@@ -605,7 +605,7 @@ class RebuildIncrementalTest < Minitest::Test
     corpus = %w[code_identities enrichments place_index person_index stats honkoku_ndl_catalog timeline
                 silver_dates silver_meter place_apply artifact_scripts facets kind_axis passage_facets
                 entity_index entry_facets hiero_postings sign_concordances lect_journal lect_facets
-                dictionary_stats derge_titles aes_titles lemma_rollups links analyze]
+                dictionary_stats derge_titles aes_titles lemma_rollups links analyze lects_checkpoint]
     assert_equal corpus.sort, rows.select { |row| row[:scope] == "corpus" }.map { |row| row[:stage] }.sort
     report = result.outcomes.first.report
     assert_equal 1, report.added + report.updated, "beta's one document revised"
@@ -624,7 +624,7 @@ class RebuildIncrementalTest < Minitest::Test
     full_rebuilder.run
     incremental_rebuilder.run
 
-    assert_equal %w[code_identities enrichments lect_journal person_index place_index],
+    assert_equal %w[code_identities enrichments lect_journal lects_checkpoint person_index place_index],
                  incremental_rows.map { |row| row[:stage] }.sort,
                  "no replay, no builders, no index work: a skip records no near-zero row"
   end
@@ -1017,6 +1017,21 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal 0, links[:links].where(from_urn: "urn:stray").count,
                  "a journal-only link is backed by nothing — the re-mine kills it"
     links.disconnect
+  end
+
+  # Every incremental re-mints the journal, so every incremental ends with
+  # its WAL folded back (TRUNCATE) — dirty or clean.
+  def test_incremental_ends_with_the_lect_journal_wal_checkpointed
+    full_rebuilder.run
+    reader = Nabu::Store::LectJournal.open!(config.lects_journal_path) # an overlay-shaped reader
+    Nabu::LectRulings.append!(config.lect_rulings_path,
+                              urn: "urn:nabu:alpha:a", code: "grc", lect_id: "grc:koine")
+    incremental_rebuilder.run
+
+    assert_equal 0, File.size?("#{config.lects_journal_path}-wal").to_i
+    assert(incremental_rows.any? { |row| row[:stage] == "lects_checkpoint" })
+  ensure
+    reader&.disconnect
   end
 
   # P71-6: the lect journal re-derives on EVERY incremental run — a

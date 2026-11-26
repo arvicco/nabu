@@ -405,6 +405,13 @@ module Nabu
       # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run
       # touched no rows, so the existing stats still describe them.
       analyzed = ledgered_stage(ledger, "analyze") { analyze_after_incremental(db, fulltext) } if builders_ran
+      # The journal re-minted above (every run) while the registry's
+      # read-only overlay connections stayed open: fold its WAL back, as
+      # the full rebuild's last stage does.
+      progress&.stage("lects wal checkpoint")
+      ledgered_stage(ledger, "lects_checkpoint") do
+        Store::IndexMaintenance.checkpoint_aux!({ "lects" => @config.lects_journal_path }, progress: progress)
+      end
       # Every stage returned: NOW the dirty replays' rows close "succeeded"
       # (Rebuild#replay leaves them open past the load).
       # The corpus lane stages ran for every replayed source: stamp the
@@ -436,7 +443,7 @@ module Nabu
     def incremental_plan(swept, index_dirty)
       replays = swept.reject { |item| %i[skip clean].include?(item.verdict.state) }
                      .map { |item| "replay:#{item.entry.slug}" }
-      replays + (index_dirty ? %w[fulltext_index] : []) + %w[stage_reconcile cjk_lane lect_journal]
+      replays + (index_dirty ? %w[fulltext_index] : []) + %w[stage_reconcile cjk_lane lect_journal lects_checkpoint]
     end
 
     # A content digest of the journal's resolution-relevant columns —

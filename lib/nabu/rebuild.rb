@@ -414,6 +414,13 @@ module Nabu
         Store::AnalyzeReport.new(scope: "catalog + index",
                                  seconds: Store.analyze!(db) + Store.analyze!(fulltext))
       end
+      # The lect journal was re-minted wholesale above while the registry's
+      # read-only overlay connections stayed open, so no last close folds
+      # its WAL back (a full live rebuild left 125 MB of it). Fold it now.
+      progress&.stage("lects wal checkpoint")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :lects_checkpoint) do
+        Store::IndexMaintenance.checkpoint_aux!({ "lects" => @config.lects_journal_path }, progress: progress)
+      end
       # P78-r1: the profiler's facts OUTLIVE the run — each stage already
       # flushed to the ledger's stage_timings as it returned (stage_flusher);
       # what remains is the corpus stages' work-size denominator, known only

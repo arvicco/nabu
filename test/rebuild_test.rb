@@ -266,7 +266,8 @@ class RebuildTest < Minitest::Test
                   "facets", "kind axis", "passage facets", "entity index", "entry facets", "hiero postings",
                   "sign concordances", "lect journal",
                   "lect facets", "dictionary stats", "derge titles", "aes titles", "artifact scripts",
-                  "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
+                  "source stats", "fulltext index", "lemma rollups", "links", "analyze",
+                  "lects wal checkpoint"],
                  stages
   end
 
@@ -1163,6 +1164,35 @@ class RebuildTest < Minitest::Test
     assert_equal 0, stray,
                  "a journal row with no config source of truth is wiped — db/ holds only derived data"
     journal.disconnect
+  end
+
+  # The journal is re-minted wholesale every rebuild while the registry's
+  # read-only overlay connections stay open, so no "last close" ever folds
+  # its WAL back (a live full rebuild left a 125 MB lects WAL beside the
+  # 169 MB file). The rebuild's last stage checkpoints it (TRUNCATE).
+  def test_rebuild_ends_with_the_lect_journal_wal_checkpointed
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+    Nabu::LectRulings.append!(config.lect_rulings_path, urn: "urn:nabu:test_adapter:one:1",
+                                                        code: "grc", lect_id: "grc:koi", note: "ruling")
+    # A reader holding the journal open across the run (the overlay shape).
+    reader = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+    stages = []
+    rebuilder.run(progress: Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label }))
+
+    wal = "#{config.lects_journal_path}-wal"
+    assert_equal 0, File.size?(wal).to_i, "the lects WAL is truncated at the rebuild's end"
+    assert_equal "lects wal checkpoint", stages.last
+    with_ledger do |ledger|
+      refute_nil Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "corpus",
+                                                        stage: "lects_checkpoint")
+    end
+  ensure
+    reader&.disconnect
   end
 
   # Trend continuity across the rebuild boundary: source ids are re-minted by
