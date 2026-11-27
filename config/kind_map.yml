@@ -1429,6 +1429,27 @@ sources:
       "Schooltext": school                # 6 — scribal exercises, the schoolroom's own products
       "Legal": legal                      # 2
       "Treaty": legal/treaty              # 1 — the treaty is the house legal sub by name
+  dbbe:                # census 2026-11-27, whole archive through the adapter: upstream's closed
+    #                    six-class genre list (each with its own gloss in the genre table), on
+    #                    occurrences and types alike (an epigram may carry several). Every class
+    #                    is a VERSE PARATEXT of a manuscript book — the epigram exists to frame
+    #                    the book it is written in — so each folds to paratext AND
+    #                    literary/poetry (the edr "sepulcralis, carmen" dual-fold precedent for
+    #                    verse that also serves a function). Counts = occurrence / type documents.
+    facet: genre
+    map:
+      "Text-related epigram": [paratext, literary/poetry]               # 6,170 / 2,277 — upstream
+      #                                     gloss "Title": the verse title of the text it heads
+      "Author-related epigram": [paratext, literary/poetry/praise]      # 4,163 / 1,308 — gloss
+      #                                     "Laudatory": praise of the text's author
+      "Scribe-related epigram": [paratext, literary/poetry]             # 3,882 / 1,927 — gloss
+      #                                     "Colophon": the scribe's verse colophon (no colophon sub)
+      "Reader-related epigram": [paratext, literary/poetry]             # 742 / 510 — gloss
+      #                                     "Paraenetic": the admonition to the book's reader
+      "Image-related epigram": [paratext, literary/poetry]              # 512 / 368 — gloss
+      #                                     "Miniature": the poem on the book's miniature
+      "Patron-related epigram": [paratext/dedication, literary/poetry]  # 331 / 265 — gloss
+      #                                     "Dedicatory": the patron's dedication of the book
   delpher-newspapers:  # P173 — census 2026-11-13: the 16xx cone, 8,559 issues of 22 papers
     # The Delpher open newspaper archive IS the periodical press: every
     # document is one issue of a newspaper (courantes, gazettes, the

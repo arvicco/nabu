@@ -108,6 +108,20 @@ sources:
       objectInfo: object_type # 6,807 docs (runestone 1,963 · fragment of runestone 696 …)
       style: style            # 2,669 docs, 88 ornament styles (Pr 1–5, Rak, Fp …; "?" a claim)
       # carver (1,080 docs) is a PERSON field — the person lane, not a facet (later)
+  dbbe:                       # census 2026-11-27, whole archive through the adapter (12,928
+    #                           occurrence + 5,226 type documents; translation siblings carry none)
+    fields:
+      genre: genre            # 18,026 docs, upstream's six classes: Text-related 8,447 · Scribe-related
+      #                         5,809 · Author-related 5,471 · Reader-related 1,252 · Image-related 880 ·
+      #                         Patron-related 596 — folded onto the kind axis in config/kind_map.yml
+      metre: metre            # 18,099 docs, 11 values (Dodecasyllable 13,134 · Dactylic hexameter 3,487 ·
+      #                         Elegiacs 624 · Decapentasyllable 570 · Other 215 · Mixture 111 …)
+      keywords: subject       # 4,703 docs, 209 values (Psalter 740 · Music 589 · David 406 · Hektor 362 …)
+      tags: subject           # 4,859 type docs, 50 function tags (Reference to content of the book 2,117 ·
+      #                         Completion of the book 941 · Prayer 823 · Praise of the author 771 …)
+      authors: author         # 4,539 docs, 282 poets (a type's Poet; its occurrences inherit it)
+      repository: repository  # 8,234 occurrence docs, 63 holding libraries (Vaticana 1,815 · BNF 1,140 ·
+      #                         Laurenziana 785 · Marciana 655 · Bodleian 595 · British Library 468 …)
   damos:                      # census: 5,890 Linear B items (live catalog 2026-10-21)
     fields:
       material: material      # 5,890 docs, 3 values (clay 5,888 · ivory 1 · stone 1) — the

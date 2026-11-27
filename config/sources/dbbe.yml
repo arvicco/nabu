@@ -1,0 +1,25 @@
+dbbe:   # 02-sources row 441
+  adapter: Nabu::Adapters::Dbbe
+  adopted: "2026-11-27"
+  axes: [classical]
+  siblings: ["-tr[0-9]+"]  # the translation tail — occurrence-<id> / type-<id> never end in -tr<digits>
+  translations: true  # the type translations (CC0 in the same file) ride as -tr<id> siblings
+  wired: false   # first sync pending. EXPECT (dry parse of the 2026-11-16 file, md5 85b0abf7…):
+                 # 20,658 documents (12,928 occurrences + 5,226 types + 2,504 translations),
+                 # 91,755 passages (53,896 verses + 27,078 type lines + 10,781 translation
+                 # lines), 122 skipped by rule (textless occurrences), 0 unrecognized, 0 errored.
+                 # Eyeball urn:nabu:dbbe:occurrence-24315 (Messina S. Salv. 117, "ἄκουε δα(υί)δ
+                 # τοῦ παρ' ἡμῖν ὀρφέως:") and urn:nabu:dbbe:type-1865 --parallel; probe
+                 # nabu search for "ὀρφέως".
+  sync_policy: manual   # upstream re-exports the file; each sync re-reads the latest record
+  # The Database of Byzantine Book Epigrams (Ghent University, dbbe.ugent.be):
+  # the Greek verse paratexts of medieval manuscripts, from the project's
+  # "simplified structure" SQLite export on Zenodo (concept record 19435533).
+  # Documents: the OCCURRENCE (the epigram as one manuscript carries it,
+  # verse passages) and the TYPE (the editors' normalized text, line
+  # passages); the type translations as -tr<id> siblings (eng/deu/fra/lat/
+  # ita/nld …). Manuscripts and persons ride as metadata; bibliography
+  # records are not carried. Language grc, lect by date band (posture).
+  # LICENSE: the Zenodo record's license field "cc-zero" (CC0 1.0) → open.
+  # Fetch resolves the concept record's latest version through the Zenodo
+  # API and md5-verifies the file against the record before landing it.
