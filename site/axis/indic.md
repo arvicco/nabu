@@ -42,7 +42,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `tamilex` | texts | nc | wired · auto | 7,913 docs / 15,309 passages |
 | `te-wikisource` | texts | attribution | wired · manual | 453 docs / 208,794 passages |
 | `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,965 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `vedaweb` | texts | attribution | wired · manual | 1,028 docs / 10,552 passages |
 | `wiktionary-dv` | dictionary | attribution | wired · manual | 2,047 entries |
 | `wiktionary-kn` | dictionary | attribution | wired · manual | 2,741 entries |
@@ -55,7 +55,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `san` 511,752 · `pli` 97,455 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,619 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,104 · `eng` 4,796 · `kan-Latn` 3,850 … and 33 more (`nabu axis indic` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `oge` 5 · `ota` 5 … and 21 more (`nabu axis indic` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `oge` 5 · `ota` 5 … and 24 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 

@@ -2015,6 +2015,20 @@ the Serbian and Croatian shelves alike), `wiktionary-ca` (Catalan,
 13,549), `wiktionary-pa` (Punjabi, 10,749) and `wiktionary-oc`
 (Occitan, 7,521).
 
+**`med-headwords`** — the Middle English Dictionary's own entry list
+(University of Michigan; the editors' list of October 2023, used by
+their permission): 57,094 entries with the printed headword, the
+variant and early spellings, the normalized search forms, the part of
+speech and the MED entry id — no definitions, but the key from a
+spelling met in a Middle English text to its MED entry online.
+
+**`lane-lexicon`** — Edward William Lane's *Arabic–English Lexicon*
+(London, 1863–1893), the standard dictionary of classical Arabic in
+English, in the Perseus/Alpheios digital edition (CC BY-SA 3.0 US):
+48,795 entries under 5,087 roots, each with its printed page, the
+derived-verb paragraphs kept beside their root and the internal
+"see" references resolved.
+
 ## 8bd. The P155 arrivals — the TCP's American and eighteenth-century collections, early-modern manuscripts, the Grand Tour, and an Arabic lexicon
 
 **`evans-tcp`** — Early American Imprints, Series I (Evans), as keyed

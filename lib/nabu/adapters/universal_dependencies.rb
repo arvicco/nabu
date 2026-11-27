@@ -610,6 +610,75 @@ module Nabu
         "avestan-old" => {
           repo: "https://github.com/UniversalDependencies/UD_Avestan-Old",
           language: "ave", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # == Four more v2.19 initial releases — the historical newcomers the
+        # first v2.19 pass did not take. Facts read first-hand at the r2.19
+        # tag 2026-11-26 (master = the tag + an eval.log only). Each
+        # LICENSE.txt is the identical BY-SA grant ("The treebank is
+        # licensed under the Creative Commons License Attribution-ShareAlike
+        # 4.0 International") and each README metadata says `License: CC
+        # BY-SA 4.0` → attribution. All test split only.
+        #
+        # Prakrit — DIPI (Aryaman Arora, Adam Farris; Digitising Imperial
+        # Prakrit Inscriptions): the Ashokan rock edicts in their parallel
+        # dialect versions — Girnar (43 sentences), Shahbazgarhi (14), Kalsi,
+        # Mansehra, Jaugada (8 each), Dhauli (3); stats.xml 84 sentences /
+        # 972 words / 152 MWT (the compounds). The site is the sent_id
+        # prefix (girnar-1-1) — the dating lane places each run by it and
+        # dates every sentence by the README's "reign of Ashoka (r.
+        # 268--232 BCE)" (UdSentenceDates::DERIVED). `# orig` (the
+        # Leiden-bracketed reading) is not whitelisted — declared coarseness;
+        # its per-token copy rides MISC Orig=. Raw text from the Ashoka
+        # Project on Bibliotheca Polyglotta (Oslo), "licensed under GNU
+        # GPLv3 (which we respect in this treebank)" — a copyleft input
+        # compatible with the attribution class. not-to-release/ holds the
+        # annotation CSVs the conllu is built from (same content, not
+        # walked). Language `pra` (UD's file prefix — the 639-2 Prakrit
+        # collective).
+        "prakrit-dipi" => {
+          repo: "https://github.com/UniversalDependencies/UD_Prakrit-DIPI",
+          language: "pra", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Manchu — GDUD (Wenchao Li, Haitao Liu; Zhejiang): 81 grammatical
+        # example sentences from an unnamed reference grammar of Manchu, in
+        # Latin transliteration with morpheme hyphens (gene-he); stats.xml
+        # 81 sentences / 446 words. Every block carries `# text[eng]`, NOT
+        # on the ConlluParser translation whitelist (only one block's
+        # `# text_en` rides) — declared coarseness: widening the shared
+        # parser's whitelist dirties every conllu-family source's stamp, so
+        # it waits for a rebuild-adjacent change. Grammar examples state no
+        # date or place. Language `mnc`.
+        "manchu-gdud" => {
+          repo: "https://github.com/UniversalDependencies/UD_Manchu-GDUD",
+          language: "mnc", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Swedish — Modern (Språkbanken's Swedish Diachronic Treebank;
+        # Nivre, Stymne, Mårtensson et al.): "Modern Swedish (1526–1880)",
+        # today ONE source — the Gospel of Mark of the 1526 New Testament,
+        # after Mårtensson's 2026 edition; stats.xml 735 sentences / 16,436
+        # words / 22 MWT. No lemmas upstream ("Lemmas: not available"), MISC
+        # Ref=MRK_<chapter>.<verse> per token. The one newdoc id
+        # `NT1526:MRK [Markus]` carries the print year → the dating lane.
+        # Language `sv` (UD's tag; the registry's bare sv is the
+        # post-1526 open end).
+        "swedish-modern" => {
+          repo: "https://github.com/UniversalDependencies/UD_Swedish-Modern",
+          language: "sv", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Ukrainian — Zhelekhivka (Maria Shvedova, Arsenii Lukashevskyi): a
+        # historical regional standard of Ukrainian (Galicia/Bukovina) in
+        # the Zhelekhivka orthography (Zhelekhivskyi 1886, revised 1904) —
+        # three complete newspaper articles, stats.xml 348 sentences / 9,348
+        # words / 74 MWT. Each newdoc id ends in the article's year
+        # (Vischovannja_pro_XX_vik_1892 198 sentences, Ivan_Rybchyn_…_1921
+        # 128, Stepan_Smal-Stockij_…_1917 22) → the dating lane. The first
+        # blocks carry `# udpipe_model_licence = CC BY-NC-SA` — the
+        # pre-annotation TOOL's model (UDPipe on ParlaMint), manually
+        # corrected; the treebank's own grant is BY-SA throughout (the MiCA
+        # third-party-input precedent). Language `uk`.
+        "ukrainian-zhelekhivka" => {
+          repo: "https://github.com/UniversalDependencies/UD_Ukrainian-Zhelekhivka",
+          language: "uk", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 

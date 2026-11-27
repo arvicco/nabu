@@ -715,3 +715,55 @@ r2.19 license sweep 2026-11-16: no drift — LICENSE.txt (full text) and
 README `License:` metadata compared r2.18 vs r2.19 for all 36 previously
 held treebanks, identical; the PROFITEROLE (Old and Middle French) and
 UDante forks stand unchanged at r2.19.
+
+## The v2.19 historical four (retrieved 2026-11-26)
+
+Four more "Initial release in Universal Dependencies" treebanks of v2.19,
+cut from the **r2.19 tag** like the bundle above (each repo's master is
+the tag plus one `eval.log` commit — same data). Each `<dir>/README.md` is
+the machine-readable metadata block only. Counts are stats.xml at the tag,
+re-censused on the file (`# sent_id` lines). All test split only.
+
+| Dir / file | Repo (tag commit) | Upstream | Fixture |
+|---|---|---|---|
+| `prakrit-dipi/pra_dipi-ud-test.conllu` | `UD_Prakrit-DIPI` (561f5f02) | 84 blocks, 972 words, 152 MWT; 94,323 B, sha256 `0c326551…a2addf0` | WHOLE file |
+| `manchu-gdud/mnc_gdud-ud-test.conllu` | `UD_Manchu-GDUD` (10fc51d1) | 81 blocks, 446 words, no MWT; 31,453 B, sha256 `87d012e3…c6eedd7d9` | WHOLE file |
+| `swedish-modern/sv_modern-ud-test-head20.conllu` | `UD_Swedish-Modern` (97816c1e) | 735 blocks, 16,436 words, 22 MWT; 842,553 B, sha256 `d728a6b2…2da7a385` | first 20 blocks, 24,501 B |
+| `ukrainian-zhelekhivka/uk_zhelekhivka-ud-test-slices.conllu` | `UD_Ukrainian-Zhelekhivka` (59421982) | 348 blocks, 9,348 words, 74 MWT; 1,037,989 B, sha256 `ad95c623…c9c01a84` | first 5 blocks of each of the 3 newdoc runs (198/128/22), 15 blocks, 32,828 B |
+
+- **DIPI** (Aryaman Arora, Adam Farris): the Ashokan rock edicts in their
+  parallel dialect versions, sent_id = `<site>-<edict>-<sentence>` —
+  girnar 43, shahbazgarhi 14, kalsi / mansehra / jaugada 8 each, dhauli
+  3. `# orig` per block (the Leiden-bracketed reading, not whitelisted);
+  MISC Gloss= and Orig=. The README: raw text from the Ashoka Project on
+  Bibliotheca Polyglotta (Oslo), "licensed under GNU GPLv3 (which we
+  respect in this treebank)". Upstream's delivery grains: the one conllu
+  (taken) and `not-to-release/` — `get_text.py`, `map.html` and twelve
+  annotation CSVs (`girnar-1.csv` …) the conllu is generated from: the
+  same content at its build stage, no `.conllu`, never walked. Genre
+  `nonfiction news`. Language `pra`.
+- **GDUD** (Wenchao Li, Haitao Liu): grammar examples in Latin
+  transliteration; every block has `# text[eng]` (not whitelisted), one
+  block also `# text_en` (rides "translations"). Genre
+  `grammar-examples`. Language `mnc`.
+- **Swedish-Modern** (Språkbanken's Swedish Diachronic Treebank): only the
+  Gospel of Mark of the 1526 New Testament (Mårtensson's 2026 edition) so
+  far; one `# newdoc id = NT1526:MRK [Markus]`; no lemmas (`Lemmas: not
+  available`); MISC Ref=MRK_<ch>.<v>. Genre `bible`. Language `sv`.
+- **Zhelekhivka** (Maria Shvedova, Arsenii Lukashevskyi): three newspaper
+  articles; each newdoc id ends in its year
+  (`Vischovannja_pro_XX_vik_1892`,
+  `Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921`,
+  `Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917`), repeated as `# doc_id`
+  on every block; the first block of each run also carries UDPipe
+  generator comments incl. `# udpipe_model_licence = CC BY-NC-SA` (the
+  pre-annotation tool's model, a third-party input — the treebank's grant
+  is BY-SA). Genre `news`. Language `uk`.
+
+Licenses (read verbatim at the r2.19 tag, 2026-11-26): all four
+LICENSE.txt files are the identical BY-SA grant — "The treebank is
+licensed under the Creative Commons License Attribution-ShareAlike 4.0
+International. The complete license text is available at:
+http://creativecommons.org/licenses/by-sa/4.0/legalcode" — and all four
+README metadata blocks say "License: CC BY-SA 4.0" → attribution
+override.

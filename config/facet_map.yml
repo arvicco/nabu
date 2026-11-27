@@ -746,6 +746,11 @@ sources:
     entry_fields:
       pos: word_class         # Karp partOfSpeech tags verbatim: nn 27,605 · vb 9,291 · av 5,599 ·
       #                         ab 2,226 · nl 117 · pp 135 · kn 75 · pn 74 … (6,825 entries carry none)
+  med-headwords:              # census 2026-11-26 over headwords_202310.xml (57,094 entries)
+    entry_fields:
+      pos: word_class         # every PS @EXPAN verbatim (57,959 over 57,086 entries; 8 POS empty):
+      #                         noun 27,098 · verb 10,323 · adjective 8,732 · adverb 4,167 ·
+      #                         gerund 4,032 · participle 2,183 · preposition 257 · phrase 220 …
   littre:                     # census 2026-11-02 over xml/a.xml … z.xml (78,483 articles)
     entry_fields:
       pos: word_class         # the printed gram verbatim: s. m. 25,277 · s. f. 19,701 · adj. 14,680 ·
@@ -776,6 +781,11 @@ sources:
       #                         (individual's name …) 613 … (21,344 entries carry none)
       etymon_languages: etymon_language  # the etymology rows' iso_code verbatim: grc · lat · ara ·
       #                         heb · per · syr · akk · pal · eng · fre · spa · san (2,995 named etymons)
+  lane-lexicon:               # census 2026-11-26 at the pinned 7dd04e1 (48,795 entries)
+    entry_fields:
+      root: root              # the div2 root heading's radicals verbatim — Lane's article grain, the
+      #                         root → entries grouping: 5,087 roots over 48,752 entries (the 43
+      #                         letter-article entries sit outside any root)
   wilkens-oui:                # the book's own tradition/script marks (Abkürzungen, PDF pp. 13–14),
     entry_fields:             # mapped by WilkensOui::MARK_FACETS; Buddhist terms go unmarked upstream
       tradition: tradition    # (m) manichäisch → Manichaean 611 · (c) christlich → Christian 119

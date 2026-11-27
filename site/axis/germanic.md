@@ -26,7 +26,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 46 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 47 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 November 2026)</span> |
 |---|---|---|---|---|
@@ -51,6 +51,7 @@ A source wears every desk it serves — these 46 answer this desk. Holdings are 
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
 | `leme` | dictionary | attribution | wired · manual | 943,211 entries |
+| `med-headwords` | dictionary | nc | wired · manual | 57,094 entries |
 | `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
 | `nb-no` | texts | open | wired · manual | 9 docs / 3,940 passages |
@@ -65,7 +66,7 @@ A source wears every desk it serves — these 46 answer this desk. Holdings are 
 | `runesdb` | texts | attribution | wired · manual | 983 docs / 1,981 passages |
 | `stationers-register` | texts | attribution | wired · manual | 10,453 docs / 26,047 passages |
 | `statutes-realm` | texts | open | wired · manual | 661 docs / 8,053 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `wellcome` | texts | open | wired · manual | 4,772 docs / 1,130,632 passages |
 | `wiktionary-dum` | dictionary | attribution | wired · manual | 2,342 entries |
 | `wiktionary-enm` | dictionary | attribution | wired · manual | 56,687 entries |
@@ -79,9 +80,9 @@ A source wears every desk it serves — these 46 answer this desk. Holdings are 
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `en` 601,236 · `ita` 167,236 · `lat` 143,047 · `non` 97,017 · `ang` 71,142 · `fra` 61,677 · `enm` 60,521 · `sv` 53,406 · `spa` 28,397 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `en` 601,236 · `ita` 167,236 · `lat` 143,047 · `enm` 117,615 · `non` 97,017 · `ang` 71,142 · `fra` 61,677 · `sv` 53,407 · `spa` 28,397 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `cop` 3 … and 16 more (`nabu axis germanic` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `cop` 3 … and 19 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 

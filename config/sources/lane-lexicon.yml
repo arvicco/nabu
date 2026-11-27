@@ -1,0 +1,19 @@
+lane-lexicon:   # 02-sources row 440
+  adapter: Nabu::Adapters::LaneLexicon
+  adopted: "2026-11-26"
+  axes: [arabic]
+  wired: true    # first sync verified 2026-11-26: 37 documents, 48,795 entries, 0 errored, 8 files skipped by rule, 0 unrecognized — exact on the dry-parse census
+  sync_policy: manual
+  # Lane's Arabic-English Lexicon (E. W. Lane, 1863–1893; the posthumous
+  # parts and Supplement ed. Stanley Lane-Poole) — the library's first
+  # classical Arabic dictionary, beside the modern-usage wiktionary-ar.
+  # Perseus digitization with Alpheios corrections; TEI P4 letter buckets
+  # (new family lane-tei). One dictionary slug `lane`, language ara (lect
+  # ara:cla via config/lect_overrides.yml); entry id = the upstream @id,
+  # variant copies stem-prefixed, id-less paragraphs anchored on their
+  # preceding entry (the id design: the adapter's class note). Root,
+  # paragraph and printed page ride the annotations (root is an entry
+  # facet). LICENSE: README verbatim "This work is licensed under a
+  # Creative Commons Attribution-ShareAlike 3.0 United States License."
+  # (read 2026-11-26) → attribution. Upstream dormant since 2019 → pinned,
+  # manual.

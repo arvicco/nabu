@@ -1,0 +1,16 @@
+sources:
+  med-headwords:
+    kind: {posture: unclassified, note: "a dictionary shelf — the kind axis classifies
+        documents; the one document is the MED editors' entry list"}
+    lect: {posture: identity, note: "enm — the nabu-lects Middle English anchor (parent ang,
+        band 1100–1500). The list carries no per-entry date or dialect: the MED's period
+        and dialect evidence lives in its quotations, which the list omits, so the bare
+        anchor is the whole honest claim even once enm date-band stages exist"}
+    dating: {posture: undatable, note: "the list carries no dates — the MED's dated
+        quotations (and their manuscript dates) are not part of it; the vintage of the list
+        itself (2023-10) is provenance, not a dating claim"}
+    places: {posture: unplaced, note: "no place field; the dialect labels of the MED's
+        quotations are not in the list"}
+    script: {posture: implied, note: "Latin script with the Middle English letters (ȝ, þ, ð,
+        æ) and the MED's editorial diacritics on the display spellings (macrons, breves,
+        dot-below for close ē/ō), numeric character references decoded"}

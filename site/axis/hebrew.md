@@ -34,12 +34,12 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `pgp-geniza` | texts | nc | wired · manual | 9,848 docs / 303,860 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
 | `sefaria` | texts | open | wired · manual | 2,033 docs / 1,111,873 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `wiktionary-arc` | dictionary | attribution | wired · manual | 2,396 entries |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `hbo` 36,817 · `grc` 6,313 · `arc` 6,093 · `eng` 5,919 · `jrb` 4,068 · `heb` 3,790 · `egy` 3,050 · `ara` 1,954 · `egy-Egyd` 1,424 · `en` 1,396 … and 20 more (`nabu axis hebrew` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `oge` 5 · `lzh` 4 · `frm` 3 · `fro` 3 … and 17 more (`nabu axis hebrew` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `oge` 5 · `lzh` 4 · `frm` 3 · `fro` 3 … and 21 more (`nabu axis hebrew` lists all).
 
 ## The desk's instruments
 

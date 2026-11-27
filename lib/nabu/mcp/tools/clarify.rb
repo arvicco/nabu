@@ -18,7 +18,9 @@ module Nabu
         "alias), match: exact|prefix|token|fuzzy (a misspelling guess, said so), source, " \
         "language, license_class; present-only detail, ref_urn}. Never a silent guess: two " \
         "editions sharing a title, or a citation several hold, resolve to NOTHING and list every " \
-        "reading (ref_urn each). Diacritics optional (οδυσσεια finds Ὀδύσσεια). Backed by a " \
+        "reading (ref_urn each). A misspelled title plus citation (\"Illiad 1.1\") lists the " \
+        "near-title works holding that citation as fuzzy candidates with ref_urn. Diacritics " \
+        "optional (οδυσσεια finds Ὀδύσσεια). Backed by a " \
         "precompiled title index; when it is not built the note says so and urn input still " \
         "resolves. Bounded (default #{CLARIFY_DEFAULT_LIMIT}, max #{CLARIFY_MAX_LIMIT}).".freeze
 

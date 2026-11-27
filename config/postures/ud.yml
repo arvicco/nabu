@@ -1,10 +1,10 @@
 sources:
   ud:
     kind: {posture: unclassified, note: "every treebank README's Genre line (UD genre tags,
-        all 42 treebanks) rides each split document as the genre facet, verbatim — never
+        all 46 treebanks) rides each split document as the genre facet, verbatim — never
         kind-folded: a split file mixes whatever its treebank mixes, so one kind over the
-        union would misstate each text (census 2026-10-19; the six UD v2.19 newcomers'
-        lines read at the r2.19 tag 2026-11-16)"}
+        union would misstate each text (census 2026-10-19; the ten UD v2.19 newcomers'
+        lines read at the r2.19 tag 2026-11-16 and 2026-11-26)"}
     # lect machine-postured (codemap + the 2026-10-11 gn → gn:old override,
     # the ruled narrow exception to D57-f: the Old Guaraní treebank is a
     # stage witness and the only gn-claiming document); the lzh treebanks →
@@ -21,14 +21,31 @@ sources:
     # oge (the registry's ka:mid is the honest node; an oge-wide override
     # would mislabel GLC/OGLauRo, so only a per-document ruling fits),
     # and avestan-old is Gathic (Yasna 28 → ave:old).
+    # The four later v2.19 codes resolve by identity as well (checked
+    # against canonical/nabu-lects 2026-11-26): pra (prakrit-dipi — the
+    # deliberately coarse Prakrit collective, parent san; the registry
+    # note keeps it the claim for whatever a source does not distinguish),
+    # mnc (manchu-gdud, parent tuw), sv (swedish-modern — the 1526 New
+    # Testament sits exactly on sv:old's upper bound, so the bare anchor's
+    # post-1526 open end is the honest node) and uk (ukrainian-zhelekhivka,
+    # bare anchor under orv). Finer candidates stay bare under D57-f, named
+    # for a registry package: an Ashokan member under pra (the edicts'
+    # dialects), an early-modern sv stage (äldre nysvenska, 1526–1732) and
+    # a Zhelekhivka orthography on uk (the sl bohoric pattern).
     dating: {posture: partial, note: "the sentence-comment dates of four treebanks (census
         2026-10-19): birchbark date_created on 1,203 letters (25 bands), rnc created on 56
         documents, ruthenian date/created on 83, egyptian-pc date on 3,089 sentences (5th/6th
         Dynasty, banded by the TLA thesaurus nodes in period_bands.yml) — passage-grain runs +
-        a document envelope (UdSentenceDates). The other 38 treebanks state no date (the six
-        v2.19 newcomers' sentence comments carry none — their works' eras, e.g. CronOc's
-        late-13th-c. Roman de Lagrasse or MidGLauRo's 12th/17th-c. novels, live only in
-        README prose: curated-band candidates, declared not faked)"}
+        a document envelope (UdSentenceDates). Three v2.19 treebanks date by treebank-level
+        rules (UdSentenceDates::DERIVED, read at the r2.19 tag 2026-11-26): the year each
+        Zhelekhivka newdoc id ends in (1892, 1921, 1917), Swedish-Modern's NT1526 newdoc
+        (1526), and DIPI's Ashokan edicts at the README's reign band (268–232 BCE). The other
+        39 treebanks state no date (the first six v2.19 newcomers' sentence comments carry
+        none — their works' eras, e.g. CronOc's late-13th-c. Roman de Lagrasse or MidGLauRo's
+        12th/17th-c. novels, live only in README prose: curated-band candidates, declared not
+        faked; manchu-gdud is reference-grammar examples, undatable)"}
     places: {posture: named, note: "egyptian-pc's place comment (Saqqara, all 3,089 sentences)
-        rides the UdSentenceDates rows; no other treebank states a place"}
+        and DIPI's edict site — its sent_id prefix (Girnar, Shahbazgarhi, Kalsi, Mansehra,
+        Jaugada, Dhauli; 84 sentences) — ride the UdSentenceDates rows; no other treebank
+        states a place"}
     script: {posture: implied}

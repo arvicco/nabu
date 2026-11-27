@@ -138,3 +138,12 @@ class LaneTestAdapter < TestAdapter
     end
   end
 end
+
+# The dictionary-PRIMARY sibling (content_kind :dictionary): the lane's
+# glossary.tsv format as a source of its own, for the routing tests of the
+# dictionary loader's sync/rebuild wiring (its entry-grain parse breaker).
+class DictionaryTestAdapter < LaneTestAdapter::DictionaryLane
+  def self.manifest = TestAdapter::MANIFEST
+
+  def self.content_kind = :dictionary
+end

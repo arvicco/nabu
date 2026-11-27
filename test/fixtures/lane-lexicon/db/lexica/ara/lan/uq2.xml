@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><TEI.2><text><body><div1 type="alphabetic letter" n="ق" org="uniform" sample="complete" part="N"><head lang="ar">ق</head>
+
+ <div2 type="root" org="uniform" sample="complete" part="N"><head><foreign lang="ar">ق</foreign></head>
+
+  <entryFree>
+    <form>
+      <orth lang="ar">ق</orth></form>
+
+ </entryFree>
+</div2>
+<div2 type="root" org="uniform" sample="complete" part="N"><head><foreign lang="ar">قبس</foreign></head>
+
+  <entryFree id="n42477" key="قبوس" type="main">
+    <form>
+      <orth orig="" extent="full" lang="ar">قبوس</orth></form> <hi rend="ital">A sort of</hi> <foreign lang="ar">طُنْبُور</foreign>: see <foreign lang="ar">مَعَازِفُ</foreign>.
+
+ </entryFree>
+</div2>
+<div2 type="root" org="uniform" sample="complete" part="N"><head><foreign lang="ar">قبع</foreign></head>
+
+  <entryFree id="n42478" key="قَبَعَ السِّقَاءَ" type="main">
+    <form>
+      <itype>1</itype> 
+      <orth orig="" extent="full" lang="ar">قَبَعَ السِّقَاءَ</orth></form>: see <foreign lang="ar">خَنَثَ</foreign>.
+
+  </entryFree>
+<entryFree id="n42479" key="قَبِيعَةٌ" type="main">
+    <form>
+      <orth orig="" extent="full" lang="ar">قَبِيعَةٌ</orth></form> [The <hi rend="ital">pommel</hi> of a sword;] <hi rend="ital">the thing of
+silver</hi> or <hi rend="ital">iron at the extremity of the hilt of a
+sword.</hi> (S, K.)
+
+ </entryFree>
+</div2>
+<div2 type="root" org="uniform" sample="complete" part="N"><head><foreign lang="ar">قبن</foreign></head>
+
+  <entryFree id="n42507" key="قَبَّانٌ" type="main">
+    <form>
+      <orth orig="" extent="full" lang="ar">قَبَّانٌ</orth></form> <hi rend="ital">A steelyard:</hi> see <foreign lang="ar">عَمُودُ المِيزَانِ</foreign>.
+
+ </entryFree>
+</div2>
+<div2 type="root" org="uniform" sample="complete" part="N"><head><foreign lang="ar">قبو</foreign></head>
+
+  <entryFree id="n42508" key="قَبَآءٌ" type="main">
+    <form>
+      <orth orig="" extent="full" lang="ar">قَبَآءٌ</orth></form> [<hi rend="ital">A kind of tunic, resembling the</hi> <foreign lang="ar">قَفْتَانٌ</foreign>,
+<hi rend="ital">generally reaching to the middle of the shank,
+divided down the front, and made to overlap
+over the chest.</hi> So in the present day. See also
+Dozy, Dict. des noms de vêtements, pp. 352–62.]
+
+ </entryFree>
+</div2>
+<div2 type="root" org="uniform" sample="complete" part="N"><head><foreign lang="ar">قو</foreign>: see <foreign lang="ar">قوى</foreign></head>
+
+  <entryFree>
+
+ </entryFree>
+</div2>
+</div1></body></text></TEI.2>

@@ -26,13 +26,13 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `stgall-priscian` | texts | attribution | wired · manual | 239 docs / 13,395 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `wiktionary-br` | dictionary | attribution | wired · manual | 2,336 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `cy` 89,386 · `sga` 6,838 · `bre` 5,491 · `mga` 796 · `xlp` 633 · `pgl` 547 · `ett` 502 · `xtg-Grek` 402 · `cym` 321 · `cel` 286 … and 20 more (`nabu axis celtic` lists all).
 
-**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 26 November 2026): `zho` 327,296 · `xcl` 8,544 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 40 more (`nabu axis celtic` lists all).
+**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 26 November 2026): `zho` 327,296 · `xcl` 8,544 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 43 more (`nabu axis celtic` lists all).
 
 ## The desk's instruments
 

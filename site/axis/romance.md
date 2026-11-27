@@ -61,7 +61,7 @@ A source wears every desk it serves — these 43 answer this desk. Holdings are 
 | `socinian-letters` | texts | attribution | wired · manual | 1,869 docs / 18,067 passages |
 | `theatre-classique` | texts | nc | wired · manual | 1,939 docs / 1,601,085 passages |
 | `typikon-bible` | texts | attribution | wired · manual | 229 docs / 105,698 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `wellcome` | texts | open | wired · manual | 4,772 docs / 1,130,632 passages |
 | `wiktionary-ca` | dictionary | attribution | wired · manual | 198,685 entries |
 | `wiktionary-frm` | dictionary | attribution | wired · manual | 4,956 entries |
@@ -72,7 +72,7 @@ A source wears every desk it serves — these 43 answer this desk. Holdings are 
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `lat` 202,994 · `cat` 199,652 · `fra` 90,157 · `fro` 9,502 · `oci` 7,530 · `frm` 4,959 · `osp` 2,185 · `roa-opt` 1,682 · `spa` 1,217 · `eng` 747 … and 30 more (`nabu axis romance` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 18 more (`nabu axis romance` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 22 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 

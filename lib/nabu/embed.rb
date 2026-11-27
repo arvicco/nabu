@@ -129,8 +129,9 @@ module Nabu
     def self.input_sha(input) = Digest::SHA256.hexdigest(input)
 
     def initialize(catalog:, vectors:, slugs:, worker_argv: nil, model: MODEL,
-                   batch_size: DEFAULT_BATCH, limit: nil, progress: nil)
+                   batch_size: DEFAULT_BATCH, limit: nil, progress: nil, page_size: PAGE)
       @catalog = catalog
+      @page_size = page_size
       @vectors = vectors
       @slugs = slugs
       @worker_argv = worker_argv
@@ -186,30 +187,49 @@ module Nabu
 
     # -- selection -----------------------------------------------------------
 
-    def scope
-      @catalog[:passages]
-        .join(:documents, id: Sequel[:passages][:document_id])
-        .join(:sources, id: Sequel[:documents][:source_id])
-        .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
-        .where(Sequel[:sources][:slug] => @slugs)
+    # The scope: the live passages of live documents of the flagged
+    # sources. Walked per source as a keyset over (document id, passage
+    # sequence) — the order documents_source_id_index (source_id, rowid)
+    # and passages_document_id_sequence_index already hold, so each page
+    # is an index range read that stops at the page size, never a sort.
+    # (The earlier passage-id keyset over the three-way join could not
+    # ride any index in that order: every page re-collected and
+    # temp-sorted the whole remaining scope — quadratic in scope size.)
+    # Membership is unchanged; only the yield ORDER differs, and nothing
+    # depends on it (the skip decision is per-row presence + sha).
+    def each_scope_page(&)
+      @catalog[:sources].where(slug: @slugs).order(:id).select_map(:id).each do |source_id|
+        each_source_page(source_id, &)
+      end
     end
 
-    # Keyset pages in passage-id order; never materializes more than one.
-    def each_scope_page
-      cursor = 0
+    # Keyset pages over one source; never materializes more than one.
+    def each_source_page(source_id)
+      cursor = nil
       loop do
-        rows = scope
-               .where { Sequel[:passages][:id] > cursor }
-               .order(Sequel[:passages][:id])
-               .limit(PAGE)
-               .select(Sequel[:passages][:id].as(:passage_id), Sequel[:passages][:urn],
-                       Sequel[:passages][:text], Sequel[:passages][:language])
-               .all
+        rows = source_page(source_id, cursor).all
         break if rows.empty?
 
-        cursor = rows.last[:passage_id]
+        cursor = rows.last.values_at(:document_id, :sequence)
         yield rows
       end
+    end
+
+    def source_page(source_id, cursor)
+      doc_id = Sequel[:documents][:id]
+      sequence = Sequel[:passages][:sequence]
+      page = @catalog[:passages]
+             .join(:documents, id: Sequel[:passages][:document_id])
+             .where(Sequel[:documents][:source_id] => source_id,
+                    Sequel[:documents][:withdrawn] => false, Sequel[:passages][:withdrawn] => false)
+      if cursor
+        # (doc, seq) > cursor, spelled so the documents side stays a
+        # rowid range on the source index.
+        page = page.where(doc_id >= cursor[0]).where(Sequel.|(doc_id > cursor[0], sequence > cursor[1]))
+      end
+      page.order(doc_id, sequence).limit(@page_size)
+          .select(Sequel[:passages][:id].as(:passage_id), doc_id.as(:document_id), sequence,
+                  Sequel[:passages][:urn], Sequel[:passages][:text], Sequel[:passages][:language])
     end
 
     # { urn => stored text_sha } for this page's urns — one indexed IN

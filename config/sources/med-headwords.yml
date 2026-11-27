@@ -1,0 +1,6 @@
+med-headwords:   # 02-sources row 439
+  adapter: Nabu::Adapters::MedHeadwords
+  adopted: "2026-11-26"
+  axes: [germanic]
+  wired: true    # first sync verified 2026-11-26: 1 dictionary document, 57,094 entries, 0 errored, 0 skipped — exact on the whole-file census
+  sync_policy: manual

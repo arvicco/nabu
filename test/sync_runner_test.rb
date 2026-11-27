@@ -1619,6 +1619,52 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 48, live_docs
   end
 
+  # The dictionary loader's entry-grain twin: twelve held entries whose
+  # glossary file stops parsing exceed the limit (max(10, 20% of 12) = 10)
+  # — nothing is withdrawn, the sync names it loudly in ENTRY terms, and
+  # --force accepts.
+  def test_dictionary_parse_breaker_keeps_entries_and_force_accepts
+    write_glossary("glossy", 12)
+    runner = make_runner(registry(entry("glossy", DictionaryTestAdapter, wired: true)))
+    runner.sync("glossy", parse_only: true)
+    File.write(File.join(@canonical, "glossy", "glossary.tsv"), "malformed\n", mode: "a")
+
+    tripped = runner.sync("glossy", parse_only: true)
+
+    refute tripped.aborted?
+    assert_equal [0, 12], tripped.load_report.to_h.values_at(:withdrawn, :parse_held)
+    assert_equal 12, Nabu::Store::DictionaryEntry.where(withdrawn: false).count, "the held entries stay served"
+    finding = tripped.warnings.find { |w| w.kind == :parse_breaker }
+    assert finding, "a tripped dictionary parse breaker must be named"
+    assert_match(/PARSE BREAKER: 12 held entr\(ies\) now fail to parse/, finding.message)
+    assert_includes finding.message, "bin/nabu sync glossy --parse-only --force"
+
+    accepted = runner.sync("glossy", parse_only: true, force: true)
+
+    assert_equal [12, 12, 0], accepted.load_report.to_h.values_at(:withdrawn, :parse_withdrawn, :parse_held)
+    assert_equal 0, Nabu::Store::DictionaryEntry.where(withdrawn: false).count
+  end
+
+  # The secondary lane rides the same breaker and the same --force, and its
+  # line reaches the sync's warnings beside the primary's.
+  def test_dictionary_lane_parse_breaker_is_named_and_force_accepts
+    write_glossary("lane-src", 12)
+    File.write(File.join(@canonical, "lane-src", "one.txt"), "Iliad\nμῆνιν\n")
+    runner = make_runner(registry(entry("lane-src", LaneTestAdapter, wired: true)))
+    runner.sync("lane-src", parse_only: true)
+    File.write(File.join(@canonical, "lane-src", "glossary.tsv"), "malformed\n", mode: "a")
+
+    tripped = runner.sync("lane-src", parse_only: true)
+
+    assert_equal 12, tripped.dictionary_lane.parse_held
+    finding = tripped.warnings.find { |w| w.kind == :parse_breaker }
+    assert_match(/PARSE BREAKER: 12 held entr\(ies\)/, finding&.message)
+
+    accepted = runner.sync("lane-src", parse_only: true, force: true)
+
+    assert_equal 12, accepted.dictionary_lane.parse_withdrawn
+  end
+
   # --- inline deviation warnings (P5-5, delta-aware since P18-7) ------------
 
   # A sync whose errored count moved off the recorded ledger baseline emits one
@@ -2092,6 +2138,13 @@ class SyncRunnerTest < Minitest::Test
     FileUtils.mkdir_p(dir)
     File.write(File.join(dir, "one.txt"), "Iliad\nμῆνιν\n")
     File.write(File.join(dir, "glossary.tsv"), "g1\tμῆνις\twrath\ng2\tθεά\tgoddess\n")
+  end
+
+  # A +count+-entry glossary.tsv under canonical/<slug> (the lane format).
+  def write_glossary(slug, count)
+    dir = File.join(@canonical, slug)
+    FileUtils.mkdir_p(dir)
+    File.write(File.join(dir, "glossary.tsv"), (1..count).map { |i| "g#{i}\tλόγος#{i}\tword #{i}\n" }.join)
   end
 
   def seed_baseline(slug, baseline:, anchor:)

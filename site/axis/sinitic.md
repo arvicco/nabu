@@ -44,7 +44,7 @@ A source wears every desk it serves — these 32 answer this desk. Holdings are 
 | `tianyige` | texts | open | wired · frozen | 312 docs / 38,711 passages |
 | `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 | `tshet-uinh` | dictionary | open | wired · manual | 42,563 entries |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `viet-wikisource` | texts | attribution | wired · manual | 32 docs / 7,674 passages |
 | `wenhai` | dictionary | attribution | wired · manual | 3,085 entries |
@@ -58,7 +58,7 @@ A source wears every desk it serves — these 32 answer this desk. Holdings are 
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `zho` 543,313 · `lzh` 93,441 · `ltc` 58,680 · `vi` 52,107 · `och` 38,234 · `jpn` 32,607 · `cmn` 7,387 · `pli` 7,289 · `sit` 7,048 · `eng` 4,796 … and 4 more (`nabu axis sinitic` lists all).
 
-**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 26 November 2026): `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 40 more (`nabu axis sinitic` lists all).
+**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 26 November 2026): `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 42 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 

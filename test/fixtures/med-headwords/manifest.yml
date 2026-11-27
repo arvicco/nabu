@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The file is an entry-level TRIM (whole: false) of the upstream list, so a
+# fresh GET returns the full 19.4 MB file and is fetched for URL-liveness
+# only, never byte-compared; re-apply the README's entry selection after any
+# refresh. adapter_test is null: the adapter test asserts trim-level counts.
+source: med-headwords
+adapter_test:
+retrieved: 2026-11-26
+files:
+  - path: headwords_202310.xml
+    url: https://medictionary.info/pages/headwords_202310.xml
+    whole: false
+    trim: 15 entries chosen per the README (57,094 entries -> 15), each line verbatim

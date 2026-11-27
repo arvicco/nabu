@@ -1909,6 +1909,17 @@ sources:
     entries_display: '6,355'
     holdings: 6,355 entries
     canonical_display: "<1 MB"
+  lane-lexicon:
+    name: Lane's Arabic-English Lexicon (Perseus digitization, Alpheios edition)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 48795
+    entries_display: '48,795'
+    holdings: 48,795 entries
+    canonical_display: 95 MB
   larth-etp:
     name: Larth ETP glossary — Etruscan vocabulary with POS and translations
     license_class: attribution
@@ -2138,6 +2149,18 @@ sources:
     entries_display: '0'
     holdings: 6 documents / 1,518 passages
     canonical_display: 26 MB
+  med-headwords:
+    name: Middle English Dictionary — headwords, variant spellings and entry ids (MED
+      editors' list)
+    license_class: nc
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 57094
+    entries_display: '57,094'
+    holdings: 57,094 entries
+    canonical_display: 19 MB
   meloniromance:
     name: Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF)
     license_class: attribution
@@ -3517,13 +3540,13 @@ sources:
   ud:
     name: Universal Dependencies — ancient treebanks
     license_class: nc
-    documents: 93
-    documents_display: '93'
-    passages: 338638
-    passages_display: '338,638'
+    documents: 97
+    documents_display: '97'
+    passages: 339886
+    passages_display: '339,886'
     entries: 0
     entries_display: '0'
-    holdings: 93 documents / 338,638 passages
+    holdings: 97 documents / 339,886 passages
     canonical_display: 1.1 GB
   uk-wikisource:
     name: Ukrainian Wikisource — the chronicles (Літописи, edition-filtered)
@@ -3639,7 +3662,7 @@ sources:
     entries: 0
     entries_display: '0'
     holdings: 4,772 documents / 1,130,632 passages
-    canonical_display: 2.3 GB
+    canonical_display: 2.4 GB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -4371,11 +4394,11 @@ shelves:
     - torot
     - ud
     - iswoc
-    documents: 150
-    documents_display: '150'
-    passages: 425580
-    passages_display: '425,580'
-    size_display: 150 / 425,580
+    documents: 154
+    documents_display: '154'
+    passages: 426828
+    passages_display: '426,828'
+    size_display: 154 / 426,828
   cuneiform:
     sources:
     - oracc

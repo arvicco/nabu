@@ -1,0 +1,50 @@
+<TEI.2>
+    <text>
+        <body>
+            <div1 part="N" n="q1" org="uniform" sample="complete" type="alphabetical letter">
+                <head lang="ar">ق</head>
+                <div2 part="N" n="q" org="uniform" sample="complete" type="alphabetical letter">
+                    <entryFree id="n42505" key="ق" type="main">
+                        <form>
+                            <itype>alphabetical letter</itype>
+                            <orth extent="full" lang="ar">ق</orth>
+                        </form>
+                    </entryFree>
+                </div2>
+                <div2 type="root" org="uniform" sample="complete" part="N">
+                    <head>
+                        <foreign lang="ar">قبس</foreign>
+                    </head>
+                    <entryFree id="n42506" key="قبوس" type="main">
+                        <form>
+                            <orth orig="" extent="full" lang="ar">قبوس</orth>
+                        </form>
+                        <hi rend="ital">A sort of</hi>
+                        <foreign lang="ar">طُنْبُور</foreign>: see <foreign lang="ar">مَعَازِفُ</foreign>.
+
+ </entryFree>
+                </div2>
+                <div2 type="root" org="uniform" sample="complete" part="N">
+                    <head>
+                        <foreign lang="ar">قبع</foreign>
+                    </head>
+                    <entryFree id="n42507" key="قَبَعَ السِّقَاءَ" type="main">
+                        <form>
+                            <itype>1</itype>
+                            <orth orig="" extent="full" lang="ar">قَبَعَ السِّقَاءَ</orth>
+                        </form>: see <foreign lang="ar">خَنَثَ</foreign>.
+
+  </entryFree>
+                    <entryFree id="n42508" key="قَبِيعَةٌ" type="main">
+                        <form>
+                            <orth orig="" extent="full" lang="ar">قَبِيعَةٌ</orth>
+                        </form> [The <hi rend="ital">pommel</hi> of a sword;] <hi rend="ital">the thing of
+silver</hi> or <hi rend="ital">iron at the extremity of the hilt of a
+sword.</hi> (S, K.)
+
+ </entryFree>
+                </div2>
+            </div1>
+        </body>
+    </text>
+</TEI.2>

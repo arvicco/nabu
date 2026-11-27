@@ -92,7 +92,8 @@ module Nabu
       gloss_lines: "gloss-lines lane",    # passage-grain token-gloss lines
       lemma_rollups: "lemma rollups",     # P121-2: lemma/curve/mix rollups
       links: "links re-mine",             # P70-3b: the re-derived links instrument
-      analyze: "analyze" # P42-4: the bounded post-rebuild ANALYZE (catalog + index)
+      analyze: "analyze", # P42-4: the bounded post-rebuild ANALYZE (catalog + index)
+      lects_checkpoint: "lects wal checkpoint" # the re-minted lect journal's WAL folded back
     }.freeze
 
     # +on_measure+ (the machine-visible runs packet): a callable invoked

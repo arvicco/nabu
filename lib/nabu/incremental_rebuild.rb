@@ -46,13 +46,20 @@ module Nabu
     Trusted = Data.define(:slug, :stamp_short)
 
     # One source's dry-run verdict: state :clean | :dirty | :skip, +reason+
-    # the drift component for :dirty (:canonical/:parser/:config/:migration/
-    # :unstamped/:weak_identity, or — P39-1, a String because it names files —
-    # "fold(<module>, ...)") or :no_canonical for :skip.
-    Verdict = Data.define(:slug, :state, :reason, :stamp_short) do
-      def initialize(slug:, state:, reason: nil, stamp_short: nil)
-        super
+    # the FIRST drift component in blame order for :dirty (:canonical/
+    # :parser/:config/:migration/:unstamped/:weak_identity, or — P39-1, a
+    # String because it names files — "fold(<module>, ...)") or
+    # :no_canonical for :skip. +reasons+ (additive) carries EVERY drifted
+    # component in the same vocabulary, so code drift behind a canonical
+    # move is named too; [] for :clean. #drift_label is the owner's line.
+    Verdict = Data.define(:slug, :state, :reason, :stamp_short, :reasons) do
+      def initialize(slug:, state:, reason: nil, stamp_short: nil, reasons: nil)
+        reasons ||= reason.nil? ? [] : [reason]
+        super(slug: slug, state: state, reason: reason || reasons.first, stamp_short: stamp_short,
+              reasons: reasons.freeze)
       end
+
+      def drift_label = reasons.join(" + ")
     end
 
     # What `--dry-run --incremental` reports. +refusal+ (a message or nil)
@@ -405,6 +412,13 @@ module Nabu
       # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run
       # touched no rows, so the existing stats still describe them.
       analyzed = ledgered_stage(ledger, "analyze") { analyze_after_incremental(db, fulltext) } if builders_ran
+      # The journal re-minted above (every run) while the registry's
+      # read-only overlay connections stayed open: fold its WAL back, as
+      # the full rebuild's last stage does.
+      progress&.stage("lects wal checkpoint")
+      ledgered_stage(ledger, "lects_checkpoint") do
+        Store::IndexMaintenance.checkpoint_aux!({ "lects" => @config.lects_journal_path }, progress: progress)
+      end
       # Every stage returned: NOW the dirty replays' rows close "succeeded"
       # (Rebuild#replay leaves them open past the load).
       # The corpus lane stages ran for every replayed source: stamp the
@@ -436,7 +450,7 @@ module Nabu
     def incremental_plan(swept, index_dirty)
       replays = swept.reject { |item| %i[skip clean].include?(item.verdict.state) }
                      .map { |item| "replay:#{item.entry.slug}" }
-      replays + (index_dirty ? %w[fulltext_index] : []) + %w[stage_reconcile cjk_lane lect_journal]
+      replays + (index_dirty ? %w[fulltext_index] : []) + %w[stage_reconcile cjk_lane lect_journal lects_checkpoint]
     end
 
     # A content digest of the journal's resolution-relevant columns —
@@ -551,12 +565,14 @@ module Nabu
     def replay_written?(entry) = entry.slug == LanguageShelf::SLUG
 
     def verdict_from(entry, fingerprint, stamp)
-      drift = fingerprint.drift_against(stamp)
-      return Verdict.new(slug: entry.slug, state: :clean, stamp_short: fingerprint.short) if drift.nil?
+      drifts = fingerprint.drifts_against(stamp)
+      return Verdict.new(slug: entry.slug, state: :clean, stamp_short: fingerprint.short) if drifts.empty?
 
       # A fold drift names the changed file(s) — the owner reads these lines.
-      drift = "fold(#{fingerprint.fold_blame(stamp).join(', ')})" if drift == :fold
-      Verdict.new(slug: entry.slug, state: :dirty, reason: drift)
+      drifts = drifts.map do |drift|
+        drift == :fold ? "fold(#{fingerprint.fold_blame(stamp).join(', ')})" : drift
+      end
+      Verdict.new(slug: entry.slug, state: :dirty, reasons: drifts)
     end
 
     # The current fingerprint, its fold digest scoped by the catalog's own

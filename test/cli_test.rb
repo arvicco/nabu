@@ -3338,6 +3338,21 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_rebuild_incremental_dry_run_names_every_drifted_component
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+      db = Nabu::Store.connect(config.catalog_path)
+      db[:derivation_stamps].where(slug: "corpus").update(parser_digest: "0" * 64, fingerprint: "0" * 64)
+      db.disconnect
+      File.write(File.join(config.canonical_dir, "corpus", "one.txt"), "Iliad\nμῆνιν\nἄειδε\nνέος\n")
+
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --incremental --dry-run]) }
+
+      assert_nil status
+      assert_match(/dirty\s+corpus \(canonical \+ parser\)/, out)
+    end
+  end
+
   def test_rebuild_incremental_skips_clean_sources_on_their_stamp
     with_rebuild_env do |config|
       with_config(config) { run_cli(%w[rebuild]) }

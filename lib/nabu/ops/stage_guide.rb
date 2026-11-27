@@ -308,6 +308,9 @@ module Nabu
       stage :analyze, "analyze",
             "Refreshes SQLite planner statistics on the catalog and the index, so the first queries plan " \
             "against real row counts."
+      stage :lects_checkpoint, "lects wal checkpoint",
+            "Folds the freshly re-minted lect journal's write-ahead log back into its file, so the journal " \
+            "does not carry a log as large as itself into the next run."
     end
   end
 end

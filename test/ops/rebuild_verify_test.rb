@@ -18,7 +18,7 @@ module Ops
     T0 = Time.utc(2026, 11, 20, 12)
 
     Plan = Data.define(:refusal, :verdicts, :builders_dirty, :index_dirty)
-    Verdict = Data.define(:slug, :state, :reason)
+    Verdict = Nabu::IncrementalRebuild::Verdict
 
     def setup
       @db = store_test_db
@@ -315,10 +315,25 @@ module Ops
       dir
     end
 
-    def trickle_plan(reason)
+    def trickle_plan(reason, reasons: nil)
       Plan.new(refusal: nil, verdicts: [Verdict.new(slug: "texts", state: :clean, reason: nil),
-                                        Verdict.new(slug: "wellcome", state: :dirty, reason: reason)],
+                                        Verdict.new(slug: "wellcome", state: :dirty, reason: reason,
+                                                    reasons: reasons)],
                builders_dirty: false, index_dirty: false)
+    end
+
+    # The verdict names every drifted component, so code drift behind a
+    # trickle's canonical move is no longer excused as the crawl's: a FAIL
+    # naming both.
+    def test_code_drift_behind_a_live_trickle_canonical_move_fails_naming_both
+      census!
+      full_run!
+      dir = trickle!("wellcome", 4242)
+      @plan = trickle_plan(:canonical, reasons: %i[canonical parser])
+      stamps = check(verify(trickle_dir: dir, alive: ->(pid) { pid == 4242 }), "stamps")
+
+      assert_equal :fail, stamps.status
+      assert_equal ["wellcome: canonical + parser"], stamps.lines
     end
 
     def test_canonical_drift_under_a_live_trickle_crawl_is_a_note_not_a_failure

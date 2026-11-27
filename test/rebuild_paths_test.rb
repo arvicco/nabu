@@ -48,6 +48,8 @@ class RebuildPathsTest < Minitest::Test
       "lect journal" => "written through the lect CLIs in-phase (apply-rules, assign, withdraw) " \
                         "and re-minted wholesale by both rebuild flavors; refresh projects the " \
                         "lect facet FROM it and never re-mints it",
+      "lects wal checkpoint" => "folds the write-ahead file the journal's wholesale re-mint leaves " \
+                                "behind; refresh never re-mints the journal, so it leaves none",
       "source stats" => "maintained by the loader hooks at every sync; a builder pass changes " \
                         "no document or passage row",
       "fulltext index" => "maintained per source at sync time; index-core drift is the " \

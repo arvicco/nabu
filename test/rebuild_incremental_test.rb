@@ -179,6 +179,35 @@ class RebuildIncrementalTest < Minitest::Test
     assert_incremental_state_equals_fresh_full_rebuild
   end
 
+  # The dictionary loader's entry-grain breaker on the incremental path:
+  # twelve held glossary entries whose file stops parsing exceed the limit
+  # (max(10, 20% of 12) = 10) — every entry stays served, the line names
+  # entries, and the source stays unstamped until the parse recovers.
+  def test_incremental_dictionary_parse_breaker_keeps_entries_unstamped
+    write_sources(<<~YAML)
+      glossy:
+        adapter: DictionaryTestAdapter
+    YAML
+    good = (1..12).map { |i| "g#{i}\tλόγος#{i}\tword #{i}\n" }.join
+    write_canonical("glossy", "glossary.tsv" => good)
+    full_rebuilder.run
+
+    write_canonical("glossy", "glossary.tsv" => "#{good}malformed\n")
+    outcome = incremental_rebuilder.run.outcomes.find { |o| o.slug == "glossy" }
+
+    assert_equal [12, 0], outcome.report.to_h.values_at(:parse_held, :withdrawn)
+    breaker = outcome.warning_lines.find { |line| line.start_with?("PARSE BREAKER") }
+    assert_match(/PARSE BREAKER: 12 held entr\(ies\)/, breaker)
+    assert_equal 12, raw_rows(:dictionary_entries).count { |row| !row[:withdrawn] }, "every held entry stays served"
+    assert_equal [:dirty], incremental_rebuilder.plan.verdicts.select { |v| v.slug == "glossy" }.map(&:state),
+                 "a tripped dictionary breaker leaves the source unstamped"
+
+    write_canonical("glossy", "glossary.tsv" => good)
+    incremental_rebuilder.run
+
+    assert_equal [:clean], incremental_rebuilder.plan.verdicts.select { |v| v.slug == "glossy" }.map(&:state)
+  end
+
   # The parse breaker on the incremental path: eleven of thirteen held beta
   # documents newly failing exceeds the limit (max(10, 20% of 13) = 10), so
   # NOTHING is withdrawn and the state deliberately differs from a full
@@ -328,6 +357,24 @@ class RebuildIncrementalTest < Minitest::Test
     verdicts = plan.verdicts.to_h { |v| [v.slug, [v.state, v.reason]] }
     assert_equal [:dirty, "fold(jpn.rb)"], verdicts.fetch("gamma")
     assert_equal [:clean, nil], verdicts.fetch("alpha")
+  end
+
+  # A verdict carries EVERY drifted component (additively: +reason+ stays
+  # the first blame) — parser drift behind a canonical move is named too.
+  def test_a_dirty_verdict_names_every_drifted_component
+    full_rebuilder.run
+    with_db(write: true) do |db|
+      db[:derivation_stamps].where(slug: "beta").update(parser_digest: "0" * 64, fingerprint: "0" * 64)
+    end
+    write_canonical("beta", "b.txt" => THEOGONY)
+
+    verdict = incremental_rebuilder.plan.verdicts.find { |v| v.slug == "beta" }
+    assert_equal :dirty, verdict.state
+    assert_equal :canonical, verdict.reason
+    assert_equal %i[canonical parser], verdict.reasons
+    assert_equal "canonical + parser", verdict.drift_label
+    clean = incremental_rebuilder.plan.verdicts.find { |v| v.slug == "alpha" }
+    assert_empty clean.reasons
   end
 
   # -- P89-1 (owner ruling, option c): the corpus-builder carve-out --------
@@ -605,7 +652,7 @@ class RebuildIncrementalTest < Minitest::Test
     corpus = %w[code_identities enrichments place_index person_index stats honkoku_ndl_catalog timeline
                 silver_dates silver_meter place_apply artifact_scripts facets kind_axis passage_facets
                 entity_index entry_facets hiero_postings sign_concordances lect_journal lect_facets
-                dictionary_stats derge_titles aes_titles lemma_rollups links analyze]
+                dictionary_stats derge_titles aes_titles lemma_rollups links analyze lects_checkpoint]
     assert_equal corpus.sort, rows.select { |row| row[:scope] == "corpus" }.map { |row| row[:stage] }.sort
     report = result.outcomes.first.report
     assert_equal 1, report.added + report.updated, "beta's one document revised"
@@ -624,7 +671,7 @@ class RebuildIncrementalTest < Minitest::Test
     full_rebuilder.run
     incremental_rebuilder.run
 
-    assert_equal %w[code_identities enrichments lect_journal person_index place_index],
+    assert_equal %w[code_identities enrichments lect_journal lects_checkpoint person_index place_index],
                  incremental_rows.map { |row| row[:stage] }.sort,
                  "no replay, no builders, no index work: a skip records no near-zero row"
   end
@@ -1017,6 +1064,21 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal 0, links[:links].where(from_urn: "urn:stray").count,
                  "a journal-only link is backed by nothing — the re-mine kills it"
     links.disconnect
+  end
+
+  # Every incremental re-mints the journal, so every incremental ends with
+  # its WAL folded back (TRUNCATE) — dirty or clean.
+  def test_incremental_ends_with_the_lect_journal_wal_checkpointed
+    full_rebuilder.run
+    reader = Nabu::Store::LectJournal.open!(config.lects_journal_path) # an overlay-shaped reader
+    Nabu::LectRulings.append!(config.lect_rulings_path,
+                              urn: "urn:nabu:alpha:a", code: "grc", lect_id: "grc:koine")
+    incremental_rebuilder.run
+
+    assert_equal 0, File.size?("#{config.lects_journal_path}-wal").to_i
+    assert(incremental_rows.any? { |row| row[:stage] == "lects_checkpoint" })
+  ensure
+    reader&.disconnect
   end
 
   # P71-6: the lect journal re-derives on EVERY incremental run — a
