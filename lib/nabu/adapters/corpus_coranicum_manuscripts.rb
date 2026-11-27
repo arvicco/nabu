@@ -173,6 +173,12 @@ module Nabu
 
       def self.materialized_paths = [CorpusCoranicumClone::PIN_FILE]
 
+      # No remote of its own: the fetch reads the sibling source's pinned
+      # clone on disk and never touches the network, so there is no
+      # upstream repository for the remote probe to compare against — the
+      # clone's liveness is corpus-coranicum's probe.
+      def self.upstream_repo_urls = []
+
       # +clone_dir+/+pinned_sha+ exist for the tests; no-arg construction
       # reads canonical/corpus-coranicum beside the workdir.
       def initialize(clone_dir: nil, pinned_sha: CorpusCoranicum::PINNED_SHA)

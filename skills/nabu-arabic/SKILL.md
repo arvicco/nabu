@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: arabic
   origin: generated
-  sources: "althurayya corpus-coranicum diccas kitab kitab-reuse lane-lexicon ociana openiti pgp-geniza quranic-corpus wiktionary-ar"
+  sources: "althurayya corpus-coranicum corpus-coranicum-manuscripts corpus-coranicum-variants diccas kitab kitab-reuse lane-lexicon ociana openiti pgp-geniza quranic-corpus wiktionary-ar"
 ---
 
 # The Arabist — the `arabic` desk
@@ -25,6 +25,8 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | --- | --- | --- |
 | `althurayya` | al-Ṯurayyā Gazetteer — the early Islamic world (gazetteer instrument) | attribution |
 | `corpus-coranicum` | Corpus Coranicum — the Cairo 1924 Qurʾān with the Talmon concordance (BBAW TEI export) | attribution |
+| `corpus-coranicum-manuscripts` | Corpus Coranicum — Qurʾān manuscript transcriptions (BBAW TEI export) | attribution |
+| `corpus-coranicum-variants` | Corpus Coranicum — the variant readings of the Qurʾān by reader (BBAW TEI export) | attribution |
 | `diccas` | DiCCAS — Disaster Corpus in Classical Arabic Sources (Cicola, Bologna) | nc |
 | `kitab` | KITAB Text Reuse Data — passim pairwise alignments over OpenITI (links instrument, pilot) | nc |
 | `kitab-reuse` | KITAB Text Reuse Data — pairwise statistics (intertext instrument) | nc |

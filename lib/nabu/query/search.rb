@@ -609,6 +609,7 @@ module Nabu
       # The Buckwalter shelves: their search form is the Arabic the stored
       # Buckwalter encodes (QuranicCorpus.search_source), so a Buckwalter-
       # TYPED query only meets them through the same rendering.
+      # const: the sources whose adapter declares the Buckwalter search form (code fact, not a census)
       BUCKWALTER_SOURCES = %w[quranic-corpus].freeze
       BUCKWALTER_LANGUAGE = "ara-Latn"
       private_constant :BUCKWALTER_SOURCES, :BUCKWALTER_LANGUAGE

@@ -634,6 +634,7 @@ module Nabu
       # The Arabic verb forms (I–XII) as stem values, lowercased roman
       # numerals — one spelling for both Quran sources (Talmon "Stem4",
       # the QAC "(IV)").
+      # const: the grammatical inventory of Arabic verb forms (not a corpus census)
       ARABIC_STEMS = %w[i ii iii iv v vi vii viii ix x xi xii].freeze
 
       # Corpus Coranicum (Talmon's concordance; class note): field →

@@ -129,6 +129,11 @@ class DerivabilityWritersTest < Minitest::Test
   # the P108 trio (kouigenji's 54 maki, kokubunken's three TEIs,
   # nrct's one CSV) move UrlDownload fetches to house names the
   # same way — the burman_concordance law kind.
+  # corpus_coranicum_clone writes ONE file per clone-sharing source,
+  # canonical/<slug>/corpus-coranicum.pin.json, inside Adapter#fetch:
+  # the sha of the sibling corpus-coranicum clone the source read —
+  # the file_fetch law kind (a pinned sidecar, declared in
+  # materialized_paths).
   # canonical_identity_cache (P116) writes ONE derived file,
   # db/canonical_identities.json (tmp+rename): the census-keyed memo of
   # plain-tree canonical identities — the DERIVED law kind (a pure
@@ -379,6 +384,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/fetch/statutes_realm_fetch.rb
     nabu/adapters/hrcak_marulana_fetch.rb
     nabu/fetch/hab_edoc_fetch.rb
+    nabu/adapters/corpus_coranicum_clone.rb
     nabu/fetch/sefaria_fetch.rb nabu/fetch/titus_fetch.rb nabu/url_download.rb
     nabu/fetch/litopys_fetch.rb
     nabu/fetch/wiki_fetch.rb nabu/fetch/zip_fetch.rb
