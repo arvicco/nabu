@@ -1123,7 +1123,9 @@ the Secret History of the Mongols (1 / 3,523).
 Tonyukuk in runiform with transliteration, transcription and Turkish
 translation (3 / 214), `turkic-pd` — Kuun's Codex Cumanicus, Thomsen's
 and Radloff's Orkhon editions and Vámbéry's Kudatku Bilik as
-public-domain scans (4 / 2,069); the dictionaries `wiktionary-ota` —
+public-domain scans (4 / 2,069), `makhzan` — thirty Ottoman Turkish
+manuscripts of 1438–1869 transcribed line by line (30 / 3,762; nc);
+the dictionaries `wiktionary-ota` —
 Ottoman Turkish (10,016 entries) and `wiktionary-trk-oat` — Old
 Anatolian Turkish (607); and the cognate sets `savelyevturkic` — 32
 Turkic languages (905 sets) and `robbeetstriangulation` — the

@@ -68,6 +68,14 @@ scans read page by page. The text is uncorrected OCR: the Latin-script
 prose and transcriptions can be searched, the Uyghur and runiform type
 cannot.
 
+**Ottoman manuscripts, line by line.** OpenITI's MAKHZAN release
+transcribes thirty Ottoman Turkish manuscripts copied between 1438 and
+1869 — six copies of the tale of the Severed Head, saints' lives,
+medicine, gardening, astrology, fatwas, a commentary on Ḥāfiẓ — as
+training data for handwriting recognition: 3,762 lines, the library's
+first Ottoman manuscript text. The release is one six-gigabyte archive
+of page images; only the two megabytes of transcription are fetched.
+
 **Turkic dictionaries and cognate sets.** Wiktionary's Ottoman Turkish
 (10,016 entries) and Old Anatolian Turkish (607) join the Old Turkic,
 Old Uyghur and Chagatai extracts already on the reference shelf. Two

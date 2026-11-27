@@ -2,7 +2,7 @@ makhzan:   # 02-sources row 457
   adapter: Nabu::Adapters::Makhzan
   adopted: "2026-11-27"
   axes: [turkic, arabic]
-  wired: false   # EXPECTED FIRST SYNC (dry parse of the real text members, 2026-11-27):
+  wired: true    # first sync verified 2026-11-27, exact: 30 docs / 3,762 passages, 178 skipped by rule. EXPECTED FIRST SYNC (dry parse of the real text members, 2026-11-27):
                  # bin/nabu sync makhzan — the record API, the metadata TSV
                  # (568 KB) and, by HTTP Range into the 6.1 GB zip64 deposit,
                  # the outer directory + 30 nested document zips' ALTO/METS

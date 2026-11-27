@@ -155,7 +155,7 @@ The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta ma
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
-**Members** (13): `althurayya`, `corpus-coranicum`, `corpus-coranicum-manuscripts`, `corpus-coranicum-variants`, `diccas`, `kitab`, `kitab-reuse`, `lane-lexicon`, `ociana`, `openiti`, `pgp-geniza`, `quranic-corpus`, `wiktionary-ar`
+**Members** (14): `althurayya`, `corpus-coranicum`, `corpus-coranicum-manuscripts`, `corpus-coranicum-variants`, `diccas`, `kitab`, `kitab-reuse`, `lane-lexicon`, `makhzan`, `ociana`, `openiti`, `pgp-geniza`, `quranic-corpus`, `wiktionary-ar`
 
 ### hittite
 
@@ -252,7 +252,7 @@ The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscr
 
 The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscripts (line-by-line TEI, Perso-Arabic with transliteration) and the kaikki Old Turkic / Old Uyghur / Chagatai extracts — the Wilkens Old Uyghur dictionary and the runiform inscriptions joining as their packets and asks land.
 
-**Members** (11): `atmo`, `robbeetstriangulation`, `savelyevturkic`, `tr-wikisource`, `turkic-pd`, `ud`, `westoldturkic`, `wiktionary-ota`, `wiktionary-recon`, `wiktionary-trk-oat`, `wilkens-oui`
+**Members** (12): `atmo`, `makhzan`, `robbeetstriangulation`, `savelyevturkic`, `tr-wikisource`, `turkic-pd`, `ud`, `westoldturkic`, `wiktionary-ota`, `wiktionary-recon`, `wiktionary-trk-oat`, `wilkens-oui`
 
 ### mongolic
 
