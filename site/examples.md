@@ -523,6 +523,50 @@ hand-keyed editions — Hans Sachs's *Wittenbergisch Nachtigall* of 1523
 page by page, and the letters of the nuns of Kloster Lüne in Latin and
 Middle Low German.
 
+## For the Turkologist
+
+*The [Turkic desk]({{ '/axis/turkic/' | relative_url }}); live run of 27 November 2026.*
+
+The three Orkhon inscriptions are held line by line in the runiform
+script, each line with its transcription and a modern Turkish
+translation. Tonyukuk opens his own stone in the first person — "I,
+Bilge Tonyukuk, was born in the land of China; the Türk people were
+subject to China":
+
+```
+$ bin/nabu show urn:nabu:tr-wikisource:tonyukuk:1-B1
+urn:nabu:tr-wikisource:tonyukuk:1-B1 [otk]
+  𐰋𐰃𐰠𐰏𐰀: 𐱃𐰆𐰪𐰸𐰸: 𐰋𐰤: 𐰇𐰕𐰢: 𐱃𐰉𐰍𐰲: 𐰃𐰠𐰭𐰀: 𐰶𐰠𐰦𐰢: 𐱅𐰇𐰼𐰚: 𐰉𐰆𐰑𐰣: 𐱃𐰉𐰍𐰲𐰴𐰀: 𐰝𐰇𐰼𐰼: 𐰼𐱅𐰃:
+  document: urn:nabu:tr-wikisource:tonyukuk — Tonyukuk yazıtı (the Tonyukuk inscription)
+  date: 716–726 CE · Bain Tsokto, Tuul valley (Mongolia)
+```
+
+A line can be found through its translation or its transcription as
+well as through the runes, and the word for the sky and its god is on
+the dictionary shelf in the same script:
+
+```
+$ bin/nabu search "Tonyukuk" --source tr-wikisource --translations
+urn:nabu:tr-wikisource:tonyukuk:2-D8 [otk]  — Tonyukuk yazıtı (the Tonyukuk inscription)
+  translation: …Bilge Kağan ilinde yazdırdım. Ben Bilge [Tonyukuk].
+…
+$ bin/nabu define 𐱅𐰭𐰼𐰃
+𐱅𐰭𐰼𐰃 [otk] — Wiktionary — Old Turkic (kaikki.org extract) [attribution]
+  gloss: sky; god
+  etymon: ←(inherited) *teŋri [trk-pro]
+```
+
+Six centuries later, on the Black Sea steppe, the same word
+stands in the Creed that a friar wrote down in Cuman, as Géza Kuun
+printed it from the Codex Cumanicus in 1880 (the page text is
+uncorrected OCR of the scan):
+
+```
+$ bin/nabu search "tengri" --source turkic-pd
+urn:nabu:turkic-pd:kuun-codex-cumanicus-1880:360 [lat]
+  … Inanirmen' barcaga erkli bir ata [tengri]ga (,) kokni jerni barca korunur korumes…
+```
+
 ## Typing a citation loosely
 
 A citation typed from memory rarely arrives clean. `clarify` resolves
