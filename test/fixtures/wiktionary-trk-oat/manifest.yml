@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-trk-oat
+adapter_test: test/adapters/wiktionary_trk_oat_test.rb
+retrieved: 2026-11-27
+files:
+  - path: kaikki.org-dictionary-OldAnatolianTurkish.jsonl
+    url: https://kaikki.org/dictionary/Old%20Anatolian%20Turkish/kaikki.org-dictionary-OldAnatolianTurkish.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {میوه, من},
+      byte-verbatim in upstream order, of 607 lines
