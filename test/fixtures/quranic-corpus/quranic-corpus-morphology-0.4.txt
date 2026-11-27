@@ -1,0 +1,162 @@
+# PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK
+#====================================================================
+#
+#  Quranic Arabic Corpus (morphology, version 0.4)
+#  Copyright (C) 2011 Kais Dukes
+#  License: GNU General Public License
+#
+#  The Quranic Arabic Corpus includes syntactic and morphological
+#  annotation of the Quran, and builds on the verified Arabic text
+#  distributed by the Tanzil project.
+#
+#  TERMS OF USE:
+#
+#  - Permission is granted to copy and distribute verbatim copies
+#    of this file, but CHANGING IT IS NOT ALLOWED.
+#
+#  - This annotation can be used in any website or application,
+#    provided its source (the Quranic Arabic Corpus) is clearly
+#    indicated, and a link is made to http://corpus.quran.com to enable
+#    users to keep track of changes.
+#
+#  - This copyright notice shall be included in all verbatim copies
+#    of the text, and shall be reproduced appropriately in all works
+#    derived from or containing substantial portion of this file.
+#
+#  Please check updates at: http://corpus.quran.com/download
+
+# PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK
+#====================================================================
+#
+#  Tanzil Quran Text (Uthmani, version 1.0.2)
+#  Copyright (C) 2008-2009 Tanzil.info
+#  License: Creative Commons BY-ND 3.0 Unported
+#
+#  This copy of quran text is carefully produced, highly
+#  verified and continuously monitored by a group of specialists
+#  at Tanzil project.
+#
+#  TERMS OF USE:
+#
+#  - Permission is granted to copy and distribute verbatim copies
+#    of this text, but CHANGING IT IS NOT ALLOWED.
+#
+#  - This quran text can be used in any website or application,
+#    provided its source (Tanzil.info) is clearly indicated, and
+#    a link is made to http://tanzil.info to enable users to keep
+#    track of changes.
+#
+#  - This copyright notice shall be included in all verbatim copies
+#    of the text, and shall be reproduced appropriately in all files
+#    derived from or containing substantial portion of this text.
+#
+#  Please check updates at: http://tanzil.info/updates/
+#
+#====================================================================
+
+LOCATION	FORM	TAG	FEATURES
+(1:1:1:1)	bi	P	PREFIX|bi+
+(1:1:1:2)	somi	N	STEM|POS:N|LEM:{som|ROOT:smw|M|GEN
+(1:1:2:1)	{ll~ahi	PN	STEM|POS:PN|LEM:{ll~ah|ROOT:Alh|GEN
+(1:1:3:1)	{l	DET	PREFIX|Al+
+(1:1:3:2)	r~aHoma`ni	ADJ	STEM|POS:ADJ|LEM:r~aHoma`n|ROOT:rHm|MS|GEN
+(1:1:4:1)	{l	DET	PREFIX|Al+
+(1:1:4:2)	r~aHiymi	ADJ	STEM|POS:ADJ|LEM:r~aHiym|ROOT:rHm|MS|GEN
+(1:2:1:1)	{lo	DET	PREFIX|Al+
+(1:2:1:2)	Hamodu	N	STEM|POS:N|LEM:Hamod|ROOT:Hmd|M|NOM
+(1:2:2:1)	li	P	PREFIX|l:P+
+(1:2:2:2)	l~ahi	PN	STEM|POS:PN|LEM:{ll~ah|ROOT:Alh|GEN
+(1:2:3:1)	rab~i	N	STEM|POS:N|LEM:rab~|ROOT:rbb|M|GEN
+(1:2:4:1)	{lo	DET	PREFIX|Al+
+(1:2:4:2)	Ea`lamiyna	N	STEM|POS:N|LEM:Ea`lamiyn|ROOT:Elm|MP|GEN
+(1:3:1:1)	{l	DET	PREFIX|Al+
+(1:3:1:2)	r~aHoma`ni	ADJ	STEM|POS:ADJ|LEM:r~aHoma`n|ROOT:rHm|MS|GEN
+(1:3:2:1)	{l	DET	PREFIX|Al+
+(1:3:2:2)	r~aHiymi	ADJ	STEM|POS:ADJ|LEM:r~aHiym|ROOT:rHm|MS|GEN
+(1:4:1:1)	ma`liki	N	STEM|POS:N|ACT|PCPL|LEM:ma`lik|ROOT:mlk|M|GEN
+(1:4:2:1)	yawomi	N	STEM|POS:N|LEM:yawom|ROOT:ywm|M|GEN
+(1:4:3:1)	{l	DET	PREFIX|Al+
+(1:4:3:2)	d~iyni	N	STEM|POS:N|LEM:diyn|ROOT:dyn|M|GEN
+(1:5:1:1)	<iy~aAka	PRON	STEM|POS:PRON|LEM:<iy~aA|2MS
+(1:5:2:1)	naEobudu	V	STEM|POS:V|IMPF|LEM:Eabada|ROOT:Ebd|1P
+(1:5:3:1)	wa	CONJ	PREFIX|w:CONJ+
+(1:5:3:2)	<iy~aAka	PRON	STEM|POS:PRON|LEM:<iy~aA|2MS
+(1:5:4:1)	nasotaEiynu	V	STEM|POS:V|IMPF|(X)|LEM:{sotaEiynu|ROOT:Ewn|1P
+(1:6:1:1)	{hodi	V	STEM|POS:V|IMPV|LEM:hadaY|ROOT:hdy|2MS
+(1:6:1:2)	naA	PRON	SUFFIX|PRON:1P
+(1:6:2:1)	{l	DET	PREFIX|Al+
+(1:6:2:2)	S~ira`Ta	N	STEM|POS:N|LEM:Sira`T|ROOT:SrT|M|ACC
+(1:6:3:1)	{lo	DET	PREFIX|Al+
+(1:6:3:2)	musotaqiyma	ADJ	STEM|POS:ADJ|ACT|PCPL|(X)|LEM:m~usotaqiym|ROOT:qwm|M|ACC
+(1:7:1:1)	Sira`Ta	N	STEM|POS:N|LEM:Sira`T|ROOT:SrT|M|ACC
+(1:7:2:1)	{l~a*iyna	REL	STEM|POS:REL|LEM:{l~a*iY|MP
+(1:7:3:1)	>anoEamo	V	STEM|POS:V|PERF|(IV)|LEM:>anoEama|ROOT:nEm|2MS
+(1:7:3:2)	ta	PRON	SUFFIX|PRON:2MS
+(1:7:4:1)	Ealayo	P	STEM|POS:P|LEM:EalaY`
+(1:7:4:2)	himo	PRON	SUFFIX|PRON:3MP
+(1:7:5:1)	gayori	N	STEM|POS:N|LEM:gayor|ROOT:gyr|M|GEN
+(1:7:6:1)	{lo	DET	PREFIX|Al+
+(1:7:6:2)	magoDuwbi	N	STEM|POS:N|PASS|PCPL|LEM:magoDuwb|ROOT:gDb|M|GEN
+(1:7:7:1)	Ealayo	P	STEM|POS:P|LEM:EalaY`
+(1:7:7:2)	himo	PRON	SUFFIX|PRON:3MP
+(1:7:8:1)	wa	CONJ	PREFIX|w:CONJ+
+(1:7:8:2)	laA	NEG	STEM|POS:NEG|LEM:laA
+(1:7:9:1)	{l	DET	PREFIX|Al+
+(1:7:9:2)	D~aA^l~iyna	N	STEM|POS:N|ACT|PCPL|LEM:DaA^l~|ROOT:Dll|MP|GEN
+(109:1:1:1)	qulo	V	STEM|POS:V|IMPV|LEM:qaAla|ROOT:qwl|2MS
+(109:1:2:1)	ya`^	VOC	PREFIX|ya+
+(109:1:2:2)	>ay~uhaA	N	STEM|POS:N|LEM:>ay~uhaA|NOM
+(109:1:3:1)	{lo	DET	PREFIX|Al+
+(109:1:3:2)	ka`firuwna	N	STEM|POS:N|ACT|PCPL|LEM:ka`firuwn|ROOT:kfr|MP|NOM
+(109:2:1:1)	laA^	NEG	STEM|POS:NEG|LEM:laA
+(109:2:2:1)	>aEobudu	V	STEM|POS:V|IMPF|LEM:Eabada|ROOT:Ebd|1S
+(109:2:3:1)	maA	REL	STEM|POS:REL|LEM:maA
+(109:2:4:1)	taEobudu	V	STEM|POS:V|IMPF|LEM:Eabada|ROOT:Ebd|2MP
+(109:2:4:2)	wna	PRON	SUFFIX|PRON:2MP
+(109:3:1:1)	wa	CONJ	PREFIX|w:CONJ+
+(109:3:1:2)	laA^	NEG	STEM|POS:NEG|LEM:laA
+(109:3:2:1)	>antumo	PRON	STEM|POS:PRON|2MP
+(109:3:3:1)	Ea`biduwna	N	STEM|POS:N|ACT|PCPL|LEM:EaAbid|ROOT:Ebd|MP|NOM
+(109:3:4:1)	maA^	REL	STEM|POS:REL|LEM:maA
+(109:3:5:1)	>aEobudu	V	STEM|POS:V|IMPF|LEM:Eabada|ROOT:Ebd|1S
+(109:4:1:1)	wa	CONJ	PREFIX|w:CONJ+
+(109:4:1:2)	laA^	NEG	STEM|POS:NEG|LEM:laA
+(109:4:2:1)	>anaA"	PRON	STEM|POS:PRON|1S
+(109:4:3:1)	EaAbidN	N	STEM|POS:N|ACT|PCPL|LEM:EaAbid|ROOT:Ebd|M|INDEF|NOM
+(109:4:4:1)	m~aA	REL	STEM|POS:REL|LEM:maA
+(109:4:5:1)	Eabad	V	STEM|POS:V|PERF|LEM:Eabada|ROOT:Ebd|2MP
+(109:4:5:2)	t~umo	PRON	SUFFIX|PRON:2MP
+(109:5:1:1)	wa	CONJ	PREFIX|w:CONJ+
+(109:5:1:2)	laA^	NEG	STEM|POS:NEG|LEM:laA
+(109:5:2:1)	>antumo	PRON	STEM|POS:PRON|2MP
+(109:5:3:1)	Ea`biduwna	N	STEM|POS:N|ACT|PCPL|LEM:EaAbid|ROOT:Ebd|MP|NOM
+(109:5:4:1)	maA^	REL	STEM|POS:REL|LEM:maA
+(109:5:5:1)	>aEobudu	V	STEM|POS:V|IMPF|LEM:Eabada|ROOT:Ebd|1S
+(109:6:1:1)	la	P	PREFIX|l:P+
+(109:6:1:2)	kumo	PRON	STEM|POS:PRON|2MP
+(109:6:2:1)	diynu	N	STEM|POS:N|LEM:diyn|ROOT:dyn|M|NOM
+(109:6:2:2)	kumo	PRON	SUFFIX|PRON:2MP
+(109:6:3:1)	wa	CONJ	PREFIX|w:CONJ+
+(109:6:3:2)	li	P	PREFIX|l:P+
+(109:6:3:3)	Ya	PRON	STEM|POS:PRON|1S
+(109:6:4:1)	diyni	N	STEM|POS:N|LEM:diyn|ROOT:dyn|M|NOM
+(109:6:4:2)		PRON	SUFFIX|PRON:1S
+(112:1:1:1)	qulo	V	STEM|POS:V|IMPV|LEM:qaAla|ROOT:qwl|2MS
+(112:1:2:1)	huwa	PRON	STEM|POS:PRON|3MS
+(112:1:3:1)	{ll~ahu	PN	STEM|POS:PN|LEM:{ll~ah|ROOT:Alh|NOM
+(112:1:4:1)	>aHadN	N	STEM|POS:N|LEM:>aHad|ROOT:AHd|M|INDEF|NOM
+(112:2:1:1)	{ll~ahu	PN	STEM|POS:PN|LEM:{ll~ah|ROOT:Alh|NOM
+(112:2:2:1)	{l	DET	PREFIX|Al+
+(112:2:2:2)	S~amadu	N	STEM|POS:N|LEM:S~amad|ROOT:Smd|MS|NOM
+(112:3:1:1)	lamo	NEG	STEM|POS:NEG|LEM:lam
+(112:3:2:1)	yalido	V	STEM|POS:V|IMPF|LEM:walada|ROOT:wld|3MS|MOOD:JUS
+(112:3:3:1)	wa	CONJ	PREFIX|w:CONJ+
+(112:3:3:2)	lamo	NEG	STEM|POS:NEG|LEM:lam
+(112:3:4:1)	yuwlado	V	STEM|POS:V|IMPF|PASS|LEM:walada|ROOT:wld|3MS|MOOD:JUS
+(112:4:1:1)	wa	CONJ	PREFIX|w:CONJ+
+(112:4:1:2)	lamo	NEG	STEM|POS:NEG|LEM:lam
+(112:4:2:1)	yakun	V	STEM|POS:V|IMPF|LEM:kaAna|ROOT:kwn|SP:kaAn|3MS|MOOD:JUS
+(112:4:3:1)	l~a	P	PREFIX|l:P+
+(112:4:3:2)	hu,	PRON	STEM|POS:PRON|3MS
+(112:4:4:1)	kufuwFA	N	STEM|POS:N|LEM:kufuw|ROOT:kfA|M|INDEF|ACC
+(112:4:5:1)	>aHadN[	N	STEM|POS:N|LEM:>aHad|ROOT:AHd|M|INDEF|NOM

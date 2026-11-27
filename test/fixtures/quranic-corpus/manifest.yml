@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The file is a row-level TRIM (whole: false) of the upstream morphology
+# file, so a fresh GET returns the full 6.3 MB file and is fetched for
+# URL-liveness only, never byte-compared; re-apply the README's recipe after
+# any refresh. adapter_test is null: the adapter test asserts trim-level
+# counts.
+source: quranic-corpus
+adapter_test:
+retrieved: 2026-11-27
+files:
+  - path: quranic-corpus-morphology-0.4.txt
+    url: https://raw.githubusercontent.com/q-ran/quran/8abbbb2942f4479a8f314c04192d0c6f575ead15/sources/1.0/quranic-corpus-morphology-0.4.txt
+    whole: false
+    trim: >-
+      lines 1-57 verbatim (both copyright blocks + the column header) and every
+      row of suras 1, 109 and 112 (128,219 rows -> 105), each line
+      byte-identical, upstream order, CRLF kept
