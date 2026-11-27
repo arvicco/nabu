@@ -271,6 +271,20 @@ class DisplayTest < Minitest::Test
                  "OpenITI carries no tashkeel: plain is a byte no-op there"
   end
 
+  # Old Turkic runiform (Orkh, right to left): Kül Tigin G1's opening as
+  # TrWikisource stores it over the checked-in fixture (real bytes,
+  # U+10C45 U+10C2D U+10C3C U+10C03 …).
+  KT_G1 = "𐱅𐰭𐰼𐰃: 𐱅𐰏: 𐱅𐰭𐰼𐰃𐰓𐰀: 𐰉𐰆𐰞𐰢𐱁:"
+
+  def test_otk_runiform_runs_are_wrapped_in_rtl_isolates
+    rendered = render(KT_G1, "otk")
+    assert rendered.text.start_with?(RLI), "otk policy sets isolates: true (home script Orkh)"
+    assert_includes rendered.applied, Nabu::Display::ISOLATES
+    assert_equal KT_G1, unwrap(rendered.text), "nothing to strip"
+    assert_equal KT_G1, render(KT_G1, "otk", mode: "full").text
+    refute_includes render("TeŊRİ: TeG:", "otk-Latn").applied, Nabu::Display::ISOLATES
+  end
+
   def test_the_script_rule_never_adds_isolates_a_policy_lacks
     refute_includes render(ZOGR, "chu-Arab").text, RLI, "no isolates: true in the policy, no wrap"
   end
