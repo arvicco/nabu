@@ -208,6 +208,69 @@ class DisplayTest < Minitest::Test
     end
   end
 
+  # -- pointed Arabic: the Cairo Qurʾān (corpus-coranicum) -------------------
+  #
+  # Real stored verses: Q 111:1 and 112:1 are CorpusCoranicum's parse of the
+  # checked-in fixture; Q 2:2, 2:152 and 2:242 are the same parser over the
+  # live clone (the fixture's three suras carry no pause sign, standalone
+  # maddah, rounded zero or small yeh — the live census does).
+  QURAN_111_1 = "تَبَّتۡ يَدَآ أَبِی لَهَبٍۢ وَتَبَّ"
+  QURAN_112_1 = "قُلۡ هُوَ ٱللَّهُ أَحَدٌ"
+  QURAN_2_2 = "ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَۛ فِيهِۛ هُدًۭى لِّلۡمُتَّقِينَ" # pause ۛ ×2, small low meem ۭ
+  QURAN_2_152 = "فَٱذۡكُرُونِیٓ أَذۡكُرۡكُمۡ وَٱشۡكُرُوا۟ لِی وَلَا تَكۡفُرُونِ" # maddah on yeh, rounded zero ۟
+  QURAN_2_242 = "كَذَٰلِكَ يُبَيِّنُ ٱللَّهُ لَكُمۡ ءَايَٰتِهِۦ لَعَلَّكُمۡ تَعۡقِلُونَ" # small yeh ۦ
+
+  def test_default_strips_the_quranic_recitation_marks_and_keeps_the_tashkeel
+    rendered = render(QURAN_2_2, "ara")
+    assert_equal QURAN_2_2.delete("ۭۛ"), unwrap(rendered.text),
+                 "exactly the pause signs and the small low meem go; every vowel sign stays"
+    assert_equal ["quranic-marks"], rendered.applied - [Nabu::Display::ISOLATES]
+    assert_equal QURAN_2_152.delete("۟").sub("یٓ", "ی"), unwrap(render(QURAN_2_152, "ara").text),
+                 "the maddah over a yeh and the rounded zero are recitation marks"
+    assert_equal QURAN_111_1.delete("ۢ"), unwrap(render(QURAN_111_1, "ara").text)
+  end
+
+  def test_default_changes_nothing_on_a_verse_with_vocalization_only
+    [QURAN_112_1, QURAN_2_242].each do |verse|
+      rendered = render(verse, "ara")
+      assert_equal verse, unwrap(rendered.text)
+      assert_equal [Nabu::Display::ISOLATES], rendered.applied
+    end
+  end
+
+  def test_plain_yields_the_bare_consonantal_text
+    {
+      QURAN_112_1 => "قل هو ٱلله أحد",
+      QURAN_111_1 => "تبت يدآ أبی لهب وتب",
+      QURAN_2_2 => "ذلك ٱلكتب لا ريب فيه هدى للمتقين",
+      QURAN_2_152 => "فٱذكرونی أذكركم وٱشكروا لی ولا تكفرون",
+      QURAN_2_242 => "كذلك يبين ٱلله لكم ءايته لعلكم تعقلون"
+    }.each do |verse, bare|
+      rendered = render(verse, "ara", mode: "plain")
+      assert_equal bare, unwrap(rendered.text), "plain: letters only — hamza seats, ٱ and آ are letters"
+      assert_includes rendered.applied, "tashkeel"
+    end
+  end
+
+  def test_plain_keeps_hamza_and_alef_maddah_letters
+    text = unwrap(render(QURAN_111_1, "ara", mode: "plain").text)
+    assert_includes text, "آ", "U+0622 decomposes to alef + maddah under NFD — the alef's maddah is a letter, kept"
+    assert_includes text, "أ", "hamza on its seat is a consonant, never a vowel sign"
+    assert_includes unwrap(render(QURAN_112_1, "ara", mode: "plain").text), "ٱ", "alef wasla is a letter"
+  end
+
+  def test_full_mode_shows_the_cairo_verse_byte_for_byte
+    [QURAN_2_2, QURAN_2_152, QURAN_111_1].each do |verse|
+      assert_equal verse, render(verse, "ara", mode: "full").text
+    end
+  end
+
+  def test_the_arabic_mark_classes_are_inert_on_buckwalter_and_unpointed_text
+    assert_equal QAC_112_1, render(QAC_112_1, "ara-Latn", mode: "plain").text
+    assert_equal DIWAN_LINE, unwrap(render(DIWAN_LINE, "ara", mode: "plain").text),
+                 "OpenITI carries no tashkeel: plain is a byte no-op there"
+  end
+
   def test_the_script_rule_never_adds_isolates_a_policy_lacks
     refute_includes render(ZOGR, "chu-Arab").text, RLI, "no isolates: true in the policy, no wrap"
   end
