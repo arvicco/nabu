@@ -60,6 +60,11 @@ module Nabu
   #   ko-wikisource-mk         33 / 159          reading                   3.3 kB
   #   stgall-priscian      13,381 / 13,395       priscian                  0.9 MB
   #   lotsawa-house       111,994 / 413,067      phonetics                 3.9 MB
+  #   tr-wikisource           212 / 214          transcription            48.3 kB
+  #     (the Orkhon lines' vocalized reading, Çeviri yazı — the adapter's
+  #     dry parse 2026-11-27, pre-sync; not in the totals below. Its
+  #     letter-by-letter Harf çevirisi "transliteration" is HELD: a
+  #     case-coded letter string no reader types)
   #
   # 31 sources, 2,336,455 layer-bearing passages, 228.5 MB folded layer
   # text (a 194.7 MB lane, trial-built).
@@ -192,7 +197,8 @@ module Nabu
       "aozora" => [Spec.new(key: "ruby", field: "reading")],
       "ko-wikisource-mk" => [Spec.new(key: "reading", fold: "kor")],
       "stgall-priscian" => [Spec.new(key: "priscian", fold: "lat")],
-      "lotsawa-house" => [Spec.new(key: "phonetics", fold: :generic)]
+      "lotsawa-house" => [Spec.new(key: "phonetics", fold: :generic)],
+      "tr-wikisource" => [Spec.new(key: "transcription")]
     }.freeze
 
     # A layer must carry at least one letter: "*" anchors, bare verse

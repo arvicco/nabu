@@ -32,6 +32,10 @@ module Nabu
   #   old-nubian-ud          120 / 124      translations.translation (Russian)
   #   guaman-poma             43 / 5,911    translation (Spanish of Quechua)
   #   ko-wikisource-mk        29 / 159      modern (modern-Korean rendering)
+  #   tr-wikisource          212 / 214      translation (modern Turkish of the
+  #                                          Orkhon lines; adapter dry parse
+  #                                          2026-11-27, pre-sync — the 2
+  #                                          lacuna rows' "[...]" mint nothing)
   #
   # Deliberately NOT registered: itkc "translation_ref" (an id pointing at
   # the translation, not its text); corph "translation_notes" (editorial
@@ -75,6 +79,7 @@ module Nabu
       "old-nubian-ud" => [CONLLU_TRANSLATIONS],
       "stgall-priscian" => [Spec.new(key: "translation")],
       "tamilex" => [Spec.new(key: "translation", reject: TAMILEX_TODO)],
+      "tr-wikisource" => [Spec.new(key: "translation")],
       "ud" => [CONLLU_TRANSLATIONS]
     }.freeze
 

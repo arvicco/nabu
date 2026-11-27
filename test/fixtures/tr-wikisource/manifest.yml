@@ -1,0 +1,26 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every page is an api.php revision, re-enveloped in the adapter's own
+# on-disk shape (the envelope is ours, the wikitext verbatim, three of
+# them line-trimmed) — so whole: false, adapter_test null.
+source: tr-wikisource
+adapter_test: null
+retrieved: "2026-11-27"
+files:
+  - path: pages/5093.json
+    url: https://tr.wikisource.org/w/index.php?curid=5093&oldid=174981
+    whole: false
+    trim: revid 174981, line-trimmed to G1–G2 + KD1 + two Kaynak entries, re-enveloped — README
+  - path: pages/5095.json
+    url: https://tr.wikisource.org/w/index.php?curid=5095&oldid=174979
+    whole: false
+    trim: revid 174979, line-trimmed to B7–B9 + GB1, re-enveloped — README
+  - path: pages/5096.json
+    url: https://tr.wikisource.org/w/index.php?curid=5096&oldid=175665
+    whole: false
+    trim: revid 175665, line-trimmed to 1-B1–1-B2 + 2-B1, re-enveloped — README
+  - path: pages/5338.json
+    url: https://tr.wikisource.org/w/index.php?curid=5338&oldid=102344
+    whole: false
+    trim: whole wikitext of revid 102344, re-enveloped — README

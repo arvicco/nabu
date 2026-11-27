@@ -68,6 +68,13 @@ languages:
   orv: {}
   bul: {}
   pgl: { spacing: true }
+  # Old Turkic's home script is the runiform (Orkh, U+10C00 block — a
+  # right-to-left script, Nabu::Display::RTL_SCRIPTS): the tr-wikisource
+  # Orkhon lines and the UD Tonqq treebank both store runiform, so the
+  # isolates claim is the hbo/arc one; nothing to strip (the word
+  # separator ':' is punctuation). A romanized otk-Latn tag stays
+  # left-to-right by the script rule.
+  otk: { isolates: true }
 
 # Edition-level conventions (P27-1) — per-SOURCE rules the `reading` mode
 # executes (`--display diplomatic` shows the marks as stored). Census-first

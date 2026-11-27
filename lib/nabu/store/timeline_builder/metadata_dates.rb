@@ -312,6 +312,9 @@ module Nabu
           #                               imprint rides "imprint" — no place claim
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
+          "tr-wikisource" => :structured, # each inscription's date: KT 732 / BK 735 from the texts' own
+          #                                 animal-cycle date lines (no class), Tonyukuk c. 716–726
+          #                                 attributed (class composition); place = the findspot
           "nb-no" => :structured, # P165: the item record's issued year (+ the untouched
           #                         imprint date where it differs), class edition; place =
           #                         the imprint place in the print's own form (Christianiae)

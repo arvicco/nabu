@@ -166,10 +166,10 @@ display: cantillation stripped (--display full shows all marks)
 display: apparatus simplified: sigla (--display diplomatic shows the edition marks)
 ```
 
-**RTL isolates.** With `isolates: true` (hbo/arc, and since P41-3 ara/fas),
-rendered runs are wrapped in U+2067/U+2069 (RTL isolate / pop). In a
-bidi-capable terminal this keeps Hebrew and Arabic-script runs coherent
-inside left-to-right layout lines; where bidi is absent the characters are
+**RTL isolates.** With `isolates: true` (hbo/arc, and since P41-3 ara/fas;
+otk for the Old Turkic runiform, the Orkh block), rendered runs are
+wrapped in U+2067/U+2069 (RTL isolate / pop). In a bidi-capable
+terminal this keeps Hebrew and Arabic-script runs coherent inside left-to-right layout lines; where bidi is absent the characters are
 invisible and harmless. Width math (KWIC columns) excludes them, so
 alignment never shifts.
 
