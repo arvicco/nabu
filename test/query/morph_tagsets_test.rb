@@ -205,5 +205,29 @@ module Query
       assert_includes search("ḥꜣ.tꞽ", morph: "state=pron").map(&:urn), "urn:nabu:tla-hf:late-egyptian-v19:1"
       assert_empty search("=f", morph: "gender=fem")
     end
+
+    # Q 112:3 يَلِدۡ / يُولَدۡ (Talmon base yalid / yūlad): Stem1 Imp Jussive
+    # 3P Sg Masc, active and passive.
+    def test_corpus_coranicum_talmon_fields_reach_the_morph_surface
+      load_source("corpus-coranicum", "CorpusCoranicum")
+      urn = "urn:nabu:corpus-coranicum:sura-112:112.3"
+      hits = search("yalid", morph: "stem=i,conjugation=impf,mood=jus,person=3")
+      assert_includes hits.map(&:urn), urn
+      assert_equal "person=3|number=sing|gender=masc|stem=i|conjugation=impf|mood=jus|voice=act",
+                   hits.find { |hit| hit.urn == urn }.morph
+      assert_includes search("yūlad", morph: "voice=pass").map(&:urn), urn
+      assert_empty search("yalid", morph: "mood=sub")
+    end
+
+    # Q 112:3 yalido / yuwlado (LEM walada): the segment features string.
+    def test_quranic_corpus_features_reach_the_morph_surface
+      load_source("quranic-corpus", "QuranicCorpus")
+      urn = "urn:nabu:quranic-corpus:112:3"
+      hits = search("walada", morph: "mood=jus,voice=pass")
+      assert_includes hits.map(&:urn), urn
+      assert_match "stem=i", hits.find { |hit| hit.urn == urn }.morph
+      assert_includes search("walada", morph: "stem=i,conjugation=impf,person=3").map(&:urn), urn
+      assert_empty search("walada", morph: "conjugation=perf")
+    end
   end
 end

@@ -489,10 +489,15 @@ arabic:
     million passages** — with the Persian lane (`fas`) riding the same
     corpus. Holdings below are read live.
   instruments: |
-    - **No gold lemmas — OpenITI is unannotated.** The corpus carries no
-      morphology or lemma layer, so `--lemma`, `vocab` and `formulas` do not
-      apply to this desk; its instruments are **full-text search** across the
-      whole Islamicate shelf and the **timeline**.
+    - **Lemmas and morphology on the Qurʾān; OpenITI is unannotated.** The
+      two Qurʾān shelves are annotated word by word — `corpus-coranicum`
+      (the Cairo 1924 text with Rafael Talmon's concordance: lemma, root,
+      part of speech and inflection per word) and `quranic-corpus` (the
+      Quranic Arabic Corpus morphology, per segment) — so `--lemma` and
+      `--morph` reach them (`--morph stem=x,conjugation=impf`: the verb
+      forms I–XII, the Semitic conjugations, mood, voice, case). OpenITI
+      carries no morphology or lemma layer; on the Islamicate shelf the
+      instruments are **full-text search** and the **timeline**.
     - **The ara/fas Arabic-script fold:** one search skeleton across
       the ی/ي and ک/ك keyboard split, maqsura, taa marbuta, tashkeel, tatweel
       and ZWNJ — so a query typed on either keyboard reaches the stored form

@@ -2412,5 +2412,56 @@ module Query
       assert_equal "word-grain: only for Tibetan-script queries", searcher.words_note
       assert_nil searcher.word_grain
     end
+
+    # -- Buckwalter (quranic-corpus) ---------------------------------------------
+
+    # The quranic-corpus search form is the Arabic its Buckwalter encodes
+    # (QuranicCorpus.search_source), minted here exactly as the adapter
+    # mints it, over the shelf's real stored Q 112:1 and 112:2.
+    def seed_quranic_corpus
+      qac = Nabu::Store::Source.create(slug: "quranic-corpus", name: "QAC", adapter_class: "TestAdapter",
+                                       license_class: "research_private")
+      doc = make_document(source: qac, urn: "urn:nabu:quranic-corpus:112", language: "ara-Latn")
+      ["qulo huwa {ll~ahu >aHadN", "{ll~ahu {lS~amadu"].each_with_index do |text, index|
+        Nabu::Store::Passage.create(
+          document_id: doc.id, urn: "urn:nabu:quranic-corpus:112:#{index + 1}", sequence: index,
+          language: "ara-Latn", text: text, content_sha_raw: "x", revision: 1,
+          text_normalized: Nabu::Normalize.search_form(Nabu::Adapters::QuranicCorpus.search_source(text),
+                                                       language: "ara-Latn")
+        )
+      end
+      rebuild!
+    end
+
+    def test_an_arabic_script_query_reaches_the_buckwalter_shelf_unscoped
+      seed_quranic_corpus
+      assert_equal %w[urn:nabu:quranic-corpus:112:1], search("قُلْ هُوَ").map(&:urn)
+      assert_equal %w[urn:nabu:quranic-corpus:112:2], search("الصمد").map(&:urn)
+      hit = search("الصمد").first
+      assert_equal "{ll~ahu {lS~amadu", hit.text, "the hit displays the stored Buckwalter"
+      assert_equal "{ll~ahu {lS~amadu", hit.snippet, "known limit: the Latin snippet fold cannot bracket an Arabic hit"
+    end
+
+    def test_a_buckwalter_query_reaches_the_shelf_when_the_search_is_scoped_to_it
+      seed_quranic_corpus
+      assert_equal %w[urn:nabu:quranic-corpus:112:1], search("qulo huwa", source: "quranic-corpus").map(&:urn)
+      assert_equal %w[urn:nabu:quranic-corpus:112:1], search("qulo", sources: %w[quranic-corpus]).map(&:urn)
+      assert_equal %w[urn:nabu:quranic-corpus:112:1 urn:nabu:quranic-corpus:112:2],
+                   search("{ll~ahu", lang: "ara-Latn").map(&:urn).sort,
+                   "a whole Buckwalter word, braces and shadda included"
+      assert_equal %w[urn:nabu:quranic-corpus:112:2], search("{lS~amadu", source: "quranic-corpus").map(&:urn)
+      assert_empty search("{lsamadu", source: "quranic-corpus"), "s (س) is not the emphatic S (ص)"
+    end
+
+    def test_a_latin_query_is_never_read_as_buckwalter_unscoped
+      seed_quranic_corpus
+      doc = make_document(source: @open, urn: "urn:d:ara", language: "ara")
+      make_passage(doc, urn: "urn:d:ara:1", text: "من الناس", sequence: 0, language: "ara")
+      rebuild!
+      assert_empty search("man"), "English 'man' must not become Arabic من library-wide"
+      assert_empty search("qulo")
+      assert_empty search("man", sources: %w[quranic-corpus open]),
+                   "a source list (an axis) mixing in Arabic-script shelves is not a Buckwalter scope"
+    end
   end
 end

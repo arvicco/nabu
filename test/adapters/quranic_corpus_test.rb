@@ -29,6 +29,11 @@ class QuranicCorpusTest < Minitest::Test
 
   def adapter = ADAPTER.new
 
+  # The search form is minted over the Buckwalter → Arabic-letter
+  # rendering of the stored text (conventions §9, the parser-scoped
+  # derivation contract).
+  def conformance_search_source(passage) = ADAPTER.search_source(passage.text)
+
   def document(urn)
     a = adapter
     a.parse(a.discover(FIXTURES).find { |ref| ref.id == urn })
@@ -133,6 +138,32 @@ class QuranicCorpusTest < Minitest::Test
         assert passage.text.ascii_only?, passage.urn
         assert_equal passage.text, Nabu::Normalize.nfc(passage.text), passage.urn
       end
+    end
+  end
+
+  # The search side reads the Buckwalter as the Arabic it encodes: words
+  # stay whole ({ } ~ ` > < … are letters and signs, not punctuation),
+  # the emphatics stay distinct (S ص ≠ s س, H ح ≠ h ه), and the form folds
+  # exactly as the Cairo text's Arabic does — Q 112:1 and 1:1 index
+  # byte-identical to corpus-coranicum's search forms of the same verses.
+  def test_the_search_form_is_the_arabic_the_buckwalter_encodes
+    assert_equal "قل هو الله احد", verse("urn:nabu:quranic-corpus:112:1").text_normalized
+    assert_equal "بسم الله الرحمن الرحيم", verse("urn:nabu:quranic-corpus:1:1").text_normalized
+    assert_equal "الله الصمد", verse("urn:nabu:quranic-corpus:112:2").text_normalized
+    assert_equal "صرط الذين انعمت عليهم غير المغضوب عليهم ولا الضالين",
+                 verse("urn:nabu:quranic-corpus:1:7").text_normalized
+    assert_equal "qulo huwa {ll~ahu >aHadN", verse("urn:nabu:quranic-corpus:112:1").text,
+                 "the stored text stays upstream's bytes"
+  end
+
+  def test_the_search_form_matches_the_cairo_texts_where_the_orthographies_agree
+    cairo = Nabu::Adapters::CorpusCoranicum.new
+    workdir = Nabu::TestSupport.fixtures("corpus-coranicum")
+    passages = cairo.discover(workdir).flat_map { |ref| cairo.parse(ref).to_a }
+    cairo_forms = passages.to_h { |p| [p.urn.split(":").last.sub(".", ":"), p.text_normalized] }
+    %w[1:1 1:2 1:5 1:7 112:1 112:2].each do |citation|
+      assert_equal cairo_forms.fetch(citation), verse("urn:nabu:quranic-corpus:#{citation}").text_normalized,
+                   "Q #{citation}"
     end
   end
 
