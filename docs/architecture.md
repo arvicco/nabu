@@ -673,7 +673,9 @@ decision: the field moves fast, we keep control; the conformant core is
   through the fulltext index's **clarify lane** — `clarify_entries` /
   `clarify_names` (B-tree prefix lane over folded names) / `clarify_fts`
   (FTS5 token lane) / `clarify_trigram` (+ its fts5vocab view, the
-  misspelling lane) — derived by `Indexer.rebuild!` as stage `clarify`,
+  misspelling lane, joined by bounded transposition-neighbour prefix
+  probes on `clarify_names` and scored by restricted Damerau–Levenshtein
+  distance, so a swapped letter pair is one edit) — derived by `Indexer.rebuild!` as stage `clarify`,
   refreshed per source by `refresh_source!` when present (never
   bootstrapped by a sync), re-derived standalone by the stage reconcile or
   `rake index:clarify`). Translation only: all query logic stays in

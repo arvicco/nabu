@@ -627,8 +627,9 @@ module Nabu
         # prefix (girnar-1-1) — the dating lane places each run by it and
         # dates every sentence by the README's "reign of Ashoka (r.
         # 268--232 BCE)" (UdSentenceDates::DERIVED). `# orig` (the
-        # Leiden-bracketed reading) is not whitelisted — declared coarseness;
-        # its per-token copy rides MISC Orig=. Raw text from the Ashoka
+        # Leiden-bracketed reading) rides the passage's "orig" annotation
+        # (ConlluParser::READING_COMMENTS); its per-token copy rides MISC
+        # Orig=. Raw text from the Ashoka
         # Project on Bibliotheca Polyglotta (Oslo), "licensed under GNU
         # GPLv3 (which we respect in this treebank)" — a copyleft input
         # compatible with the attribution class. not-to-release/ holds the
@@ -642,12 +643,10 @@ module Nabu
         # Manchu — GDUD (Wenchao Li, Haitao Liu; Zhejiang): 81 grammatical
         # example sentences from an unnamed reference grammar of Manchu, in
         # Latin transliteration with morpheme hyphens (gene-he); stats.xml
-        # 81 sentences / 446 words. Every block carries `# text[eng]`, NOT
-        # on the ConlluParser translation whitelist (only one block's
-        # `# text_en` rides) — declared coarseness: widening the shared
-        # parser's whitelist dirties every conllu-family source's stamp, so
-        # it waits for a rebuild-adjacent change. Grammar examples state no
-        # date or place. Language `mnc`.
+        # 81 sentences / 446 words. 80 blocks carry `# text[eng]` and one
+        # `# text_en`; both ride "translations" (the language-tagged
+        # spelling through ConlluParser::TRANSLATION_PATTERNS). Grammar
+        # examples state no date or place. Language `mnc`.
         "manchu-gdud" => {
           repo: "https://github.com/UniversalDependencies/UD_Manchu-GDUD",
           language: "mnc", license: "CC BY-SA 4.0", license_class: "attribution"

@@ -16,6 +16,7 @@ module Query
     ODYSSEY = "urn:cts:greekLit:tlg0012.tlg002.perseus-grc2"
     ETRUSCAN = "urn:nabu:open-etruscan:li-1.1"
     AENEID = "urn:cts:latinLit:phi0690.phi003.perseus-lat2"
+    METAMORPHOSES = "urn:cts:latinLit:phi0959.phi006.perseus-lat2"
 
     def setup
       @catalog = store_test_db
@@ -188,6 +189,54 @@ module Query
       first = result.completions.first
       assert_equal [AENEID, "#{AENEID}:1.1", "fuzzy"], [first.key, first.ref_urn, first.match]
       assert_nil result.resolved_urn
+    end
+
+    # A one-transposition misspelling shares almost no trigrams with its
+    # work ("aenied" holds only "aen" of "aeneid"), so a crowd of titles
+    # sharing the input's OTHER trigrams fills the trigram pool and ranks
+    # the work out before scoring. The transposition-neighbour probe must
+    # reach it anyway, and the scorer must price a swap as ONE edit — so
+    # the work outranks a same-length two-edit label ("Xenies").
+    def transposition_rig
+      document(AENEID, title: "Aeneid", citations: %w[1.1 1.2], language: "lat")
+      document("urn:a:xenies", title: "Xenies", citations: %w[1], language: "fra")
+      document(METAMORPHOSES, title: "Metamorphoses", citations: %w[1.1], language: "lat")
+      crowd = Array.new(Nabu::Query::Clarify::FUZZY_POOL + 20) do |i|
+        { source_id: @perseus.id, urn: "urn:nabu:crowd:#{i}", title: "Xenied ilai metamorphs #{i}",
+          language: "fra", content_sha256: "x", revision: 1 }
+      end
+      @catalog[:documents].multi_insert(crowd)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
+    end
+
+    def test_a_transposition_reaches_the_work_past_a_crowded_trigram_pool
+      transposition_rig
+      result = clarify("Aenied")
+      first = result.completions.first
+      assert_equal [AENEID, "fuzzy"], [first&.key, first&.match], result.completions.map(&:title).inspect
+      refute result.is_ref, "a transposition is a misspelling guess, never a reference"
+
+      cited = clarify("Aenied 1.1").completions.first
+      assert_equal [AENEID, "#{AENEID}:1.1", "fuzzy"], [cited&.key, cited&.ref_urn, cited&.match]
+      assert_nil clarify("Aenied 1.1").resolved_urn
+    end
+
+    def test_other_adjacent_transpositions_reach_their_works
+      transposition_rig
+      { "Aneeid" => AENEID, "AeneDi" => AENEID, "Ilaid" => ILIAD,
+        "Metamorphsoes" => METAMORPHOSES }.each do |input, urn|
+        assert_includes clarify(input).completions.first(2).map(&:key), urn, input
+      end
+      assert_equal "#{ILIAD}:2.1", clarify("Ilaid 2.1").completions.first&.ref_urn
+    end
+
+    def test_exact_and_doubled_letter_inputs_resolve_as_before_with_the_crowd
+      transposition_rig
+      assert_equal "#{AENEID}:1.2", clarify("Aeneid 1.2").resolved_urn
+      assert_equal "exact", clarify("Aeneid").completions.first.match
+      illiad = clarify("Illiad 1.1")
+      assert_equal ["#{ILIAD}:1.1", "#{ILIAD_ENG}:1.1"].sort, illiad.completions.first(2).filter_map(&:ref_urn).sort
+      assert_nil illiad.resolved_urn
     end
 
     # Token hits on a common word fill the title probe; the misspelled
