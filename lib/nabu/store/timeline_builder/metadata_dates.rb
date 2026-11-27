@@ -156,6 +156,10 @@ module Nabu
           "damos" => :period_label, # the Aegean ceramic-phase chronology ("LM IIIA2 or LM
           #   IIIB") through the ruled Aegean rows of period_bands.yml (every
           #   held label covered); the site/findspot place hash rides along
+          "dbbe" => :structured, # each occurrence's completion_date_floor/ceiling (ISO day bounds →
+          #                        years; the epigram's copying date in its manuscript — no
+          #                        class); place = the manuscript's place of origin, leaf to root.
+          #                        Types and the translation siblings carry no date
           "dbnl" => :structured, # P165: the register's jaar — the transcribed witness's date (a
           #                        manuscript or first print: no class; a later printing: class
           #                        edition, or the header's first-print year as composition); no place
