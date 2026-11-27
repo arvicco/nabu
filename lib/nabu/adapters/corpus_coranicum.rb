@@ -97,9 +97,10 @@ module Nabu
     # omitted. Further analyses ride "alternatives" (the same keys). Not
     # kept: sura/verse/word_number (the join key, restated by "id"),
     # created_at/updated_at (database bookkeeping), and analyse_prefix
-    # wherever it equals analyse_prefix1 (all 91,285 rows). Morph facets
-    # are not decoded yet (no Query::MorphFacets tagset row); `search
-    # --lemma` reads the transliterated base.
+    # wherever it equals analyse_prefix1 (all 91,285 rows). The fields
+    # decode as morph facets through the Query::MorphFacets corpus-coranicum
+    # row (`search --lemma <base> --morph …`); `search --lemma` reads the
+    # transliterated base.
     #
     # == fetch
     #

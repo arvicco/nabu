@@ -180,7 +180,7 @@ module Query
     # one scoped row placed AHEAD of them, so its tokens never reach them.
     def test_decoder_table_is_explicit_and_ordered
       assert_equal %w[form morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code pos
-                      analysis form gloss],
+                      analysis form gloss form features],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
@@ -878,6 +878,169 @@ module Query
         assert_empty MF.features({ "gloss" => label }, source: tla), label
       end
       assert_empty MF.features({ "gloss" => "-3sg.m" }, source: "aes"), "tla-hf-scoped"
+    end
+
+    # -- Corpus Coranicum (Talmon's concordance fields) --------------------------
+
+    CC = "corpus-coranicum"
+
+    # Real corpus-coranicum tokens (CorpusCoranicum over the checked-in
+    # fixture; the fields the façade reads, values verbatim): finite verbs
+    # under the Semitic keys — Stem1…12 → stem i…xii, Imp/Perf/Imperative →
+    # conjugation impf/perf/impv — never a Greek tense.
+    def test_corpus_coranicum_finite_verbs
+      yalid = { "form" => "يَلِدۡ", "lemma" => "yalid", "pos" => "Verb", "pattern" => "Stem1", "aspect" => "Imp",
+                "actpass" => "Act", "mortality" => "NonEnergicus", "mood" => "Jussive", "gender" => "Masc",
+                "number" => "Sg", "person" => "3P", "dependent_pron" => "0" } # Q 112:3
+      assert_equal({ "stem" => "i", "conjugation" => "impf", "mood" => "jus", "voice" => "act", "gender" => "masc",
+                     "number" => "sing", "person" => "3" }, MF.features(yalid, source: CC))
+      assert_equal "pass", MF.features(yalid.merge("form" => "يُولَدۡ", "actpass" => "Pass"), source: CC)["voice"]
+      nastain = { "form" => "نَسۡتَعِينُ", "pos" => "Verb", "pattern" => "Stem10", "aspect" => "Imp",
+                  "actpass" => "Act", "mood" => "Indic", "gender" => "Masc/Fem", "number" => "Pl",
+                  "person" => "1P" } # Q 1:5
+      assert_equal({ "stem" => "x", "conjugation" => "impf", "mood" => "ind", "voice" => "act", "number" => "plur",
+                     "person" => "1" }, MF.features(nastain, source: CC))
+      assert MF.match?(nastain, [%w[gender masc]], source: CC), "Masc/Fem is common gender: either reading"
+      assert MF.match?(nastain, [%w[gender fem]], source: CC)
+      qul = { "form" => "قُلۡ", "pos" => "Verb", "pattern" => "Stem1", "aspect" => "Imperative",
+              "mortality" => "NonEnergicus", "gender" => "Masc", "number" => "Sg", "person" => "2P" } # Q 112:1
+      assert_equal({ "stem" => "i", "conjugation" => "impv", "mood" => "imp", "gender" => "masc", "number" => "sing",
+                     "person" => "2" }, MF.features(qul, source: CC))
+      anamta = { "form" => "أَنۡعَمۡتَ", "pos" => "Verb", "pattern" => "Stem4", "aspect" => "Perf", "actpass" => "Act",
+                 "gender" => "Masc", "number" => "Sg", "person" => "2P" } # Q 1:7
+      assert_equal "iv", MF.features(anamta, source: CC)["stem"]
+      assert_equal "perf", MF.features(anamta, source: CC)["conjugation"]
+    end
+
+    # Participles are Talmon "Verb" tokens with ActPart/PassPart (the ETCBC
+    # ptca/ptcp, mood part) and carry nominal case; Rectus/Obliquus are the
+    # two-case sound-plural/dual forms (Obliquus = acc or gen).
+    def test_corpus_coranicum_participles_and_nouns
+      dallina = { "form" => "ٱلضَّآلِّينَ", "pos" => "Verb", "pattern" => "Stem1", "aspect" => "ActPart",
+                  "gender" => "Masc", "number" => "Pl", "casefld" => "Obliquus", "definite" => "Def" } # Q 1:7
+      assert_equal({ "stem" => "i", "conjugation" => "ptca", "mood" => "part", "gender" => "masc", "number" => "plur",
+                     "definite" => "def" }, MF.features(dallina, source: CC))
+      assert MF.match?(dallina, [%w[case gen]], source: CC)
+      assert MF.match?(dallina, [%w[case acc]], source: CC)
+      refute MF.match?(dallina, [%w[case nom]], source: CC)
+      maghdub = { "form" => "ٱلۡمَغۡضُوبِ", "pos" => "Verb", "pattern" => "Stem1", "aspect" => "PassPart",
+                  "gender" => "Masc", "number" => "Sg", "casefld" => "Gen", "definite" => "Def" } # Q 1:7
+      assert_equal "ptcp", MF.features(maghdub, source: CC)["conjugation"]
+      hablun = { "form" => "حَبۡلٌۭ", "pos" => "Noun", "pattern" => "fa&l", "gender" => "Masc", "number" => "Sg",
+                 "casefld" => "Nom", "dependent_pron" => "0", "definite" => "Tanwiin", "diptotic" => "Triptotic" }
+      assert_equal({ "gender" => "masc", "number" => "sing", "case" => "nom", "definite" => "ind" },
+                   MF.features(hablun, source: CC), "tanwīn is the indefinite; the nominal pattern is lexical")
+      assert_equal "plur", MF.features(hablun.merge("number" => "BrokenPl"), source: CC)["number"]
+      assert_equal "dual", MF.features(hablun.merge("number" => "Dual"), source: CC)["number"]
+      assert_equal "nom", MF.features(hablun.merge("casefld" => "Rectus"), source: CC)["case"]
+    end
+
+    # The attached pronoun's dependent_* fields describe the SUFFIX, never
+    # the host word; pronouns decode their subcategory as prontype.
+    def test_corpus_coranicum_pronouns_and_suffixes
+      imraatuhu = { "form" => "وَٱمۡرَأَتُهُۥ", "pos" => "Noun", "pattern" => "f&alat", "gender" => "Fem",
+                    "number" => "Sg", "casefld" => "Nom", "dependent_pron" => "1", "dependent_person" => "3P",
+                    "dependent_number" => "Sg", "dependent_gender" => "Masc", "diptotic" => "Triptotic" } # Q 111:4
+      assert_equal({ "gender" => "fem", "number" => "sing", "case" => "nom" }, MF.features(imraatuhu, source: CC))
+      huwa = { "form" => "هُوَ", "pos" => "Pron", "subcategory" => "Independent", "gender" => "Masc", "number" => "Sg",
+               "person" => "3P" } # Q 112:1
+      assert_equal({ "prontype" => "prs", "gender" => "masc", "number" => "sing", "person" => "3" },
+                   MF.features(huwa, source: CC))
+      alladhina = { "form" => "ٱلَّذِينَ", "pos" => "Pron", "subcategory" => "Relative", "gender" => "Masc",
+                    "number" => "Pl" } # Q 1:7
+      assert_equal "rel", MF.features(alladhina, source: CC)["prontype"]
+      assert_equal "dem", MF.features(huwa.merge("subcategory" => "DemonstrativeNear"), source: CC)["prontype"]
+      assert_equal "int", MF.features(huwa.merge("subcategory" => "Interrogative"), source: CC)["prontype"]
+      allah = { "form" => "ٱللَّهُ", "pos" => "Noun", "subcategory" => "ProperName", "casefld" => "Nom",
+                "definite" => "Def" }
+      assert_equal({ "case" => "nom", "definite" => "def" }, MF.features(allah, source: CC))
+    end
+
+    # Deliberately undecoded: particles' lexical semantics, the energic
+    # flag, the diptotic class, nominal patterns, the alternatives (other
+    # analyses — possibly other roots; the lemma anchor reads the first).
+    def test_corpus_coranicum_residue_decodes_nothing
+      lam = { "form" => "لَمۡ", "lemma" => "lam", "pos" => "Particle", "semantic" => "Negative",
+              "dependent_pron" => "0" } # Q 112:3
+      assert_empty MF.features(lam, source: CC)
+      assert_empty MF.features({ "form" => "x", "mortality" => "Energicus", "diptotic" => "Diptotic",
+                                 "pattern" => "fa&l", "aspect" => "Letters" }, source: CC)
+      assert_empty MF.features({ "form" => "x", "pattern" => "Stem1" }, source: CC),
+                   "a Stem pattern decodes only on a Verb token"
+      ambiguous = { "form" => "x", "pos" => "Noun", "number" => "Sg",
+                    "alternatives" => [{ "pos" => "Noun", "number" => "Pl" }] }
+      assert_equal({ "number" => "sing" }, MF.features(ambiguous, source: CC))
+      assert_empty MF.features({ "form" => "x", "pos" => "Noun", "number" => "Sg" }, source: "aes"),
+                   "corpus-coranicum-scoped"
+    end
+
+    # -- Quranic Arabic Corpus (the segment feature string) ----------------------
+
+    QAC = "quranic-corpus"
+
+    def qac(form, tag, features) = { "form" => form, "tag" => tag, "features" => features }
+
+    # Real quranic-corpus segments, verbatim: the checked-in fixture's rows,
+    # plus Q 2:2 *a`lika, 2:18 Sum~N[ and 2:214 zulozilu from the live file.
+    def test_quranic_corpus_verbs
+      assert_equal({ "stem" => "i", "conjugation" => "impf", "mood" => "jus", "voice" => "act", "person" => "3",
+                     "gender" => "masc", "number" => "sing" },
+                   MF.features(qac("yalido", "V", "STEM|POS:V|IMPF|LEM:walada|ROOT:wld|3MS|MOOD:JUS"), source: QAC))
+      assert_equal "pass",
+                   MF.features(qac("yuwlado", "V", "STEM|POS:V|IMPF|PASS|LEM:walada|ROOT:wld|3MS|MOOD:JUS"),
+                               source: QAC)["voice"]
+      assert_equal({ "stem" => "x", "conjugation" => "impf", "voice" => "act", "person" => "1", "number" => "plur" },
+                   MF.features(qac("nasotaEiynu", "V", "STEM|POS:V|IMPF|(X)|LEM:{sotaEiynu|ROOT:Ewn|1P"),
+                               source: QAC), "the indicative is unmarked upstream — no mood claimed")
+      assert_equal({ "stem" => "iv", "conjugation" => "perf", "voice" => "act", "person" => "2", "gender" => "masc",
+                     "number" => "sing" },
+                   MF.features(qac(">anoEamo", "V", "STEM|POS:V|PERF|(IV)|LEM:>anoEama|ROOT:nEm|2MS"), source: QAC))
+      assert_equal({ "stem" => "i", "conjugation" => "impv", "mood" => "imp", "voice" => "act", "person" => "2",
+                     "gender" => "masc", "number" => "sing" },
+                   MF.features(qac("qulo", "V", "STEM|POS:V|IMPV|LEM:qaAla|ROOT:qwl|2MS"), source: QAC))
+    end
+
+    # Form I is the one unmarked form: inferred only on a TRILITERAL root;
+    # a quadriliteral's base stem (Q 2:214 zulzilū, root zlzl — a live-file
+    # row) stays undecoded.
+    def test_quranic_corpus_form_one_is_inferred_only_on_triliteral_roots
+      zulzilu = qac("zulozilu", "V", "STEM|POS:V|PERF|PASS|LEM:zulozilu|ROOT:zlzl|3MP")
+      refute MF.features(zulzilu, source: QAC).key?("stem")
+      assert_equal "pass", MF.features(zulzilu, source: QAC)["voice"]
+    end
+
+    def test_quranic_corpus_participles_nouns_and_pronouns
+      assert_equal({ "stem" => "i", "conjugation" => "ptca", "mood" => "part", "voice" => "act", "gender" => "masc",
+                     "number" => "plur", "case" => "nom" },
+                   MF.features(qac("ka`firuwna", "N", "STEM|POS:N|ACT|PCPL|LEM:ka`firuwn|ROOT:kfr|MP|NOM"),
+                               source: QAC))
+      assert_equal "ptcp",
+                   MF.features(qac("magoDuwbi", "N", "STEM|POS:N|PASS|PCPL|LEM:magoDuwb|ROOT:gDb|M|GEN"),
+                               source: QAC)["conjugation"]
+      assert_equal({ "gender" => "masc", "definite" => "ind", "case" => "nom" },
+                   MF.features(qac(">aHadN", "N", "STEM|POS:N|LEM:>aHad|ROOT:AHd|M|INDEF|NOM"), source: QAC))
+      assert_equal({ "number" => "plur", "definite" => "ind", "case" => "nom" },
+                   MF.features(qac("Sum~N[", "N", "STEM|POS:N|LEM:>aSam~|ROOT:Smm|P|INDEF|NOM"), source: QAC))
+      assert_equal({ "prontype" => "prs", "person" => "3", "gender" => "masc", "number" => "sing" },
+                   MF.features(qac("huwa", "PRON", "STEM|POS:PRON|3MS"), source: QAC))
+      assert_equal({ "prontype" => "prs", "person" => "2", "gender" => "masc", "number" => "plur" },
+                   MF.features(qac("wna", "PRON", "SUFFIX|PRON:2MP"), source: QAC),
+                   "the suffix segment IS the token: its features are its own")
+      assert_equal({ "prontype" => "rel", "gender" => "masc", "number" => "plur" },
+                   MF.features(qac("{l~a*iyna", "REL", "STEM|POS:REL|LEM:{l~a*iY|MP"), source: QAC))
+      assert_equal "dem", MF.features(qac("*a`lika", "DEM", "STEM|POS:DEM|LEM:*a`lik|MS"), source: QAC)["prontype"]
+    end
+
+    def test_quranic_corpus_residue_decodes_nothing
+      assert_empty MF.features(qac("{l", "DET", "PREFIX|Al+"), source: QAC)
+      assert_empty MF.features(qac("wa", "CONJ", "PREFIX|w:CONJ+"), source: QAC)
+      assert_empty MF.features(qac("lamo", "NEG", "STEM|POS:NEG|LEM:lam"), source: QAC)
+      assert_empty MF.features(qac("na", "EMPH", "SUFFIX|+n:EMPH"), source: QAC)
+      assert_equal({ "conjugation" => "impf", "voice" => "act", "stem" => "i", "person" => "3", "gender" => "masc",
+                     "number" => "sing", "mood" => "jus" },
+                   MF.features(qac("yakun", "V", "STEM|POS:V|IMPF|LEM:kaAna|ROOT:kwn|SP:kaAn|3MS|MOOD:JUS"),
+                               source: QAC), "the special group (kāna and sisters) is lexical")
+      assert_empty MF.features(qac("huwa", "PRON", "STEM|POS:PRON|3MS"), source: CC), "quranic-corpus-scoped"
     end
   end
 end
