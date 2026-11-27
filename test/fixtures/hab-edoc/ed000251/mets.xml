@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets OBJID="edoc/ed000251" xmlns:mets="http://www.loc.gov/METS/" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:wdb="http://diglib.hab.de/wdb/" xmlns:rmd="http://diglib.hab.de/rights" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/mods/v3">
+    <mets:metsHdr>
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenbüttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+    
+    <mets:dmdSec ID="dmd_opac">
+        <mets:mdRef LOCTYPE="PURL" MDTYPE="OTHER" OTHERMDTYPE="PICA" MIMETYPE="text/xml"  xlink:href="http://diglib.hab.de/?format=mods&amp;opac=1745077707"/>
+    </mets:dmdSec>
+
+    <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods>
+                    <mods:identifier type="uri">https://hainhofer.hab.de</mods:identifier>
+                    <mods:titleInfo>
+                        <mods:title>Kommentierte digitale Edition der Reise- und Sammlungsbeschreibungen Philipp Hainhofers (1578-1647)</mods:title>
+                    </mods:titleInfo>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Wenzel</mods:namePart>
+                        <mods:namePart type="given">Michael</mods:namePart>
+                        <mods:displayForm>Michael Wenzel</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">pdr</mods:roleTerm>
+                        </mods:role>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">edt</mods:roleTerm>
+                        </mods:role>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">cwt</mods:roleTerm>
+                        </mods:role>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">dtc</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Timann</mods:namePart>
+                        <mods:namePart type="given">Ursula</mods:namePart>
+                        <mods:displayForm>Ursula Timann</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">trc</mods:roleTerm>                            
+                        </mods:role>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">cwt</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">de la Iglesia</mods:namePart>
+                        <mods:namePart type="given">Martin</mods:namePart>
+                        <mods:displayForm>Martin de la Iglesia</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">dtm</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Hübner</mods:namePart>
+                        <mods:namePart type="given">Stefanie</mods:namePart>
+                        <mods:displayForm>Stefanie Hübner</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">cwt</mods:roleTerm>
+                        </mods:role>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">dtc</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Brüderle-Krug</mods:namePart>
+                        <mods:namePart type="given">Nicole</mods:namePart>
+                        <mods:displayForm>Nicole Brüderle-Krug</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">cwt</mods:roleTerm>
+                        </mods:role>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">dtc</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">de Vries</mods:namePart>
+                        <mods:namePart type="given">Malte</mods:namePart>
+                        <mods:displayForm>Malte de Vries</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">cwt</mods:roleTerm>
+                        </mods:role>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">dtc</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Reichert</mods:namePart>
+                        <mods:namePart type="given">Nils</mods:namePart>
+                        <mods:displayForm>Nils Reichert</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">cwt</mods:roleTerm>
+                        </mods:role>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">dtc</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Wolfenbüttel</mods:placeTerm>
+                        </mods:place>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                        <mods:dateIssued encoding="w3cdtf">2020-</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title>Wolfenbütteler Digitale Editionen</mods:title>
+                        </mods:titleInfo>
+                        <mods:part>
+                            <mods:detail>
+                                <mods:number>4</mods:number>
+                            </mods:detail>
+                        </mods:part>
+                        <mods:identifier type="purl">http://diglib.hab.de/?opac=1000751309</mods:identifier>
+                    </mods:relatedItem>
+                    <mods:recordInfo>
+                        <mods:recordContentSource authority="gbv" authorityURI="http://uri.gbv.de/organization/isil/DE-23">OPAC</mods:recordContentSource>
+                        <mods:recordIdentifier source="opac">1745077707</mods:recordIdentifier>
+                    </mods:recordInfo>
+                    <mods:note type="projectDescription">
+                        Die Editionswebsite gibt Ihnen Zugriff auf die digitale Edition der Reiseberichte des Augsburger Kaufherrn Philipp Hainhofer, die dieser zwischen 1594 und 1636 verfasste. Momentan ist die Edition noch nicht vollständig, sondern umfasst in der ersten Projektphase bis 2020 die zwischen 1603 und 1636 entstandenen Beschreibungen seiner fünf Reisen an den Münchner Hof. Anschließend sollen in einem zweiten Abschnitt bis 2023 die Reisen nach Eichstätt, Nürnberg, Regensburg, Neuburg, Heidelberg (und Oberrhein) sowie Stuttgart, daraufhin in einer dritten Förderperiode die Reisen nach Stettin, Innsbruck und Dresden herausgegeben werden. Die letzte Projektphase wird das Reisetagebuch der Studien- und frühen Erwachsenenjahre sowie einige kleinere Kuraufenthalte zum Thema haben. Der Abschluss des Langfristvorhabens ist für 2029 vorgesehen.                        
+                        Die Reiserelationen bilden den Kern von Hainhofers schriftlichem Nachlass und sind eine außerordentliche Ressource für Kunstgeschichte und Geschichtswissenschaften der Frühen Neuzeit sowie für benachbarte Disziplinen, und dies unter diversen Gesichtspunkten wie der Erforschung von Residenzen und Sammlungen, Hof-, Adels- und Zeremonialkultur, Reise- und Kunstliteratur, kulturellem Austausch und materieller Kultur, Diplomatie- und Politikgeschichte.
+                        Ziel der von der Deutschen Forschungsgemeinschaft geförderten digitalen Edition ist es, die Reiserelationen Hainhofers erstmals vollständig in Form von digitalen Faksimiles der Handschriften und als Volltext vorzulegen und mit umfangreichen kritischen Apparaten und Sachkommentaren in Text und Bild zu versehen.                      
+                        Über diese bereits seit Langem gewünschte komplette Tiefenerschließung von Hainhofers Reiserelationen hinaus wird das Projekt zudem zwei konzeptionell-strukturellen wissenschaftlichen Leitzielen dienen. Es sind dies zum einen eine Schärfung der Frage nach Funktion und Bedeutung kultureller Vermittlung und Übersetzung in einem innereuropäischen Raum in Zeiten erhöhter politischer und konfessioneller Auseinandersetzungen, zum anderen der Versuch eines erneuerten Ansatzes von Interdisziplinarität, bei dem die unterschiedlichen Fachrichtungen in gleichen Maßen integriert sind.
+                    </mods:note>
+                    <mods:subject displayLabel="Reiseberichte">
+                        <mods:topic valueURI="https://d-nb.info/gnd/4076645-7">Reisebericht</mods:topic>
+                    </mods:subject>
+                    <mods:subject displayLabel="Sammlungsbeschreibungen">
+                        <mods:topic valueURI="https://d-nb.info/gnd/4128844-0">Sammlung</mods:topic>
+                    </mods:subject>
+                    <mods:subject displayLabel="Frühe Neuzeit">
+                        <mods:temporal valueURI="https://d-nb.info/gnd/7503866-3">Frühe Neuzeit</mods:temporal>
+                    </mods:subject>
+                    <mods:subject displayLabel="Digitale Edition - Handschrift">
+                        <mods:genre valueURI="https://d-nb.info/gnd/1212244893">Digitale Edition</mods:genre>
+                        <mods:topic valueURI="https://d-nb.info/gnd/4148186-0">Handschrift</mods:topic>
+                    </mods:subject>
+                    <mods:subject displayLabel="Kunst- und Kulturgeschichte">
+                        <mods:name valueURI="https://d-nb.info/gnd/4138803-3">Kunstgeschichte &lt;Fach></mods:name>
+                        <mods:name valueURI="https://d-nb.info/gnd/4125671-2">Kulturgeschichte &lt;Fach></mods:name>
+                    </mods:subject>
+                </mods:mods>                
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+
+    <!-- Rechtesegment  -->
+    <mets:amdSec ID="amd_edoc_ed000251">
+
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+       <mets:rightsMD ID="rmd_edoc_ed000251_CC">
+           <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://creativecommons.org/licenses/by-sa/3.0/de/" LABEL="CC BY-SA 3.0"/>
+        </mets:rightsMD>
+    </mets:amdSec>
+
+    <!-- files  ##############################################################################################   -->
+    <mets:fileSec>
+
+        <!--  Transkription mit TEI Kodierung -->
+        <mets:fileGrp USE="transcription">
+            <mets:file ID="muenchen1603" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="texts/München 1603.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+        <!--  Register und Bibliographie -->
+        
+        <mets:fileGrp>            
+            <mets:file ID="register" MIMETYPE="application/xhtml+xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="media/register.xhtml"/>
+            </mets:file>           
+        </mets:fileGrp>
+        
+    </mets:fileSec>
+
+
+    <!-- structure ##############################################################################################   -->
+    <mets:structMap>
+        <mets:div ID="ebooks_ed000251_toc">
+
+            <!--  Transkription **************************************************** -->
+            <mets:div TYPE="transcription" LABEL="München 1603" ID="muenchen1603_transcript" ADMID="rmd_edoc_ed000251_CC">
+                <mets:fptr FILEID="muenchen1603"/>
+            </mets:div>
+            <mets:div TYPE="transcription" LABEL="München 1611" ID="muenchen1611_transcript" ADMID="rmd_edoc_ed000251_CC">
+                <mets:fptr FILEID="muenchen1611"/>
+            </mets:div>
+            <mets:div TYPE="transcription" LABEL="München 1612" ID="muenchen1612_transcript" ADMID="rmd_edoc_ed000251_CC">
+                <mets:fptr FILEID="muenchen1612"/>
+            </mets:div>
+            <mets:div TYPE="transcription" LABEL="München 1613" ID="muenchen1613_transcript" ADMID="rmd_edoc_ed000251_CC">
+                <mets:fptr FILEID="muenchen1613"/>
+            </mets:div>
+            <mets:div TYPE="transcription" LABEL="München 1636" ID="muenchen1636_transcript" ADMID="rmd_edoc_ed000251_CC">
+                <mets:fptr FILEID="muenchen1636"/>
+            </mets:div>
+            <mets:div TYPE="transcription" LABEL="Eichstätt 1611" ID="eichstaett1611_transcript" ADMID="rmd_edoc_ed000251_CC">
+                <mets:fptr FILEID="eichstaett1611"/>
+            </mets:div>
+            <mets:div TYPE="transcription" LABEL="Nürnberg 1612" ID="nuernberg1612_transcript" ADMID="rmd_edoc_ed000251_CC">
+                <mets:fptr FILEID="nuernberg1612"/>
+            </mets:div>
+
+            <!--  Register und Bibliographie ******************************************************************************** -->
+            <mets:div TYPE="index" LABEL="Register und Bibliographie" ID="edoc_ed000251_register">
+                <mets:fptr FILEID="register"/>
+            </mets:div>
+            
+        </mets:div>
+    </mets:structMap>
+
+</mets:mets>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="edoc_ed000146_fg_abauzit_offenbarung_org">
+    <teiHeader>
+         <fileDesc>
+            <titleStmt>
+                <title>Discours historique sur l'apocalypse</title>
+                <author>Abauzit</author>
+                <respStmt>
+                    <resp>Digitale Edition </resp>
+                    <name>Christian Werner </name>
+                    <name>Marcus Baumgarten </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Projektleitung </resp>
+                    <name>Dr. Helmut Berthold </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Herausgegeben von </resp>
+                    <name type="org">Lessing Akademie </name>
+                </respStmt>
+                <funder>Deutsche Forschungsgemeinschaft </funder>
+            </titleStmt>
+            <editionStmt>
+                <edition>Digitale Edition der Übersetzungen Lessings </edition>
+            </editionStmt>
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel </name>
+                    <address>
+                        <street>Lessingplatz 1 </street>
+                        <name type="city">Wolfenbüttel </name>
+                        <postCode>D-38299 </postCode>
+                        <name type="country">Germany </name>
+                    </address>
+                </publisher>
+                <date when="2007-03-22" type="issued">2007 </date>
+                <date type="digitised"/>
+                <distributor>Herzog August Bibliothek Wolfenbüttel </distributor>
+                <availability status="restricted">
+                    <p>Herzog August Bibliothek Wolfenbüttel ( <ref
+                            target="http://diglib.hab.de/?link=012">copyright information </ref>)
+                    </p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <biblStruct>
+                    <analytic xml:lang="de" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+                        <author>Abauzit, Firmin</author>
+                        <title level="a">Discours historique sur l'apocalypse</title>
+                    </analytic>
+                    <monogr>
+                        <title level="m">Oeuvres diverses</title>
+                        <author>Abauzit, Firmin</author>
+                        <imprint>
+                            <biblScope type="vol">T. 1</biblScope>
+                            <biblScope type="pp">S. </biblScope>
+                            <pubPlace>London</pubPlace>
+                            <date>1770</date>
+                        </imprint>
+                    </monogr>
+                </biblStruct>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p xml:id="lport">
+                    <ref target="http://diglib.hab.de/?link=XXX">Digitale Edition der Übersetzungen
+                        Lessings </ref>
+                </p>
+            </projectDesc>
+        </encodingDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <pb n="247"/>
+            <div>
+                <head type="maintitle">DISCOURS HISTORIQUE<lb/> SUR<lb/> L'APOCALYPSE.</head>
+            </div>
+            <pb n="248"/>
+            <!-- AVERTISSEMENT DE L'AUTEUR -->
+            <pb n="249"/>
+            <div>
+                <head xml:id="org001" type="part">DISCOURS HISTORIQUE SUR L'<rs type="bibl"
+                        ref="#Apc">APOCALYPSE</rs>.</head>
+                <head xml:id="org002" type="abstract" rend="font-style: italic">Canon des Livres du
+                    <rs type="bibl" ref="#nov_test"><term target="'bibe">Nouveau Testament</term></rs> formé
+                    <w>com<lb rend="bindestrich"/>me</w> au hasard &amp; sans règle, par le zèle des
+                    <w>parti<lb rend="bindestrich"/>culiers</w>. Mauvais effet de cette   <term target="'freih">liberté.</term>
+                    <w>Parta<lb rend="bindestrich"/>ge</w> de sentimens sur plusieurs Epitres. <rs type="bibl"
+                        ref="#Apc">
+                        <w>L'Apoca<lb rend="bindestrich"/>lypse</w>
+                    </rs>, preuve de l'irrégularité avec laquelle le <w>Ca<lb rend="bindestrich"/>non</w> du <rs
+                        type="bibl" ref="#nov_test">Nouveau Testament</rs> a été formé.</head>
+                <p xml:id="org003">§. 1. <hi rend="initiale">I</hi><hi
+                        rend="font-variant: small-caps">L</hi> ne faut pas s'imaginer que le<lb/>
+                    Canon des <term target="#bibe">Ecrits Sacrés</term>, tel<lb/> que nous l'avons aujourd'hui,<lb/> se soit
+                    formé tout d'un coup<lb/> dès le tems des Apôtres. Les<lb/> premiers Livres qui
+                    vinrent à la connoissance des<lb/> <term target="#chri">Chrétiens</term> furent sans doute les Evangiles,
+                        <w>ensui<lb rend="bindestrich"/>te</w> les Epitres, les unes plutôt, les autres plus
+                    tard.<lb/> Les <term target="#kirc">Eglises</term> à qui elles avoient été écrites, se les<lb/>
+                    communiquoient les unes aux autres; les Romains<lb/> aux Corinthiens, les
+                    Corinthiens aux Romains, &amp;<pb n="250"/> ainsi de chaque Epitre, à
+                    mesure que le <w>commer<lb rend="bindestrich"/>ce</w> s'étendoit entre les <term target="#chri">Chrétiens</term>. On ne voit
+                        <w>pa<lb rend="bindestrich"/>roître</w> ni Concile, ni Pape, ni Autorité
+                    <w>Souverai<lb rend="bindestrich"/>ne</w>, qui ait fixé le Canon des <term
+                        target="#bibe">Ecritures</term>. C'a été<lb/>
+                    l'ouvrage du tems. Aujourd'hui on ajoutoit un<lb/> Livre, &amp; demain un
+                    autre; &amp; cela se faisoit, dit<lb/> M. <rs type="person" ref="#basn"
+                        >Basnage</rs>
+                    <note type="footnote" n="(*)">
+                        <rs type="bibl" ref="#basnage_histoire">Histoire de l'Eglise, Liv. 8.</rs>
+                    </note>, <hi rend="font-style: italic">par quelques particuliers qui
+                            <w>trou<lb rend="bindestrich"/>vant</w> un écrit utile à la piété, le produisoient à
+                        leur<lb/> <term
+                            target="#kirc">Eglise</term>; &amp; même</hi>, ajoute-t-il, <hi
+                        rend="font-style: italic">ils se donnoient là-<lb/> dessus une si grande
+                                <term target="#freih">liberté</term>, qu'ils comptoient entre<lb/> les Livres canoniques des écrits
+                                manifestement <w>sup<lb rend="bindestrich"/>posés</w></hi>. Les <term target="#kirc">Eglises</term> se partageoient en
+                    opinions<lb/> différentes, comme les particuliers. Les unes<lb/> rejettoient un
+                    Livre pendant que les autres le <w>rece<lb rend="bindestrich"/>voient</w>. On contestoit, on
+                    examinoit avant que<lb/> d'admettre. <rs type="bibl" ref="#II_Pt">La seconde
+                        Lettre</rs> de S. <rs type="person" ref="#petr">Pierre</rs> n'étoit<lb/> pas
+                    d'abord dans le Canon; plusieurs, dit <rs type="person" ref="#euse"
+                    >Eusébe</rs>,<lb/> la jugerent utile, &amp; l'on commen&#231;a de la
+                    lire <w>a<lb rend="bindestrich"/>vec</w> soin. Il assure la même chose des <rs type="bibl"
+                        ref="#juja">Lettres</rs> de S.<lb/>
+                    <rs type="person" ref="#jaco">Jacques</rs> &amp; de S. <rs type="person"
+                        ref="#juda">Jude</rs>. Un très petit nombre d'<w>An<lb rend="bindestrich"/>ciens</w> en
+                    avoient parlé comme de deux Ecrits <w>Di<lb rend="bindestrich"/>vins</w>. Quelques <term target="#kirc"
+                        >Eglises</term> se
+                    déterminerent à les lire.<lb/> Le doute dura longtems, &amp; enfin il fut
+                    aboli. S. <rs type="person" ref="#hier">
+                        <w>Jé<lb rend="bindestrich"/>rome</w>
+                    </rs> dit aussi de la <rs type="bibl" ref="#Iac">Lettre</rs> de S. <rs
+                        type="person" ref="#jaco">Jacques</rs>, qu'elle<lb/> avoit acquis son
+                    autorité peu à peu par la suite des<lb/> temps. <rs type="bibl" ref="#Hbr"
+                        >L'Epitre aux Hébreux</rs>, la <rs type="bibl" ref="#II_Io">seconde</rs>
+                    &amp; la<lb/>
+                    <rs type="bibl" ref="#III_Io">troisième</rs> de S. <rs type="person" ref="johan"
+                        >Jean</rs>, ne sont devenues <w>canoni<lb rend="bindestrich"/>ques</w> que la même manière.
+                    C'est ainsi que le<lb/> Canon des Ecritures se <term target="#voll"
+                        >perfectionnoit</term>
+                        <w>insensible<lb rend="bindestrich"/>ment</w>; &amp; cela paroît dans un plus grand jour
+                    par<lb/> l'Histoire que nous allons faire de L'<rs type="bibl" ref="#Apc"
+                        ><term target="#offe">Apocalypse</term></rs>,<lb/> &amp; des contradictions qu'elle a souffertes.</p>
+                <pb n="251"/>
+                <p xml:id="org004">§. 2. De tous les Ecrits qui sont venus
+                    <w>immé<lb rend="bindestrich"/>diatement</w> après ceux des Apôtres, il ne nous<lb/> reste que la
+                        <rs type="bibl" ref="#clemens_brief1">première Epitre</rs> de S. <rs
+                        type="person" ref="#clem">Clément</rs>
+                    <w>Ro<lb rend="bindestrich"/>main</w>, avec un fragment de la <rs type="bibl"
+                        ref="#clemens_brief2">seconde</rs>; <rs type="bibl" ref="#barnabas_brief"
+                        >l'Epitre</rs><lb/> attribuée à S. <rs type="person" ref="#barn"
+                    >Barnabé</rs>, &amp; qui est d'un Ecrivain<lb/> fort ancien; le <rs
+                        type="bibl" ref="hermas_hirte">Livre</rs> d'<rs type="person" ref="#herm"
+                        >Hermas</rs>; les <rs type="bibl" ref="ignatius_briefe">Lettres</rs>
+                    qui<lb/> portent le nom d'<rs type="person" ref="#igna">Ignace</rs>, avec <rs
+                        type="bibl" ref="polycarpus_brief">celle</rs> de <rs type="person"
+                        ref="#poly">Policarpe</rs>.</p>
+            </div>
+            <div>
+                <head type="abstract" rend="font-style: italic">Silence des Ecrivains.</head>
+                <p xml:id="org005">§. 3. Dans tous ces Ecrits, on ne voit aucune<lb/> trace de l'<rs
+                    type="bibl" ref="#Apc"><term target="#offe">Apocalypse</term></rs>. Il est vrai qu'on ne peut<lb/> rien
+                    conclure de leur silence contre ce Livre en<lb/> particulier, puisqu'ils ne
+                    parlent pas non plus des<lb/> quatre Evangiles, ni de la plupart des Livres du<lb/>
+                    <rs type="bibl" ref="#nov_test"><term target="#bibe">Nouveau Testament</term></rs>.</p>
+            </div>
+            <div>
+                <head type="abstract" rend="font-style: italic">Suppositions de <rs type="person"
+                        ref="#proc">Prochore</rs>. Son Caractère.</head>
+                <p xml:id="org006">§. 4. Le faux <rs type="person" ref="#proc">Prochore</rs>, qui se
+                    dit Disciple<lb/> des Apôtres, en savoit bien davantage; &amp; voici<lb/> ce
+                    qu'il raconte de la vie de S. <rs type="person" ref="#johan">Jean</rs>. Cet <rs
+                        type="person" ref="#johan">
+                        <w>Apô<lb rend="bindestrich"/>tre</w>
+                    </rs> apprit aux Chrétiens d'Ephése qu'il avoit une<lb/> <term target="#offe">révélation</term> de <rs
+                        type="person" ref="#jesus">Jésus-Christ</rs>. Ils le prièrent de la<lb/>
+                    mettre par écrit; l'<rs type="person" ref="#johan">Apôtre</rs> dicta son <rs
+                        type="bibl" ref="#Io">Evangile</rs> à<lb/>
+                    <rs type="person" ref="#proc">Prochore</rs> au milieu des éclairs, des tonnerres
+                    &amp;<lb/> des tremblemens de terre. Ensuite il écrivit son <rs type="bibl"
+                        ref="#Apc">
+                        <term target="#offe"><w>A<lb rend="bindestrich"/>pocalypse</w></term>
+                    </rs> de sa propre main, comme s'il en eut<lb/> fait plus de cas que de son <rs
+                        type="bibl" ref="#Io">Evangile</rs>. Mais le<lb/> prétendu <rs type="person"
+                        ref="#proc">Prochore</rs> qui se met ici parmi les <w>Ac<lb rend="bindestrich"/>teurs</w>,
+                    étoit du nombre de ces honnêtes Chrétiens,<lb/> qui se jouoient de la crédulité
+                    du <term
+                        target="#publ">public</term>, &amp; qui<lb/> se parant d'un grand zèle pour la <term target="#reli">Religion</term>,
+                    ne<lb/> cachoient pas même leur jeu sous le masque d'<w>u<lb rend="bindestrich"/>ne</w> probité
+                    payenne. Son <rs type="bibl" ref="#unbekannt">Livre</rs> est plein de <term target="#fabe">fables</term><pb
+                        n="252"/> &amp; d'absurdités. Les termes <hi
+                        rend="font-style: italic">d'Hypostase</hi>, de <w rend="italic"
+                        >Con<lb rend="bindestrich"/>substantiel</w>, &amp; autres, marquent assés le tems où<lb/>
+                    il a été fabriqué.</p>
+            </div>
+            <div>
+                <head type="abstract" rend="font-style: italic"><rs type="person" ref="#ceri"
+                        >Cérinthe</rs> soup&#231;onné d'être Auteur de l'<rs type="bibl"
+                        ref="Apc">
+                            <term target="#offe"><w>Apoca<lb rend="bindestrich"/>lypse</w> </term>
+                    </rs>.</head>
+                <p xml:id="org007">§. 5. Après la mort des Apôtres <note type="footnote" n="(*)"><rs
+                            type="person" ref="#euse">Euseb.</rs>
+                        <rs type="bibl" ref="eusebius_kirchengeschichte">Hist. Lib. 3. C. 28.</rs>
+                        &amp; <rs type="bibl" ref="eusebius_kirchengeschichte">Lib. 7. C.
+                        25.</rs></note>, parut <rs type="person" ref="#ceri">
+                        <w>Cérin<lb rend="bindestrich"/>the</w>
+                    </rs>, homme fort entêté du règne temporel de mille<lb/> ans. C'étoit une
+                    opinion qui venoit originairement<lb/> des <term target="#jude">Juifs</term>, &amp; qu'il répandoit
+                    parmi les Chrétiens.<lb/> Il s'appuyoit sur l'<rs type="bibl" ref="Apc"
+                        ><term target="#offe">Apocalypse </term></rs> qu'il soutenoit être<lb/> une production de S. <rs
+                        type="person" ref="#johan">Jean</rs>. Mais quelque raison<lb/> qu'il eût de
+                    parler ainsi, plusieurs <term target="#orth">Orthodoxes</term> ne<lb/> laissèrent pas le soup&#231;onner
+                    d'en être lui-même<lb/> le Père, parce qu'il leur sembloit que cet <rs
+                        type="bibl" ref="Apc">ouvrage</rs><lb/> favorisoit le règne de mille ans,
+                    comme nous le<lb/> verrons dans la suite.</p>
+            </div>
+            <div>
+                <head type="abstract" rend="font-style: italic">Autres <term target="#ketz">Hérétiques</term> contre l'<rs
+                    type="bibl" ref="#Apc"><term target="#offe">Apocalypse</term></rs>. <w>Répon<lb rend="bindestrich"/>se</w> singulière
+                        d'<rs type="person" ref="#epip">Epiphanes</rs>.</head>
+                <p>§. 6. Cependant d'autres <term target="#ketz">Hérétiques</term>, <rs type="person" ref="#cerd"
+                    >Cerdon</rs><lb/> &amp; <rs type="person" ref="#marci">Marcion</rs>, au
+                    rapport de <rs type="person" ref="#tert">Tertullien</rs>
+                    <note type="footnote" n="(&#x2020;)">
+                        <rs type="bibl" ref="#tertullian_marcion">Tertul. contra Marci. Lib. 4.</rs>
+                    </note>, &amp;<lb/> même les Alogiens, selon S. <rs type="person"
+                        ref="#epip">Epiphanes</rs>
+                    <note type="footnote" n="(§)">
+                        <rs type="person" ref="#epip">Epiphanes</rs>
+                        <rs type="bibl" ref="#unbekannt">H&#xe6;res. 51.</rs>
+                    </note>, s'<w>é<lb rend="bindestrich"/>leverent</w> contre l'<rs type="bibl" ref="#Apc"
+                        > <term target="#offe">Apocalypse</term></rs> qu'ils vouloient ôter<lb/> à S. <rs type="person" ref="#johan"
+                        >Jean</rs>, parce, disoient-ils entr'autres raisons,<lb/> que du tems de cet
+                    <rs type="person" ref="#johan">Apôtre</rs>, il n'y avoit point<lb/> d'<term target="#kirc">Eglise</term>
+                    Chrétienne à Thyatire: ce que S. <rs type="person" ref="#epip">
+                        <w>Epipha<lb rend="bindestrich"/>nes</w>
+                    </rs> ne craint point de leur accoder, &amp; il <w>suppo-<pb n="253"/>se</w>
+                    en même tems, que lorsque S. <rs type="person" ref="#johan">Jean</rs> écrit à
+                    l'<term target="#kirch"><w>E<lb rend="bindestrich"/>glise</w></term> de Thyatire, il parle, non comme si elle<lb/> existoit
+                    alors, mais par un <term target="#geis">esprit</term> de Prophétie.</p>
+                <p xml:id="org008">§. 7. Voilà donc au sujet de l'<rs type="bibl" ref="#Apc"
+                    ><term target="#offe">Apocalypse</term></rs>, <term target="#ketz"><w>Hé<lb rend="bindestrich"/>rétiques</w></term> conte Hérétiques, pendant que les
+                    <term
+                        target="#orth"><w>Or<lb rend="bindestrich"/>thodoxes</w></term> se tenoient encore à l'écart. Du moins<lb/>
+                    ignore-t-on parfaitement de quelle manière ils <w>en<lb rend="bindestrich"/>visageoient</w> cette
+                    dispute.</p>
+            </div>
+            <div>
+                <head type="abstract" rend="font-style: italic"><rs type="person" ref="#just"
+                    >Justin</rs>, premier partisan de l'<rs type="bibl" ref="#Apc"><term target="#offe">Apocalypse</term></rs>.</head>
+                <p xml:id="org009">§. 8. <rs type="person" ref="#just">Justin Martir</rs>, qui
+                    écrivoit vers l'an 170.<lb/> de <rs type="person" ref="#jesus">Jésus-Christ</rs>,
+                    est le premier de nos <term target="#kirc">Docteurs</term><lb/> qui ait fait mention de l'<rs type="bibl"
+                        ref="#Apc"><term target="#offe">Apocalypse</term></rs>; &amp; ce qu'il y<lb/> a de remarquable,
+                    c'est qu'il l'attribue à l'Apôtre<lb/> S. <rs type="person" ref="#johan"
+                    >Jean</rs>. Dans son <rs type="bibl" ref="#justinus_tryphon">Dialogue avec
+                        Triphon</rs>, ce<lb/> <term target="#jude">Juif</term> lui demande s'il ne croit pas que Jérusalem<lb/>
+                    doive être rétablie un jour? <rs type="person" ref="#just">Justin</rs> répond
+                    que<lb/> pour lui, il le croit ainsi avec tous les Chrétiens<lb/> qui pensent
+                    juste, &amp; il dit: <hi rend="font-style: italic">Il y a eu parmi nous<lb/>
+                        un certain personnage nommé <rs type="person" ref="#johan">Jean</rs>, l'un
+                        des douze<lb/> Apôtres de <rs type="person" ref="#jesus">Jésus-Christ</rs>.
+                        Il a prédit dans son <rs type="bibl" ref="#Apc">
+                            <term target="#offe"><w>A<lb rend="bindestrich"/>pocalypse</w></term>
+                        </rs> que les Fidèles passeront mille ans dans <w>Jé<lb rend="bindestrich"/>rusalem</w></hi>.
+                    C'est la seul fois que <rs type="person" ref="#just">Justin</rs> cite l'<rs
+                        type="bibl" ref="#Apc">
+                        <term target="#offe"><w>Apo<lb rend="bindestrich"/>calypse</w></term>
+                    </rs> dans ses ouvrages, &amp; il la cite pour <w>prou<lb rend="bindestrich"/>ver</w> le règne
+                    de mille ans.</p>
+                <p xml:id="org010">§. 9. Il ne paroît point par les termes de ce<lb/>
+                    <rs type="person" ref="#just"><term target="#kirc"
+                        >Docteur</term></rs>, qu'elle fut alors re&#231;ue
+                    dans toutes les <w>E<lb rend="bindestrich"/>glises</w>; il semble ne proposer ici que son avis
+                    <w>par<lb rend="bindestrich"/>ticulier</w>, ou tout au plus l'avis de ses <term target="#chri">Chrétiens</term><lb/> qui
+                    pensoient juste sur cet objet, c'est-à-dire, qui<lb/> croyoient le règne de
+                    mille ans. Mais on ne <w>sau<lb rend="bindestrich"/>roit</w> douter qu'il ne citât de son chef un
+                    faux <w>E<lb rend="bindestrich"/>vangile</w>, lorsqu'il dit dans ce même Dialogue, que<lb/>
+                    <rs type="person" ref="#jesus">Jésus-Christ</rs> descendant dans le Jourdain, <hi
+                        rend="font-style: italic">le feu<pb n="254"/> s'y alluma</hi>,
+                    &amp; qu'on entendit cette voix du Ciel:<lb/>
+                    <hi rend="font-style: italic">tu es mon Fils, je t'ai aujourd'hui engendré</hi>.
+                    Il<lb/> assure que les Apôtres <hi rend="font-style: italic">ont écrit ces
+                        choses</hi>, qui ne<lb/> se trouvent pourtant que dans l'<rs type="bibl"
+                        ref="#ebionitenevangelium">Evangile des <w>E<lb rend="bindestrich"/>bionites</w></rs>.</p>
+            </div>
+            <div>
+                <head type="abstract" rend="font-style: italic">Son Caractère.</head>
+                <p>§. 10. Ce n'est pas qu'<rs type="person" ref="#just">il</rs> ne se donnât de la
+                    <w>pei<lb rend="bindestrich"/>ne</w> pour s'informer de la <term target="#wahr">vérité</term> des faits. Il avoit<lb/>
+                    beaucoup voyagé, non en homme vulgaire, mais<lb/> en Antiquaire
+                    curieux.<!-- Hier endet Lessing Übersetzung und auch meine Auszeichnung --><note type="annotation" resp="werner">Hier endet Lessings Übersetzung.</note>
+                    Nous lui devons le trépié<lb/> de la vieille Sybille de Cumes, les trois grandes
+                    &amp;<lb/> belles cuves où elle se lavoit, le sépulchre où
+                        <w>re<lb rend="bindestrich"/>posoient</w> ses reliques, les livres où elle parloit de<lb/>
+                    Jésus-Christ. Nouveau sujet de raillerie pour les<lb/> Payens qui traitoient les
+                    Chrétiens de <hi rend="font-style: italic">Sybillistes</hi>,<lb/> mais à qui
+                    Justin ne laisse pas de faire cette grave<lb/> exhortation <note type="footnote"
+                        n="(*)">Admonit. ad Gr&#xe6;cos.</note>: <q>ô Grecs! croyés à l'ancienne
+                        &amp; vénérable Sybille dont les livres sont <w>répan<lb rend="bindestrich"/>dus</w>
+                        partout, &amp; qui a été inspirée d'une <w>maniè<lb rend="bindestrich"/>re</w>
+                        extraordinaire par le Dieu tout-puissant</q>. Il<lb/> s'étoit assuré par
+                    lui-même de l'histoire des LXX.<lb/> Interprétes, &amp; de leur Divine
+                    Version faite au<lb/> tems du Roi Hérode, des 70 cellules où ils avoient<lb/>
+                    travaillé chacun à part, &amp; de leur merveilleuse<lb/> conformité
+                    jusqu'aux moindres termes. Toutes<lb/> circonstances que S. Jérome traite de
+                    fables, mais<lb/> sur lesquelles notre Docteur insiste en faveur de<lb/> la
+                    Religion: <q>Ne vous imaginés pas, ô Grecs!<lb/> que ce que nous vous disons
+                        soit une histoire<lb/> faite à plaisir. Nous avons vu, nous-mêmes,<pb
+                            n="255"/> dans le Phare d'Alexandrie, les vestiges des<lb/> petites
+                        maisons</q>; &amp; n'étoit-ce pas là une <w>preu<lb rend="bindestrich"/>ve</w> que les
+                    Septante qu'on y avoit enfermés <w>é<lb rend="bindestrich"/>toient</w> véritablement inspirés? La
+                    statue dressée<lb/> par les Romains à Simon le Magicien, avec
+                        l'<w>in<lb rend="bindestrich"/>scriptions</w> que le met au rang des Dieux, (quoiqu'au<lb/>
+                    jugement des Antiquaires qui l'ont vue, Justin ait<lb/> mal lu <hi
+                        rend="font-style: italic">Simon</hi>, au lieu de <hi
+                        rend="font-style: italic">Sémon</hi>, Dieu des <w>Sa<lb rend="bindestrich"/>bins</w>.) est
+                    encore le fruit de ces recherches, dignes<lb/> d'un Philosophe tel que Justin;
+                    &amp; ce n'est-là qu'un<lb/> échantillon de ce qu'il auroit fait, s'il se
+                    fût <w>tour<lb rend="bindestrich"/>né</w> du côté de l'Apocalypse.</p>
+            </div>
+        </body>
+    </text>
+</TEI>

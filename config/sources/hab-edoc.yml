@@ -26,3 +26,18 @@ hab-edoc:   # 02-sources row 442
   # editions (70 listed files) + 1 unserved file + 7 superseded parts;
   # page passages ≈ 5,000–10,000 (unmeasured — the transcripts total
   # ≈ 20 MB, estimated from the first file of each edition).
+  # PER-EDITION REVIEW (2026-11-27): the editions keeping their texts under
+  # their own names reviewed one by one (HabEdoc::EDITIONS) — 12 admitted
+  # by a rule (517 own-name texts: Grimmelshausen, Lessing's translations,
+  # Serranus, Christian II's diaries, Bahnsen, the Middle Low German
+  # psalter, Rist, Hainhofer, Duchess Sibylla, Liber modorum, Tuberinus,
+  # Hartlieb) and the FMG letters (ed000249) through their description
+  # files' textLang; 18 held back with their reasons (Rubens, the
+  # Magdeburg Centuries, Karlstadt, Opitz, the FG letters …). EXPECTED NEXT
+  # SYNC: 649 new files (517 texts + 67 letters + 65 descriptions) →
+  # 1,052 documents (472 + 580: 2 Grimmelshausen texts under the METS
+  # "Benutzungsordnung" label and 2 description-less letters skipped);
+  # skipped by rule 316 (200 transcript-less editions + 18 reviewed
+  # held-back editions + 3 held-back files of ed000132/239 + 83 Lessing
+  # originals + 2 + 2 + 1 unserved + 7 superseded); new page passages
+  # ≈ 12,000–20,000 (unmeasured; Christian II's 338 diary months the bulk).

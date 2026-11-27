@@ -114,6 +114,30 @@ module Adapters
       end
     end
 
+    def test_an_edition_may_name_further_dropped_elements
+      path = File.join(FIXTURES, "ed000228/1621_11.xml")
+      kept = Nabu::Adapters::HabEdocTeiParser.new.parse(path, urn: "urn:test:x", language: "de")
+      assert kept.first.text.start_with?("Wiener Neustadt Baden (bei Wien) Wien Verlegung des Arrests"),
+             "the regest index reads as text by default"
+      dropped = Nabu::Adapters::HabEdocTeiParser.new.parse(path, urn: "urn:test:x", language: "de", dropped: %w[index])
+      refute_includes dropped.first.text, "Verlegung des Arrests"
+      assert_includes dropped.first.text, "Mittagsmahl gehabt, von dannen nach Wien"
+      assert_equal kept.map(&:urn), dropped.map(&:urn)
+    end
+
+    def test_a_letter_description_yields_its_language_and_correspondents
+      path = File.join(FIXTURES, "ed000249/texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/" \
+                                 "h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg.xml")
+      facts = Nabu::Adapters::HabEdocTeiParser.new.description(path)
+      assert_equal "de", facts["text_lang"]
+      assert_equal "Anna v. Mildenburg", facts["sender"]
+      assert_equal "Hamburg", facts["sent_place"]
+      assert_equal 1898, facts.dig("letter_date", "not_before")
+      assert_equal "Rara/FMG Bahr-Mildenburg,A.1", facts["shelfmark"]
+      assert_equal "Brief von Anna Bahr-Mildenburg an einen unbekannten Herrn (Hamburg, 27.02.1898)",
+                   facts["letter_title"]
+    end
+
     def test_output_is_nfc
       [sachs, conring, schwarz, letter].each do |document|
         document.each { |passage| assert passage.text.unicode_normalized?(:nfc), passage.urn }

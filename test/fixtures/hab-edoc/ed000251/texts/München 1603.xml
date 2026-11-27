@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>München 1603</title>
+                <author xml:id="PH">Philipp Hainhofer</author>
+                <respStmt xml:id="editor">
+                    <resp>TEI/XML-Auszeichnung</resp>
+                    <name>Projekt „Kommentierte digitale Edition der Reise- und Sammlungsbeschreibungen Philipp Hainhofers (1578–1647)“</name>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>Herzog August Bibliothek Wolfenbüttel</publisher>
+                <date when="2020"/>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by-sa/4.0/">
+                        <p>Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</p>
+                    </licence>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Herzog August Bibliothek Wolfenbüttel</repository>
+                        <idno type="shelfmark">Cod. Guelf. 60.21 Aug. 8°</idno>
+                    </msIdentifier>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <tagsDecl>
+                <rendition xml:id="aq" scheme="free">Lateinische Buchstaben im Unterschied zur deutschen Schreibschrift</rendition>
+                <rendition xml:id="s" scheme="css">text-decoration:line-through;</rendition>
+                <rendition xml:id="sup" scheme="css">vertical-align:super; font-size:x-small;</rendition>
+            </tagsDecl>
+            <listPrefixDef>
+                <prefixDef ident="lit" matchPattern="(.+)" replacementPattern="https://hainhofer.hab.de/informationen-zur-edition/bibliographie/$1">
+                    <p>Bibliographie</p>
+                </prefixDef>
+                <prefixDef ident="org" matchPattern="(.+)" replacementPattern="https://hainhofer.hab.de/register/koerperschaftsregister/$1">
+                    <p>Körperschaftsregister</p>
+                </prefixDef>
+                <prefixDef ident="plc" matchPattern="(.+)" replacementPattern="https://hainhofer.hab.de/register/orte/$1">
+                    <p>Ortsregister</p>
+                </prefixDef>
+                <prefixDef ident="psn" matchPattern="(.+)" replacementPattern="https://hainhofer.hab.de/register/personen/$1"> 
+                    <p>Personenregister</p>
+                </prefixDef>
+                <prefixDef ident="wrk" matchPattern="(.+)" replacementPattern="https://hainhofer.hab.de/register/objekte/$1">
+                    <p>Objektregister</p>
+                </prefixDef>
+                <prefixDef ident="img" matchPattern="(.+)" replacementPattern="https://hainhofer.hab.de/img/mss/60-21-aug-8f/$1">
+                    <p>digitale Faksimiles</p>
+                </prefixDef>
+                <prefixDef ident="img2" matchPattern="(.+)" replacementPattern="https://hainhofer.hab.de/img/register/$1">
+                    <p>weitere Bilder</p>
+                </prefixDef>
+            </listPrefixDef>
+            <charDecl>
+                <char xml:id="mk">
+                    <localProp name="name" value="MARKED SMALL LETTER M SIGN"/>
+                    <localProp name="entity" value="msign"/>
+                    <mapping type="MUFI">U+F2F2</mapping>
+                    <mapping type="standard">mk</mapping>
+                    <figure>
+                        <graphic mimeType="svg+xml" url="img2:mk.svg"/>
+                    </figure><note>Mark (Gewichtseinheit)</note>
+                </char>
+                <char xml:id="scudo">
+                    <mapping type="standard">▽</mapping>
+                    <figure>
+                        <graphic mimeType="svg+xml" url="img2:scudo.svg"/>
+                    </figure><note>Scudo (Währungseinheit)</note>
+                </char>
+                <char xml:id="etc2">
+                    <mapping type="standard">etc</mapping>
+                    <figure>
+                        <graphic mimeType="svg+xml" url="img2:etc2.svg"/>
+                    </figure><note>etcetera-Zeichen, das dem Buchstaben c ähnlich sieht</note>
+                </char>
+            </charDecl>
+        </encodingDesc>
+        <profileDesc>
+            <calendarDesc>
+                <calendar xml:id="gregorian">
+                    <p/>
+                </calendar>
+                <calendar xml:id="julian">
+                    <p/>
+                </calendar>
+            </calendarDesc>
+            <handNotes>
+                <handNote xml:id="druckschrift">eingebundene Druckschrift</handNote>
+                <handNote xml:id="druckgraphik">eingebundene Druckgraphik</handNote>
+                <handNote xml:id="handzeichnung">eingebundene Handzeichnung</handNote>
+                <handNote xml:id="fremde_hand">Schrift von anderer Hand</handNote>
+            </handNotes>
+        </profileDesc>
+        <revisionDesc>
+            <change when="2022"/>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <pb n="fol. 127v" facs="img:00262.jpg"/>
+                <p><lb/>Adj <date calendar="#unknown" datingMethod="#gregorian"
+                        notBefore-custom="1603-07-13" notAfter-custom="1603-07-23">13. Julij.
+                        1603</date> mit meim schwager <rs type="person" role="present"
+                        ref="psn:daniel_rem">Daniel<lb/>Rem</rs>, <hi rendition="#s">Simon</hi>
+                    <rs type="person" role="present" ref="psn:martin_horndacher"><add place="above"
+                            >Martin</add> Horndacher</rs>, <rs type="person" role="present"
+                        ref="psn:jeorg_miller">D<ex>okto</ex>r Jeorg<lb/>Miller</rs> nach <rs
+                        type="place" role="present" ref="plc:muenchen">München</rs> geraist,
+                    dan<lb/>sie wegen <rs type="place" role="remote" ref="plc:anzenhof"
+                        >Anzenhoffen</rs> lehen alda<lb/>zuempfangen gehabt, haben ihr<lb/>aigne
+                    Pferdt vnd gutschen genommen<lb/>vnd ain Ainspenniger<note resp="#editor"
+                        type="annotation" subtype="gloss">Fuhrknecht</note> haist <rs type="person"
+                        role="present" ref="psn:hans_wachter">Hans<lb/>Wachter</rs>, sein Am morgens
+                    Vmb<lb/>4 Vhr aufgewest, vnd geraist auf<lb/>den <rs type="place" role="present"
+                        ref="plc:hochzoll">hochen Zoll</rs> zu, Vondar auf<lb/><rs type="place"
+                        role="present" ref="plc:kissing">Kissingen</rs>, <foreign xml:lang="la"><hi
+                            rendition="#aq">pag<ex>us</ex></hi></foreign><note resp="#editor"
+                        type="annotation" subtype="translation">Dorf</note> welches die <rs
+                        type="org" role="remote" ref="org:jesuitenorden">Je-<lb/>suiter</rs> Vmb
+                        40<ex>000</ex>
+                    <choice>
+                        <abbr>f.</abbr>
+                        <expan>Gulden</expan>
+                    </choice> Vom <rs type="person" role="remote" ref="psn:hans_melchior_ilsung"
+                        >Ilsing</rs> kaufft</p>
+                <p><lb/><rs type="place" role="present" ref="plc:mittelstetten">Nietelsteten</rs>.
+                        <foreign xml:lang="la"><hi rendition="#aq"
+                        >pag<ex>us</ex></hi></foreign><note resp="#editor" type="annotation"
+                        subtype="translation">Dorf</note></p>
+                <p><lb/><rs type="place" role="present" ref="plc:mammendorf">Mammenden</rs>,
+                        <foreign xml:lang="la"><hi rendition="#aq"
+                        >pag<ex>us</ex></hi></foreign><note resp="#editor" type="annotation"
+                        subtype="translation">Dorf</note></p>
+                <p><lb/><rs type="place" role="present" ref="plc:fuerstenfeldbruck">Prugg</rs>, gar
+                    ain schöner lustiger<lb/>marckht, hüpsche heuser vnd schön<lb/>sauber gassen.
+                        <foreign xml:lang="la"><hi rendition="#aq">Hic pransj
+                        sumus.</hi></foreign><note resp="#editor" type="annotation"
+                        subtype="translation">Hier haben wir gegessen.</note></p>
+                <p><lb/><rs type="place" role="present" ref="plc:pasing">Basing</rs>. <foreign
+                        xml:lang="la"><hi rendition="#aq">pag<ex>us</ex></hi></foreign><note
+                        resp="#editor" type="annotation" subtype="translation">Dorf</note></p>
+                <p><lb/><rs type="place" role="present" ref="plc:muenchen">München</rs>. <foreign
+                        xml:lang="la"><hi rendition="#aq"><rs type="place" role="present"
+                                ref="plc:muenchen">Monachum</rs>. Ciuitas.<lb/>In <rs type="place"
+                                role="present" ref="plc:bayern">Bauaria</rs>, perelegans, amplis
+                            plateis<lb/>et spaciosis aedificijs perornata,<lb/>moenijs ac fossis
+                            circumdata.</hi></foreign><note resp="#editor" type="annotation"
+                        subtype="translation">München. Stadt. In Bayern, sehr elegant, mit breiten
+                        Gassen und großen Bauwerken geschmückt, von Mauern und Gräben
+                        umgeben.</note></p>
+                <p><pb n="fol. 127ar" facs="img:00263.jpg"/><note resp="#editor" type="annotation"
+                        subtype="commentary">Die Blattangabe 127 wurde irrtümlich doppelt
+                        vergeben.</note><lb/>Haben Vnsern einkher gnommen, <rs type="place"
+                        role="present" ref="plc:muenchen_goldenes_kreuz">zum<lb/>guldin Kreuz</rs>
+                    beim <rs type="person" role="remote" ref="psn:michael_hoertnit">Michael
+                        Herdt-<lb/>nit</rs>, Vor dem <rs type="place" role="present"
+                        ref="plc:muenchen_salzstadel">salzstadel</rs>, auf welchem<lb/>der
+                    Landtschafft waffen.</p>
+                <p><lb/>Den <date calendar="#unknown" datingMethod="#gregorian"
+                        notBefore-custom="1603-07-14" notAfter-custom="1603-07-24">14. Jullj.</date>
+                    Am morgens hinauß gangen<lb/>zum <rs type="place" role="present"
+                        ref="plc:muenchen_isartor">Ÿser thor</rs> Vor welchem aine<lb/>lange
+                        hülzerne<rs type="place" role="present" ref="plc:muenchen_isarbruecke">
+                        Prug</rs> Vber die Ÿser,<lb/>alda man auf die flöß sizt, ist ains<lb/>Von
+                    den 4 haupt thorn, das Ander haist<lb/><rs type="place" role="present"
+                        ref="plc:muenchen_karlstor">Neuhauser thor</rs>, zu welchem man<lb/>Von <rs
+                        type="place" role="remote" ref="plc:augsburg">Augspurg</rs> auß hinein
+                    reut,<lb/>das dritte thor ist das <rs type="place" role="remote"
+                        ref="plc:muenchen_sendlinger_tor">sendlinger thor</rs>,<lb/>vnd das Vierte
+                    würdt genent, <rs type="place" role="present" ref="plc:muenchen_schwabinger_tor"
+                        >Vnsers<lb/>herrn thor</rs>. Vnder allen thoren<lb/>nimbt man die namen Von
+                    den<lb/>Durchreisenden, vnd wo ainer ein-<lb/>zeucht, <hi rendition="#aq"
+                            ><foreign xml:lang="la">in nota</foreign><note resp="#editor"
+                            type="annotation" subtype="translation">in ein Verzeichnis</note></hi>,
+                    nach dem thor sperren<lb/>Vbergebens die Vnder dem thor, dem<lb/><rs
+                        type="person" role="remote" ref="psn:herzog_wilhelm">Alten Herrn Herzog
+                        Willhalm</rs>, Vnd dem<lb/><rs type="person" role="remote"
+                        ref="psn:herzog_maximilian">Herzog Maximiliano</rs>, so wol Auch<lb/>dem <rs
+                        type="org" role="remote" ref="org:muenchen_magistrat">burgermaister Jm
+                        Ampt</rs>, vnd<lb/>wans der würth nit vor der thorwart<lb/>hat anzaigt,
+                    würdt er in gfenckhnuß<lb/>geworfen.<note resp="#editor" type="annotation"
+                        subtype="commentary">Vgl. zur hier geschilderten Praxis der vier Gastzettel:
+                            <ref target="lit:schattenhofer_kirchen_1974">Schattenhofer 1974</ref>,
+                        S. 160.</note></p>
+            </div>
+        </body>
+    </text>
+</TEI>

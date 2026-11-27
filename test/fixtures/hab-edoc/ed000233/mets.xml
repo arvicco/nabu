@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets OBJID="edoc/ed000233" TYPE="rare book" xmlns:mets="http://www.loc.gov/METS/"
+    xmlns:wdb="http://diglib.hab.de/wdb/" 
+    xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:rmd="http://diglib.hab.de/rights" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation=" http://www.loc.gov/METS/ http://diglib.hab.de/rules/schema/mets/mets.xsd">
+    <mets:metsHdr CREATEDATE="2012-06-07T10:30:00">
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenbüttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+    
+    <!-- Katalogeintrag, verwendet wird die PPN der elektronischen Ressource oder der Ressource, die den Link enthält -->
+    
+    
+    <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="OTHER">
+            <mets:xmlData>
+                <wdb:ppn>1671261569</wdb:ppn>
+                <wdb:purl>http://diglib.hab.de/edoc/ed000233/start.htm</wdb:purl>
+                <wdb:title>Jörn Münkner, Katrin Schmidt, Jaqueline Krone (Hrsg.): Die Korrespondenz zwischen Benedikt Bahnsen (Amsterdam) und Herzog August d.J. (Wolfenbüttel). Eine digitale Briefedition. Wolfenbüttel 2018.</wdb:title>                      
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+    
+    <mets:amdSec ID="amd_edoc_ed000233">
+        <mets:techMD ID="wdb_parameter">
+            <mets:mdWrap MDTYPE="OTHER">
+                <mets:xmlData>
+                    <wdb:parameter>
+                        <!-- Sprache -->
+                        <wdb:param lang="de"/>
+                        <!--  hier wird definiert, welche Anzeigetypen für die/das Fenster zur Verfügung stehen -->
+                        <!-- Titelbaltt oder Einstiegsseite fuer "Werke"; muss gesetzt sein -->
+                        <wdb:param distype="start" firstpage_xml="start.xml"
+                            firstpage_xsl="start.xsl"/>
+                        <!-- owner logo -->
+                       
+                        <!-- Inhaltsverzeichnis -->
+                        <wdb:param distype="toc"/>
+                        
+                        <wdb:parallelView pvID="pv_transcript-facs" f1="50" f2="50"
+                            synctype="pb"/>
+                        <wdb:parallelView pvID="pv_transcript-facs2" f1="50" f2="50" synctype="pb"/>
+                        <!-- <wdb:parallelView pvID="pv_transcript-facs" f1="50" f2="50" synctype="pb"/>-->
+                          <wdb:logo owner="Forschungsverbund MWW" ownerLogo="http://diglib.hab.de/images/mww-logo-gruen.png" ownerSiteURL="http://www.mww-forschung.de" ownerContact=""/>
+                            
+                     <!--   <wdb:param distype="results-transcript" url="wdb/search/search.xql"/>-->
+                    </wdb:parameter>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+        <!-- Bibliotheks Standardlizenz für Retrodigitalisate lt. Benutzungsordnung; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000233_retrodig">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights"
+                xlink:href="http://diglib.hab.de/?link=012" LABEL="Benutzungsordnung"/>
+        </mets:rightsMD>
+        <!-- CC Standardlizenz, wenn der Autor zugestimmmt hat; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000233_CC">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights"
+                xlink:href="http://diglib.hab.de/rights/cc_by-sa.html" LABEL="CC BY-SA 3.0"/>
+        </mets:rightsMD>
+        <!-- Lizenz, wenn der Autor/Institution der weiteren Nutzung zustimmmen muss -->
+        <mets:rightsMD ID="rmd_edoc_ed000233_restricted">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights"
+                xlink:href="http://diglib.hab.de/?link=012" LABEL="rights restricted"/>
+        </mets:rightsMD>
+    </mets:amdSec>
+    
+    <!-- files  ##############################################################################################   -->
+    <mets:fileSec>
+       <mets:fileGrp>
+           <mets:file ID="edoc_ed000233_einleitung001" MIMETYPE="text/xml">
+               <mets:FLocat LOCTYPE="URL" xlink:href="einleitung/korrespondenz.xml"/>
+           </mets:file>
+               <mets:file ID="edoc_ed000233_einleitung002" MIMETYPE="text/xml">
+                   <mets:FLocat LOCTYPE="URL" xlink:href="einleitung/editionsrichtlinien.xml"/>
+           </mets:file>
+           <mets:file ID="edoc_ed000233_revision" MIMETYPE="text/xml">
+               <mets:FLocat LOCTYPE="URL" xlink:href="tei-revisions.xml"/>
+           </mets:file>
+           <mets:file ID="edoc_ed000233_personenregister" MIMETYPE="text/xml">
+               <mets:FLocat LOCTYPE="URL" xlink:href="register/register-person.xml"/>
+           </mets:file>
+           <mets:file ID="edoc_ed000233_ortsregister" MIMETYPE="text/xml">
+               <mets:FLocat LOCTYPE="URL" xlink:href="register/register-place.xml"/>
+           </mets:file>
+           <mets:file ID="edoc_ed000233_bibliography" MIMETYPE="text/xml">
+               <mets:FLocat LOCTYPE="URL" xlink:href="register/register-bibl.xml"/>
+           </mets:file>
+           <mets:file ID="edoc_ed000233_briefe001" MIMETYPE="text/xml">
+               <mets:FLocat LOCTYPE="URL" xlink:href="briefe/0001.xml"/>
+           </mets:file>
+       </mets:fileGrp>
+        
+        <!-- Facsimiles -->
+        <mets:fileGrp USE="facsimile_URL">
+            <mets:file ID="mss_ba-2-1-16" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-16/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-17" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-17/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-18" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-18/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-19" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-19/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-20" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-20/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-21" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-21/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-22" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-22/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-23" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-23/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-24" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-24/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-25" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-25/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-26" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-26/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-27" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-27/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-28" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-28/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-29" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-29/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-30" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-30/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-31" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-31/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-32" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-32/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-33" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-33/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-34" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-34/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-35" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-35/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="mss_ba-2-1-36" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL"
+                    xlink:href="https://diglib.hab.de/mss/ba-2-1-36/start.htm?distype=imgs"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+      
+        
+        <!--  Einleitungstexte mit TEI Kodierung
+        <mets:fileGrp USE="introduction">
+            <mets:file ID="edoc_ed000233_vorwort" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="einleitungen/vorwort.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+    -->
+
+        <!--  Bibliographie; register-bibl , listBibl, Abkuerzungen 
+        <mets:fileGrp USE="XML">
+            <mets:file ID="edoc_ed000233_fg_bibliography" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="register/register-bibl.xml"/>
+            </mets:file>
+        </mets:fileGrp>  -->    
+    </mets:fileSec>
+    
+    <!-- structure ##############################################################################################   -->
+    <!-- Belegung von @TYPE: "submenu" = aufklappbares menu; "menu" = aufgeklapptes Menu ohne Link; "hide"= verstecke Eintrag (kann aber von z.B. service genutzt werden) -->
+    <mets:structMap>
+   <mets:div>
+       <mets:div TYPE="introduction" LABEL="Die Korrespondenz zwischen Benedikt Bahnsen (Amsterdam) und Herzog August d.J. (Wolfenbüttel)" ID="edoc_ed000233_einleitung001_transcript">
+           <mets:fptr FILEID="edoc_ed000233_einleitung001"/>
+       </mets:div>
+       <mets:div TYPE="introduction" LABEL="Editionsbericht" ID="edoc_ed000233_einleitung002_transcript">
+           <mets:fptr FILEID="edoc_ed000233_einleitung002"/>
+       </mets:div>
+ 
+        <!--  Transcriptionen **************************************************** -->
+        <mets:div TYPE="transcription" LABEL="Brief Nr. 1, vom 4. April 1660" ID="edoc_ed000233_briefe001_transcript">
+            <mets:fptr FILEID="edoc_ed000233_briefe001"/>
+        </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 2, vom 25. April 1661" ID="edoc_ed000233_briefe002_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe002"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 3, vom 3. März 1662" ID="edoc_ed000233_briefe003_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe003"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 4, vom 11. April 1662" ID="edoc_ed000233_briefe004_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe004"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 5, vom 26. Mai 1663" ID="edoc_ed000233_briefe005_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe005"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 6, vom 14. August 1663" ID="edoc_ed000233_briefe006_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe006"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 7, ohne Datum" ID="edoc_ed000233_briefe007_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe007"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 8, vom 17. Dezember 1663" ID="edoc_ed000233_briefe008_transcript">
+               <mets:fptr FILEID="edoc_ed000233_briefe008"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 9, vom 26. Mai 1665" ID="edoc_ed000233_briefe009_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe009"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 10, vom 22. August 1665" ID="edoc_ed000233_briefe010_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe010"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 11, vom 10. September 1665" ID="edoc_ed000233_briefe011_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe011"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 12, vom 7. Dezember 1665" ID="edoc_ed000233_briefe012_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe012"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 13, vermutlich Jahresende 1665" ID="edoc_ed000233_briefe013_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe013"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 14, vom 2. Januar 1666" ID="edoc_ed000233_briefe014_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe014"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 15, vom 6. April 1666" ID="edoc_ed000233_briefe015_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe015"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 16, vom 25. Mai 1666" ID="edoc_ed000233_briefe016_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe016"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 17, vom 5. Juni 1666" ID="edoc_ed000233_briefe017_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe017"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 18, vom 22. Juni 1666" ID="edoc_ed000233_briefe018_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe018"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 19, vom 12. Juli 1666" ID="edoc_ed000233_briefe019_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe019"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 20, vom 31. Juli 1666" ID="edoc_ed000233_briefe020_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe020"/>
+       </mets:div>
+       <mets:div TYPE="transcription" LABEL="Brief Nr. 21, vermutlich August 1666" ID="edoc_ed000233_briefe021_transcript">
+           <mets:fptr FILEID="edoc_ed000233_briefe021"/>
+       </mets:div>
+       <mets:div TYPE="register" LABEL="Personenregister" ID="edoc_ed000233_personenregister_transcript">
+           <mets:fptr FILEID="edoc_ed000233_personenregister"/>
+       </mets:div>
+       <mets:div TYPE="register" LABEL="Ortsregister" ID="edoc_ed000233_ortsregister_transcript">
+           <mets:fptr FILEID="edoc_ed000233_ortsregister"/>
+       </mets:div>
+       <mets:div TYPE="register" LABEL="Bibliographisches Register" ID="edoc_ed000233_bibliography_transcript">
+           <mets:fptr FILEID="edoc_ed000233_bibliography"/>
+       </mets:div> 
+       <!--Revisisonen, Änderungsregister-->
+       <mets:div TYPE="revisions" LABEL="Revisionen" ID="edoc_ed000233_revision_transcript">
+           <mets:fptr FILEID="edoc_ed000233_revision"/>
+       </mets:div>
+       <!--  Parallele Sichten  ******************************************************************************** -->
+       <mets:div TYPE="parallel_views" ID="parallel_views">
+           <mets:div TYPE="submenu" LABEL="Transcription ↔ Facsimile" ID="edoc_ed000233_text1">
+               <mets:div ID="pv_transcript-facs1" LABEL="Brief Nr. 1, vom 4. April 1660">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe001"
+                               ID="edoc_ed000233_briefe001_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-16" ID="edoc_000233_4"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs2" LABEL="Brief Nr. 2, vom 25. April 1660">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe002"
+                               ID="edoc_ed000233_briefe002_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-17" ID="edoc_000233_5"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs3" LABEL="Brief Nr. 3, vom 3. März 1662">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe003"
+                               ID="edoc_ed000233_briefe003_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-18" ID="edoc_000233_6"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs4" LABEL="Brief Nr. 4, vom 11. April 1662">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe004"
+                               ID="edoc_ed000233_briefe004_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-19" ID="edoc_000233_7"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs5" LABEL="Brief Nr. 5, vom 26. Mai 1663">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe005"
+                               ID="edoc_ed000233_briefe005_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-20" ID="edoc_000233_8"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs6" LABEL="Brief Nr. 6, vom 14. August 1663">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe006"
+                               ID="edoc_ed000233_briefe006_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-21" ID="edoc_000233_9"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs7" LABEL="Brief Nr. 7, ohne Datum">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe007"
+                               ID="edoc_ed000233_briefe007_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-22" ID="edoc_000233_10"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs8" LABEL="Brief Nr. 8, vom 17. Dezember 1663">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe008"
+                               ID="edoc_ed000233_briefe008_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-23" ID="edoc_000233_11"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs9" LABEL="Brief Nr. 9, vom 26. Mai 1665">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe009"
+                               ID="edoc_ed000233_briefe009_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-24" ID="edoc_000233_12"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs10" LABEL="Brief Nr. 10, vom 22. August 1665">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe010"
+                               ID="edoc_ed000233_briefe010_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-25" ID="edoc_000233_13"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs11" LABEL="Brief Nr. 11, vom 10. September 1665">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe011"
+                               ID="edoc_ed000233_briefe011_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-26" ID="edoc_000233_14"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs12" LABEL="Brief Nr. 12, vom 7. Dezember 1665">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe012"
+                               ID="edoc_ed000233_briefe012_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-27" ID="edoc_000233_15"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs13" LABEL="Brief Nr. 13, vermutlich Jahresende 1665">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe013"
+                               ID="edoc_ed000233_briefe013_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-28" ID="edoc_000233_16"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs14" LABEL="Brief Nr. 14, vom 2. Januar 1666">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe014"
+                               ID="edoc_ed000233_briefe014_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-29" ID="edoc_000233_17"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs15" LABEL="Brief Nr. 15, vom 6. April 1666">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe015"
+                               ID="edoc_ed000233_briefe015_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-30" ID="edoc_000233_18"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs16" LABEL="Brief Nr. 16, vom 25. Mai 1666">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe016"
+                               ID="edoc_ed000233_briefe016_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-31" ID="edoc_000233_19"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs17" LABEL="Brief Nr. 17, vom 5. Juni 1666">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe017"
+                               ID="edoc_ed000233_briefe017_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-32" ID="edoc_000233_20"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs18" LABEL="Brief Nr. 18, vom 22. Juni 1666">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe018"
+                               ID="edoc_ed000233_briefe018_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-33" ID="edoc_000233_21"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs19" LABEL="Brief Nr. 19, vom 12. Juli 1666">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe019"
+                               ID="edoc_ed000233_briefe019_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-34" ID="edoc_000233_22"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs20" LABEL="Brief Nr. 20, vom 31. Juli 1666">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe020"
+                               ID="edoc_ed000233_briefe020_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-35" ID="edoc_000233_23"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+               <mets:div ID="pv_transcript-facs21" LABEL="Brief Nr. 21, vermutlich August 1666">
+                   <mets:fptr>
+                       <mets:par>
+                           <mets:area FILEID="edoc_ed000233_briefe021"
+                               ID="edoc_ed000233_briefe021_pv"/>
+                           <mets:area FILEID="mss_ba-2-1-36" ID="edoc_000233_24"/>
+                       </mets:par>
+                   </mets:fptr>
+               </mets:div>
+           </mets:div>
+       </mets:div>
+   </mets:div> 
+    </mets:structMap>
+    
+    
+    
+    <!--    Behavior  ######################################################################################  -->
+    <mets:behaviorSec ID="edoc_ed000233_einleitung001bs">
+        <mets:behavior STRUCTID="edoc_ed000233_einleitung001_transcript" ID="edoc_ed000233_einleitung001_bs"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-introduction.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_einleitung002_transcript" ID="edoc_ed000233_einleitung002_bs"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-introduction.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_revision_transcript" ID="edoc_ed000233_revision_bs"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-revisions.xsl"/>
+        </mets:behavior>
+    </mets:behaviorSec>
+    <!-- Titeltranskriptionen -->
+    <mets:behaviorSec ID="edoc_ed000233_001bs">
+        <mets:behavior STRUCTID="edoc_ed000233_briefe001_transcript" ID="edoc_ed000233_brief001_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe002_transcript" ID="edoc_ed000233_brief002_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe003_transcript" ID="edoc_ed000233_brief003_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe004_transcript" ID="edoc_ed000233_brief004_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe005_transcript" ID="edoc_ed000233_brief005_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe006_transcript" ID="edoc_ed000233_brief006_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe007_transcript" ID="edoc_ed000233_brief007_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe008_transcript" ID="edoc_ed000233_brief008_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe009_transcript" ID="edoc_ed000233_brief009_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe010_transcript" ID="edoc_ed000233_brief010_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe011_transcript" ID="edoc_ed000233_brief011_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe012_transcript" ID="edoc_ed000233_brief012_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe013_transcript" ID="edoc_ed000233_brief013_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe014_transcript" ID="edoc_ed000233_brief014_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe015_transcript" ID="edoc_ed000233_brief015_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe016_transcript" ID="edoc_ed000233_brief016_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe017_transcript" ID="edoc_ed000233_brief017_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe018_transcript" ID="edoc_ed000233_brief018_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe019_transcript" ID="edoc_ed000233_brief019_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe020_transcript" ID="edoc_ed000233_brief020_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000233_briefe021_transcript" ID="edoc_ed000233_brief021_bs" 
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+    </mets:behaviorSec>
+    
+    <!-- parallele Sichten -->
+    <mets:behaviorSec ID="edoc_ed000233_brief001_pv1">
+        <mets:behavior ID="edoc_ed000233_brief001_pv_01" STRUCTID="pv_transcript-facs1"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_02" STRUCTID="pv_transcript-facs2"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_03" STRUCTID="pv_transcript-facs3"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_04" STRUCTID="pv_transcript-facs4"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_05" STRUCTID="pv_transcript-facs5"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_06" STRUCTID="pv_transcript-facs6"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_07" STRUCTID="pv_transcript-facs7"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_08" STRUCTID="pv_transcript-facs8"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_09" STRUCTID="pv_transcript-facs9"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_10" STRUCTID="pv_transcript-facs10"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_11" STRUCTID="pv_transcript-facs11"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_12" STRUCTID="pv_transcript-facs12"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_13" STRUCTID="pv_transcript-facs13"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_14" STRUCTID="pv_transcript-facs14"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_15" STRUCTID="pv_transcript-facs15"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_16" STRUCTID="pv_transcript-facs16"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_17" STRUCTID="pv_transcript-facs17"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_18" STRUCTID="pv_transcript-facs18"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_19" STRUCTID="pv_transcript-facs19"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_20" STRUCTID="pv_transcript-facs20"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_brief001_pv_21" STRUCTID="pv_transcript-facs21"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/tei-transcript.xsl"/>
+        </mets:behavior>        
+    </mets:behaviorSec>
+    
+    <!--Register-->
+    <mets:behaviorSec ID="edoc_ed000233_registerbs">
+        <mets:behavior ID="edoc_ed000233_personenregister1" STRUCTID="edoc_ed000233_personenregister_transcript"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/register/tei-pers.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_ortsregister1" STRUCTID="edoc_ed000233_ortsregister_transcript"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/register/tei-place.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000233_bibliography1" STRUCTID="edoc_ed000233_bibliography_transcript"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000233/register/tei-bibl.xsl"/>
+        </mets:behavior>
+    </mets:behaviorSec>
+    
+</mets:mets>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI version="5.1" 
+	xmlns="http://www.tei-c.org/ns/1.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://diglib.hab.de/rules/schema/mss/v1.0/cataloguing.xsd" 
+	xml:lang="de"
+	xml:id="HAB_mss_h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Beschreibung von Hannover, Forschungszentrum Musik und Gender, Rara/FMG Bahr-Mildenburg,A.1</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>Elektronische Ausgabe nach TEI P5</edition>
+				<respStmt>
+					<resp>TEI-P5 konforme Kodierung durch</resp>
+					<name type="person">Maren Bagge</name>
+					<name type="org">Forschungszentrum Musik und Gender</name>
+				</respStmt>
+			</editionStmt>
+			<publicationStmt>
+				<publisher>
+					<name type="org">Forschungszentrum Musik und Gender</name>
+					<ptr target="http://www.fmg.hmtm-hannover.de"/>
+				</publisher>
+				<date type="issued" when="2019-09-30">30. September 2019</date>
+				<date type="digitised" when="2018-03-01">1. März 2018</date>
+				<distributor>Forschungszentrum Musik und Gender</distributor>
+				<availability status="free">
+					<licence target="https://creativecommons.org/publicdomain/zero/1.0/deed.de">   
+					<p>Diese Beschreibung steht unter der Creative Commons Lizenz Public Domain Dedication (CC0 1.0).</p>   
+					<p>Für die Nutzung weiterer Daten wie Digitalisaten gelten gegebenenfalls andere Lizenzen. Vgl. die <ref target="http://diglib.hab.de/?link=012">Copyright Information</ref> der Herzog August Bibliothek Wolfenbüttel.</p>
+					</licence> 
+				</availability>
+				<pubPlace>
+					<ptr type="purl" target="http://diglib.hab.de/edoc/ed000249/start.htm"/>
+				</pubPlace>
+			</publicationStmt>
+			<sourceDesc>
+				<p>Beschreibung erstellt von <name type="person">Maren Bagge</name>, 2. Lesung von <name type="person">Viola Herbst</name>.</p>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<projectDesc>
+				<p>Beschreibung erstellt im Rahmen des Projektes <name type="project">Erschließen, Forschen, Vermitteln. Identität und Netzwerke / Mobilität und Kulturtransfer im musikbezogenen Handeln von Frauen zwischen 1800 und 2000</name>. Projektleitung: <name type="person">Dr. Nicole K. Strohmann.</name>
+				</p>
+			</projectDesc>
+		</encodingDesc>
+		<profileDesc>
+			<correspDesc>				
+				<correspAction type="sent">
+					<persName ref="#Bahr-Mildenburg_Anna">Anna v. Mildenburg</persName>
+					<settlement ref="#Hamburg">Hamburg</settlement>
+					<date when="1898-02-27">27.02.1898</date>
+				</correspAction>
+				<correspAction type="received">
+					<persName ref="#Unbekannt_0045">Unbekannter Herr</persName>
+				</correspAction>
+			</correspDesc>
+			<textClass>
+				<keywords scheme="#gnd">
+				    <term xml:lang="de"
+                     ref="http://d-nb.info/gnd/4008240-4"
+                     type="docType"
+                     subtype="corresp_letter">Brief</term>
+					<term xml:lang="de" ref="http://d-nb.info/gnd/4026482-8">Identität</term>
+				</keywords>
+			</textClass>
+		</profileDesc>
+		<!-- <revisionDesc>
+			<change who="" when=""></change>
+		</revisionDesc>
+		-->
+	</teiHeader>
+	<text>
+		<body>
+			<msDesc xml:id="mss_h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg" xml:lang="de">
+				<msIdentifier>
+					<settlement>Hannover</settlement>
+					<repository rend="fmg" ref="ISIL:DE-2184">Forschungszentrum Musik und Gender</repository>
+					<idno sortKey="h-fmg-rara-bahr-mildenburg-a-001">Rara/FMG Bahr-Mildenburg,A.1</idno>
+					<!-- <altIdentifier type="catalog">
+						<repository>Kalliope</repository>
+						<idno>[Kalliope-Nr.]</idno>
+					</altIdentifier>  -->
+					<altIdentifier type="former">
+						<idno>56/1 [Mildenburg]</idno>
+					</altIdentifier>
+				</msIdentifier>
+				<head>
+					<title>Brief von Anna Bahr-Mildenburg an einen unbekannten Herrn (Hamburg, 27.02.1898)</title>
+				</head>
+				<msContents>
+					<summary>Anna Bahr-Mildenburg äußert ihre Bereitschaft an der Mitwirkung eines Konzertes des Adressaten. Aufgrund anderer Konzertverpflichtungen könne sie eine definitive Zusage allerdings erst später geben, hoffe aber, ihre Direktion habe ihre Bitte berücksichtigt, keine Opern angesetzt zu haben, bei denen ihre Mitwirkung notwendig sei.</summary>
+					<textLang mainLang="de">Deutsch</textLang>
+				</msContents>				
+				<physDesc>					
+					<objectDesc form="letter">
+						<supportDesc material="paper">
+							<support>
+								<p>Handschriftlicher Brief mit eigenhändiger Unterschrift.</p>
+								<p>Briefpapier mit Wasserzeichen: <watermark> Briefpapier Damascé. Zwischen den beiden Worten befindet sich ein Kreis mit doppelter Außenlinie, innerhalb dessen ein Mann mit erhobener Keule auf einem auf dem Rücken liegenden Tier sitzt.</watermark></p>
+							</support>
+							<extent>
+								<measure type="leavesCount">1 Doppelblatt (2 beschriftete Seiten)</measure>
+							</extent>
+						</supportDesc>
+						</objectDesc>
+					<handDesc hands="1">
+						<handNote medium="black ink">
+							<p>In schwarzer Tinte geschrieben.</p>
+						</handNote>
+					</handDesc>
+				</physDesc>
+				<history>
+					<provenance>
+						<p></p>
+					</provenance>
+					<acquisition>
+						<!--<p><rs type="org" role="seller"></rs></p>
+						<p><date type="receipt"></date></p>
+						<p><measure type="currency"></measure></p>-->
+						<p>Erworben aus Mitteln der <rs type="org" role="donor">Mariann-Steegmann-Stiftung</rs>.</p>
+					</acquisition>
+				</history>
+				<additional>
+					<adminInfo>
+						<recordHist>
+							<p></p>
+						</recordHist>
+						<availability status="free">
+							<licence target="https://creativecommons.org/publicdomain/zero/1.0/deed.de">   
+							<p>Diese Beschreibung steht unter der Creative Commons Lizenz Public Domain Dedication (CC0 1.0).</p>   
+							<p>Für die Nutzung weiterer Daten wie Digitalisaten gelten gegebenenfalls andere Lizenzen. Vgl. die <ref target="http://diglib.hab.de/?link=012">Copyright Information</ref> der Herzog August Bibliothek Wolfenbüttel.</p>
+							</licence> 						
+						</availability>
+					</adminInfo>
+					</additional>
+			</msDesc>
+		</body>
+	</text>
+</TEI>

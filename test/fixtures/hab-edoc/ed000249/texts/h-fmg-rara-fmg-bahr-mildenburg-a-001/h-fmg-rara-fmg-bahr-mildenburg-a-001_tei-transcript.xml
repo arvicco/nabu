@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="HAB_mss_h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-transcript">
+  <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Transkription von Hannover, Forschungszentrum Musik und Gender, Rara/FMG Bahr-Mildenburg,A.1</title>
+         </titleStmt>
+         <editionStmt>
+            <edition>Elektronische Ausgabe nach TEI P5.</edition>
+            <respStmt>
+               <resp>TEI-P5 konforme Kodierung durch</resp>
+					<name type="person">Maren Bagge</name>              
+            </respStmt>
+            <editor>Herausgegeben vom <name type="org">Forschungszentrum Musik und Gender.</name></editor>            
+         </editionStmt>
+         <publicationStmt>
+            <publisher>
+               <name type="org">Forschungszentrum Musik und Gender</name>
+               <ptr target="http://www.fmg.hmtm-hannover.de"/>
+            </publisher>
+            <date type="issued" when="2019-09-30">30. September 2019</date>
+            <date type="digitised" when="2018-03-01">1. März 2018</date>
+            <distributor>Forschungszentrum Musik und Gender</distributor>
+            <availability status="free">
+               <licence target="https://creativecommons.org/publicdomain/zero/1.0/deed.de"></licence>
+               <p>Diese Transkription steht unter der Creative Commons Lizenz Public Domain Dedication (CC0 1.0).</p>
+            </availability>
+            <pubPlace>
+               <ptr type="purl" target="http://diglib.hab.de/edoc/ed000249/start.htm"/>
+            </pubPlace>
+         </publicationStmt>
+         <sourceDesc><p>Transkribiert von <name type="person">Maren Bagge</name>, 2. Lesung von <name type="person">Viola Herbst</name>.</p>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+			<projectDesc>
+				<p>Transkription erstellt im Rahmen des Projektes 
+					<name type="project">Erschließen, Forschen, Vermitteln. Identität und Netzwerke / Mobilität und Kulturtransfer
+					   im musikbezogenen Handeln von Frauen zwischen 1800 und 2000</name>.
+				   Projektleitung: <name type="person">Dr. Nicole K. Strohmann.</name>
+				</p>
+			</projectDesc>
+			<editorialDecl><p>Die Übertragung folgt den Editionsrichtlinien des Projektes.</p></editorialDecl>
+		</encodingDesc>
+  </teiHeader>
+      <facsimile>
+         <graphic url="http://diglib.hab.de/varia/fmg/rara-fmg-bahr-mildenburg-a-001/0001.jpg" xml:id="rara-fmg-bahr-mildenburg-a-001_0001"/>
+         <graphic url="http://diglib.hab.de/varia/fmg/rara-fmg-bahr-mildenburg-a-001/0002.jpg" xml:id="rara-fmg-bahr-mildenburg-a-001_0002"/>
+         <graphic url="http://diglib.hab.de/varia/fmg/rara-fmg-bahr-mildenburg-a-001/0003.jpg" xml:id="rara-fmg-bahr-mildenburg-a-001_0003"/>
+         <graphic url="http://diglib.hab.de/varia/fmg/rara-fmg-bahr-mildenburg-a-001/0004.jpg" xml:id="rara-fmg-bahr-mildenburg-a-001_0004"/>
+      </facsimile>
+  <text>
+     <body>
+        <pb n="1" facs="#rara-fmg-bahr-mildenburg-a-001_0001"/>
+        <div type="letter">
+           <opener>
+              <salute> Euer <rs type="person" ref="#Unbekannt_0045">Wohlgeboren</rs>!</salute> 
+           </opener>
+            <p>
+               <lb/>Ich bin gerne <w>berei<subst><del>d</del><add rend="overwritten">t</add></subst></w> in dem
+               <lb/>am 29. März stattfindendem 
+               <lb/>Concerte mitzuwirken,
+               <lb/>kann aber meine definitive
+               <lb/>Zusage erst Mitte dieses 
+               <lb/>Monats geben da zu dieser
+               <lb/>Zeit das Repertoire der
+               <lb/>zweiten Hälfte des Monats
+               <lb/>bekannt gegeben wird.
+               <lb/>Ich hoffe dass die hiesige
+               <lb/>Direction meine bereits
+               <lb/>gestellte Bitte berücksichtigt
+               <lb/>und keine Oper ansetzt
+            </p>
+           <pb n="2" facs="#rara-fmg-bahr-mildenburg-a-001_0002"/>           
+           <pb n="3" facs="#rara-fmg-bahr-mildenburg-a-001_0003"/>
+           <p>
+              <lb/>in welcher auf meine
+              <lb/>Mitwirkung gerechnet
+              <lb/>ist. 
+           </p>
+            <closer>
+               <salute>Mit vorzüglicher 
+               <lb/>Hochachtung</salute>
+               <lb/><signed><rs type="person" ref="#Bahr-Mildenburg_Anna"></rs>Anna v. Mildenburg</signed>
+               <lb/>
+               <dateline>
+                  <rs type="place" ref="#Hamburg">Hamburg</rs> d.
+                  <date when="1898-02-27">27. Februar 
+                  <lb/>1898</date>
+               </dateline>
+            </closer> 
+            <lb/>
+           <pb n="4" facs="#rara-fmg-bahr-mildenburg-a-001_0004"/>
+        </div>
+      </body>
+  </text>
+</TEI>

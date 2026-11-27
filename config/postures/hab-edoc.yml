@@ -10,18 +10,26 @@ sources:
         Gabrias's Latin half), de (Sachs, Staindl, Furttenbach, Millinger, Solms-Laubach, Schwarz,
         the 1539 inventory, the Newe unbekanthe landte), gml (the Lüne D/DL letters by their own
         file-name language letter — upstream's textLang says nds; Escobar's Modus confitendi, the
-        edition's own 'mndt'), it (the Paesi 1507), fr (Fonteny), grc (Gabrias's Greek half).
-        Deliberately coarse: no stage is asserted — the prints carry EDITION-class years, which
-        never stage"}
+        edition's own 'mndt'), it (the Paesi 1507), fr (Fonteny), grc (Gabrias's Greek half); by
+        the per-edition review: de (Grimmelshausen, Lessing's translations, Christian II's
+        diaries, Bahnsen, Rist, Hainhofer, Duchess Sibylla, Tuberinus, Hartlieb — upstream's
+        langUsage says gmh, the 1456 text is Early New High German), lat (Serranus, Liber
+        modorum), gml (the psalter, Cod. Guelf. 81.10 Aug. 2°), and the FMG letters each by its
+        description file's own textLang (de, fr, en). Deliberately coarse: no stage is asserted
+        — the prints carry EDITION-class years, which never stage"}
     dating: {posture: partial, note: "the prints carry their imprint year (sourceDesc
         imprint/publication date, or the prose bibl's year: Helmstedt 1708) in the EDITION class;
         a manuscript's origDate or a dated letter's correspDesc date rides class-less; undated
         letters (the Lüne set mostly says 'undatiert') and the editions without a sourceDesc date
-        mint nothing"}
+        mint nothing; the reviewed editions dated by nothing else carry the year their file's own
+        title names, class-less, basis title (Christian II's diary months, Bahnsen's letters,
+        Hainhofer's journeys), and an FMG letter its description's correspDesc date"}
     places: {posture: named, note: "the imprint pubPlace as the header gives it (Nürnberg,
         Danzig, Helmstedt, Lemgoviae, Basileae — Latin forms verbatim), else origPlace or a
-        letter's sending place; no gazetteer link. The holding library (msIdentifier) is never
-        the place"}
+        letter's sending place (an FMG letter's from its description); no gazetteer link. The
+        holding library (msIdentifier) is never the place — nor a pubPlace that names it
+        (Hartlieb's 'Wolfenbüttel', dropped), nor a register sourceDesc's stray imprint
+        (Christian II's diaries, dropped)"}
     script: {posture: mixed, note: "Latin script as keyed — long s, u/v and i/j as printed, the
         abbreviation marks (ẽ, ũ, uͦ, ꝫ) kept from the choice's abbr half — beside Greek for
         Gabrias's Greek fables and the Greek quotations in Lipsius"}

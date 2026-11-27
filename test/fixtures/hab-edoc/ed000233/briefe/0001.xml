@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://diglib.hab.de/edoc/ed000233/tei_all.rnc" type="application/relax-ng-compact-syntax"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:html="http://www.w3.org/1999/html"
+    xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:id="edoc_ed000233_001">
+    <teiHeader> 
+        <fileDesc>
+            <titleStmt>
+                <title>Brief Nr. 1, vom 4. April 1660</title>
+                <author>
+                    <name type="person">
+                        <surname>Bahnsen</surname>
+                        <forename>Benedikt</forename>
+                    </name>
+                </author>
+                <respStmt>
+                    <resp>TEI-P5 konforme Kodierung durch</resp>
+                    <name type="person">
+                        <surname>Münkner</surname>
+                        <forename>Jörn</forename>
+                    </name>
+                    <name type="person">
+                        <surname>Schmidt</surname>
+                        <forename>Katrin</forename>
+                    </name>
+                    <name type="person">
+                        <surname>Krone</surname>
+                        <forename>Jaqueline</forename>
+                    </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Transskription des Briefes durch</resp>
+                    <name type="person">
+                        <surname>Hakelberg</surname>
+                        <forename>Dietrich</forename>
+                    </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Technische Unterstützung durch</resp>
+                    <name type="person">
+                        <surname>Steyer</surname>
+                        <forename>Timo</forename>
+                    </name>
+                    <orgName>Bahnsen-Herzog August Briefwechsel</orgName>
+                </respStmt>
+                <funder>BMBF</funder>
+            </titleStmt>
+            <editionStmt>
+                <edition>Elektronische Ausgabe nach TEI P5</edition>
+            </editionStmt>
+            <extent/>
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                    <ptr type="crossRef" target="http://www.hab.de"/>
+                </publisher>
+                <date>2016</date>
+                <availability status="restricted">
+                    <p> Available at <ref target="workID">http://diglib.hab.de/edoc/ed000233/start.htm"&gt; (c) Herzog August
+                            Bibliothek Wolfenbüttel</ref>
+                    </p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc><p></p><p><hi rendition="bold">HAB, Bibliotheksarchiv, BA II, 1, Nr. 16 /Brief Nr.
+                1/</hi><lb/><lb/> Der erste erhaltene Brief von <rs type="person"
+                    ref="#Benedikt_Bahnsen">Bahnsen</rs> an <rs type="person"
+                        ref="#Herzog_August_d._J.">Herzog August</rs> datiert auf den 4. April 1660.
+                Wie alle Briefe ist er in <rs type="place" ref="#Amsterdam">Amsterdam</rs> auf
+                die Post gegangen. <rs type="person" ref="#Benedikt_Bahnsen">Bahnsen</rs> nimmt
+                Bezug auf Anfragen des <rs type="person" ref="#Herzog_August_d._J."
+                    >Herzogs</rs>, die sich nicht erhalten haben, aber wie folgt erschließen lassen:
+                <rs type="person" ref="#Herzog_August_d._J.">August</rs> sucht nach einem
+                Exemplar der „Paedia politices“ des späthumanistischen Philologen und zum
+                Katholizismus konvertierten Publizisten <rs type="person" ref="#Caspar_Schoppe"
+                    >Kaspar Schoppe</rs> sowie den klandestinen Traktat „De tribus magnis
+                impostoribus“. Das von Mythen umrankte Werk über die Täuschung der Menschheit
+                durch die drei Religionsstifter <rs type="person" ref="#Mose">Moses</rs>, <rs
+                    type="person" ref="#Jesus_Christus">Christus</rs> und <rs type="person"
+                        ref="#Muhammad">Mohammed</rs> wird sich als bibliographisches Phantom
+                erweisen. <rs type="person" ref="#Benedikt_Bahnsen">Bahnsen</rs> kündigt an,
+                seine bislang erfolglose Suche nach <rs type="place" ref="#Utrecht">Utrecht</rs>
+                auszuweiten. Nach seiner Einschätzung handelt es sich bei dem Traktat um ein
+                blasphemisches Buch: „ein Grewel aller Bücher“. Ferner kündigt er an, demnächst
+                den Titel „De tribus seculis“ von <rs type="person" ref="#Julius_Sperber">Julius
+                    Sperber</rs> zu drucken sowie weitere Werke des Autors. Er werde dem <rs
+                        type="person" ref="#Herzog_August_d._J.">Herzog</rs> ein Exemplar
+                zukommen lassen. Schließlich erwähnt er, dass er der Sendung neben weiteren
+                Traktaten und einem Katalog die „Seeräubereien“ des <rs type="person"
+                    ref="#Claes_Gerritszoon_Compaen">Claes Compaen</rs> beilegt. Gut zu erkennen
+                sind die originale Faltung und Siegelung des Blattes. Wie
+                seinerzeit üblich und sicher durch den Papierpreis mit bedingt, ist das Blatt
+                Brief und Kuvert in einem. Über die drei Bücherpäckchen, die als Lieferumfang
+                angekündigt sind, ist nichts bekannt, Fatturen oder andere
+                Belege haben sich nicht erhalten.</p>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <geoDecl datum="WGS84"/>
+            <projectDesc>
+                <p>Erstellt im Projekt "Frühneuzeitliche Gelehrtenbibliotheken
+                    (Autorenbibliotheken)"</p>
+            </projectDesc>
+        </encodingDesc>
+    </teiHeader>
+    <text type="letter">
+        <body>
+            <head>Brief: Bahnsen an Herzog August vom 4. April 1660.</head>
+            <div type="letter" n="16">
+                <pb n="1r" facs="mss/ba-2-1-16_00001"/>
+                <opener>
+                    <dateline>
+                        <placeName>Amsterdam</placeName>
+                        <date calendar="#gregor" when="1660-04-04"> 1660 April 4.</date>
+                    </dateline>
+                    <salute><hi rend="zierschrift"><rs type="person" ref="#Herzog_August_d._J.">Durchleuchtiger Hochgebohrener Gnädiger Fürst und HErr
+                        p</rs></hi></salute>
+                </opener>
+                <p><hi rend="kurrent"><rs type="person" ref="#Herzog_August_d._J.">E.<ex>ure</ex>
+                                Fürstl:<ex>iche</ex> durchl:<ex>aucht</ex></rs> gnädigem begehren
+                        nach, <hi rend="antiqua">notificire</hi> mit weini=<lb/> gem, daß die
+                        bücher, alß <hi rend="antiqua"><ref type="bibliography" target="#Padia_Politica">P&#x00E6;dia Politica <rs type="person" ref="#Caspar_Schoppe">Sciopij</rs></ref></hi>, vnd dan das<lb/>
+                        Buch <hi rend="antiqua"><ref type="bibliography" target="#De_Tribus_magnis">De Tribus magnis Impostoribus</ref></hi> nirgents habe konnen<lb/>
+                        bekommen, also ich fleißig alhier wie auch zu <rs type="place" ref="#Utrecht">Ütrecht</rs> darnach,<lb/> vernommen, so bald ich eins
+                        davon werd habhafft werden, soll es<lb/> überschicket werden. Das Buch <hi rend="antiqua"><ref type="bibliography" target="#De_Tribus_magnis">De
+                                Tribus magnis Imposto=<lb/> ribus</ref></hi>, wird ein Grewel aller
+                        Bücher seÿn, denn die <hi rend="antiqua">Tres ma=<lb/> gni Impostores</hi>,
+                        davon in dem selben Buch gehandelt wird,<lb/> sollen seÿn, wie ich von
+                        anderen verstanden, <hi rend="antiqua"><rs type="person" ref="#Jesus_Christus">Christus</rs></hi>, <hi rend="antiqua"><rs type="person" ref="#Mose">Moyses</rs></hi><lb/> vnd <hi rend="antiqua"><rs type="person" ref="#Muhammad">Mahumeth</rs>.</hi></hi></p>
+
+                <p><hi rend="kurrent">Was des <hi rend="antiqua">Julij Sperberi</hi> Schrifften anlanget,
+                        so geschrieben<lb/> beÿ mir verhanden, laße ich itzunder eines drücken<lb/>
+                    genant <hi rend="antiqua"><ref type="bibliography" target="#Julij_Sperberi">De Tribus Seculis</ref></hi>, so bald solches
+                        verfertiget<lb/> will <rs type="person" ref="#Herzog_August_d._J.">Jhr
+                                Fürstl<ex>iche</ex> Durchl<ex>aucht</ex></rs> solches übersenden,
+                        möchte also<lb/> vnnötig seÿn, dieselbe erst abschreiben zu lassen, vnd<lb/>
+                        bin ferners entschloßen die anderen auch drucken zu laßen,<lb/> vnd alßdan
+                        zu überschicken.</hi></p>
+                <closer>
+               <hi rend="kurrent">Weiter überschicke ich <hi rend="antiqua"><rs type="person" ref="#Claes_Gerritszoon_Compaen"><ref type="bibliography" target="#Claes_Compaens">Claes Compaens
+                   Seeraubereÿen</ref></rs></hi>, nebenst<lb/> andern Tractätlein wie aus einliegendem <hi rend="antiqua">Catalogo</hi> zu ersehen,<lb/></hi>
+
+               <salute><hi rend="kurrent">womit <rs type="person" ref="#Herzog_August_d._J.">Ew.<ex>re</ex> Fürstl<ex>liche</ex>
+                                    Gn<ex>a</ex>d<ex>en</ex></rs> Gottlicher protection
+                            getrewlich<lb/> empfehle vnd Jch verbleibe<lb/></hi>
+                   <hi rend="zierschrift">E.<ex>ure</ex> Fürstl<ex>iche</ex>
+                                Gn<ex>a</ex>d<ex>en</ex></hi><lb/>
+                  <hi rend="kurrent">Underthäniger Diener</hi><lb/>
+                    <hi rend="zierschrift"><rs type="person" ref="#Benedikt_Bahnsen">Benedictus Bahnsen</rs>.</hi><lb/></salute>
+                    <placeName><hi rend="zierschrift"><rs type="place" ref="#Amsterdam">Amsterdam</rs></hi></placeName>
+                    <dateline>
+                        <hi rend="zierschrift">den <date calendar="#gregor" when="1660-04-04"> 4
+                                <unclear reason="illegible">[?]</unclear> Aprilis.
+                                <lb/>A<ex>nn</ex>o p 1660</date>.</hi></dateline>
+                </closer>
+                <pb n="1v" facs="mss/ba-2-1-16_00002"/>
+            </div>
+            <div>
+                <p><hi rend="kurrent">DEm Durchleuchtigen Hochgebor=<lb/> nen Fürsten vnd
+                        Herren<lb/> HErren <rs type="person" ref="#Herzog_August_d._J.">AUGUSTUS p
+                            Hertzo=<lb/> gen Zu Braunschweig vnd <lb/> Lüneburg</rs> p Meinem
+                        gnädigen<lb/> Fürsten vnd HErren p<lb/></hi></p>
+
+                <p><hi rend="kurrent">Hierbeÿ dreÿ<lb/> Pacquetlein mit<lb/> bucher mit
+                            N<ex>umer</ex>o. 1.<lb/> N<ex>umer</ex>o. 2. N<ex>umer</ex>o. 3.
+                        gezeich=<lb/> net mit <rs type="person" ref="#Benedikt_Bahnsen">B–B</rs></hi></p>
+
+                <p><hi rend="kurrent"><rs type="place" ref="#Wolfenbuettel">Wolfenbüttel.</rs></hi></p>
+                <div>
+                    <msDesc>
+                        <msIdentifier>
+                            <msName>Brief: Bahnsen an Herzog August. Brief Nr. 1, vom 4. April 1660</msName>
+                        </msIdentifier>
+                        <msPart>
+                            <msIdentifier/>
+                            <physDesc>
+                                <sealDesc>
+                                    <seal n="2" type="pendant" subtype="sigillum_secretum">
+                                        <p><note type="annotation"> Das Siegel von <name>Benedict
+                                                  Bahnsen</name>; rotschwarzer Siegellack. Das
+                                                Siegel ist angebrochen und somit nicht mehr
+                                                lesbar.</note></p>
+                                    </seal>
+                                </sealDesc>
+                            </physDesc>
+                        </msPart>
+                    </msDesc>
+                </div>
+            </div>
+        </body>
+    </text>
+</TEI>
