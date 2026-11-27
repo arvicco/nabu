@@ -4252,11 +4252,12 @@ shelves:
     - hexapla
     - suda-translations
     - cllg-sc
-    documents: 1911
-    documents_display: '1,911'
-    passages: 430724
-    passages_display: '430,724'
-    size_display: 1,911 / 430,724
+    - dbbe
+    documents: 22569
+    documents_display: '22,569'
+    passages: 522479
+    passages_display: '522,479'
+    size_display: 22,569 / 522,479
   greek-silver:
     sources:
     - diorisis
@@ -4762,14 +4763,16 @@ shelves:
     - rundata
     - runesdb
     - grand-tour
+    - hab-edoc
+    - dio-epidoc
     - dbnl
     - delpher-newspapers
     - nb-no
-    documents: 52973
-    documents_display: '52,973'
-    passages: 3555564
-    passages_display: '3,555,564'
-    size_display: 52,973 / 3,555,564
+    documents: 54423
+    documents_display: '54,423'
+    passages: 3563235
+    passages_display: '3,563,235'
+    size_display: 54,423 / 3,563,235
   africa:
     sources:
     - africa-pd
