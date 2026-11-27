@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:wdb="http://diglib.hab.de/wdb/" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:rmd="http://diglib.hab.de/rights" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dv="http://dfg-viewer.de/" OBJID="edoc/ed000020" TYPE="work" xsi:schemaLocation="      http://www.loc.gov/METS/ http://diglib.hab.de/rules/schema/mets/mets.xsd      http://www.loc.gov/mods/v3 http://diglib.hab.de/rules/schema/mods/mods-3-4.xsd      ">
+    
+    <mets:metsHdr CREATEDATE="2012-11-23T11:04:53+01:00">
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenb&#xFC;ttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+
+    <!-- Katalogeintrag, verwendet wird die PPN der elektronischen Ressource oder der Ressource, die den Link enthaelt -->
+    <!-- ID dmd_opac oder dmd_local muessen vorhanden sein -->
+    
+    <!--<mets:dmdSec ID="dmd_opac">
+        <mets:mdRef LOCTYPE="PURL" MDTYPE="OTHER" OTHERMDTYPE="PICA" MIMETYPE="text/xml"  xlink:href="http://diglib.hab.de/?format=mods&amp;opac=[ppn]"/>
+    </mets:dmdSec>-->
+    
+    
+    <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods>
+                    <mods:identifier type="purl">http://diglib.hab.de/edoc/ed000020/start.htm</mods:identifier>
+                    <!--<mods:identifier type="workID">ErstausgabenID[ppn]</mods:identifier>-->
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Schock</mods:namePart>
+                        <mods:namePart type="given">Flemming</mods:namePart>
+                        <mods:displayForm>Flemming Schock</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">ctb</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:titleInfo>
+                        <mods:title>Anonym: Neuer&#xF6;ffneter Schau-Platz von Asiatischen Nationen</mods:title>
+                    </mods:titleInfo>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Wolfenb&#xFC;ttel</mods:placeTerm>
+                        </mods:place>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                        <mods:dateIssued encoding="w3cdtf">2012</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title>Theatrum-Literatur der Fr&#xFC;hen Neuzeit: Repertorium</mods:title>
+                        </mods:titleInfo>
+                        <mods:identifier type="purl">http://diglib.hab.de/edoc/ed000132/start.htm</mods:identifier>
+                        <mods:recordInfo>
+                            <mods:recordContentSource authority="gbv" authorityURI="http://uri.gbv.de/organization/isil/DE-23">OPAC</mods:recordContentSource>
+                            <mods:recordIdentifier source="opac">656068574</mods:recordIdentifier>
+                        </mods:recordInfo>
+                    </mods:relatedItem> 
+                    
+                 </mods:mods>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+    <!-- Ausgaben des edierten Werkes (Manifestations nach FRBR)-->
+						<mets:dmdSec ID="dmd_frbr_manifestations_ppn">
+						<mets:mdRef LOCTYPE="PURL" MDTYPE="MODS" MIMETYPE="text/xml" xlink:href="http://diglib.hab.de/?format=mods&amp;opac={$opac}"/>
+						</mets:dmdSec>
+    <mets:amdSec ID="amd_edoc_ed000020">
+        <mets:techMD ID="wdb_parameter">
+            <mets:mdWrap MDTYPE="OTHER">
+                <mets:xmlData>
+                    <!--  Definition des Aussehens der Seite -->
+                    <wdb:parameter>
+                        <!-- Titelbaltt oder Einstiegsseite fuer "Werke"; muss gesetzt sein -->
+                        <wdb:param distype="start" firstpage_xml="tei-introduction.xml" firstpage_xsl="http://diglib.hab.de/rules/styles/projekte/theatra/start.xsl"/>
+                        <!-- Inhaltsverzeichnis -->
+                        <wdb:param distype="toc"/>
+                        <!-- im Kopf des Menue zu zeigende Logos -->
+                        <!--<wdb:logo owner="Uni xy" ownerLogo="xy.png" ownerSiteURL="http://xy" ownerContact="xy@xy.de"/>;  Mehrfachlogos sind zulaessig -->
+                        <wdb:logo owner="Universit&#xE4;t Kassel" ownerLogo="http://diglib.hab.de/images/logo-kassel-uni.gif" ownerSiteURL="http://www.uni-kassel.de/uni/" ownerContact=""/>
+                        <!-- Suche im Werk -->
+                        <!--<wdb:param distype="results-transcript" url="wdb/search/search.xql"/>-->
+                       
+                        <!-- Parallelansichten  -->
+                        <!--<wdb:parallelView pvID="pv_transcript-facs" f1="50" f2="50" synctype="pb"/>-->
+                   </wdb:parameter>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+        <!-- Bibliotheks Standardlizenz fuer Retrodigitalisate lt. Benutzungsordnung; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000020_retrodig">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="Benutzungsordnung"/>
+        </mets:rightsMD>
+        <!-- CC Standardlizenz, wenn der Autor zugestimmmt hat; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000020_CC">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/rights/cc_by-sa.html" LABEL="CC BY-SA 3.0"/>
+        </mets:rightsMD>
+        
+        <!-- Lizenz, wenn der Autor/Institution der weiteren Nutzung zustimmmen muss -->
+        <mets:rightsMD ID="rmd_edoc_ed000020_restricted">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="rights restricted"/>
+        </mets:rightsMD>
+        
+     </mets:amdSec>
+
+    <!-- files  ##############################################################################################   -->
+    <mets:fileSec>
+        
+        <!-- Facsimiles -->
+        <!--  Einleitung  -->
+        <mets:fileGrp USE="introduction">
+            <!-- Werkebene, alle Erlaeuerung zu einem vorliegen Werk; enspricht der Einleitung einer Edition -->
+            <mets:file ID="edoc_ed000020" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="tei-introduction.xml"/>
+            </mets:file>
+            <mets:file ID="edoc_ed000020_pdf" MIMETYPE="application/pdf">
+                <mets:FLocat LOCTYPE="URL" xlink:href="ed000020.pdf"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+        <!--  Transkription -->
+        <!--  Kommentar  -->
+        <!-- Uebersetzung -->
+
+    </mets:fileSec>
+
+    <!-- structure ##############################################################################################   -->
+    <!-- Belegung von @TYPE: "submenu" = aufklappbares menu; "menu" = aufgeklapptes Menu ohne Link; "hide"= verberge Eintrag (kann aber von z.B. service genutzt werden) -->
+    <mets:structMap>
+        <mets:div>
+            <!--  Einleitung -->
+            <mets:div TYPE="introduction" LABEL="Einf&#xFC;hrung" ID="edoc_ed000020_introduction" ADMID="rmd_edoc_ed000020_CC">
+                <mets:fptr FILEID="edoc_ed000020"/>
+            </mets:div>
+
+            <!-- Facsimiles  **************************************************** -->
+            <mets:div TYPE="transcription" LABEL="Digitalisate" ID="edoc_ed000020_facs" ADMID="rmd_edoc_ed000020_restricted">
+                <mets:fptr FILEID="edoc_ed000020"/>
+            </mets:div>
+
+            <!--  Transcriptionen **************************************************** -->
+            <!--  Uebersetzung *************************************************************** -->
+            <!--  Kommentar *************************************************************** -->
+            <!--  Bibliographie ******************************************************************************** -->
+            <mets:div TYPE="bibliography" LABEL="Forschungsliteratur" ID="edoc_ed000020_bibliography" ADMID="rmd_edoc_ed000020_CC">
+                <mets:fptr FILEID="edoc_ed000020"/>
+            </mets:div>
+
+            <!-- Register ************************************************************************************ -->
+            
+            <!--  Revision ******************************************************************************** -->
+            <!-- <mets:div TYPE="revision" LABEL="Revisionen" ID="edoc_ed000020_revision" >
+                <mets:fptr FILEID="edoc_ed000020_fg_transcript"/>
+            </mets:div>-->
+
+            <!--    Parallelsichten  ######################################################################################  -->
+            <!--  wegen der Moeglichkeit des synchronen Blaetterns koennen nicht beliebige Kombinationen angeboten werden, sondern 
+                muessen hier definiert werden. 
+                Die Groesse der jeweiliigen resultierenden  Anzeigefenster und die Art des Syncronisierungsschluessel kann in wdb:parallelViews festgelegt werden -->
+
+            <!--  Parallele Sichten  ******************************************************************************** -->
+            </mets:div>
+    </mets:structMap>
+   
+    <!-- noch nicht in Funktion -->
+    <!--<mets:structLink></mets:structLink>-->
+
+    <!--    Behavior  ######################################################################################  -->
+    <!--  Innerhab der Behavior-Sections werden verschwiedene technische Anzeigeformate und Sichten auf die selbe Datei, z.B. tei-transcription.xml definiert. 
+            Unterschiedliche Sichten auf verschiedene Dateien erhalten eine eigene Behavior Section.
+            xlink:show="new" bei mechanism bedeutet, dass ein neues Fenster ge�et wird und keine Darstellung im Frame erfolgt
+     -->
+     
+     <!--Transkription-->
+    <!--Faksimile-->
+    <mets:behaviorSec ID="edoc_ed000020_b_facs">
+        <mets:behavior ID="edoc_ed000020_b_facs_01" STRUCTID="edoc_ed000020_facs" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/rules/styles/projekte/theatra/tei-facsimile.xsl"/>
+        </mets:behavior>
+    </mets:behaviorSec>
+     <!-- Bibliographie -->
+    <mets:behaviorSec ID="edoc_ed000020_b_bibliography">
+        <mets:behavior ID="edoc_ed000020_b_bibliography_02" STRUCTID="edoc_ed000020_bibliography" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/rules/styles/projekte/theatra/tei-bibliography.xsl"/>
+        </mets:behavior>
+    </mets:behaviorSec>
+    
+    <!-- Einleitung -->
+    <mets:behaviorSec ID="edoc_ed000020_b_introduction">
+        <mets:behavior STRUCTID="edoc_ed000020_introduction" ID="edoc_ed000020_b_introduction_01" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="http://diglib.hab.de/rules/styles/projekte/theatra/tei-introduction2.xsl"/>
+        </mets:behavior>
+    </mets:behaviorSec>
+</mets:mets>

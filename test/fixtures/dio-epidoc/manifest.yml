@@ -1,0 +1,41 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a WHOLE, byte-identical member of a v1.0 volume zip on the
+# Epigraf dumps page — but upstream serves only the zips, never a member by
+# its own URL, so no entry is refetchable by a raw GET: each records the zip
+# it was cut from. Re-cut per the README recipe after a new dump version.
+source: dio-epidoc
+adapter_test: test/adapters/dio_epidoc_test.rb
+retrieved: 2026-11-27
+files:
+  - path: di7/article-BSS-001-nsn~3212.xml
+    refetchable: false
+    reason: a member of https://epigraf.inschriften.net/files/download/77651 (di7_epidoc.zip, v1.0); no per-file URL
+    whole: true
+    trim: none
+  - path: di77/article-hgw-246-mv~477.xml
+    refetchable: false
+    reason: a member of https://epigraf.inschriften.net/files/download/77647 (di77_epidoc.zip, v1.0); no per-file URL
+    whole: true
+    trim: none
+  - path: di102/article-HST-083-mv~2048.xml
+    refetchable: false
+    reason: a member of https://epigraf.inschriften.net/files/download/77661 (di102_epidoc.zip, v1.0); no per-file URL
+    whole: true
+    trim: none
+  - path: rejected/article-BSS-001-nsn~3212.ttl
+    refetchable: false
+    reason: a member of https://epigraf.inschriften.net/files/download/77655 (di7_ttl.zip, v1.0); no per-file URL
+    whole: true
+    trim: none
+  - path: rejected/article-BSS-001-nsn~3212.rdf
+    refetchable: false
+    reason: a member of https://epigraf.inschriften.net/files/download/77659 (di7_rdf_xml.zip, v1.0); no per-file URL
+    whole: true
+    trim: none
+  - path: rejected/article-BSS-001-nsn~3212.jsonld
+    refetchable: false
+    reason: a member of https://epigraf.inschriften.net/files/download/77656 (di7_jsonld.zip, v1.0); no per-file URL
+    whole: true
+    trim: none

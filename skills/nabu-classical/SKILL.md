@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "aio analecta-hymnica cgpg cllg-freed cllg-sc corpus-corporum croala damos digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus josephus-latin lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate wellcome"
+  sources: "aio analecta-hymnica cgpg cllg-freed cllg-sc corpus-corporum croala damos dbbe digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus josephus-latin lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate wellcome"
 ---
 
 # The Classicist — the `classical` desk
@@ -31,6 +31,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `corpus-corporum` | Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich) | nc |
 | `croala` | Croatiae auctores Latini — CroALa (Jovanović, ed.) | attribution |
 | `damos` | DĀMOS — Database of Mycenaean at Oslo (the Linear B corpus) | nc |
+| `dbbe` | Database of Byzantine Book Epigrams (DBBE, Ghent University) — archive | open |
 | `digiliblt` | digilibLT — Biblioteca digitale di testi latini tardoantichi (CIRCSE CoNLL-U) | attribution |
 | `diorisis` | Diorisis Ancient Greek Corpus (Vatri & McGillivray, figshare v1 2018) | attribution |
 | `dprr` | DPRR — Digital Prosopography of the Roman Republic (person authority) | nc |

@@ -15,13 +15,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
 |---|---|---|---|---|
 | `ceipp-rongorongo` | texts | nc | wired · manual | 25 docs / 314 passages |
 | `ebible-pacific` | texts | open | wired · manual | 100 docs / 48,762 passages |
 | `niupepa` | texts | research_private | wired · manual | 1,465 docs / 14,816 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `mri` 1,465 · `haw` 66 · `pon` 28 · `rap` 25 · `cha` 6.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `mri` 1,465 · `haw` 66 · `pon` 28 · `rap` 25 · `cha` 6.
 
 ## The desk's instruments
 

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium formulae-open gregobase hrcak-marulana josephus-latin littre llct1 lo-congres mazarinades meloniromance memis nb-no noscemus openmgh osta pleias-french-books saenkoromance salom socinian-letters theatre-classique typikon-bible ud wellcome wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
+  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium formulae-open gregobase hab-edoc hrcak-marulana josephus-latin littre llct1 lo-congres mazarinades meloniromance memis nb-no noscemus openmgh osta pleias-french-books saenkoromance salom socinian-letters theatre-classique typikon-bible ud wellcome wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
 ---
 
 # The Romanist — the `romance` desk
@@ -40,6 +40,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `divinum-officium` | Divinum Officium — the Tridentine Latin Office and Mass (Breviarium and Missale Romanum) | open |
 | `formulae-open` | Formulae – Litterae – Chartae: formulae-open (early medieval charters) | attribution |
 | `gregobase` | GregoBase — a database of Gregorian scores (gregobase.selapa.net) | open |
+| `hab-edoc` | Herzog August Bibliothek Wolfenbüttel — digital editions (Editiones Electronicae Guelferbytanae, Wolfenbütteler Digitale Editionen) | attribution |
 | `hrcak-marulana` | Colloquia Maruliana — the journal of Marulić studies (Marulianum, Split), full text from Hrčak: scholarship on Marko Marulić and the Croatian humanists, Latin and Croatian text editions | attribution |
 | `josephus-latin` | The Latin Josephus — Antiquitates, Bellum, Contra Apionem, De excidio (latinjosephus.org v3.0) | attribution |
 | `littre` | Littré, Dictionnaire de la langue française (1863–1877) — oeuvres/littre TEI | attribution |

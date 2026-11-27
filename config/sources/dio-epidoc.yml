@@ -1,0 +1,19 @@
+dio-epidoc:   # 02-sources row 443
+  adapter: Nabu::Adapters::DioEpidoc
+  adopted: "2026-11-27"
+  axes: [epigraphy, germanic]
+  wired: true    # first sync verified 2026-11-27: 978 documents / 2,699 passages, 0 skipped, 0 errored —
+                 # exact on the dumps page's own article counts (DI 7: 73, DI 77: 448, DI 102: 457)
+  sync_policy: manual   # version 1.0 of 2025-05-18, sha256-pinned; a new version or volume = a re-pin
+  # Die Deutschen Inschriften (DI) — the Epigraf structured-data dumps of
+  # the Akademie der Wissenschaften und der Literatur Mainz: the medieval
+  # and early modern inscriptions (to 1650) of DI 7 Braunschweig (Kloster
+  # Riddagshausen and the incorporated villages), DI 77 Greifswald and
+  # DI 102 Stralsund — grave slabs, epitaphs, bells, church plate,
+  # paintings, house inscriptions — in Latin, High and Low German. One
+  # document per printed catalogue number (urn:nabu:dio-epidoc:di7-001),
+  # passage = the printed inscription (textpart A1, B1 …). License: every
+  # file's <licence target=".../by/4.0/">CC BY 4.0 for the text</licence>;
+  # images are links only and the EpiDoc carries none → attribution.
+  # Fetch: three page-linked EpiDoc zips (ZipFetch, sha256 pins); the
+  # RDF serializations and the CGIF catalogue dump are not fetched.

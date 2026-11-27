@@ -1,0 +1,25 @@
+sources:
+  dbbe:
+    # kind is machine-postured by the kind_map rule (facet genre): upstream's six-class
+    # epigram genre list, each class a verse paratext folded to paratext + literary/poetry.
+    lect: {posture: dates, note: "the date-band inference stages each OCCURRENCE from its own
+        copying date (upstream's completion_date_floor/ceiling): 9,817 of the 12,892 dated
+        occurrences fall wholly inside grc:byz [330, 1453]; the 3,075 whose interval reaches past
+        1453 (late-Byzantine and post-Byzantine copies of the same epigrams) and the 36 undated
+        stay bare grc. The TYPES (the editors' normalized texts) carry no date and stay bare grc
+        — honest, since a type gathers witnesses across centuries. No facet rule: a label map
+        would only repeat the band"}
+    dating: {posture: partial, note: "occurrences are dated by upstream's typed ISO day bounds
+        (12,892 of 12,928, 501–1800; the epigram's copying date in its manuscript, usually the
+        manuscript's own, sometimes finer — MetadataDates :structured, no class); the types and
+        the translation siblings carry no date of their own, and the poets' life dates are not
+        projected onto the texts (attribution dating would be inference)"}
+    places: {posture: named, note: "the manuscript's place of origin from upstream's hierarchical
+        location table, leaf to root ('Calabria, Southern Italy, Italy', 'the Hodegon Monastery,
+        Istanbul, Turkey'), with the historical-name chain beside it — named, no gazetteer refs
+        (2,357 occurrences); the holding library is a present location and rides as repository,
+        never as the place claim"}
+    script: {posture: implied, note: "polytonic Greek (Grek) as the manuscripts are transcribed:
+        the occurrences keep the scribe's orthography, accentuation and punctuation, editorial
+        parentheses expanding abbreviations (δα(υί)δ) and the database's gap marks; the types are
+        normalized polytonic; translations in Latin script (Modern Greek in monotonic Greek)"}

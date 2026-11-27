@@ -53,6 +53,7 @@ kinds:
   iip: inscriptions
   aio: inscriptions
   armepic: inscriptions
+  dio-epidoc: inscriptions
   ogham: inscriptions
   rundata: inscriptions
   lexlep: inscriptions

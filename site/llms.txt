@@ -1,6 +1,6 @@
 # Nabu
 
-> Nabu is a local, license-honest library of the ancient world: 2,930,493 documents and 135,786,119 citable passages in 292 language codes from 370 live public sources, with 5,454,309 dictionary entries, 26.1 million gold-standard lemma annotations in 60 languages (36.2 million more machine-suggested), and 31 research desks; 88% of documents are public-domain or attribution-class (census of 26 November 2026). It is a pipeline and SQLite store that runs on the researcher's own disk — this site describes it; it does not serve the texts.
+> Nabu is a local, license-honest library of the ancient world: 2,952,601 documents and 135,885,545 citable passages in 292 language codes from 373 live public sources, with 5,454,309 dictionary entries, 26.1 million gold-standard lemma annotations in 60 languages (36.2 million more machine-suggested), and 31 research desks; 89% of documents are public-domain or attribution-class (census of 27 November 2026). It is a pipeline and SQLite store that runs on the researcher's own disk — this site describes it; it does not serve the texts.
 
 Do not crawl this site page by page to inventory the library — use the lookup files below: the source and language indexes and the desk dossiers answer what is held, and the source registry answers it machine-readably.
 

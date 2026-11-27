@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (33): `aio`, `analecta-hymnica`, `cgpg`, `cllg-freed`, `cllg-sc`, `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `formulae-open`, `glaux`, `glt`, `hypotactic`, `ig-cyprus`, `josephus-latin`, `lasla`, `lexica`, `lila`, `noscemus`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `pta`, `sigla`, `suda-translations`, `ud`, `vulgate`, `wellcome`
+**Members** (34): `aio`, `analecta-hymnica`, `cgpg`, `cllg-freed`, `cllg-sc`, `corpus-corporum`, `croala`, `damos`, `dbbe`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `formulae-open`, `glaux`, `glt`, `hypotactic`, `ig-cyprus`, `josephus-latin`, `lasla`, `lexica`, `lila`, `noscemus`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `pta`, `sigla`, `suda-translations`, `ud`, `vulgate`, `wellcome`
 
 ### romance
 
@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (43): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `formulae-open`, `gregobase`, `hrcak-marulana`, `josephus-latin`, `littre`, `llct1`, `lo-congres`, `mazarinades`, `meloniromance`, `memis`, `nb-no`, `noscemus`, `openmgh`, `osta`, `pleias-french-books`, `saenkoromance`, `salom`, `socinian-letters`, `theatre-classique`, `typikon-bible`, `ud`, `wellcome`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
+**Members** (44): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `formulae-open`, `gregobase`, `hab-edoc`, `hrcak-marulana`, `josephus-latin`, `littre`, `llct1`, `lo-congres`, `mazarinades`, `meloniromance`, `memis`, `nb-no`, `noscemus`, `openmgh`, `osta`, `pleias-french-books`, `saenkoromance`, `salom`, `socinian-letters`, `theatre-classique`, `typikon-bible`, `ud`, `wellcome`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
 
 ### epigraphy
 
@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (42): `aio`, `armepic`, `ceipom`, `ceipp-rongorongo`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pgp-geniza`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
+**Members** (43): `aio`, `armepic`, `ceipom`, `ceipp-rongorongo`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `dio-epidoc`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pgp-geniza`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 
@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), Beowulf again in Klaeber's edition with its aligned English (perseus-anglit), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (47): `aspr`, `blbooks`, `bosworth-toller`, `cleasby-vigfusson`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dbnl`, `delpher-newspapers`, `dta`, `ecco-tcp`, `eebo-tcp`, `emmo`, `evans-tcp`, `fornsvenska`, `fsv-lexica`, `grand-tour`, `helipad`, `iswoc`, `leme`, `med-headwords`, `menota`, `menotec`, `nb-no`, `pcmep`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `runesdb`, `stationers-register`, `statutes-realm`, `ud`, `wellcome`, `wiktionary-dum`, `wiktionary-enm`, `wiktionary-gmh`, `wiktionary-gmq-osw`, `wiktionary-got`, `wiktionary-non`, `wiktionary-ofs`, `wiktionary-sco`, `zoega`
+**Members** (49): `aspr`, `blbooks`, `bosworth-toller`, `cleasby-vigfusson`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dbnl`, `delpher-newspapers`, `dio-epidoc`, `dta`, `ecco-tcp`, `eebo-tcp`, `emmo`, `evans-tcp`, `fornsvenska`, `fsv-lexica`, `grand-tour`, `hab-edoc`, `helipad`, `iswoc`, `leme`, `med-headwords`, `menota`, `menotec`, `nb-no`, `pcmep`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `runesdb`, `stationers-register`, `statutes-realm`, `ud`, `wellcome`, `wiktionary-dum`, `wiktionary-enm`, `wiktionary-gmh`, `wiktionary-gmq-osw`, `wiktionary-got`, `wiktionary-non`, `wiktionary-ofs`, `wiktionary-sco`, `zoega`
 
 ### celtic
 

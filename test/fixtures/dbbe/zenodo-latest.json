@@ -1,0 +1,39 @@
+{
+  "created": "2026-09-28T07:01:49.954763+00:00",
+  "modified": "2026-11-16T10:47:58.023473+00:00",
+  "id": 23008642,
+  "conceptrecid": "19435533",
+  "doi": "10.5281/zenodo.23008642",
+  "conceptdoi": "10.5281/zenodo.19435533",
+  "metadata": {
+    "title": "Database of Byzantine Book Epigrams - Archive",
+    "publication_date": "2026-09-28",
+    "resource_type": {
+      "title": "Dataset",
+      "type": "dataset"
+    },
+    "license": {
+      "id": "cc-zero"
+    }
+  },
+  "files": [
+    {
+      "id": "cde48600-0a52-4bf1-a347-5a6da2c061eb",
+      "key": "dbbe_archive.sqlite",
+      "size": 60125184,
+      "checksum": "md5:85b0abf7ed8801d5524a58d0e159abce",
+      "links": {
+        "self": "https://zenodo.org/api/records/23008642/files/dbbe_archive.sqlite/content"
+      }
+    }
+  ],
+  "links": {
+    "self": "https://zenodo.org/api/records/23008642",
+    "self_html": "https://zenodo.org/records/23008642",
+    "latest": "https://zenodo.org/api/records/23008642/versions/latest",
+    "parent": "https://zenodo.org/api/records/19435533",
+    "versions": "https://zenodo.org/api/records/23008642/versions"
+  },
+  "updated": "2026-11-16T10:47:58.023473+00:00",
+  "revision": 6
+}

@@ -1,0 +1,1585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mets - Muster für einen alten Druck mit Strukturdaten  -->
+<!--  Liste der moeglichen Werte fuer USE -Atrribute
+(Angehaengtes _URL bedeutet, dass die Ressource verlinkt wurde)
+
+Bisher in Gebrauch:
+
+config
+facsimile 
+facsimile_URL
+transcrcription
+translation
+introduction
+index (=register)
+revision
+bibliography
+ejournal
+ebook
+article
+
+Derzeit unterstützte Funktionen:
+http://diglib.hab.de/behavior#folding 
+-->
+<!-- Grundlage: METS Ver.1.9.1   ; die Schemaadresse steuert die Anzeige, sofern neuere Definitionen vorliegen sollten -->
+<mets:mets OBJID="edoc/ed000132" 
+    xmlns:mets="http://www.loc.gov/METS/"
+    xmlns:tei="http://www.tei-c.org/ns/1.0" 
+    xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:wdb="http://diglib.hab.de/wdb/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://www.loc.gov/METS/ http://diglib.hab.de/rules/schema/mets/v1.9/wdb-mets-2.xsd">
+
+
+    <mets:metsHdr CREATEDATE="2013-03-30T14:33:00Z" LASTMODDATE="2013-03-30T14:33:00Z">
+        <!-- automatische Aenderung fuer Daten vorsehen -->
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenbüttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+
+    <!-- Katalogeintrag -->
+
+    <mets:dmdSec ID="dmd_ref">
+        <mets:mdRef LOCTYPE="PURL" MDTYPE="MODS" MIMETYPE="application/xml"
+            xlink:href="http://diglib.hab.de/?format=mods&amp;opac=656068574"/>
+    </mets:dmdSec>
+
+    <!-- wird primaer angezeigt, aber fakultativ; verpflichtendes Format ist MODS -->
+    <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods>
+                    <mods:identifier type="purl"
+                        >http://diglib.hab.de/edoc/ed000132/start.htm</mods:identifier>
+                    <mods:titleInfo>
+                        <mods:title>Welt und Wissen auf der Bühne</mods:title>
+                        <mods:subTitle>Theatrum-Literatur der Frühen Neuzeit ;
+                            Repertorium</mods:subTitle>
+                    </mods:titleInfo>
+                    <mods:name type="personal" authority="gnd" authorityURI="http://d-nb.info/gnd/"
+                        valueURI="http://d-nb.info/gnd/12116750X">
+                        <mods:namePart type="family">Roßbach</mods:namePart>
+                        <mods:namePart type="given">Nikola</mods:namePart>
+                    </mods:name>
+                    <mods:name type="personal" authority="gnd" authorityURI="http://d-nb.info/gnd/"
+                        valueURI="http://d-nb.info/gnd/141905573">
+                        <mods:namePart type="family">Stäcker</mods:namePart>
+                        <mods:namePart type="given">Thomas</mods:namePart>
+                    </mods:name>
+                    <mods:name type="personal" authority="gnd" authorityURI="http://d-nb.info/gnd/"
+                        valueURI="http://d-nb.info/gnd/137348215">
+                        <mods:namePart type="family">Schock</mods:namePart>
+                        <mods:namePart type="given">Flemming</mods:namePart>
+                    </mods:name>
+                    <mods:name type="corporate">
+                        <namePart>Herzog August Bibliothek</namePart>
+                    </mods:name>
+                    <mods:name type="corporate">
+                        <namePart>Technische Universität Darmstadt</namePart>
+                    </mods:name>
+                    <mods:typeOfResource>software, multimedia</mods:typeOfResource>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="code" authority="marccountry">gw</mods:placeTerm>
+                        </mods:place>
+                        <mods:place>
+                            <placeTerm type="text">Wolfenbüttel</placeTerm>
+                        </mods:place>
+                        <mods:publisher>Herzog August Bibliothek</mods:publisher>
+                        <mods:dateIssued>2011</mods:dateIssued>
+                        <mods:issuance>monographic</mods:issuance>
+                    </mods:originInfo>
+                    <mods:language>
+                        <mods:languageTerm authority="iso639-2b" type="code">ger</mods:languageTerm>
+                    </mods:language>
+                    <mods:physicalDescription>
+                        <mods:form authority="marcform">electronic</mods:form>
+                        <mods:form authority="marccategory">electronic resource</mods:form>
+                        <mods:form authority="marcsmd">remote</mods:form>
+                        <mods:extent>Online-Ressource</mods:extent>
+                    </mods:physicalDescription>
+                    <mods:recordInfo>
+                        <mods:descriptionStandard>rakwb</mods:descriptionStandard>
+                        <mods:recordContentSource authority="marcorg"
+                            >GBVCP</mods:recordContentSource>
+                        <mods:recordCreationDate encoding="marc">110411</mods:recordCreationDate>
+                        <mods:recordChangeDate encoding="iso8601"
+                            >20121107120208.0</mods:recordChangeDate>
+                        <mods:recordIdentifier source="DE-601">656068574</mods:recordIdentifier>
+                        <mods:recordOrigin>Converted from MARCXML to MODS version 3.4 using
+                            MARC21slim2MODS3-4.xsl (Revision 1.74gbv3)</mods:recordOrigin>
+                    </mods:recordInfo>
+                    <mods:languageOfCataloging>
+                        <mods:languageTerm authority="iso639-2b" type="code">ger</mods:languageTerm>
+                    </mods:languageOfCataloging>
+                </mods:mods>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+
+    <!-- administrative section ################################################################ -->
+    <mets:amdSec ID="amd_edoc_ed000132">
+        <!--  hier ggf. Integration von PREMIS   -->
+
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+        <!-- 
+            Bibliotheks Standardlizenz für Retrodigitalisate lt. Benutzungsordnung ist CC BY-SA 3.0 (vgl. http://diglib.hab.de/?link=012)
+              wird aber hier von den separat gewährten publisher rights der Autoren unterschieden;
+        -->
+        <mets:rightsMD ID="rmd_edoc_ed000132_retrodig">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights"
+                xlink:href="http://diglib.hab.de/?link=012" LABEL="Benutzungsordnung"/>
+        </mets:rightsMD>
+
+        <!-- CC Standardlizenz, wenn der Autor zugestimmmt hat; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000132_CC">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights"
+                xlink:href="http://diglib.hab.de/rights/cc_by-sa.html" LABEL="CC BY-SA 3.0"/>
+        </mets:rightsMD>
+
+        <!-- Lizenz, wenn der Autor/Institution der weiteren Nutzung zustimmmen muss -->
+        <mets:rightsMD ID="rmd_edoc_ed000132_restricted">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights"
+                xlink:href="http://diglib.hab.de/?link=012" LABEL="rights restricted"/>
+        </mets:rightsMD>
+    </mets:amdSec>
+
+    <!-- files  ##############################################################################################   -->
+    <mets:fileSec>
+        <!--   
+            Die Verbindung von hier nachgewiesenen files zu externen TEI Dokumenten wird mittels File -ID hier uber das @xml:id Attribut dort  hergestellt, z.B.
+            <TEI version="5.0" xml:base="http://diglib.hab.de/edoc/ed000008/" xml:id="edoc_ed000132_fg_introduction">    
+        -->
+        <!-- wdb:parameter für die Anzeige und Menüführung -->
+
+        <mets:fileGrp USE="config">
+            <mets:file ID="wdb_parameter" USE="navigator">
+                <mets:FContent>
+                    <mets:xmlData>
+                        <wdb:parameter>
+                            <!--  hier wird definiert, welche Anzeigetypen für die/das Fenster zur Verfügung stehen -->
+                            <!-- Titelbaltt oder Einstiegsseite fuer "Werke"; muss gesetzt sein -->
+                            <wdb:param distype="start" firstpage_xml="start.xml"
+                                firstpage_xsl="start.xsl"/>
+                            <!-- Inhaltsverzeichnis -->
+                            <wdb:param distype="toc"/>
+                            <!-- Startsprache -->
+                            <wdb:param lang="de"/>
+                            <!-- Volltextsuche mit Paralleler Volltextsicht; @url fuer Aufgerufenes Skript, nur fuer Menusuche; Extrasuchen unter Behavior -->
+                            <!-- welche XQL Scripte sollen fuer die Suche verwendet werden; wdb ist Standard 
+                                  Pfad: exist.hab.de/rest/db/apps/[wdb:param]/search.xql
+                            -->
+                            <!--http://exist.hab.de/rest/db/apps/projekte/theatra/search/src_search.xql?dir=periodica/70-a-hist-2f&q=polen&qurl=projekte/theatra/view/display.xql&xml=tei-transcript.xml&qtype=&introduction=true-->
+                            
+                            <wdb:param distype="results-transcript" url="projekte/theatra/search/intro_search.xql"/>
+                            
+                            <wdb:logo owner="Universität Kassel" ownerLogo="http://diglib.hab.de/images/logo-kassel-uni.gif" ownerSiteURL="http://www.uni-kassel.de/uni/" ownerContact=""/>
+                                
+                        </wdb:parameter>
+                    </mets:xmlData>
+                </mets:FContent>
+            </mets:file>
+        </mets:fileGrp>
+
+        <!-- Titel  mit bibliographischen Metadaten zu einem Zeitpunkt X-->
+        <mets:fileGrp USE="title" VERSDATE="2012-10-30T00:00:00">
+            <mets:file ID="edoc_145_title" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="dmd.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+
+        <!-- Documente auf dem Server-->
+        <mets:fileGrp USE="document_URL">
+            <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f107">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000152/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f42">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000154/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f135">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000078/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f146">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000173/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f75">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000014/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f126">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000149/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f24">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000101/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f17">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000026/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f27">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000113/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f41">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000120/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f47">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000116/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f54">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000033/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f62">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000123/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f67">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000020/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f78">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000048/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f88">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000032/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f96">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000016/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f110">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000087/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f115">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000065/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f117">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000064/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f122">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000136/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f125">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000153/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f153">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000190/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f158">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000192/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f163">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000199/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f165">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000200/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f166">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000058/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f172">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000170/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f176">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000207/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f178">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000204/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f179">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000206/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f180">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000205/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f181">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000184/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f43">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000155/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f113">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000137/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f120">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000067/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f121">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000138/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f132">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000160/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f40">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000100/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f138">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000161/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f155">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000189/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f21">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000099/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f140">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000096/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f2">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000027/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f131">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000165/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f19">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000098/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f82">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000097/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f102">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000142/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f12">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000028/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f18">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000061/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f34">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000044/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f162">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000191/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f106">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000126/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f157">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000182/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f37">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000036/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f73">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000110/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f177">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000198/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f33">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000114/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f149">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000188/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f76">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000070/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f152">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000185/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f109">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000128/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f136">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000163/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f10">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000095/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f103">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000167/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f171">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000177/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f174">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000178/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f68">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000029/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f182">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000208/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f101">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000062/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f89">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000025/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f151">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000203/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f39">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000111/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f98">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000147/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f11">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000021/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f14">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000043/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f129">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000156/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f139">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000157/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f142">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000158/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f44">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000112/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f38">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000019/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f164">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000187/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f66">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000102/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f145">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000171/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f100">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000172/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f168">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000202/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f105">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000088/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f148">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000174/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f156">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000175/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f81">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000094/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f108">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000089/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f22">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000030/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f26">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000093/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f175">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000209/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f16">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000022/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f50">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000059/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f94">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000092/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f161">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000193/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f20">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000115/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f45">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000169/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f57">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000091/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f134">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000057/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f55">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000015/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f36">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000047/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f130">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000090/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f8">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000117/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f3">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000031/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f4">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000040/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f6">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000042/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f9">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000071/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f15">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000109/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f77">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000046/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f80">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000041/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f95">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000039/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f60">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000150/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f97">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000038/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f119">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000063/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f147">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000195/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f83">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000037/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f173">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000210/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f28">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000118/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f143">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000159/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f160">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000186/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f169">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000180/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f159">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000201/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f30">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000125/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f49">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000055/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f170">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000179/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f46">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000080/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f104">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000127/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f59">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000079/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f86">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000119/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f133">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000129/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f53">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000045/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f84">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000017/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f48">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000049/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f144">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000073/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f71">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000077/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f111">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000134/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f70">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000076/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f74">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000121/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f87">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000122/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f85">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000105/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f90">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000130/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f25">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000075/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f79">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000074/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f23">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000023/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f31">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000108/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f150">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000197/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f58">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000104/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f35">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000144/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f63">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000060/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f116">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000141/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f29">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000103/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f13">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000124/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f118">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000066/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f123">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000135/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f1">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000164/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f52">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000168/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f154">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000183/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f64">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000054/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f93">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000051/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f127">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000052/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f128">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000053/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f114">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000139/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f141">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000069/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f5">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000056/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f124">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000151/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f92">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000106/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f61">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000107/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f99">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000162/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f65">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000018/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f32">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000148/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f167">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000196/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f137">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000050/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f72">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000034/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f112">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000140/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f56">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000035/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f7">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000072/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f51">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000068/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f69">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000194/start.htm" xlink:show="new"/>
+   </mets:file>
+   <mets:file MIMETYPE="text/html" ID="edoc_ed000132_introduction_f91">
+      <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000024/start.htm" xlink:show="new"/>
+   </mets:file>
+        </mets:fileGrp>
+
+
+        <!--  Transkription mit TEI Kodierung; die ID muss in der korrespondierenden TEI Datei  im TEI root-Element stehen, hier z.B. <TEI xml:id="edoc_ed000132_fg_transcript"> -->
+        <mets:fileGrp USE="transcription">
+            <mets:file ID="edoc_ed000132_fg_transcript" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="tei-transcript-pnr.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+
+        <!--  Einleitung , Bibliographie-->
+        <mets:fileGrp USE="introduction">
+            <mets:file ID="edoc_ed000132_fg_introduction" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="tei-introduction.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+
+        <!-- Uebersetzung -->
+        <!-- Register -->
+        <mets:fileGrp USE="index">
+            <mets:file ID="edoc_ed000132_fg_personenregister" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="register-person.xml"/>
+            </mets:file>
+            <!--<mets:file ID="edoc_ed000132_fg_ortsregister" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="ortsverzeichnis.xml"/>
+            </mets:file>-->
+        </mets:fileGrp>
+    </mets:fileSec>
+
+    <!-- structure ##############################################################################################   -->
+
+    
+    <mets:structMap>
+        <mets:div>
+            <!--  Einleitungen -->
+            <mets:div TYPE="introduction" LABEL="Repertorium der Theatra-Literatur" ID="edoc_ed000132_introduction"
+                ADMID="rmd_edoc_ed000132_CC">
+                
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_27"
+                    LABEL="Anonym: Neu auffgelegtes Complementir- und Liebes-Theatrum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f27"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_41"
+                    LABEL="Anonym: Martialischer Schau-Platz / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f41"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_47"
+                    LABEL="Anonym: Kriegs-Theatrum In Italien / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f47"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_54"
+                    LABEL="Anonym: Theatrum De Veneficis / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f54"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_62"
+                    LABEL="Anonym: Pommerisches Kriegs-Theatrum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f62"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_67"
+                    LABEL="Anonym: Schau-Platz von Asiatischen Nationen / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f67"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_78"
+                    LABEL="Anonym: Neues Kriegs-Theater / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f78"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_88"
+                    LABEL="Anonym: Theatrum Malorum Mulierum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f88"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_96"
+                    LABEL="Anonym: Theatrum Novum Politico-Historicum / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f96"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_110"
+                    LABEL="Anonym: Genealogischer Schauplatz des ietztherrschenden Europae / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f110"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_115"
+                    LABEL="Anonym: Neu-auffgeführter Schau-Platz Oder warhaffte Liebes-Geschicht / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f115"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_117"
+                    LABEL="Anonym: Schau-Platz aller Dinge / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f117"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_122"
+                    LABEL="Anonym: Frantzösischer Soldaten-Teufel / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f122"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_125"
+                    LABEL="Anonym: Theatrum Adriaticum / Baum, Constanze">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f125"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_153"
+                    LABEL="Anonym: Theatrum Novellarum Mundi Alterum / Pabst, Linda">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f153"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_158"
+                    LABEL="Anonym: Schauplatz der ausgearteten Menschheit. Mit einer Vorrede von Friedrich Schiller / Košenina, Alexander">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f158"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_163"
+                    LABEL="Anonym: Staats- und Kriegs-Schau-Bühne Des Königreichs Pohlen / Münkner, Jörn">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f163"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_165"
+                    LABEL="Anonym: Hungarisch- und Venetianisches Kriegs-Theatrum / Münkner, Jörn">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f165"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_166"
+                    LABEL="Anonym: Theatrum Chemicum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f166"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_172"
+                    LABEL="Anonym: Hamburgisch Mordt-Theatrum / Schmidt, Natalie">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f172"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_176"
+                    LABEL="Anonym [Abraham Rémy]: Theatri Amoris Vierdter Theil  – Histori Clitophonis (Theatrum Amoris IV) / Möckel, Sebastian">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f176"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_178"
+                    LABEL="Anonym [Pierre de Casaneuve]: Theatrum Amoris Oder Schawplatz der Liebe. Histori von Caritea (Theatrum Amoris I) / Möckel, Sebastian">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f178"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_179"
+                    LABEL="Anonym [Abraham Rémy]: Theatri Amoris Dritter Theil – Histori Endymionis (Theatrum Amoris III) / Möckel, Sebastian">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f179"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_180"
+                    LABEL="Anonym [Antoine du Périer]: Theatri Amoris Ander Theil  – Histori der verliebten Loziae (Theatrum Amoris II) / Möckel, Sebastian">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f180"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_181"
+                    LABEL="Anonym: Theatrum Symphateticum Auctum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f181"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_43"
+                    LABEL="Anonym: Neu-eröffneter kleiner Schau-Platz / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f43"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_113"
+                    LABEL="Anonym: Theatrum Novellarum Mundi / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f113"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_120"
+                    LABEL="Anonym: Schauplatz Serinischer Helden-Thaten / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f120"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_121"
+                    LABEL="Anonym: Theatrum Morum / Smith, Paul J.">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f121"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_132"
+                    LABEL="Anonym: Der zu Bender Eröffnete Schau-Platz Der Ottomannischen Gerechtigkeit / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f132"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_107"
+                    LABEL="A.C.M.: Schauplatz Einer vollständigen und leicht begreiffenden Frantzösischen Sprachkunst / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f107"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_42"
+                    LABEL="Stanislaus Reinhard Acxtelmeier: Schau-Bühne Der Rebellionen und Auffrühren / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f42"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_135"
+                    LABEL="Johann Samuel Adami: Theatrum tragicum, oder Eröffnete Schau-Bühne allerhand sonder- und wunderbarer Trauer- und Todes-Fälle / Košenina, Alexander">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f135"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_146"
+                    LABEL="Johann Christoph Adelung: Schauplatz des Baierischen Erbfolgskrieges / Münkner, Jörn">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f146"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_75"
+                    LABEL="Johann Jacob Agricola: Schau-Platz deß Allgemeinen Hauß-Halten / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f75"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_126"
+                    LABEL="Otto Aicher (Dodo Richea): Theatrum Funebre / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f126"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_24"
+                    LABEL="Aegidius Albertinus: Der Welt Tummel: und Schaw-Platz / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f24"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_17"
+                    LABEL="Jost Amman: Gynaeceum, Sive Theatrum Mulierum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f17"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_40"
+                    LABEL="Elias Ashmole: Theatrum Chemicum Britannicum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f40"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_138"
+                    LABEL="Caspar Bauhin: Theatrum Anatomicum / Reetz, Katja">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f138"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_155"
+                    LABEL="Caspar Bauhin: Prodromos Theatri Botanici / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f155"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_21"
+                    LABEL="Georg Beatus: Amphitheatrum Naturae / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f21"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_140"
+                    LABEL="Mattia Bellintani: Teatro del paradiso / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f140"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_2"
+                    LABEL="Jacques Besson: Theatrum Instrumentorum Et Machinarum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f2"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_131"
+                    LABEL="Anonym [W. B. M.]: Schau-Platz der Betrieger / Košenina, Alexander">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f131"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_19"
+                    LABEL="Johann Matthias Beyer: Theatrum Machinarum Molarium / Bäcker, Barbara; Lux, Carina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f19"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_82"
+                    LABEL="Steven Blankaart: Schou-burg der Rupsen (Schau-Platz Der Raupen) / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f82"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_102"
+                    LABEL="Steven Blankaart: Theatrum Chimicum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f102"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_12"
+                    LABEL="Georg Andreas Böckler: Theatrum Machinarum Novum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f12"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_18"
+                    LABEL="Gabriel Bodenehr: Curioses Staats und Kriegs Theatrum am Rhein / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f18"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_34"
+                    LABEL="Jean Bodin: Universae Naturae Theatrum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f34"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_162"
+                    LABEL="Pierre Boiastuau: Le Theatre Du Monde / Zeller, Rosmarie">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f162"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_106"
+                    LABEL="Simon Bornmeister: Schau-Platz der Römisch-Teutschen Käiser / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f106"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_157"
+                    LABEL="Giovanni Botero: Theatrum Principum / Rauschenbach, Sina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f157"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_37"
+                    LABEL="Marcus Zverius Boxhorn: Theatrum Hollandiae / Rauschenbach, Sina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f37"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_73"
+                    LABEL="Andreas Brunner: Theatrum Virtutis Et Gloriae Boicae (Schau-Plaz Bayerischer Helden) / Frankenberg, Ansgar">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f73"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_177"
+                    LABEL="Vincenzo Bruno: Teatro De Gl´Inventori Di Tutte Le Cose / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f177"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_33"
+                    LABEL="Dominicus Franciscus Calin: Ritterlicher Schau-Platz/ Aller Dapfferen und Wolverdienten Helden / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f33"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_149"
+                    LABEL="Giulio Camillo: L’Idea del Theatro / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f149"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_76"
+                    LABEL="Caspar von Ceumern: Theatridium Livonicum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f76"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_152"
+                    LABEL="Strozzio Cigogna: Magiae Omnifariae Vel potius, Universae Naturae Theatrum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f152"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_109"
+                    LABEL="Friedrich Eberhard Collin: Wunder-voller Schauplatz Der Heiligen Märtyrer / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f109"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_136"
+                    LABEL="Anonym: Curieuser Schauplatz des in diesem achtzehnden Seculo angefangenen und noch fortwährenden blutigen Krieges / Lohsträter, Kai">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f136"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_10"
+                    LABEL="Peter Dahlmann: Historischer Schauplatz Vornehmer und berühmter Staats- und Rechts-Gelehrten / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f10"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_103"
+                    LABEL="Peter Dahlmann: Schauplatz Der Masquirten und Demasquirten Gelehrten / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f103"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_171"
+                    LABEL="Gil González Dávila: Teatro De Las Grandezas de la Villa de Madrid / Rauschenbach, Sina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f171"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_174"
+                    LABEL="Gil González Dávila: Teatro Eclesiástico De La Primitiva Iglesia De Las Indias Occidentales / Rauschenbach, Sina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f174"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_68"
+                    LABEL="Charles Philippe Dieussart: Theatrum Architecturae Civilis / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f68"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_182"
+                    LABEL="Giuseppe Donzelli: Teatro Farmaceutico dogmatico, E Spagirico / Kalff, Sabine">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f182"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_101"
+                    LABEL="Jacob Döpler: Theatrum Poenarum / Rößler, Hole">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f101"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_89"
+                    LABEL="Christoph Eißlingen: Breviarium Itineris Italiae / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f89"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_151"
+                    LABEL="[Johann Andreas Endter/Christoph Peller]: Theatrum Pacis / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f151"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_39"
+                    LABEL="Gottlieb Feinler: Theatrum Morientium / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f39"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_98"
+                    LABEL="Erasmus Francisci: Neu-erbauter Schau-Platz denckwürdiger Geschichte / Helduser, Urte">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f98"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_11"
+                    LABEL="Erasmus Francisci: Schau- und Ehren-Platz Christlicher Tapfferkeit / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f11"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_14"
+                    LABEL="Erasmus Francisci: Die lustige Schau-Bühne von allerhand Curiositäten / Helduser, Urte">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f14"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_129"
+                    LABEL="Jacob August Franckenstein: Schweitzerisches Theatrum / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f129"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_139"
+                    LABEL="Jacob August Franckenstein: Portugiesisches Theatrum / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f139"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_142"
+                    LABEL="Jacob August Franckenstein: Englisches Theatrum / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f142"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_44"
+                    LABEL="Iriniphilus Nugaeserius Freymund: Moscovitische Schau-Bühne / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f44"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_38"
+                    LABEL="Johann Frisch: Schauplatz Barbarischer Schlaverey / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f38"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_164"
+                    LABEL="Casimir Füesslin: Theatrum Gloriae Sanctorum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f164"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_66"
+                    LABEL="Giovanni Paolo Gallucci: Theatrum mundi, et temporis / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f66"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_145"
+                    LABEL="Tomaso Garzoni: La piazza universale di tutte le professioni del mondo / Heßelmann, Peter">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f145"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_100"
+                    LABEL="Henning Johannes Gerdes: Theatrum Fati Svetici / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f100"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_168"
+                    LABEL="Johann Georg Gross: Theatrum Biblicum ex scriptis theologorum veterum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f168"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_105"
+                    LABEL="Franz Haffner: Der klein Solothurner Schaw-Platz / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f105"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_148"
+                    LABEL="Georg Philipp Harsdörffer: Der Grosse Schauplatz Jämerlicher Mordgeschichte / Jakob, Hans Joachim">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f148"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_156"
+                    LABEL="Georg Philipp Harsdörffer: Der grosse Schau-Platz Lust- und Lehrreicher Geschichte / Helduser, Urte">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f156"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_81"
+                    LABEL="Albert Heidenfeld: Asiatischer Schauplatz / Rauschenbach, Sina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f81"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_108"
+                    LABEL="Christoph Helwig: Theatrum Historicum / Steiner, Benjamin">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f108"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_22"
+                    LABEL="Hans Georg Hertel: New eröffneter Geometrischer Schaw- und Mässe-Platz / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f22"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_26"
+                    LABEL="Johann Wolfgang Heydt: Schau-Platz von Africa und Ost-Indien / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f26"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_175"
+                    LABEL="Conrad Horlacher: Theatrum Arcanorum Divinae Sapientiae / Blum, Livia">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f175"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_16"
+                    LABEL="Tileman van der Horst/Jacob Polley: Theatrum Machinarum Universale; Of Keurige Verzameling van verscheide grote en zeer fraaie Waterwerken / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f16"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_50"
+                    LABEL="Tileman van der Horst: Theatrum Machinarum Universale; Of Nieuwe Algemeene Bouwkunde / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f50"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_94"
+                    LABEL="Ivo Hueber: Theatrum Annuum Historico-Morale Heroinarum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f94"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_161"
+                    LABEL="Johann Jonston: Theatrum universale de avibus / Kalff, Sabine">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f161"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_20"
+                    LABEL="Johann Heinrich Gottlob von Justi: Schauplatz der Künste und Handwerke / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f20"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_45"
+                    LABEL="Johann Erhard Kapp: Schauplatz des Tetzelischen Ablaß-Krams Und des Darwider streitenden Sel. D. Martini Lutheri / Fülling, Melanie">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f45"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_57"
+                    LABEL="Johann Peter Kayser: Historischer Schau-Platz Der Alten berühmten Stadt Heydelberg / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f57"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_134"
+                    LABEL="Athanasius Kircher: Theatrum Hieroglyphicum / Reetz, Katja">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f134"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_55"
+                    LABEL="Matthias Kramer: Allgemeiner Schau-Platz/ auf welchem [...] vorgestellet wird die Teutsche und Italiänische Benennung aller Haupt-Dinge der Welt / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f55"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_36"
+                    LABEL="Carl Sebastian Heinrich Kunze: Schauplatz der gemeinnützigsten Maschinen / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f36"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_130"
+                    LABEL="Johann Lauterbach: Physiosophia sive theatrum sapientiae / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f130"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_8"
+                    LABEL="Christian Lehmann: Historischer Schauplatz derer natürlichen Merckwürdigkeiten / Jakob, Hans Joachim">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f8"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_3"
+                    LABEL="Jacob Leupold: Theatrum Pontificiale / Frentzel, Bianca; Nicodemus, Claudia">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f3"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_4"
+                    LABEL="Jacob Leupold: Theatrum Staticum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f4"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_6"
+                    LABEL="Jacob Leupold: Theatrum Machinarum Hydrotechnicarum / Hanl, Michael; Horn, Franziska">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f6"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_9"
+                    LABEL="Jacob Leupold: Theatrum Machinarium, Oder Schau-Platz der Heb-Zeuge / Göbel, Yvonne">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f9"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_15"
+                    LABEL="Jacob Leupold, Joachim Ernst Scheffler: Theatri Machinarum Supplementum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f15"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_77"
+                    LABEL="Jacob Leupold: Theatrum Machinarum Generale / Müller, Anja">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f77"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_80"
+                    LABEL="Jacob Leupold: Theatrum Machinarum Hydraulicarum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f80"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_95"
+                    LABEL="Jacob Leupold: Theatrum Arithmetico-Geometricum / Bischof, Corinna; Hoerl, Tobias">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f95"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_60"
+                    LABEL="Johann Gerhard Leurse: Chymischen Schauplatzes Vortrab / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f60"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_97"
+                    LABEL="Arnoldo Liberio: Neu eröffnetes Welt- und Staats-Theatrum / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f97"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_119"
+                    LABEL="Louis Liger: Nouveau Theatre D’Agriculture Et Menage Des Champs / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f119"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_147"
+                    LABEL="Jacob Lorhard: Theatrum Philosophicum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f147"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_83"
+                    LABEL="Hiob Ludolf: Allgemeine Schau-Bühne der Welt / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f83"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_173"
+                    LABEL="Johann Christian Lünig: Theatrum Ceremoniale Historico-Politicum, Oder Historisch- und Politischer Schau-Platz / Lütkemeier, Melina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f173"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_28"
+                    LABEL="Johann Christoph Männling: Curiositäten-Alphabeth, das ist, Eine angenehme Schau-Bühne historischer Ergetzlichkeiten / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f28"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_143"
+                    LABEL="Johann Christoph Männling: Schaubühne des Todes, Oder Leich-Reden / Motz, Dominik">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f143"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_160"
+                    LABEL="Paul Jacob Marperger: Nutz- und Lehr-reicher historischer Schau-Platz (Theatrum theoretico-practicum) / Heiderich, Julia">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f160"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_169"
+                    LABEL="Christian Matthiae: Theatrum Historicum Theoretico-Practicum / Rauschenbach, Sina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f169"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_159"
+                    LABEL="Johann Merck: Traur-Schau-Büehne / Košenina, Alexander">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f159"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_30"
+                    LABEL="Mercurius (Johann Friedrich Schmid): Schau-Platz der Dantzenden / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f30"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_49"
+                    LABEL="Matthäus Merian: Theatrum Europaeum / Scholz Williams, Gerhild">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f49"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_170"
+                    LABEL="Arnoldus Mermannus: Theatrum Conversionis / Rauschenbach, Sina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f170"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_46"
+                    LABEL="Johann Gerhard Meuschen: Courieuse Schau-Bühne Durchläuchtigst-Gelahrter Dames / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f46"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_104"
+                    LABEL="François Maximilien Misson: Théatre Sacré Des Cevennes / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f104"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_59"
+                    LABEL="Andreas Möller: Theatrum Freibergense Chronicum / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f59"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_86"
+                    LABEL="Claude Mollet: Theatre Des Plans Et Iardinages / Roßbach, ">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f86"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_133"
+                    LABEL="Johann Ulrich Müller: Die durch Blut und Glut beängstigte Kriegs-Schaubühne / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f133"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_53"
+                    LABEL="David Nerreter: Schau-Platz Der Streitenden doch unüberwindlichen Christlichen Kyrchen / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f53"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_84"
+                    LABEL="Peter Nylandt: Schouw-toneel der aertsche schepselen (Schauplatz Irdischer Geschöpffe) / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f84"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_48"
+                    LABEL="Abraham Ortelius: Theatrum Orbis Terrarum / Knoll, Martin">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f48"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_144"
+                    LABEL="Christian Franz Paullini: Theatrum Illustrium Virorum Corbeiae Saxonicae / Meiser, David">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f144"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_71"
+                    LABEL="Lorenz Peckenstein: Theatrum Saxonicum / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f71"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_111"
+                    LABEL="Guillaume de la Perrière: Le Theatre des bons engins / Saunders, Alison">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f111"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_70"
+                    LABEL="Christoph Pfeiffer: Schau-Platz Des ehemaligen Alten Adels / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f70"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_74"
+                    LABEL="Willibald Pirckheimer: Theatrum Virtutis &amp; Honoris / Roßbach, ">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f74"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_87"
+                    LABEL="Timotheus Polus: Lustiger Schauplatz/ Da allerley Personen/ Aempter/ Stände/ Künste/ Händel/ Gewerbe und Handwercke/ Wie auch derselben Anfänger/ Erfinder und Vermehrer bey einander sind / Roßbach, ">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f87"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_85"
+                    LABEL="Georgius Bartholdus Pontanus: Bibliotheca Sive Theatrum Concionum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f85"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_90"
+                    LABEL="Samuel Purchas: A Theatre of Politicall Flying-Insects / Steinmann, Holger">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f90"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_25"
+                    LABEL="Samuel Quicchelberg: Inscriptiones Vel Tituli Theatri / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f25"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_79"
+                    LABEL="Johannes Rempen: Schau-Bühne Der Evangelischen Warheit / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f79"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_23"
+                    LABEL="Andreas Reyher: Theatrum Latino-Germanico-Graecum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f23"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_31"
+                    LABEL="Christoph Richter: Spectaculum Historicum / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f31"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_150"
+                    LABEL="Gottfried Rogg: Encyclopaedia, oder Schau-Bühne Curioser Vorstellungen / Baum, Constanze">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f150"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_58"
+                    LABEL="Gioseppe Rosaccio: Teatro Del Cielo E Della Terra / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f58"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_35"
+                    LABEL="Johann Leonhard Rost: Schau-Platz Der Galanten und Gelährten Welt / Meierhofer, Christian">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f35"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_63"
+                    LABEL="Friedrich Roth-Scholtz: Deutsches Theatrum Chemicum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f63"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_116"
+                    LABEL="Joachim von Sandrart: Des Alten und Neuen Roms Grosser Schau-Platz / Schreurs-Morét, Anna">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f116"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_29"
+                    LABEL="Abraham Saur: Theatrum Urbium / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f29"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_13"
+                    LABEL="Christian Heinrich Schmidt: Kleiner Schauplatz des bürgerlichen Gewerbfleißes / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f13"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_118"
+                    LABEL="Benjamin Schmolck: Heiliger Schau-Platz Der Liebe / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f118"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_123"
+                    LABEL="Olivier de Serres: Theatre D’Agriculture Et Mesnage Des Champs / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f123"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_1"
+                    LABEL="Friedrich Wilhelm von Sommersberg: Historischer und Genealogischer Schauplatz des Teutschen Reichs / Koch, Peggy">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f1"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_52"
+                    LABEL="Johann Andreas Steislinger: Neu-eröffnetes Kriegs- und Friedens Theatrum / Feldle, Nadja">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f52"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_154"
+                    LABEL="Kaspar Stieler: Schau-Platz Schöner anmuhtiger Comoedien und Tragoedien / Gundlach, Denise">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f154"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_64"
+                    LABEL="Johann Stridbeck: Curioses Staats und Kriegs Theatrum Dermahliger Begebenheiten in Francken und Schwaben / Roßbach, ">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f64"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_93"
+                    LABEL="Johann Stridbeck: Curioses Staats und Kriegs Theatrum Dermahliger Begebenheiten in Bayern / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f93"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_127"
+                    LABEL="Johann Stridbeck: Curioses Staats und Kriegs Theatrvm Dermahliger Begebenheiten im Tyrol / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f127"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_128"
+                    LABEL="Johann Stridbeck: Theatrum Der Vornehmsten Kirchen Clöster Pallæst u: Gebeude in Chur F. Residentz Stadt München / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f128"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_114"
+                    LABEL="Johannes Thomae: Trawriger Schawplatz Des im Jahre 1642. belagerten Leipzigs / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f114"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_141"
+                    LABEL="John Thorie: The theatre of the Earth / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f141"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_5"
+                    LABEL="Johann Weichard Valvasor: Theatrum Mortis Humanae / Warda, ">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f5"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_124"
+                    LABEL="Richard Verstegan: Theatrum Crudelitatum / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f124"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_92"
+                    LABEL="Augustin de Vetancurt: Teatro Mexicano / Rauschenbach, Sina">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f92"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_61"
+                    LABEL="Johann Wilhelm Volckmar: Schau-Platz Der schnöden Eytelkeit / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f61"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_99"
+                    LABEL="Hans Vredeman de Vries: Theatrum vitae humanae / Baum, Constanze">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f99"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_65"
+                    LABEL="Johann Walther: Tempe Historica / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f65"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_32"
+                    LABEL="Georg Wilhelm Wegner: Schau-Platz Vieler Ungereimten Meynungen und Erzehlungen / Helduser, Urte">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f32"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_167"
+                    LABEL="Johann Jakob Werdmüller: Schau-Platz Der Alten und neuen Fortifications-Maximes / Münkner, Jörn">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f167"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_137"
+                    LABEL="Johann Gottfried Zeidler: Theatrum Eruditorum / Meiser, David">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f137"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_72"
+                    LABEL="Heinrich Zeising/Hieronymus Megiser: Theatrum Machinarum / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f72"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_112"
+                    LABEL="Mathias Ignatius Zinner: Der Allgemeine Lebenslauff und Schau-Platz dieser Welt / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f112"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_56"
+                    LABEL="Vittorio Zonca: Novo Teatro Di Machine Et Edificii / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f56"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_7"
+                    LABEL="Johann Ehrenfried Zschackwitz: Historisch-Genealogischer Schau-Platz / Schock, Flemming">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f7"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_51"
+                    LABEL="Zacharias Zwanzig: Theatrum Praecedentiae / Rohrschneider, Michael">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f51"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_69"
+                    LABEL="Theodor Zwinger: Theatrum Botanicum, Das ist: Neu Vollkommenes Kräuter-Buch / Laube, Stefan">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f69"/>
+                </mets:div>
+                <mets:div TYPE="introduction" ID="edoc_ed000132_introduction_91"
+                    LABEL="Jan van Zyl: Theatrum Machinarum Universale; Of Groot Algemeen Moolen-Boek / Roßbach, Nikola">
+                    <mets:fptr FILEID="edoc_ed000132_introduction_f91"/>
+                </mets:div>
+            </mets:div>
+
+            <!-- Facsimiles  **************************************************** -->
+            <!--  Transcriptionen **************************************************** -->
+            <!--  Uebersetzungen *************************************************************** -->
+            <!--  Bibliographie ******************************************************************************** -->
+           <!-- <mets:div TYPE="bibliography" LABEL="Bibliographie" ID="edoc_ed000132_bibliography"
+                ADMID="rmd_edoc_ed000132_CC">
+                <mets:fptr FILEID="edoc_ed000132_fg_introduction"/>
+            </mets:div>-->
+
+            <!-- Register ************************************************************************************ -->
+              
+                <mets:div TYPE="register" LABEL="Personenregister"
+                    ID="edoc_ed000132_personenregister" ADMID="rmd_edoc_ed000132_CC">
+                    <mets:fptr FILEID="edoc_ed000132_fg_personenregister"/>
+                </mets:div>
+
+                <!--<mets:div TYPE="register" LABEL="Ortsregister" ID="edoc_ed000132_ortsregister"
+                    ADMID="rmd_edoc_ed000132_CC">
+                    <mets:fptr FILEID="edoc_ed000132_fg_ortsregister"/>
+                </mets:div>
+         -->
+            <!--  Revision ******************************************************************************** -->
+            <!--<mets:div TYPE="revision" LABEL="Revisionen" ID="edoc_ed000132_revision">
+                <mets:fptr FILEID="edoc_ed000132_fg_introduction"/>
+            </mets:div>-->
+
+            <!--    Parallelsichten  ######################################################################################  -->
+            <!--  wegen der Moeglichkeit des synchronen Blaetterns koennen nicht beliebige Kombinationen angeboten werden, sondern 
+                muessen hier definiert werden. Parallelsichten werden in einem neuen Fenster geoeffnet;
+                Groesse der jeweiliigen resultierenden  Anzeigefenster und die Art des Syncronisierungsschlüssels wird in wdb:parallelViews festgelegt -->
+            <!--  Parallele Sichten  ******************************************************************************** -->
+            </mets:div>
+
+    </mets:structMap>
+
+    <!-- hier könnten in Zukunft LOD Beziehungen bzw. Tripel abgebildet werden -->
+    <mets:structLink>
+        <mets:smLink xlink:from="subject" xlink:to="object" xlink:arcrole="praedicat"/>
+    </mets:structLink>
+
+    <!--    Behavior  ######################################################################################  -->
+    <!--  Innerhab der Behavior-Sections werden verschwiedene technische Anzeigeformate und Sichten auf die selbe Datei, z.B. tei-transcription.xml definiert. 
+            Unterschiedliche Sichten auf verschiedene Dateien erhalten eine eigene Behavior Section.
+            xlink:show="new" bei mechanism bedeutet, dass ein neues Fenster geöffnet wird und keine Darstellung im Frame erfolgt
+    -->
+
+    <!--Register-->
+
+    <mets:behaviorSec ID="edoc_ed000132_b_index">
+        <mets:behavior ID="edoc_ed000132_b_index_01" STRUCTID="edoc_ed000132_personenregister"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-register-persons.xsl"/>
+        </mets:behavior>
+       <!-- <mets:behavior ID="edoc_ed000132_b_index_02" STRUCTID="edoc_ed000132_ortsregister"
+            LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-register-places.xsl"/>
+        </mets:behavior>-->
+    </mets:behaviorSec>
+
+    <!--Uebersetzung-->
+    <!--Transkriptionen-->
+    <!--  
+       Hier folgt  behavior zur Funktion menues; 
+-->
+    <mets:behaviorSec ID="function_navigator">
+        <mets:behavior STRUCTID="edoc_ed000132_introduction" ID="function_folding">
+            <!-- onRequest bedeutet, dass gefaltet ist und auf Wunsch entfaltet wird, onLoad kann gesetzt werden, wenn eine Struktur entfaltet angezeigt werden soll -->
+            <mets:interfaceDef LABEL="folding" LOCTYPE="OTHER" OTHERLOCTYPE="URI"
+                xlink:href="http://diglib.hab.de/behavior#folding"/>
+            <mets:mechanism LABEL="folding" LOCTYPE="URL"
+                xlink:href="http://dglib.hab.de/navigator.js" xlink:actuate="onRequest"/>
+        </mets:behavior>
+    </mets:behaviorSec>
+
+
+</mets:mets>

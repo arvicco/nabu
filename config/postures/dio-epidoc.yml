@@ -1,0 +1,23 @@
+sources:
+  dio-epidoc:
+    # kind: machine-postured by the kind_map.yml dio-epidoc genre fold (the
+    # inscriptions' own Textsorte labels).
+    lect: {posture: dates, note: "per inscription from langUsage (German labels, the first named
+        language decides): lateinisch → lat, hochdeutsch/deutsch → deu, niederdeutsch → gml,
+        griechisch → grc, hebräisch → heb; date-band inference stages the dated lat
+        (med/ren/new) and deu (de:early 1350–1650) documents whose interval sits in one band.
+        gml has no stages (Middle Low German is the whole corpus period); 11 High German
+        passages dated before 1350 stay bare de (gmh is the candidate). Textparts upstream gives
+        no language (numbers, initials, names — 775 of 2,699) are und"}
+    dating: {posture: dated, note: "978/978 carry origDate German prose: 901 closed intervals
+        (years, ranges, centuries with A./M./E. and n.H./n.V./n.D. fractions), 77 open-ended
+        (vor/nach, 'o. früher'/'o. später'); 'um' and '?' ride as circa/uncertain flags"}
+    places: {posture: named, note: "977/978 name Epigraf's location string verbatim (church or
+        building, town — 'St. Nikolai, Stralsund'; a museum when that is where the object is);
+        the settlement rides beside it. No gazetteer refs or coordinates in the dump"}
+    script: {posture: implied, note: "Latin script for lat/deu/gml (the hand's style — gotische
+        Minuskel, Kapitalis, Fraktur — rides the script_style facet); the 3 heb passages are
+        Hebrew script (two pointed Decalogue tablets). Declared coarse: the 1 grc passage
+        (DI 102 Nr. 138, 'AGIOS · OTEOS') is Greek in Latin letters, held bare grc — no grc-Latn
+        codemap row exists; Greek-script words inside 6 Latin humanist inscriptions ride their
+        lat passage"}

@@ -12,7 +12,7 @@
 # ride the reference shelf, whose row reads the census entry total instead.
 ---
 classical-greek: [perseus-greek, cllg-freed]
-post-classical-greek: [first1k-greek, pta, cgpg, hexapla, suda-translations, cllg-sc]
+post-classical-greek: [first1k-greek, pta, cgpg, hexapla, suda-translations, cllg-sc, dbbe]
 greek-silver: [diorisis, glaux]
 classical-latin: [perseus-latin, lasla]
 liturgy-chant:
@@ -187,6 +187,8 @@ germanic:
   - rundata
   - runesdb
   - grand-tour
+  - hab-edoc
+  - dio-epidoc
   - dbnl
   - delpher-newspapers
   - nb-no

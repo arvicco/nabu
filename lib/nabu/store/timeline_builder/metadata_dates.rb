@@ -156,6 +156,10 @@ module Nabu
           "damos" => :period_label, # the Aegean ceramic-phase chronology ("LM IIIA2 or LM
           #   IIIB") through the ruled Aegean rows of period_bands.yml (every
           #   held label covered); the site/findspot place hash rides along
+          "dbbe" => :structured, # each occurrence's completion_date_floor/ceiling (ISO day bounds →
+          #                        years; the epigram's copying date in its manuscript — no
+          #                        class); place = the manuscript's place of origin, leaf to root.
+          #                        Types and the translation siblings carry no date
           "dbnl" => :structured, # P165: the register's jaar — the transcribed witness's date (a
           #                        manuscript or first print: no class; a later printing: class
           #                        edition, or the header's first-print year as composition); no place
@@ -178,6 +182,9 @@ module Nabu
           "digar-corpora" => :structured, # the ERB record's 008 date1 (u-digits widen to
           #                                 the decade), class edition; place = the 260 imprint
           #                                 place in the print's own form (Perno, Riia)
+          "dio-epidoc" => :structured, # DI 7/77/102: origDate German prose (years, ranges,
+          #                              A./M./E. and n.H./n.V./n.D. century fractions, vor/nach/
+          #                              "o. früher" open ends); place = Epigraf's location string
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "divinum-officium" => :place_only, # no dating (undatable); the local-calendar proper's
@@ -243,6 +250,9 @@ module Nabu
           "honkoku" => :ndl_catalog_date, # the NDL catalog record the HonkokuNdlCatalog join
           #                                  writes for NDL-held materials (出版日 envelope),
           #                                  else the label's nengō "date" (parse time)
+          "hab-edoc" => :structured, # the print's imprint year (class edition), else a manuscript's
+          #                            origDate or a letter's correspDesc date (class-less); place =
+          #                            the imprint pubPlace / origPlace / sending place verbatim
           "hr-wikisource" => :era_band_key,
           "hrcak-marulana" => :structured, # the record's datacite Issued year (class edition)
           "iedc" => :iso_prefix_key,

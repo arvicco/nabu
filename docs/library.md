@@ -2641,3 +2641,42 @@ church papers, to Te Toa Takitini — page by page in the collection's
 OCR text, period spelling kept. The largest Māori-language text
 corpus online, held for local research with the collection and the
 NZDL credited on every passage.
+
+**`dbbe`** — the Database of Byzantine Book Epigrams (Ghent University):
+the Greek verse paratexts of medieval manuscripts — scribes' colophons,
+patrons' dedications, title and miniature poems, verses addressed to the
+reader or praising a book's author. Each is held twice: as it stands in
+one of some 4,500 manuscripts, with the scribe's spelling and punctuation
+verse by verse (12,928 occurrences), and as the normalized text the
+editors establish for each group of similar copies (5,226 types). About
+2,500 translations into English, German, French, Latin, Italian and
+Dutch sit beside the normalized texts. Copies are dated by manuscript
+(6th–19th c.) and carry genre, metre, poet and repository. CC0.
+
+**`dio-epidoc`** — Die Deutschen Inschriften, the interacademic edition
+of the medieval and early modern inscriptions of the German lands, in the
+three volumes published as structured EpiDoc: DI 7 (Braunschweig: Kloster
+Riddagshausen and the incorporated villages), DI 77 (Greifswald) and DI
+102 (Stralsund). 978 catalogue numbers / 2,699 inscriptions, 1145 to the
+seventeenth century — the grave slabs and epitaphs of the Hanseatic
+churches above all, with bells, church plate, altarpieces, glass and
+house inscriptions. Each inscription is cited by its printed number
+(DI 102, Nr. 83) and carries the edited text and, for most Latin texts,
+its German translation. Latin, High German and Middle Low German, with a
+few Hebrew and Greek lines (CC BY 4.0 for the text; images are not part
+of the dumps).
+
+**`hab-edoc`** — the Herzog August Bibliothek Wolfenbüttel's digital
+editions: hand-keyed TEI transcriptions of early modern prints and
+manuscripts from the library's own edition series. Hans Sachs's
+*Wittenbergisch Nachtigall* (1523), Kaempfer's *Amoenitates exoticae*
+(1712), Lipsius and Orsini on the libraries of antiquity, Dasypodius's
+Latin-German dictionary, the *Paesi novamente retrovati* with its German
+*Newe unbekanthe landte*, Sebald Heyden's school colloquies in fifteen
+printings, Gabrias's fables, Conring's Latin poems, Sibylla Schwarz's
+poems (1650), a sixteenth-century cookbook, and the letters of the nuns
+of Kloster Lüne (c. 1460–1555). 472 transcripts / 4,972 pages in Latin,
+Early New High German, Middle Low German, Italian and French, page by
+page as keyed; the licence is read per transcript (CC BY, CC BY-SA or
+CC0). Editions that publish no transcript file are skipped by rule and
+counted.

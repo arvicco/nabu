@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The archive is a row-level TRIM of the upstream SQLite file (built locally
+# by the README's recipe, not fetchable by a raw GET); the API record is a
+# field trim of the live latest-version response, fetched for URL-liveness
+# only (the record moves with every new version). adapter_test is null: the
+# adapter test asserts trim-level counts.
+source: dbbe
+adapter_test:
+retrieved: 2026-11-27
+files:
+  - path: dbbe_archive.sqlite
+    refetchable: false
+    provenance: local-trim
+    reason: schema-intact 8-occurrence / 9-type / 11-translation trim of the real
+      60 MB dbbe_archive.sqlite (record 23008642, md5 85b0abf7ed8801d5524a58d0e159abce)
+      by the README's recipe — every table and its DDL kept, rows filtered by their
+      occurrence/type/manuscript/person relations, lookup tables whole, WAL header kept
+    upstream: https://zenodo.org/api/records/23008642/files/dbbe_archive.sqlite/content
+    copied: 2026-11-27
+    whole: false
+    trim: 60 MB -> 8 occurrences, schema intact
+  - path: zenodo-latest.json
+    url: https://zenodo.org/api/records/19435533/versions/latest
+    whole: false
+    trim: the latest-version API record cut to ids, DOIs, dates, license, files and links (values verbatim)
