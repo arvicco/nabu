@@ -453,6 +453,8 @@ module Nabu
           "titus-sogdian" => :place_only, # the page findspot (one site every line resolves to)
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
+          "turkic-pd" => :structured, # each work's print year (the mongolic-pd mold; Radloff's
+          #                             bound series spans 1895–1899); imprint rides "imprint"
           "typikon-bible" => :structured, # P153: the edition year the dump records (1688, class
           #                                 edition) — no place claim
           "uk-wikisource" => :era_band_key,

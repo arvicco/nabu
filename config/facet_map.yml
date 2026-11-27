@@ -358,6 +358,10 @@ sources:
     fields:
       author: author          # "J.-M. Amiot; L. Langlès (ed.)" — the census's responsibility
       #                         line verbatim (Cyrillic names with their romanization)
+  turkic-pd:                  # 4 scanned volumes
+    fields:
+      author: author          # "W. Radloff; W. Barthold; F. Hirth" — the census's responsibility
+      #                         line verbatim (a bound series names every part's author)
   eebo-tcp:                   # 45,048 of 60,325 docs, 13,589 authors
     fields:
       author: author          # ESTC-style headings with life dates INSIDE the string

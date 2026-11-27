@@ -1770,6 +1770,21 @@ sources:
       #                                            for the language's learner (texts + vocabulary/apparatus)
       #                                            — the schoolroom's own product, the nearest head
       "tales": literary/narrative/tale           # 1 — Jülg's Siddhi-Kür: the tale cycle edited and translated
+  turkic-pd:          # the census's own per-work genre label (TurkicPd::ITEMS), one per document;
+    #                   counts = census items 2026-11-27 (4)
+    facet: genre
+    map:
+      "glossary edition": lexical/glossary       # 1 — Kuun's Codex Cumanicus: the codex IS a Latin–Persian–
+      #                                            Cuman glossary (its Cuman texts a minority), edited with
+      #                                            Kuun's own glossaries
+      "inscription study": scholarly             # 2 — Thomsen, Radloff: decipherment, transcription,
+      #                                            translation, grammar and historical commentary in the
+      #                                            scholar's prose; the runiform texts themselves (royal
+      #                                            steles) are garbled in the OCR, so the document is the
+      #                                            study, not the stele
+      "text edition": literary/wisdom            # 1 — Vámbéry's Kudatku Bilik: the edition's bulk is the
+      #                                            Qutadgu Bilig itself (transcription + translation), the
+      #                                            mirror for princes — instruction literature
   vedaweb:
     source_kind: hymn-prayer/hymn   # the Rigveda: 1,028 hymns, each addressed to its deity
     #                                 (upstream's own addressee per hymn) — hymns by form;
