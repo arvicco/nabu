@@ -5,12 +5,13 @@ description: >-
   Worked examples of the Nabu library in use, by discipline: classics,
   papyrology, Slavic philology, comparative linguistics, Assyriology,
   Hittitology, Egyptology, sinology, medieval Latin, Old English,
-  Hebrew and biblical studies, and Southeast Asian epigraphy.
+  Hebrew and biblical studies, Southeast Asian epigraphy, Byzantine book
+  epigrams, Arabic lexicography and the inscriptions of the German lands.
 ---
 
 {% assign census = site.data.census -%}
 Worked walk-throughs, one per discipline, using real commands and output
-from live runs between July and September 2026 (each section notes its
+from live runs between July and November 2026 (each section notes its
 date where it matters). Nothing below is a mock-up; trims are marked
 with ellipses. Each discipline is also a **research desk** — one of the
 {{ census.desks }} [desks]({{ '/axis/' | relative_url }}), where that
@@ -436,6 +437,106 @@ urn:nabu:dharma-khmer:INSCIK00299-24:1 [okz-Latn]
 — the hell-and-heaven gallery of Angkor Wat, naming the razor-edged
 mountain Kṣuradhāraparvata and the sinners it awaits: elephant thieves,
 horse thieves, and those who show contempt for brahmins and pandits.
+
+## For the Byzantinist
+
+*The [classical desk]({{ '/axis/classical/' | relative_url }}); live run of 27 November 2026.*
+
+The Database of Byzantine Book Epigrams holds the verses scribes and
+patrons wrote into Greek manuscripts, each one twice: as it stands in a
+given manuscript, in that scribe's spelling, and as the normalized text
+the editors establish for a family of copies, with translations beside
+it. The best-known colophon of them all — the scribe reaching the end of
+his book like a traveller sighting home — can be followed from copy to
+copy:
+
+```
+$ bin/nabu search "ξένοι χαίρουσιν πατρίδα" --source dbbe
+…
+urn:nabu:dbbe:occurrence-17562:1 [grc]
+  Ὥσπερ [ξενοὶ] χαίρουσιν ἰδεῖν | πατρίδα·
+…
+47 hits
+
+$ bin/nabu show urn:nabu:dbbe:occurrence-17562
+urn:nabu:dbbe:occurrence-17562 — … (PARIS - Bibliothèque Nationale de France (BNF) - Coisl. 231, f. 187v) [grc]
+  date: 1001–1100 CE
+  facets: genre=Scribe-related epigram · metre=Dodecasyllable · …
+    :1  Ὥσπερ ξενοὶ χαίρουσιν ἰδεῖν | πατρίδα·
+    :2  οὕτος καὶ τῶ γρά|φοντι τέλος βιβλίου:-
+
+$ bin/nabu show urn:nabu:dbbe:type-2148          # the editors' normalized text
+    :1  Ὥσπερ ξένοι χαίρουσιν ἰδεῖν πατρίδα,
+    :2  οὕτως καὶ οἱ γράφοντες βιβλίου τέλος.
+
+$ bin/nabu show urn:nabu:dbbe:type-2148-tr2149   # one of its nine translations
+    :1  Like travellers rejoice upon seeing their homeland,
+    :2  so too do scribes upon reaching the end of the book.
+```
+
+The eleventh-century Paris scribe wrote οὕτος for οὕτως and put the
+writer in the dative; the search finds him anyway, because matching
+folds accents and breathings while the stored text keeps every one.
+
+## For the Arabist
+
+*The [Arabic desk]({{ '/axis/arabic/' | relative_url }}); live run of 27 November 2026.*
+
+Lane's *Arabic–English Lexicon* stands on the reference shelf beside the
+classical Arabic prose of the OpenITI corpus. `define` answers from Lane
+by root and form, with his authorities in their sigla, and from the
+other Arabic dictionaries held:
+
+```
+$ bin/nabu define كتب
+كَتَّبَ [ara] — An Arabic-English Lexicon (Lane) [attribution]  urn:nabu:dict:lane:n36626.1
+  facets: root=كتب
+
+2 كَتَّبَ See 1 and 4 ＝
+-A2- كتّب النَّاقَةَ, inf. n. تَكْتِيبٌ, He tied the udder of the camel. (AZ, S.) ＝
+-A3- كتّب الكَتَائِبَ, inf. n. تَكْتِيبٌ; (S, K;) and ↓ كَتَبَهَا; (TA;) (tropical:) He prepared the troops; …
+…
+```
+
+## For the epigrapher of the German lands
+
+*The [epigraphy desk]({{ '/axis/epigraphy/' | relative_url }}); live run of 27 November 2026.*
+
+Three volumes of *Die Deutschen Inschriften* — Braunschweig, Greifswald,
+Stralsund — are cited by their printed catalogue numbers, each
+inscription on the object a passage of its own. A Greifswald grave slab
+in St. Nikolai, with its owner's note, his initials and the slab's
+number in the church floor:
+
+```
+$ bin/nabu show urn:nabu:dio-epidoc:di77-354
+urn:nabu:dio-epidoc:di77-354 — Grabplatte für Joachim Wittling [deu]
+  date: 1625 CE · St. Nikolai, Greifswald
+  kind: mark/ownership + mark/label — upstream: "Eigentumsvermerk", "Nummerierung"
+    :A1  DIESER STEIN VND BEGREBNIS GEHORET IOCHIM WITTLINCK VNDT SEINEN ERBEN ANNO 1625
+    :B1  I W
+    :C1  218
+```
+
+Beside them on the Germanic shelf stand the Herzog August Bibliothek's
+hand-keyed editions — Hans Sachs's *Wittenbergisch Nachtigall* of 1523
+page by page, and the letters of the nuns of Kloster Lüne in Latin and
+Middle Low German.
+
+## Typing a citation loosely
+
+A citation typed from memory rarely arrives clean. `clarify` resolves
+what it can and offers the nearest readings for the rest; a doubled
+letter or a swapped pair still reaches the work (live run of 27
+November 2026):
+
+```
+$ bin/nabu clarify "Aenied 1.1"
+candidates (4):
+  Aeneid  [document · fuzzy]  urn:cts:latinLit:phi0690.phi003.perseus-eng2  perseus-latin [eng · attribution]
+    → urn:cts:latinLit:phi0690.phi003.perseus-eng2:1.1
+…
+```
 
 ## Searching by meaning
 
