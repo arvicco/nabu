@@ -83,17 +83,13 @@ module Nabu
       # The header alone (the adapter's discovery-time licence peek): the
       # teiHeader slice of the file, DOM-mined. {} when the file has none.
       def header(path)
-        slice = File.open(path, "rb") { |io| io.read(HEADER_PEEK_BYTES) }.to_s
-        start = slice.index(/<teiHeader[\s>]/)
-        finish = slice.index("</teiHeader>")
+        text = SourceRead.utf8_file(path, label: "hab-edoc transcript")
+        start = text.index(/<teiHeader[\s>]/)
+        finish = text.index("</teiHeader>")
         return {} unless start && finish
 
-        HeaderMiner.mine(slice[start...(finish + "</teiHeader>".length)].force_encoding(Encoding::UTF_8))
+        HeaderMiner.mine(text[start...(finish + "</teiHeader>".length)])
       end
-
-      # The longest header in the census is Kaempfer's (50,408 bytes, its
-      # langUsage lists 25 languages); 256 KiB is that with room.
-      HEADER_PEEK_BYTES = 262_144
 
       private
 

@@ -35,7 +35,7 @@ module Nabu
 
       Transcript = Data.define(:href, :rights)
 
-      def self.read(path) = new(File.binread(path))
+      def self.read(path) = new(SourceRead.utf8_file(path, label: "hab-edoc METS manifest"))
 
       def self.transcript_name?(href) = TRANSCRIPT_NAME.match?(File.basename(href.to_s))
 
