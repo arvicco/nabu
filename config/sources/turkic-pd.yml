@@ -1,0 +1,26 @@
+turkic-pd:   # 02-sources row 456
+  adapter: Nabu::Adapters::TurkicPd
+  adopted: "2026-11-27"
+  axes: [turkic]
+  wired: false   # adapter + fixtures shipped; awaiting the first real sync
+  sync_policy: manual
+  # The PD Turkic reference shelf as archive.org scans — 4 census items:
+  # Kuun's Codex Cumanicus (Budapest 1880; the first Cuman text in the
+  # library), Thomsen's Inscriptions de l'Orkhon déchiffrées (Helsingfors
+  # 1896), Radloff's Die alttürkischen Inschriften der Mongolei (St
+  # Petersburg; the scan binds the 1895 part, the Neue Folge 1897 and the
+  # Zweite Folge 1899, with Barthold and Hirth), Vámbéry's Uigurische
+  # Sprachmonumente und das Kudatku Bilik (Innsbruck 1870; the first
+  # Qutadgu Bilig witness). The mongolic-pd mechanics (IaScanShelf, hOCR
+  # pair, page grain, UNCORRECTED OCR declared; the runiform and Uyghur
+  # scripts and Radloff's transcriptions are garbled — declared).
+  # Language = the prose's (lat 1, fra 1, deu 2) with the language
+  # presented in "object_language" (qwm 1, otk 2, xqa 1 — Vámbéry's text is
+  # the Karakhanid Qutadgu Bilig; reasoning in the adapter). Public domain
+  # (authors †1905–1930, prints 1870–1899). HELD BACK: Şemseddin Sami's
+  # Kamus-i Türki (kamusitrki00emse — the Arabic-script OCR is noise),
+  # Redhouse's Turkish and English Lexicon 1890 (scan rights unchecked),
+  # the Commons facsimile of the Dīwān Lughāt al-Turk (page images only,
+  # no text). EXPECTED FIRST SYNC (census 2026-11-27, every page index
+  # fetched and parsed): 4 docs / 2,069 passages (the non-blank hOCR pages:
+  # Kuun 538, Thomsen 227, Radloff 1,029, Vámbéry 275), ~2.1 MB.
