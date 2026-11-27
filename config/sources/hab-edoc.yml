@@ -2,7 +2,7 @@ hab-edoc:   # 02-sources row 442
   adapter: Nabu::Adapters::HabEdoc
   adopted: "2026-11-27"
   axes: [germanic, romance]
-  wired: false   # registered; first sync pending
+  wired: true    # first sync verified 2026-11-27: 472 documents / 4,972 passages, 308 skipped by rule, 0 errored
   sync_policy: manual
   # The Herzog August Bibliothek Wolfenbüttel's digital editions
   # (diglib.hab.de/edoc/): the Editiones Electronicae Guelferbytanae, the
