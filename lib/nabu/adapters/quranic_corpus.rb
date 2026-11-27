@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "buckwalter"
 require_relative "quranic_corpus_parser"
 require_relative "quranic_corpus_suras"
 require_relative "source_read"
@@ -50,6 +51,20 @@ module Nabu
     # "root" (the LEM: and ROOT: values verbatim, where upstream gives
     # them). Roots are written in Buckwalter letters, radicals unseparated
     # (rHm, Alh, $r*m) — 1,602 triliteral, 40 quadriliteral.
+    #
+    # == Search form (conventions §9, the parser-scoped derivation)
+    #
+    # The stored text stays Buckwalter; text_normalized is minted through
+    # the one folding boundary over .search_source — the Arabic the
+    # Buckwalter encodes, one character to one codepoint (Buckwalter) — so
+    # the house Arabic fold applies: words stay whole, the case-coded
+    # emphatics stay distinct (S ص / s س), vowel signs drop, and Q 112:1
+    # indexes as قل هو الله احد, exactly as the Cairo text of
+    # corpus-coranicum does. An Arabic-script query reaches the shelf
+    # unscoped; a Buckwalter-typed query reaches it under --source
+    # quranic-corpus or --lang ara-Latn (Query::Search's Buckwalter
+    # variant), never unscoped — a Latin query is not read as Buckwalter
+    # library-wide.
     #
     # Titles and the Meccan/Medinan label come from the Tanzil metadata
     # (QuranicCorpusSuras, cc-by), which also gives each sura's verse
@@ -130,6 +145,10 @@ module Nabu
       )
 
       def self.manifest = MANIFEST
+
+      # The documented derivation text_normalized is minted from (class
+      # note, "Search form") — a pure function of the stored text.
+      def self.search_source(text) = Buckwalter.to_arabic(text)
 
       # The probe HEADs the pinned blob: reachability + drift vs the
       # .file-fetch.json pin.
@@ -212,10 +231,11 @@ module Nabu
       end
 
       def passage(doc_urn, segments, sequence)
+        text = Normalize.nfc(parser.verse_text(segments))
         Nabu::Passage.new(
           urn: "#{doc_urn}:#{segments.first.verse}", language: LANGUAGE,
-          text: Normalize.nfc(parser.verse_text(segments)), sequence: sequence,
-          annotations: { "tokens" => segments.map(&:token) }
+          text: text, text_normalized: Normalize.search_form(self.class.search_source(text), language: LANGUAGE),
+          sequence: sequence, annotations: { "tokens" => segments.map(&:token) }
         )
       end
 

@@ -5,6 +5,7 @@ require_relative "../languages"
 require_relative "../normalize"
 require_relative "../store/indexer"
 require_relative "../tibetan_words"
+require_relative "../adapters/buckwalter"
 require_relative "catalog_join"
 require_relative "lect_filter"
 require_relative "stored_snippet"
@@ -350,7 +351,7 @@ module Nabu
         @place_note = nil
         raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
 
-        variants = Nabu::Normalize.query_forms(query.to_s, language: lang)
+        variants = query_variants(query, lang: lang, source: source, sources: sources)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
@@ -475,7 +476,7 @@ module Nabu
         @word_grain = nil
         @place_note = nil
         @rank_note = SCAN_MODE_NOTE
-        variants = Nabu::Normalize.query_forms(query.to_s, language: lang)
+        variants = query_variants(query, lang: lang, source: source, sources: sources)
         return [] if variants.first.strip.empty?
 
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
@@ -604,6 +605,38 @@ module Nabu
       end
 
       private
+
+      # The Buckwalter shelves: their search form is the Arabic the stored
+      # Buckwalter encodes (QuranicCorpus.search_source), so a Buckwalter-
+      # TYPED query only meets them through the same rendering.
+      BUCKWALTER_SOURCES = %w[quranic-corpus].freeze
+      BUCKWALTER_LANGUAGE = "ara-Latn"
+      private_constant :BUCKWALTER_SOURCES, :BUCKWALTER_LANGUAGE
+
+      # The fold union (Normalize.query_forms) plus — ONLY when the search
+      # is scoped to the Buckwalter shelves (--source naming one, a source
+      # list holding nothing else, or --lang ara-Latn; an axis that merely
+      # INCLUDES one, like arabic, does not qualify — its Arabic-script
+      # shelves would take the noise) — the query read as Buckwalter: rendered to Arabic
+      # on its RAW case (S ص ≠ s س) and folded the way the shelf was
+      # indexed. Never unscoped: read as Buckwalter, any Latin query would
+      # grow an Arabic variant (English "man" → من) matching the Arabic
+      # shelves library-wide — the P79-1 noise genus. An Arabic-script
+      # query needs no variant: the shelf's form is already Arabic.
+      def query_variants(query, lang:, source:, sources:)
+        variants = Nabu::Normalize.query_forms(query.to_s, language: lang)
+        return variants unless buckwalter_scope?(lang, source, sources)
+
+        reading = Nabu::Normalize.search_form(Nabu::Adapters::Buckwalter.to_arabic(query.to_s),
+                                              language: BUCKWALTER_LANGUAGE)
+        reading.strip.empty? ? variants : (variants | [reading])
+      end
+
+      def buckwalter_scope?(lang, source, sources)
+        listed = Array(sources)
+        BUCKWALTER_SOURCES.include?(source) || (listed.any? && (listed - BUCKWALTER_SOURCES).empty?) ||
+          lang.to_s.casecmp?(BUCKWALTER_LANGUAGE)
+      end
 
       # Non-exact page (the folded FTS path, unchanged semantics): one bounded
       # inner window, reassembled in FTS rank order after the catalog join drops

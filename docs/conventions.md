@@ -674,6 +674,32 @@ shape. Scope: properties of the HSMS transcription convention, so both
 rules live in the hsms family, not in `LANGUAGE_FOLDS`; each
 derivation is deterministic, so two parses and rebuilds agree.
 
+**Buckwalter rendering (quranic-corpus — PARSER-SCOPED, the same
+contract).** The Quranic Arabic Corpus stores its forms in extended
+Buckwalter transliteration (`ara-Latn`), which is case-significant (`S`
+ص vs `s` س, `H` ح vs `h` ه, `A` alef vs `a` fatḥa) and spells letters
+with punctuation characters (`{` ٱ, `$` ش, `*` ذ, `>` أ, `~` shadda) —
+folded as Latin, the downcase merged the emphatics and the tokenizer
+split words at those characters. The pristine text stays upstream's
+bytes; `text_normalized` is minted through the one boundary over
+`QuranicCorpus.search_source(text)` — the Arabic the Buckwalter encodes,
+one character to one codepoint (`Nabu::Adapters::Buckwalter`, the
+corpus's own table) — so the ara rule folds it exactly as Arabic script:
+Q 112:1 `qulo huwa {ll~ahu >aHadN` indexes as `قل هو الله احد`, the same
+form corpus-coranicum's Cairo text mints (5,916 of 6,236 verses and
+76,970 of 77,430 words fold identically; the residue is orthographic —
+the Cairo high hamza ٴ U+0674 against the corpus's ء, and the small
+waw/yeh U+06E5/06E6, letters the ara rule does not fold). An
+Arabic-script query reaches the shelf unscoped. A Buckwalter-typed
+query reaches it only when the search is scoped to it (`--source
+quranic-corpus`, or `--lang ara-Latn`): `Query::Search` then adds the
+query read as Buckwalter — rendered on its raw case, folded the same
+way — to the union. Unscoped it never does, since any Latin query read
+as Buckwalter grows an Arabic variant (English *man* → من) that would
+match the Arabic shelves library-wide (the P79-1 noise genus). Known
+limit: the snippet highlight folds the stored Buckwalter as Latin, so a
+hit on this shelf is returned with its snippet unbracketed.
+
 Changing any rule here changes every `text_normalized` and therefore every
 passage `content_sha256`: plan a full `nabu rebuild` (drop + re-derive), not
 a parse-only sync, or the loader will read the change as a corpus-wide
