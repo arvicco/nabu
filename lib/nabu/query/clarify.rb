@@ -67,6 +67,13 @@ module Nabu
       FUZZY_TRIGRAMS = 6
       FUZZY_MIN_SIMILARITY = 0.6
       FUZZY_NAME_CAP = 80
+      # The transposition-neighbour probe (#transposition_lane): one B-tree
+      # prefix-range probe on clarify_names per adjacent swap of the input's
+      # head, each bounded — at most TRANSPOSE_SPAN − 1 indexed probes of
+      # TRANSPOSE_POOL rows, the prefix lane's cost class.
+      # const: probe bounds, not corpus claims
+      TRANSPOSE_SPAN = 24
+      TRANSPOSE_POOL = 8
       # A trailing token carrying a digit reads as a citation ("Iliad 1.1").
       CITATION = /\A(?<title>.+?)\s+(?<citation>[\p{L}\p{N}]*\p{N}[\p{L}\p{N}.:-]*)\z/
       # Document candidates probed for a title + citation reading.
@@ -329,10 +336,23 @@ module Nabu
           .limit(TOKEN_POOL).select_map(Sequel.lit("rowid"))
       end
 
-      # The misspelling lane: the input's rarest held trigrams (vocab doc
-      # counts), ORed, best-ranked first, then kept by trigram Jaccard
-      # similarity against the entry's names.
+      # The misspelling lane: the transposition neighbours plus the input's
+      # rarest held trigrams' hits (vocab doc counts, ORed, best-ranked
+      # first), then kept by edit-distance similarity (#similarity) against
+      # the entry's names.
       def fuzzy_lane(folded)
+        ids = (transposition_lane(folded) + trigram_lane(folded)).uniq
+        return [] if ids.empty?
+
+        names = @fulltext[Nabu::Store::Indexer::CLARIFY_NAMES_TABLE].where(entry_id: ids)
+                                                                    .select_hash_groups(:entry_id, :folded)
+        ids.filter_map do |id|
+          sim = names.fetch(id, []).map { |name| similarity(folded, name) }.max || 0
+          [id, sim] if sim >= FUZZY_MIN_SIMILARITY
+        end
+      end
+
+      def trigram_lane(folded)
         grams = trigrams(folded)
         return [] if grams.empty?
 
@@ -342,14 +362,32 @@ module Nabu
         return [] if probe.empty?
 
         expression = probe.map { |term| %("#{term.gsub('"', '""')}") }.join(" OR ")
-        ids = @fulltext[Nabu::Store::Indexer::CLARIFY_TRIGRAM_TABLE]
-              .where(Sequel.lit("clarify_trigram MATCH ?", expression))
-              .order(Sequel.lit("rank")).limit(FUZZY_POOL).select_map(Sequel.lit("rowid"))
-        names = @fulltext[Nabu::Store::Indexer::CLARIFY_NAMES_TABLE].where(entry_id: ids)
-                                                                    .select_hash_groups(:entry_id, :folded)
-        ids.filter_map do |id|
-          sim = names.fetch(id, []).map { |name| similarity(folded, name) }.max || 0
-          [id, sim] if sim >= FUZZY_MIN_SIMILARITY
+        @fulltext[Nabu::Store::Indexer::CLARIFY_TRIGRAM_TABLE]
+          .where(Sequel.lit("clarify_trigram MATCH ?", expression))
+          .order(Sequel.lit("rank")).limit(FUZZY_POOL).select_map(Sequel.lit("rowid"))
+      end
+
+      # A swapped letter pair ("aenied" for "aeneid", "ilaid" for "iliad")
+      # breaks the two or three trigrams around it, so a short title can
+      # share NO trigram with its misspelling — or few enough that a crowd
+      # of titles sharing the input's other trigrams ranks it out of the
+      # trigram pool before scoring. So every adjacent swap of the input's
+      # head is probed directly as a whole-name prefix on clarify_names'
+      # B-tree: the one-transposition neighbour can never be dropped.
+      # Cost: ≤ TRANSPOSE_SPAN − 1 bounded range probes (TRANSPOSE_POOL rows
+      # each) — the prefix lane's class, never a scan.
+      def transposition_lane(folded)
+        head = folded[0, TRANSPOSE_SPAN]
+        tail = folded[TRANSPOSE_SPAN..] || ""
+        variants = (0...(head.length - 1)).filter_map do |i|
+          next if head[i] == head[i + 1]
+
+          "#{head[0, i]}#{head[i + 1]}#{head[i]}#{head[(i + 2)..]}#{tail}"
+        end
+        variants.uniq.flat_map do |variant|
+          @fulltext[Nabu::Store::Indexer::CLARIFY_NAMES_TABLE]
+            .where(Sequel[:folded] >= variant).where(Sequel[:folded] < "#{variant}#{HIGH}")
+            .order(:folded).limit(TRANSPOSE_POOL).select_map(:entry_id)
         end
       end
 
@@ -358,22 +396,33 @@ module Nabu
       end
 
       # 1 − (edit distance / longer length): a doubled letter or one
-      # transposition costs one unit, so "illiad" ~ "iliad" reads 0.83 —
-      # what a misspelling IS, which trigram overlap underrates on short
-      # titles. Names past FUZZY_NAME_CAP chars are compared on their head.
+      # adjacent transposition costs one unit, so "illiad" ~ "iliad" and
+      # "aenied" ~ "aeneid" both read 0.83 — what a misspelling IS, which
+      # trigram overlap underrates on short titles. Names past
+      # FUZZY_NAME_CAP chars are compared on their head.
       def similarity(input, name)
         name = name[0, FUZZY_NAME_CAP]
         longer = [input.length, name.length].max
-        longer.zero? ? 0 : 1 - levenshtein(input, name).fdiv(longer)
+        longer.zero? ? 0 : 1 - edit_distance(input, name).fdiv(longer)
       end
 
-      def levenshtein(left, right)
+      # Optimal string alignment (restricted Damerau–Levenshtein): insert,
+      # delete, substitute, and swap of two adjacent characters, one unit
+      # each (plain Levenshtein prices a swap at two).
+      def edit_distance(left, right)
+        left = left.chars
+        right = right.chars
+        before = nil
         previous = (0..right.length).to_a
-        left.each_char.with_index(1) do |lchar, i|
-          current = [i]
-          right.each_char.with_index(1) do |rchar, j|
-            current << [previous[j] + 1, current[j - 1] + 1, previous[j - 1] + (lchar == rchar ? 0 : 1)].min
+        left.each_with_index do |lchar, i|
+          current = [i + 1]
+          right.each_with_index do |rchar, j|
+            cost = [previous[j + 1] + 1, current[j] + 1, previous[j] + (lchar == rchar ? 0 : 1)].min
+            cost = [cost, before[j - 1] + 1].min if before && i.positive? && j.positive? &&
+                                                    lchar == right[j - 1] && left[i - 1] == rchar
+            current << cost
           end
+          before = previous
           previous = current
         end
         previous.last
