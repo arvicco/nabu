@@ -46,7 +46,7 @@ module Nabu
     # (ed000282–284 are placeholder copies of ed000280)
     LAST_KNOWN_ID = 284
     # const: walk terminator past LAST_KNOWN_ID, not a corpus claim (the
-    # census saw no gap longer than 7 ids: ed000254–ed000256, ed000262–265)
+    # census saw no gap longer than 4 ids: ed000262–ed000265)
     MISS_RUN = 20
     # const: crawl politeness pause, not a corpus claim (≤ 1 request/s)
     DELAY = 1.0

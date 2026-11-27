@@ -24,8 +24,10 @@ module Nabu
     # No complete list exists upstream (HabEdocFetch: sitemap.xml stops
     # at ed000229, the HAB's "Digitale Editionen" page links 54
     # editions); the census walked the ids. ed000001–ed000300 plus the
-    # sitemap's two suffixed ids: 254 answer with a METS manifest
-    # (ed000001 … ed000284), the rest 404 — among them the old HTML-only
+    # sitemap's two suffixed ids: 256 answer with a METS manifest — 255
+    # on the id walk (ed000001 … ed000284) plus ed000086_neu, a
+    # reorganized copy of ed000086 the walk never reaches — the rest 404
+    # or carry no METS, among them the old HTML-only
     # editions (ed000004 Vilnius colloquy, ed000005 Kircher's letters:
     # transcription.htm pages, no TEI) and the library's databases
     # (Lutherdatenbank, Leichenpredigten …). Grains:
@@ -40,11 +42,13 @@ module Nabu
     #   Augsburg_1530, …:ed000248:Brief001-D; the token is the file name
     #   with the "tei-transcript" stem cut). Passage = page (the parser).
     # - REJECTED, skipped by rule: an edition whose METS lists no
-    #   transcript (229 of 254 — the Theatrum repertory's 191 facsimile
-    #   records with a tei-introduction only, and the project editions
-    #   with their own file trees: Rubens, Lessing's translations, the
-    #   Magdeburg Centuries, Karlstadt, Christian II's diaries, Opitz …
-    #   a different grain each, left for their own packets); a listed
+    #   transcript (230 of the walk's 255 — 184 records with a
+    #   tei-introduction only, most of them the Theatrum repertory's
+    #   facsimile records, and the editions whose transcription fileGrp
+    #   uses its own file names: Rubens, Lessing's translations, the
+    #   Magdeburg Centuries, Karlstadt, Christian II's diaries, Opitz,
+    #   Serranus, Hartlieb … — those groups mix introductions into the
+    #   texts, so each is a per-edition review left for its own packet); a listed
     #   transcript upstream does not serve (404 at fetch, recorded in the
     #   fetch state); a part file superseded by the edition's whole
     #   transcript (ed000223); an edition held back by EDITIONS (below);

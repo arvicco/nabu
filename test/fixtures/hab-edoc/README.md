@@ -47,7 +47,8 @@ The edition list: upstream publishes none complete — `sitemap.xml` names
 ed000001–ed000229 (230 entries incl. `ed000086_neu`, `ed000216test`), the
 HAB's page <https://www.hab.de/digitale-editionen/> links 54 editions up to
 ed000276. The census requested `mets.xml` for ed000001–ed000300 and the
-suffixed two: 254 METS (last ed000284; ed000285–300 all 404). robots.txt
+suffixed two: 256 METS — 255 on the id walk (last ed000284; ed000285–300
+all 404) plus `ed000086_neu`. robots.txt
 (re-read 2026-11-27) disallows `/wdb/`, `/rights/`, `/rules/`, `/images/`,
 `/temp/`, `/cache/`, `/download.php`, `/passwort/`, `/Report*/`,
 `/diglib2004/` — never `/edoc/`.
@@ -63,8 +64,8 @@ Grains upstream serves per edition directory:
   text, never fetched.
 - **project trees** with their own names (Rubens `archivalien/*.xml`, Lessing
   `*_org.xml`/`*_ue.xml`, Opitz `Band_I/*.xml`, Christian II `1621_11.xml` …):
-  229 editions without a transcript-named file, skipped by rule (specimen:
-  `ed000020/mets.xml`).
+  230 editions on the id walk without a transcript-named file (184 of them
+  introduction-only records), skipped by rule (specimen: `ed000020/mets.xml`).
 - **HTML-only editions** (ed000004, ed000005: `transcription.htm` pages, no
   METS) and the library's databases on edoc ids (Lutherdatenbank,
   Leichenpredigten …): no METS — not this shelf.

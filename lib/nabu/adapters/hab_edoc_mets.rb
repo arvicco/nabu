@@ -6,7 +6,7 @@ module Nabu
   module Adapters
     # One edition's mets.xml on diglib.hab.de/edoc/<id>/ — the WDB's own
     # per-edition manifest, read for the three things the hab-edoc
-    # adapter needs (census 2026-11-27, 254 METS files):
+    # adapter needs (census 2026-11-27, 256 METS files):
     #
     # - the TRANSCRIPTS: every relative .xml FLocat of the fileSec whose
     #   basename follows the WDB transcript convention
