@@ -2,7 +2,7 @@ robbeetstriangulation:
   adapter: Nabu::Adapters::Robbeetstriangulation
   adopted: "2026-11-27"
   axes: [etym, turkic, mongolic, japonic, korean]
-  wired: false   # until the first real sync is verified.
+  wired: true    # first sync verified 2026-11-27, exact: 3,173 cognate sets, 2 skipped by rule
                  # EXPECTED FIRST SYNC (full-scale dry parse 2026-11-27 of
                  # the pinned v0.3 zip): 1 document → 3,173 entries / 26,220
                  # reflex rows (0 loan-flagged, 0 doubtful, 5,451

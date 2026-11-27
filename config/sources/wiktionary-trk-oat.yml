@@ -2,7 +2,7 @@ wiktionary-trk-oat:   # 02-sources row 449
   adapter: Nabu::Adapters::WiktionaryTrkOat
   adopted: "2026-11-27"
   axes: [turkic]
-  wired: false   # first sync: bin/nabu enable wiktionary-trk-oat && bin/nabu sync
+  wired: true    # first sync verified 2026-11-27, exact: 607 entries
                  # wiktionary-trk-oat (one ~1.7 MB JSONL GET). EXPECTED FIRST SYNC:
                  # 1 dictionary doc → 607 entries / 3,816 reflex rows (438 etymon
                  # + 3,378 descendant, 622 of them ota), 0 headwordless skips,

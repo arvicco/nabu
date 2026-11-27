@@ -2,7 +2,7 @@ turkic-pd:   # 02-sources row 456
   adapter: Nabu::Adapters::TurkicPd
   adopted: "2026-11-27"
   axes: [turkic]
-  wired: false   # adapter + fixtures shipped; awaiting the first real sync
+  wired: true    # first sync verified 2026-11-27, exact: 4 docs / 2,069 passages, 0 errored
   sync_policy: manual
   # The PD Turkic reference shelf as archive.org scans — 4 census items:
   # Kuun's Codex Cumanicus (Budapest 1880; the first Cuman text in the

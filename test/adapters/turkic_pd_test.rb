@@ -121,7 +121,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["turkic-pd"]
       refute_nil entry
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired after the verified first sync"
       assert_equal "manual", entry.sync_policy
       assert_equal ["turkic"], entry.axes
     end

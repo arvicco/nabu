@@ -2,7 +2,7 @@ savelyevturkic:
   adapter: Nabu::Adapters::Savelyevturkic
   adopted: "2026-11-27"
   axes: [etym, turkic]
-  wired: false   # until the first real sync is verified.
+  wired: true    # first sync verified 2026-11-27, exact: 905 cognate sets, 2 skipped by rule
                  # EXPECTED FIRST SYNC (full-scale dry parse 2026-11-27 of
                  # the pinned v2.1 zip): 1 document → 905 entries / 8,360
                  # reflex rows (0 loan-flagged, 0 doubtful, 1,282

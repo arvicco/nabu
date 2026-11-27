@@ -2,7 +2,7 @@ wiktionary-ota:   # 02-sources row 448
   adapter: Nabu::Adapters::WiktionaryOta
   adopted: "2026-11-27"
   axes: [turkic]
-  wired: false   # first sync: bin/nabu enable wiktionary-ota && bin/nabu sync wiktionary-ota
+  wired: true    # first sync verified 2026-11-27, exact: 10,016 entries
                  # (one ~34 MB JSONL GET). EXPECTED FIRST SYNC: 1 dictionary doc →
                  # 10,016 entries / 25,882 reflex rows (3,594 etymon + 22,288
                  # descendant), 0 headwordless skips, 0 non-NFC (the 2026-10-30

@@ -115,7 +115,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (26): `acd`, `calfa-lexicon`, `cldf-spine`, `clics`, `csd`, `derom`, `dyenindoeuropean`, `edl`, `etruscan-loans`, `iecor`, `kitchensemitic`, `liv`, `mcd`, `meloniromance`, `nabu-lects`, `peirosst`, `sabellic-loans`, `saenkoromance`, `sagartst`, `starling`, `tlopo`, `uralex`, `westoldturkic`, `wiktionary-recon`, `wold`, `zhangrgyalrong`
+**Members** (28): `acd`, `calfa-lexicon`, `cldf-spine`, `clics`, `csd`, `derom`, `dyenindoeuropean`, `edl`, `etruscan-loans`, `iecor`, `kitchensemitic`, `liv`, `mcd`, `meloniromance`, `nabu-lects`, `peirosst`, `robbeetstriangulation`, `sabellic-loans`, `saenkoromance`, `sagartst`, `savelyevturkic`, `starling`, `tlopo`, `uralex`, `westoldturkic`, `wiktionary-recon`, `wold`, `zhangrgyalrong`
 
 ### biblical
 
@@ -220,7 +220,7 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 
 The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. The OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
 
-**Members** (11): `bibyeonsa`, `goryeosa`, `goryeosa-jeoryo`, `itkc`, `itkc-catalog`, `ko-wikisource-mk`, `okhc`, `sillok`, `sjw`, `wiktionary-ko`, `wiktionary-okm`
+**Members** (12): `bibyeonsa`, `goryeosa`, `goryeosa-jeoryo`, `itkc`, `itkc-catalog`, `ko-wikisource-mk`, `okhc`, `robbeetstriangulation`, `sillok`, `sjw`, `wiktionary-ko`, `wiktionary-okm`
 
 ### sea
 
@@ -244,7 +244,7 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
-**Members** (16): `aozora`, `edrdg`, `haga-jinmei`, `hdic`, `honkoku`, `ja-wikisource`, `kokubunken`, `kouigenji`, `kradfile`, `ndl-kotenseki`, `ninjal-textdb`, `nrct`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
+**Members** (17): `aozora`, `edrdg`, `haga-jinmei`, `hdic`, `honkoku`, `ja-wikisource`, `kokubunken`, `kouigenji`, `kradfile`, `ndl-kotenseki`, `ninjal-textdb`, `nrct`, `oncoj`, `oncoj-lexicon`, `robbeetstriangulation`, `unihan`, `wiktionary-recon`
 
 ### turkic
 
@@ -252,7 +252,7 @@ The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscr
 
 The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscripts (line-by-line TEI, Perso-Arabic with transliteration) and the kaikki Old Turkic / Old Uyghur / Chagatai extracts — the Wilkens Old Uyghur dictionary and the runiform inscriptions joining as their packets and asks land.
 
-**Members** (5): `atmo`, `ud`, `westoldturkic`, `wiktionary-recon`, `wilkens-oui`
+**Members** (11): `atmo`, `robbeetstriangulation`, `savelyevturkic`, `tr-wikisource`, `turkic-pd`, `ud`, `westoldturkic`, `wiktionary-ota`, `wiktionary-recon`, `wiktionary-trk-oat`, `wilkens-oui`
 
 ### mongolic
 
@@ -260,7 +260,7 @@ The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscrip
 
 The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land.
 
-**Members** (6): `altaica-shm`, `mnc-wikisource`, `mongolic-pd`, `ptg`, `shiratori-shm`, `wiktionary-recon`
+**Members** (7): `altaica-shm`, `mnc-wikisource`, `mongolic-pd`, `ptg`, `robbeetstriangulation`, `shiratori-shm`, `wiktionary-recon`
 
 ### americas
 

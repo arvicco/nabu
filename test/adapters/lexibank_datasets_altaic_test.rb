@@ -220,7 +220,7 @@ class LexibankDatasetsAltaicTest < Minitest::Test
       entry = registry[slug]
       refute_nil entry, "#{slug} must be registered in config/sources/"
       assert_equal expect.klass, entry.adapter_class
-      refute entry.wired, "#{slug}: wired only after the verified first sync"
+      assert entry.wired, "#{slug}: wired after the verified first sync"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "etym", slug
       assert_includes entry.axes, "turkic", slug

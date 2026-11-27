@@ -2,7 +2,7 @@ tr-wikisource:   # 02-sources row 453
   adapter: Nabu::Adapters::TrWikisource
   adopted: "2026-11-27"
   axes: [turkic]
-  wired: false
+  wired: true    # first sync verified 2026-11-27, exact: 3 docs / 214 passages, 1 skipped by rule, 0 errored
   sync_policy: manual
   # The Orkhon inscriptions on Turkish Wikisource (tr.wikisource.org,
   # Kategori:Orhun Abideleri): Kül Tigin (732), Bilge Kağan (735) and
