@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Deutsche Poëtische Gedichte</title>
+            <title type="volume" n="1">Erster Band</title>
+            <author>
+               <persName ref="http://d-nb.info/gnd/118762974">
+                  <surname>Schwarz</surname>
+                  <forename>Sibylla</forename>
+               </persName>
+            </author>
+            <respStmt xml:id="textsource-1" corresp="#availability-textsource-1">
+               <orgName>Herzog August Bibliothek Wolfenbüttel</orgName>
+               <resp>
+                  <note type="remarkResponsibility">Bereitstellung der Texttranskription.</note>
+                  <ref target="http://diglib.hab.de/edoc/ed000278/start.htm"/>
+                  <date type="importDTA">2023-09-13T08:39:22Z</date>
+               </resp>
+            </respStmt>
+            <respStmt>
+               <persName>
+                  <surname>Altmann</surname>
+                  <forename>Friederike</forename>
+               </persName>
+               <persName>
+                  <surname>Baumgarten</surname>
+                  <forename>Marcus</forename>
+               </persName>
+               <resp>
+                  <note type="remarkResponsibility">Bearbeitung der digitalen Edition.</note>
+                  <date type="importDTA">2023-09-13T08:39:22Z</date>
+               </resp>
+            </respStmt>
+         </titleStmt>
+         <editionStmt>
+            <edition>Digitalisierte Ausgabe [Auszug aus der Vorlage].</edition>
+         </editionStmt>
+         <extent>
+            <measure type="images">136</measure>
+            <measure type="tokens"/>
+            <measure type="types"/>
+            <measure type="characters"/>
+         </extent>
+         <publicationStmt>
+            <publisher xml:id="HAB">
+               <email>auskunft@hab.de</email>
+               <orgName role="project">Praktikum an der Arbeitsstelle für Digitale
+                  Editionen</orgName>
+               <orgName role="hostingInstitution" xml:lang="de">Hezog August Bibliothek
+                  Wolfenbüttel</orgName>
+               <address>
+                  <addrLine>Schlossplatz 1, 38304 Wolfenbüttel</addrLine>
+                  <country>Germany</country>
+               </address>
+            </publisher>
+            <pubPlace>Wolfenbüttel</pubPlace>
+            <date type="publication">2023-09-13T08:39:22Z</date>
+            <availability xml:id="availability-textsource-1" corresp="#textsource-1">
+               <licence target="http://creativecommons.org/publicdomain/zero/1.0/">
+                  <p>Dieses Werk ist gemeinfrei.</p>
+               </licence>
+            </availability>
+            <availability xml:id="availability-imagesource-1" corresp="#imagesource-1">
+               <licence target="http://creativecommons.org/publicdomain/zero/1.0/">
+                  <p>Dieses Werk ist gemeinfrei.</p>
+               </licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl type="MM"/>
+            <biblFull>
+               <titleStmt>
+                  <title level="m" type="main">Deutsche Poëtische Gedichte</title>
+                  <title level="m" type="volume" n="1">Erster Band</title>
+                  <author>
+                     <persName ref="http://d-nb.info/gnd/118762974">
+                        <surname>Schwarz</surname>
+                        <forename>Sibylla</forename>
+                     </persName>
+                  </author>
+                  <editor>
+                     <persName ref="http://d-nb.info/gnd/122837622">
+                        <surname>Gerlach</surname>
+                        <forename>Samuel</forename>
+                     </persName>
+                  </editor>
+               </titleStmt>
+               <editionStmt>
+                  <edition n="1"/>
+               </editionStmt>
+               <extent>
+                  <measure type="pages">[8] Bl., CXII S., [2] Bl : Kupfert., Frontisp. (Portr.) ;
+                     4°</measure>
+               </extent>
+               <publicationStmt>
+                  <publisher><name>Anna Rhete</name></publisher>
+                  <pubPlace>Danzig</pubPlace>
+                  <date type="publication">1650</date>
+               </publicationStmt>
+            </biblFull>
+            <msDesc xml:id="imagesource-1" corresp="#availability-imagesource-1">
+               <msIdentifier>
+                  <repository>Herzog August Bibliothek Wolfenbüttel</repository>
+                  <idno>
+                     <idno type="shelfmark">A: 229.2 Quod. (5)</idno>
+                     <idno type="URLCatalogue"
+                        >https://opac.lbs-braunschweig.gbv.de/DB=2/SET=1/TTL=31/SHW?FRST=36</idno>
+                     <idno type="URLImages"
+                        >http://diglib.hab.de/drucke/229-2-quod-5/start.htm</idno>
+                     <idno type="URN">urn:nbn:de:gbv:23-drucke/229-2-quod-53</idno>
+                  </idno>
+               </msIdentifier>
+               <physDesc>
+                  <typeDesc>
+                     <p>Fraktur</p>
+                  </typeDesc>
+               </physDesc>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <editorialDecl>
+            <p>Die Transkription erfolgte nach den unter <ref
+                  target="http://www.tei-c.org/Guidelines/P5/"
+                  >http://www.tei-c.org/Guidelines/P5/</ref> formulierten Richtlinien.</p>
+            <p>Verfahren der Texterfassung: OCR mit Nachkorrektur.</p>
+            <p> Bogensignaturen: nicht übernommen; Druckfehler: ignoriert; fremdsprachliches
+               Material: gekennzeichnet; Geminations-/Abkürzungsstriche: expandiert, markiert;
+               Hervorhebungen (Antiqua, Sperrschrift, Kursive etc.): nicht ausgezeichnet; I/J in
+               Fraktur: wie Vorlage; i/j in Fraktur: wie Vorlage; Kolumnentitel: nicht übernommen;
+               Kustoden: nicht übernommen; langes s (ſ): als s transkribiert; Normalisierungen:
+               keine; rundes r (&amp;#xa75b;): keine Angabe; Seitenumbrüche markiert: ja;
+               Silbentrennung: wie Vorlage; u/v bzw. U/V: wie Vorlage; Vokale mit übergest. e: wie
+               Vorlage; Vollständigkeit: teilweise erfasst; Zeichensetzung: DTABf-getreu;
+               Zeilenumbrüche markiert: ja; </p>
+         </editorialDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="deu">(Früh-)Neuhochdeutsch</language>
+            <language ident="lat">Latein</language>
+         </langUsage>
+         <textClass>
+            <classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dwds1main"
+               >Belletristik</classCode>
+         </textClass>
+      </profileDesc>
+   </teiHeader>
+   <text>
+      <front>
+         <titlePage>
+            <pb n="fol. a i r"
+               source="http://diglib.hab.de/drucke/229-2-quod-5/start.htm?image=00005"/>
+            <lb/>
+            <docAuthor><persName ref="https://d-nb.info/gnd/118762974">Sibyllen
+                  Schwarzin/</persName>
+               <lb/>Vohn <lb/>Greiffswald aus Pommern/</docAuthor>
+            <lb/>
+            <docTitle>
+               <titlePart>Deutsche Poëtische <lb/>Gedichte/</titlePart>
+            </docTitle>
+            <lb/>
+            <docEdition>Nuhn <lb/>Zum ersten mahl/ auß ihren eignen <lb/>Handschrifften/ herauß
+               gegeben <lb/>und verleget <lb/>Durch <lb/><persName
+                  ref="https://d-nb.info/gnd/122837622">M<ex>agister</ex> SAMUEL GERLACH/</persName>
+               <lb/>auß dem Hertzogtuhm Wuͤrtemberg.</docEdition>
+            <lb/>
+            <docImprint>und in <lb/>DANTZIG <lb/>Gedrukt/ bey seel. <persName
+                  ref="https://d-nb.info/gnd/128616806">Georg Rheten </persName><persName
+                  ref="https://d-nb.info/gnd/1046972782">Witwen</persName> /</docImprint>
+            <lb/>
+            <docDate>im <date when="1650">M. DC. L. Jahr.</date></docDate>
+         </titlePage>
+      </front>
+      <pb n="fol. a i v" source="http://diglib.hab.de/drucke/229-2-quod-5/start.htm?image=00006"/>
+      <body>
+         <div>
+            <pb n="fol. a ii r"
+               source="http://diglib.hab.de/drucke/229-2-quod-5/start.htm?image=00007"/>
+            <lb/>
+            <head>Untertaͤhnigste Zuschrifft <lb/>Der Durchleuchtigsten/ Großmaͤch= <lb/>tigsten und
+               Sieghaftesten Fuͤrstin <lb/>und Fraͤulein/ <lb/><persName
+                  ref="https://d-nb.info/gnd/118520652">Fr<ex>äulein</ex> CHRISTINEN</persName>/
+               <lb/>Der Schweden/Gohten und Wenden Koͤnigin/ <lb/>Großfuͤrstin in Finland/ Hertzogin
+               zu Brehmen/ <lb/>Verden/ Pommern/ Ehesten und Carellen Fuͤrstin <lb/>zu Ruͤgen/
+               Fraͤulein uͤber Wismar und Jngerman= <lb/>land/ etc Seiner gnaͤdigsten Koͤnigin
+               <lb/>und Fraͤulein <lb/>vohn <lb/><persName ref="https://d-nb.info/gnd/122837622"
+                     >M<ex>agister</ex> Samuel Gerlach</persName>.</head>
+            <lg>
+               <l>O Du Grosse Koͤniginne/ deines großen Vaters Bild!</l>
+               <l>Die du bißher seine Stelle/ mit dem blanken Schwerd und Schild/</l>
+               <l>Aber mehr noch mit Verstand/ hast/ im Deutschen Reich/ vertretten/</l>
+               <l>die so sehr betrengte Kirch auß dem Elend zu erretten/</l>
+               <l>und auff freihen Fuß zusetzen/ es auch so hinaus gefuͤhrt/</l>
+               <l>daß/ allweil Welt Welt wird bleiben/ dihr die Nachwelt danken wird.</l>
+               <l>Sih/ der alleringste koͤmt unter denen die beschuͤtzet/</l>
+               <l>und/ durch deinen starken Arm/ nun sind wider unterstuͤtzet/</l>
+               <l>denen du die Bahn hinwider in ihr Vaterland gemacht/</l>
+               <l>und den unerschaͤtzten Frieden/ uͤber Hoffen/ hast gebracht.</l>
+               <l>Jch/ der alleringste/ komm/ mein Dankopffer dihr zu bringen/</l>
+               <l>Ach wie gern wolt' ich dazu dihr ein Sigs=Liedlein singen</l>
+               <pb n="fol. a ii v"
+                  source="http://diglib.hab.de/drucke/229-2-quod-5/start.htm?image=00008"/>
+               <l>Aber meine schwache Zunge gleicht der Nachtigal sich nuhn/</l>
+               <l>die ihr=sunsten=helle Stimme hat gehemmt/ und ist davohn/</l>
+               <l>weis fast selber nicht wohin; wolt ich dann dem Kuckuk gleichen/</l>
+               <l>seinen sehr verachten Tohn singen/ muͤst ich doch erbleichen/</l>
+               <l>weil er seine Kukuks Stimme nuhn auch gaͤntzlich unterlaͤst;</l>
+               <l>Wer dann solt mich lehren singen; darum ists das allerbaͤst'/</l>
+               <l>alles singen einzustellen. Gleichwol soll ich mich erzeigen</l>
+               <l>dankbahr/ und nachdem ich nichts bey mir finde/ so mein eigen/</l>
+               <l>wil ich/ Theure Koͤniginne/ dihr ein gaͤntzlich fremdes Werk/</l>
+               <l>ob es wohl bey dihr kein fremdes/ zu eim sichern Dankgemerk/</l>
+               <l>uͤbergeben; fremd ists nicht wegen deiner/ dann es ruͤhret</l>
+               <l>aus deim Pommerlande her/ welches billig dihr gebuͤhret/</l>
+               <l>ist/ und bleibet auch dein eigen; Niemand kan das Heilge Grab</l>
+               <l>gantz und gahr vergebens huͤten/ daß er nichtes dafuͤr hab.</l>
+               <l>Diß doch ist das ringste noch/ welches wihr dihr koͤnnen geben/</l>
+               <l>Wihr sind dihr mit Guht und Bluht/ ja mit unserm Leib und Leben</l>
+               <l>selbst verbunden und verpflichtet. Ach! Ach wann wir alle doch</l>
+               <l>wohl bedaͤchten/ wie so treulich du des Leibs und Seelen=Joch</l>
+               <l>uns genommen ab den Hals/ und der schwaͤren Last entrissen/</l>
+               <l>daß sich unsre Treiber nu selber ewig schaͤmen muͤßen/</l>
+               <l>weil ihr Stecken sey zubrochen. Daruͤm/ sag ich/ ist das Land</l>
+               <l>Pomern/ un noch mehr/ dein eigen/un wirst nuhn ein großer Stand</l>
+               <l>unsers Edlen Deutschen Reichs; diß doch laß ich andre schlichten/</l>
+               <l>die es besser koͤnnen tuhn. Mich itzt wil ich wider richten</l>
+               <l>dahin/ wo ich erst gezihlet; dises Werk ist billich dein/</l>
+               <l>weil es her aus Pommern kommet/ wessen solt es sonsten seyn?</l>
+               <l>Dein/ dein ist es widerum/ weil es bey uns unerhoͤret/</l>
+               <l>und durchaus was neues ist: Bistu selbst nicht/ die man ehret</l>
+               <l>nunmehr auff dem gantzen Runden/ wegen deiner Wundergaben/</l>
+               <l>vihler Sprache[n]/ Weißheit/ Kunst/daß die Maͤner nichts mehr haben/</l>
+               <l>Dir worinnen vohrzugehen/ du vernichtst der Helden Ruhm/</l>
+               <l>der Gelehrten Lorbeer=Kraͤntze machstu dihr zum Eigenthum.</l>
+               <pb n="fol. a iii r"
+                  source="http://diglib.hab.de/drucke/229-2-quod-5/start.htm?image=00009"/>
+               <l>Dein/ dein ist es noch einmahl/ weil eß seinen Uhrsprung nimmet</l>
+               <l>her vohn einem Jungfern=Bild/ als in deren hat geglimmet/</l>
+               <l>wie ein Feuer in der Aschen/ lauter Tugend/ Scham und Zucht;</l>
+               <l>Du bist/ Koͤnigliches Fraͤulein/ un Koͤn'ginne selbst/ die Frucht/</l>
+               <l>so die Keuschheit selbsten hat/ vohn der Keuschheit/ ihr gezeuget;</l>
+               <l>Diß nuhn ist die Uhrsach/ daß sich zu deinen Fuͤßen neiget</l>
+               <l>dises Werk in tiefster Demuht/ und ich mich mit ihm dazu/</l>
+               <l>daß wir alle beyde moͤgen finden Sicherheit und Ruh/</l>
+               <l>unter deinem starcken Schutz wider alle Laͤster=Zungen;</l>
+               <l>Finden wihr die nuhr bey dihr! So ist uns wohl gelungen!</l>
+               <l>Welcher wil/ und wird wohl moͤgen dises Buch auß deiner Hand</l>
+               <l>reissen? ja wer wird sich wollen steken in ein solche Schand/</l>
+               <l>mich aus Koͤniglicher Gnad' aus zustossen/ auszutreiben?</l>
+               <l>Alle beyde werden wohl frey und sicher ewig bleiben:</l>
+               <l>Momus wird sich selber scheuen/ seinen hart und stumpfen Zahn</l>
+               <l>dran zu setzen und zu wetzen/ Schimpf wird seyn sein Lohn. Wolahn</l>
+               <l>Friedens=Koͤniginne/ leb/ lebe lange Fridens=Zeiten/</l>
+               <l>daß wihr deinen Fridens=Ruhm moͤgen ewiglich außbreiten!</l>
+            </lg>
+         </div>
+         <div>
+            <lb/>
+            <head><persName ref="https://d-nb.info/gnd/118520652">Fraͤulein CHRISTINEN</persName>/
+               <lb/>Koͤniginne in Schweden usf. <lb/>durch versetzte Buchstaben C. in Z. <lb/>Auf!
+               dein Reich/ wo es seyn kan/ steh <lb/>fein lang in Nuz. <lb/>Erklaͤhret in einem
+               <lb/>Zirkel=Gedicht/</head>
+            <lg>
+               <l>Ruf/ wer nuhr kan immer ruffen/ als ein frommer Hertzens=Christ/</l>
+               <l>dieser/ sag ich/ ruf und bitte den/ der in dem Himmel ist/</l>
+               <pb n="fol. a iii v"
+                  source="http://diglib.hab.de/drucke/229-2-quod-5/start.htm?image=00010"/>
+               <l>Der da selnen Ehren=Stuhl hat so hoch gesetzet droben/</l>
+               <l>uͤber alles Sternen=Heer/ und auch selbst so hoch erhoben</l>
+               <l>ist/ weit uͤber alle Goͤtter/ doch der Frommen nicht vergist/</l>
+               <l>sondern ihr Gebeht erhoͤret/ und wann/ ohne falsche List/</l>
+               <l>Sie vohn hertzen ihn anruffen/ ihnen hilfft in kurzer frist/</l>
+               <l>Darumb bitt ich alle nu/ daß zu unserm Gott dort oben</l>
+               <l>Ruf wer nuhr kan immer ruffen!</l>
+
+               <l>Was dann/ Große Koͤniginne? daß bey dihr nicht werd gemiss't/</l>
+               <l>wo es seyn kan/ Ruh' und Friden; daß kein Fehde Krig noch Zwist/</l>
+               <l>inner deinen Grentzen sey; daß/ gleich wie der Sprey/ zerstoben</l>
+               <l>deine Feinde moͤgen seyn/ dein Reich/ vor ihrem toben/</l>
+               <l>Fein lang lang in Nuzen stehe! daß wihrs moͤgen seyn vergwist/</l>
+               <l>Ruf/ wer nuhr kan immer ruffen!</l>
+            </lg>
+            <lb/>
+            <byline>Geschriben zu Osterwyk im Danziger Werder/ den 18. Julij <lb/>N. Kal. war der
+               Tag Christinen/ nach <persName>M. Fuhrmans</persName> Kalender/ <lb/>dises 1650.
+               Jahres.</byline>
+         </div>
+      </body>
+   </text>
+</TEI>

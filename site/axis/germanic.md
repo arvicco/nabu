@@ -49,6 +49,7 @@ A source wears every desk it serves — these 48 answer this desk. Holdings are 
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
 | `fsv-lexica` | dictionary | attribution | wired · manual | 51,811 entries |
 | `grand-tour` | texts | attribution | wired · frozen | 4 docs / 515 passages |
+| `hab-edoc` | texts | attribution | not yet wired | not synced yet |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
 | `leme` | dictionary | attribution | wired · manual | 943,211 entries |

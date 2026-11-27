@@ -1,0 +1,28 @@
+hab-edoc:   # 02-sources row 442
+  adapter: Nabu::Adapters::HabEdoc
+  adopted: "2026-11-27"
+  axes: [germanic, romance]
+  wired: false   # registered; first sync pending
+  sync_policy: manual
+  # The Herzog August Bibliothek Wolfenbüttel's digital editions
+  # (diglib.hab.de/edoc/): the Editiones Electronicae Guelferbytanae, the
+  # Wolfenbütteler Digitale Editionen and the project editions hosted in
+  # the Wolfenbütteler Digitale Bibliothek — hand-keyed TEI transcriptions
+  # of early modern prints and manuscripts (Hans Sachs 1523, Kaempfer
+  # 1712, Lipsius, Orsini, Dasypodius, the Paesi novamente retrovati,
+  # Heyden's colloquies in fifteen printings, Sibylla Schwarz 1650, the
+  # Lüne convent letters c. 1460–1555 …). Latin, Early New High German,
+  # Middle Low German, Italian, French, some Greek.
+  # Fetch: the METS id walk (ed000001 upward, no complete upstream list;
+  # sitemap.xml stops at ed000229) + every admitted transcript, 1 request
+  # per second, file-grain resume; robots.txt leaves /edoc/ open.
+  # Licence per transcript: the TEI <licence> (CC BY 4.0 / CC BY-SA 3.0 DE
+  # / 4.0 → attribution; CC0 → open), else the edition's METS rights
+  # statement (CC BY-SA 3.0), else the site's stated CC BY-SA default.
+  # EXPECTED FIRST SYNC (census 2026-11-27): 255 edition METS; 25 editions
+  # list 550 transcripts → 472 documents if every listed file is served
+  # (3 editions held back = 70 files, 1 listed file 404, 7 part files
+  # superseded); skipped by rule: 230 transcript-less editions + 3 held-back
+  # editions (70 listed files) + 1 unserved file + 7 superseded parts;
+  # page passages ≈ 5,000–10,000 (unmeasured — the transcripts total
+  # ≈ 20 MB, estimated from the first file of each edition).

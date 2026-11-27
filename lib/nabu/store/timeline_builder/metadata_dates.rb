@@ -250,6 +250,9 @@ module Nabu
           "honkoku" => :ndl_catalog_date, # the NDL catalog record the HonkokuNdlCatalog join
           #                                  writes for NDL-held materials (出版日 envelope),
           #                                  else the label's nengō "date" (parse time)
+          "hab-edoc" => :structured, # the print's imprint year (class edition), else a manuscript's
+          #                            origDate or a letter's correspDesc date (class-less); place =
+          #                            the imprint pubPlace / origPlace / sending place verbatim
           "hr-wikisource" => :era_band_key,
           "hrcak-marulana" => :structured, # the record's datacite Issued year (class edition)
           "iedc" => :iso_prefix_key,

@@ -447,6 +447,15 @@ sources:
       authors: author         # datacite creatorName verbatim ("Tomasović, Mirko"), 602 records,
       #                         array; for a text edition upstream names the edited author
       #                         ("Fortunatus, Venantius")
+  hab-edoc:                   # census 2026-11-27 (25 editions, not yet synced)
+    fields:
+      author: author          # the print's or manuscript's author as the edition names it
+      #                         (HabEdoc::EDITIONS override > sourceDesc > titleStmt): "Hans Sachs",
+      #                         "Schwarz, Sibylla", "Conring, Hermann", "Sebald Heyden" …
+      printer: printer        # the imprint's publisher verbatim (Georg Erlinger, Anna Rhete,
+      #                         "Georg. Wolfg. Hammius", "In officina Ioannis Frobenii.")
+      edition: edition        # the WDB edition id (ed000238) — one value groups a multi-file
+      #                         edition's witnesses and letters
   eltec-srp:                  # 96 Serbian novels
     fields:
       author: author          # 63 authors ("Атанацковић, Богобој")

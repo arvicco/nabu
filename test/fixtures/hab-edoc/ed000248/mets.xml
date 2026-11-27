@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets OBJID="edoc/ed000248" TYPE="rare book" xmlns:mets="http://www.loc.gov/METS/"
+    xmlns:wdb="http://diglib.hab.de/wdb/" xmlns:rmd="http://diglib.hab.de/rights"
+    xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://www.loc.gov/METS/ http://diglib.hab.de/rules/schema/mets/v1.9/wdb-mets-2.xsd">
+    <mets:metsHdr CREATEDATE="2013-09-03T10:30:00">
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenbüttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+
+    <!-- Katalogeintrag, verwendet wird in der Regel die PPN der elektronischen Ressource oder der Ressource, die den Link enthält -->
+    <!--<mets:dmdSec ID="dmd_opac">
+              <mets:mdRef LOCTYPE="PURL" MDTYPE="OTHER" OTHERMDTYPE="PICA" MIMETYPE="text/xml"  xlink:href="http://diglib.hab.de/?format=mods&amp;opac=539364371"/>
+    </mets:dmdSec>
+    -->
+    <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods>
+                    <mods:identifier type="purl">http://diglib.hab.de/edoc/ed000248/start.htm</mods:identifier>
+                    <mods:titleInfo>
+                        <mods:title>Netzwerke der Nonnen. Edition und Erschließung der Briefsammlung aus Kloster Lüne (ca. 1460-1555)</mods:title>
+                    </mods:titleInfo>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Eva</mods:namePart>
+                        <mods:namePart type="family">Schlotheuber</mods:namePart>
+                        <mods:displayForm>Eva Schlotheuber</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Henrike</mods:namePart>
+                        <mods:namePart type="family">Lähnemann</mods:namePart>
+                        <mods:displayForm>Henrike Lähnemann</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Philipp</mods:namePart>
+                        <mods:namePart type="family">Trettin</mods:namePart>
+                        <mods:displayForm>Philipp Trettin</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Lena</mods:namePart>
+                        <mods:namePart type="family">Vosding</mods:namePart>
+                        <mods:displayForm>Lena Vosding</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Philipp</mods:namePart>
+                        <mods:namePart type="family">Stenzig</mods:namePart>
+                        <mods:displayForm>Philipp Stenzig</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Torsten</mods:namePart>
+                        <mods:namePart type="family">Schaßan</mods:namePart>
+                        <mods:displayForm>Torsten Schaßan</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Simone</mods:namePart>
+                        <mods:namePart type="family">Schultz-Balluff</mods:namePart>
+                        <mods:displayForm>Simone Schultz-Balluff</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Wolfgang</mods:namePart>
+                        <mods:namePart type="family">Seifert</mods:namePart>
+                        <mods:displayForm>Wolfgang Seifert</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Edmund</mods:namePart>
+                        <mods:namePart type="family">Wareham Wanitzek</mods:namePart>
+                        <mods:displayForm>Edmund Wareham Wanitzek</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Timo</mods:namePart>
+                        <mods:namePart type="family">Bülters</mods:namePart>
+                        <mods:displayForm>Timo Bülters</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">ctb</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Konstantin</mods:namePart>
+                        <mods:namePart type="family">Winters</mods:namePart>
+                        <mods:displayForm>Konstantin Winters</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">ctb</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Torsten</mods:namePart>
+                        <mods:namePart type="family">Schaßan</mods:namePart>
+                        <mods:displayForm>Torsten Schaßan</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">prg</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Wolfgang</mods:namePart>
+                        <mods:namePart type="family">Seifert</mods:namePart>
+                        <mods:displayForm>Wolfgang Seifert</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">prg</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="given">Eva</mods:namePart>
+                        <mods:namePart type="family">Neufeind</mods:namePart>
+                        <mods:displayForm>Eva Neufeind</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">prg</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Wolfenbüttel</mods:placeTerm>
+                        </mods:place>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                        <mods:dateIssued encoding="w3cdtf">2016-</mods:dateIssued>
+                    </mods:originInfo>
+                    <!--<mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title>Wolfenbütteler Digitale Editionen</mods:title>
+                        </mods:titleInfo>
+                        <mods:part>
+                            <mods:detail>
+                                <mods:number>ZZ</mods:number>
+                            </mods:detail>
+                        </mods:part>
+                        <!-\-<mods:identifier type="purl">http://diglib.hab.de/?opac=xxx</mods:identifier>-\->
+                    </mods:relatedItem>-->
+                    <!--
+                    <mods:recordInfo>
+                        <mods:recordContentSource authority="gbv" authorityURI="http://uri.gbv.de/organization/isil/DE-23">OPAC</mods:recordContentSource>
+                        <mods:recordIdentifier source="opac">xxx</mods:recordIdentifier>
+                    </mods:recordInfo>
+                    -->
+                    <mods:note type="projectDescription">
+                        Ziel des Forschungsprojekts ist es, die in Umfang und Zuschnitt einzigartigen und in der Forschung wenig bekannten Briefbücher der Benediktinerinnen des Klosters Lüne zu erschließen und die in die Zeit nach der großen spätmittelalterlichen Reform zurückreichende älteste Handschrift mittels einer kritischen Edition in digitaler und gedruckter Form zugänglich zu machen.
+                        Die in Latein, Niederdeutsch und einer charakteristischen niederdeutsch-lateinischen Mischsprache verfassten Briefe erweitern erheblich das zur Verfügung stehende Corpus an Texten, die im Mittelalter von Frauen selbstständig verfasst wurden. Diejenigen Frauenkonvente, bei denen die Klosterreform eine strenge Klausur durchsetzen konnte, sind hinsichtlich ihrer Kommunikationspraxis besonders aufschlussreich, da sie existentiell auf schriftliche Kommunikation sowohl in praktisch allen Lebensfragen als auch bei der Verwaltung der oft großen Grundherrschaften und bei der Wahrnehmung von Pfarr- und anderen Rechten angewiesen waren.
+                        Dass diese besondere Situation der Kommunikation von Nonnen bislang kaum von der Forschung berücksichtigt worden ist, liegt einerseits an der vielfach fragmentarischen Quellenlage und andererseits daran, dass das Wissen um interne Verhältnisse, externes Agieren sowie gesellschaftliches und kulturelles Wirken von Frauenkonventen auch insgesamt noch lückenhaft ist. Bisher sind aus dem Spätmittelalter nur deutlich kleinere Sammlungen bekannt, die zudem überwiegend aus süddeutschen Frauenklöstern stammen.
+                    </mods:note>
+                    <mods:subject displayLabel="Korrespondenznetzwerke">
+                        <mods:topic valueURI="https://d-nb.info/gnd/4180011-4">Korrespondenz</mods:topic>
+                        <mods:topic valueURI="https://d-nb.info/gnd/4055762-5">Soziales Netzwerk</mods:topic>
+                    </mods:subject>
+                    <mods:subject displayLabel="Briefsammlung">
+                        <mods:topic valueURI="https://d-nb.info/gnd/4146609-3">Briefsammlung</mods:topic>
+                    </mods:subject>
+                    <mods:subject displayLabel="Frühe Neuzeit">
+                        <mods:temporal valueURI="https://d-nb.info/gnd/7503866-3">Frühe Neuzeit</mods:temporal>
+                    </mods:subject>
+                    <mods:subject displayLabel="Digitale Edition - Handschrift">
+                        <mods:genre valueURI="https://d-nb.info/gnd/1212244893">Digitale Edition</mods:genre>
+                        <mods:topic valueURI="https://d-nb.info/gnd/4148186-0">Handschrift</mods:topic>
+                    </mods:subject>
+                    <mods:subject displayLabel="Kloster Lüne">
+                        <mods:name valueURI="https://d-nb.info/gnd/4099906-3">Kloster Lüne</mods:name>
+                    </mods:subject>
+                </mods:mods>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+
+    <!-- Rechtesegment -->
+    <mets:amdSec ID="amd_edoc_ed000248">
+        
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+        <!-- Bibliotheks Standardlizenz für Retrodigitalisate lt. Benutzungsordnung; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000248_retrodig">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="Benutzungsordnung"/>
+        </mets:rightsMD>
+        <!-- CC Standardlizenz, wenn der Autor zugestimmmt hat; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000248_CC">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/rights/cc_by-sa.html" LABEL="CC BY-SA 3.0"/>
+        </mets:rightsMD>
+        <!-- Lizenz, wenn der Autor/Institution der weiteren Nutzung zustimmmen muss -->
+        <mets:rightsMD ID="rmd_edoc_ed000248_restricted">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="rights restricted"/>
+        </mets:rightsMD>
+    </mets:amdSec>
+    
+    
+    <mets:fileSec>
+        <!--      ****Filesection ************************************************************************************** -->
+          <!-- Konfigurationsparameter -->
+            <mets:fileGrp USE="config">
+                <mets:file  ID="wdb_parameter">
+                    <mets:FContent>
+                        <mets:xmlData>
+                            <wdb:parameter>
+                                <!-- Titelbaltt oder Einstiegsseite fuer "Werke"; muss gesetzt sein -->
+                                <wdb:param distype="start" firstpage_xml="texts/start.xml" firstpage_xsl="scripts/start.xsl"/>
+                                
+                                <!-- Sprache -->
+                                <wdb:param lang="de"/>
+                                
+                                <!-- owner logo -->
+                                <!--
+                                <wdb:logo owner="Universität Düsseldorf" ownerLogo="http://diglib.hab.de/images/logo-duesseldorf.png" ownerSiteURL="http://www.uni-duesseldorf.de" ownerContact=""/>
+                                <wdb:logo owner="Universität Oxford" ownerLogo="http://diglib.hab.de/images/logo-oxford.png" ownerSiteURL="http://www.ox.ac.uk" ownerContact=""/>
+                                -->
+                                
+                                <!-- Volltextsuche mit Paralleler Volltextsicht; @url fuer Aufgerufenes Skript, nur fuer Menusuche; Extrasuchen unter Behavior -->
+                                <!-- welche XQL Scripte sollen fuer die Suche verwendet werden; wdb ist Standard 
+                                    Pfad: exist.hab.de/rest/db/apps/[wdb:param]/search.xql
+                                -->
+                              
+                              <!-- Volltextsuche -->
+                                <!--<wdb:param distype="results-transcript" url="edoc/ed000248/search/search.xql"/>-->
+                                <!--<wdb:param distype="results-transcript" url="wdb/search/search.xql"/>-->
+                                
+                                
+                              
+                                
+                                <!-- Anzeige Parallelsichten  -->
+                                <!-- 
+                                    wdb:parallelView:
+                                    -  @SMLINKID: Link auf die mets:smLink in mets:structLink ID="parallel_views" (hier die Dateien, die verbunden werden)
+                                    -  @f1 Prozent der Groesse des linken Fensters
+                                    -  @f2 Prozent der Groesse des rechten Fensters
+                                    -  @synctype  moegliche Werte: "pb" (Linking ueber pageID), "div", (Anzahl divisions),"sync" (explizite angabe), "none" (unverbunden)
+                                -->
+                                <!--<wdb:parallelView pvID="pv_transcript-facs1602" f1="30" f2="70" synctype="pb"/>-->
+                                <wdb:parallelView pvID="pv_transcript-facs" f1="50" f2="50" synctype="pb"/>
+                                
+                                <!-- im Kopf des Menue zu zeigende Logos -->
+                                <!--<wdb:logo owner="Uni xy" ownerLogo="xy.png" ownerSiteURL="http://xy" ownerContact="xy@xy.de"/>;  Mehrfachlogos sind zulaessig -->
+                               </wdb:parameter>
+                        </mets:xmlData>
+                    </mets:FContent>
+                </mets:file>
+            </mets:fileGrp>
+        
+        <!-- Facsimiles-->
+
+        <mets:fileGrp USE="facsimile_URL">
+            <mets:file ID="edoc_ed000248_mss_ed000210"       MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00069" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00069&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00118" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00118&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00221" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00221&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00227" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00227&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00627" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00627&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00635" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00635&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00636" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00636&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00637" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00637&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00638" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00638&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00640" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00640&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00642" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00642&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00644" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00644&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00646" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00646&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00647" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00647&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00649" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00649&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00650" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00650&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00651" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00651&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00653" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00653&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00656" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00656&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00686" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00686&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00726" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00726&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00727" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00727&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00731" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00731&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00735" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00735&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00789" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00789&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00792" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00792&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00795" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00795&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00805" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00805&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00806" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00806&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00807" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00807&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00808" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00808&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00813" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00813&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00816" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00816&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00821" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00821&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00823" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00823&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00825" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00825&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00831" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00831&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00833" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00833&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00841" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00841&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00844" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00844&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00847" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00847&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000210_00876" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000210/start.htm?image=00876&amp;distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000231"       MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000231/start.htm?distype=imgs"/></mets:file>
+            <mets:file ID="edoc_ed000248_mss_ed000233"       MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/mss/ed000233/start.htm?distype=imgs"/></mets:file>
+        </mets:fileGrp>
+
+        <!--  Übersichtslisten  -->
+        <mets:fileGrp USE="indices">
+            <!-- dynamisch -->
+            <!--
+            <mets:file ID="edoc_ed000248_index_textLang_all" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://exist.hab.de/rest/db/apps/edoc/ed000248/view/index.xql?list=textLang&amp;id=all"/></mets:file>
+            <mets:file ID="edoc_ed000248_index_textLang_D"   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://exist.hab.de/rest/db/apps/edoc/ed000248/view/index.xql?list=textLang&amp;id=D"/></mets:file>
+            <mets:file ID="edoc_ed000248_index_textLang_L"   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://exist.hab.de/rest/db/apps/edoc/ed000248/view/index.xql?list=textLang&amp;id=L"/></mets:file>
+            <mets:file ID="edoc_ed000248_index_textLang_DL"  MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://exist.hab.de/rest/db/apps/edoc/ed000248/view/index.xql?list=textLang&amp;id=DL"/></mets:file>
+            <mets:file ID="edoc_ed000248_index_textLang_LD"  MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://exist.hab.de/rest/db/apps/edoc/ed000248/view/index.xql?list=textLang&amp;id=LD"/></mets:file>
+            -->
+            <!-- statisch -->
+            <mets:file ID="edoc_ed000248_index_textLang_all" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="edoc/ed000248/html/textLang_all.html"/></mets:file>
+            <mets:file ID="edoc_ed000248_index_textLang_D"   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="edoc/ed000248/html/textLang_D.html"/></mets:file>
+            <mets:file ID="edoc_ed000248_index_textLang_L"   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="edoc/ed000248/html/textLang_L.html"/></mets:file>
+            <mets:file ID="edoc_ed000248_index_textLang_DL"  MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="edoc/ed000248/html/textLang_DL.html"/></mets:file>
+            <mets:file ID="edoc_ed000248_index_textLang_LD"  MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="edoc/ed000248/html/textLang_LD.html"/></mets:file>
+        </mets:fileGrp>
+        
+        <!--  Transkription  -->
+        <mets:fileGrp USE="transcription">
+<mets:file ID="edoc_ed000248_transcript_Brief001-D"  MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/Brief001-D_tei-transcript.xml"/></mets:file>
+        </mets:fileGrp>
+        
+        <!--  Einleitung zu einem Werk  -->
+        <mets:fileGrp USE="introduction">
+            <mets:file ID="edoc_ed000248_introduction_f001" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/tei-introduction.xml"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_1_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_1"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_1_1_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_1_1"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_1_2_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_1_2"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_1_3_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_1_3"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_2_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_2"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_2_1_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_2_1"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_2_2_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_2_2"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_2_3_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_2_3"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_3_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_3"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_3_1_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_3_1"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_3_2_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_3_2"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_3_3_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_3_3"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_3_4_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_3_4"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_4_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_4"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_4_1_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_4_1"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_4_2_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_4_2"/></mets:file>
+            <mets:file ID="edoc_ed000248_introduction_div_4_3_f001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/content.php?dir=edoc/ed000248&amp;distype=optional&amp;metsID=edoc_ed000248_introduction&amp;xml=texts%2Ftei-introduction.xml&amp;xsl=scripts/tei-introduction.xsl#div_4_3"/></mets:file>
+        </mets:fileGrp>
+        
+        <!--  Personenregister  -->
+        <mets:fileGrp USE="personenregister">
+            <mets:file ID="edoc_ed000248_personenregister_f001" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/personenregister.xml"/></mets:file>
+        </mets:fileGrp>
+        
+        <!--  Bibliography  -->
+        <mets:fileGrp USE="bibliography">
+            <mets:file ID="edoc_ed000248_bibliography_f001" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/tei-bibliography.xml"/></mets:file>
+        </mets:fileGrp>
+        <!-- Registerdateien -->
+        <!--
+        <mets:fileGrp USE="register">
+            <mets:file ID="edoc_ed000248_register_person" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="register/listPerson.xml"/></mets:file>
+            <mets:file ID="edoc_ed000248_register_bibl" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="register/listBibl.xml"/></mets:file>
+            <mets:file ID="edoc_ed000248_register_place" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="register/listPlace.xml"/></mets:file>
+            <mets:file ID="edoc_ed000248_register_itinerar" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="1635_01.xml"/></mets:file>
+        </mets:fileGrp>
+        -->
+        
+        <!-- statisches Personenregister -->
+        <!--
+        <mets:fileGrp>
+            <mets:file ID="pr" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="http://diglib.hab.de/edoc/ed000248/personenregister.html" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+        -->
+        <!--Links -->
+        <mets:fileGrp>
+            <mets:file ID="edoc_ed000248_klosterkarte_f001" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="http://www.landesgeschichte.uni-goettingen.de/kloester/" xlink:show="new" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+    </mets:fileSec>
+
+
+    <!--    Inhaltliche Struktur ######################################################################################  -->
+    <mets:structMap>
+        <mets:div>
+
+            <!-- Einleitung, praefationes *************************************************************  -->
+            <mets:div TYPE="submenu" LABEL="Einleitung" ID="edoc_ed000248_introduction" ADMID="rmd_edoc_ed000248_CC">
+                <mets:div TYPE="introduction" LABEL="Inhaltsverzeichnis" ID="edoc_ed000248_introduction_div_0" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_f001"/></mets:div>
+                <mets:div TYPE="submenu" LABEL="1. Historischer Kontext" ID="edoc_ed000248_introduction_div_1" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_1_f001"/>
+                    <mets:div TYPE="introduction" LABEL="1.1 Der Lüner Konvent und die Klosterlandschaft bis 1500 (Eva Schlotheuber)" ID="edoc_ed000248_introduction_div_1_1" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_1_1_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="1.2 Die Einführung der Reformation (Edmund Wareham Wanitzek)" ID="edoc_ed000248_introduction_div_1_2" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_1_2_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="1.3 Überlieferungskontext – Lüner Quellen des 15. und 16. Jahrhunderts (Lena Vosding)" ID="edoc_ed000248_introduction_div_1_3" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_1_3_f001"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="submenu" LABEL="2. Sozialer Kontext und Netzwerke" ID="edoc_ed000248_introduction_div_2" ADMID="rmd_edoc_ed000248_CC">
+                    <mets:div TYPE="introduction" LABEL="2.1 Einführung (Edmund Wareham Wanitzek)" ID="edoc_ed000248_introduction_div_2_1" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_2_1_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="2.2 Lüneburger Familien und Ämterkarrieren im Kloster Lüne (Philipp Trettin)" ID="edoc_ed000248_introduction_div_2_2" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_2_2_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="2.3 Die Lüner Pröpste und ihre Netzwerke (Philipp Stenzig)" ID="edoc_ed000248_introduction_div_2_3" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_2_3_f001"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="submenu" LABEL="3. Bildung und sprachlicher Kontext" ID="edoc_ed000248_introduction_div_3" ADMID="rmd_edoc_ed000248_CC">
+                    <mets:div TYPE="introduction" LABEL="3.1 Die Ausbildung der Nonnen (Eva Schlotheuber)" ID="edoc_ed000248_introduction_div_3_1" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_3_1_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="3.2 Zweisprachigkeit und literarische Verarbeitung (Henrike Lähnemann)" ID="edoc_ed000248_introduction_div_3_2" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_3_2_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="3.3 Schriftsprachliche Besonderheiten der niederdeutsch abgefassten Lüner Briefe (Simone Schultz-Balluff / Timo Bülters)" ID="edoc_ed000248_introduction_div_3_3" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_3_3_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="3.4 Die Rhetorik der Nonnen (Lena Vosding)" ID="edoc_ed000248_introduction_div_3_4" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_3_4_f001"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="submenu" LABEL="4. Edition" ID="edoc_ed000248_introduction_div_4" ADMID="rmd_edoc_ed000248_CC">
+                    <mets:div TYPE="introduction" LABEL="4.1 Beschreibung der Hs. 15 (Lena Vosding)" ID="edoc_ed000248_introduction_div_4_1" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_4_1_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="4.2 Editionsprinzipien für die gedruckte und die digitale Edition (Lena Vosding)" ID="edoc_ed000248_introduction_div_4_2" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_4_2_f001"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="4.3 Technische Umsetzung und Webpräsentation (Wolfgang Seifert)" ID="edoc_ed000248_introduction_div_4_3" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_introduction_div_4_3_f001"/></mets:div>
+                </mets:div>
+            </mets:div>
+          
+
+            <!-- Faksimiles ************************************************* -->
+            <!-- Faksimile -->
+            <mets:div TYPE="submenu" LABEL="Digitalisate" ID="edoc_ed000248_dig">
+                <mets:div TYPE="facsimile" LABEL="Kloster Lüne, Hs. 15" ID="edoc_ed000248_facsimile_mss_ed000210" ADMID="rmd_edoc_ed000248_restricted">
+                    <mets:fptr FILEID="edoc_ed000248_mss_ed000210"/>
+                </mets:div>
+                <mets:div TYPE="facsimile" LABEL="Kloster Lüne, Hs. 30" ID="edoc_ed000248_facsimile_mss_ed000231" ADMID="rmd_edoc_ed000248_restricted">
+                    <mets:fptr FILEID="edoc_ed000248_mss_ed000231"/>
+                </mets:div>
+                <mets:div TYPE="facsimile" LABEL="Kloster Lüne, Hs. 31" ID="edoc_ed000248_facsimile_mss_ed000233" ADMID="rmd_edoc_ed000248_restricted">
+                    <mets:fptr FILEID="edoc_ed000248_mss_ed000233"/>
+                </mets:div>
+            </mets:div>
+            <!--  Einleitungen , Transkriptionen **************************************************** -->
+           
+            <mets:div TYPE="submenu" LABEL="Briefe" ID="edoc_ed000248_index_Briefe_list">
+                <mets:div TYPE="transcript"     LABEL="alle"                                        ID="edoc_ed000248_index_Briefe_textLang_all"  ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_index_textLang_all"/></mets:div>
+                <mets:div TYPE="submenu"        LABEL="nach Sprachen"                               ID="edoc_ed000248_index_Briefe_textLang">
+                    <mets:div TYPE="transcript" LABEL="Mittelniederdeutsch"                         ID="edoc_ed000248_index_Briefe_textLang_D"  ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_index_textLang_D"/></mets:div>
+                    <mets:div TYPE="transcript" LABEL="Lateinisch"                                  ID="edoc_ed000248_index_Briefe_textLang_L"  ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_index_textLang_L"/></mets:div>
+                    <mets:div TYPE="transcript" LABEL="gemischt (mehrheitlich Mittelniederdeutsch)" ID="edoc_ed000248_index_Briefe_textLang_DL" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_index_textLang_DL"/></mets:div>
+                    <mets:div TYPE="transcript" LABEL="gemischt (mehrheitlich Lateinisch)"          ID="edoc_ed000248_index_Briefe_textLang_LD" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_index_textLang_LD"/></mets:div>
+                </mets:div>
+            </mets:div>
+            
+            <!-- Personendatei *************************************************************  -->
+            <mets:div TYPE="personenregister" LABEL="Personenregister" ID="edoc_ed000248_personenregister" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_personenregister_f001"/></mets:div>
+            
+            <!--<mets:div TYPE="transcript" LABEL="Itinerar" ID="edoc_ed000248_itinerar_sm" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_register_itinerar"/></mets:div>-->
+            <!--<mets:div LABEL="Materialien" ID="edoc_ed000248_link" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="FID1"/></mets:div>-->
+                
+            <!--<mets:div TYPE="transcript" LABEL="Personenregister" ID="edoc_ed000248_static_personenregister_sm" ADMID="rmd_edoc_ed000248_CC">
+                <mets:fptr FILEID="pr"/></mets:div>-->
+            
+            <!--  Uebersetzung *************************************************************** -->
+            <!--  Bibliographie ************************************************************** -->
+            <mets:div TYPE="bibliography" LABEL="Abkürzungen, Bibliographie" ID="edoc_ed000248_bibliography" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_bibliography_f001"/></mets:div>
+            <!--  Register ******************************************************************* -->
+            <!--  Links ************************************************************** -->
+            <mets:div TYPE="links" LABEL="Niedersächsische Klosterkarte (externer Link)" ID="edoc_ed000248_klosterkarte" ADMID="rmd_edoc_ed000248_CC"><mets:fptr FILEID="edoc_ed000248_klosterkarte_f001"/></mets:div>
+            <!--  Revision ******************************************************************* -->
+            
+        </mets:div>
+    </mets:structMap>
+    
+    <!--  Behavior Section ######################################################################################  -->
+    <!--  
+        Innerhab der Behavior-Sections werden verschwiedene technische Anzeigeformate definiert.
+        Unterschiedliche inhaltliche Sichten auf diesselbe Dateien erhalten eine eigene Behavior Section.
+    -->
+           
+    <mets:behaviorSec ID="edoc_ed000248">
+        <!--<mets:behavior ID="edoc_ed000248_intro_001" STRUCTID="edoc_ed000248_introduction" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/tei-transcript.xsl"/></mets:behavior>-->
+        <mets:behavior ID="edoc_ed000248_index_Briefe" STRUCTID="edoc_ed000248_index_Briefe_list" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000248_index_Briefe-textLang" STRUCTID="edoc_ed000248_index_Briefe_textLang" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000248_personenregister_b" STRUCTID="edoc_ed000248_personenregister" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/personenregister.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000248_introduction_b" STRUCTID="edoc_ed000248_introduction" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/tei-introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000248_bibliography_b" STRUCTID="edoc_ed000248_bibliography" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/bibliography.xsl"/></mets:behavior>
+    </mets:behaviorSec>
+    
+</mets:mets>

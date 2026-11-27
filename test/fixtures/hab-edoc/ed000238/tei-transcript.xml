@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:lang="deu"
+    xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://diglib.hab.de/rules/schema/teiP5/tei-p5-transcr.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.tei-c.org/ns/1.0" xml:id="edoc_ed000238">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>"Die Wittenbergisch Nachtigall"</title>
+                <author>Hans Sachs</author>
+                <respStmt>
+                    <resp>Transkribiert von</resp>
+                    <name type="person">Timo Steyer</name>
+                    <name type="person">Charlotte Hartmann</name>
+                </respStmt>
+            </titleStmt>
+            <editionStmt>
+                <edition>
+                    <date>28.08.2015</date>
+                </edition>
+            </editionStmt>
+            <publicationStmt>
+                <distributor>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>       
+                </distributor>
+                <idno type="werk-ID"></idno>
+                <idno type="Signatur">A: 115.2 Quod. (16)</idno>
+                <authority>
+                    <name>Herzog August Bibliothek</name>
+                    <name>MWW-Forschungsverbund</name>
+                </authority>
+                <availability status="restricted">
+                    <p>Herzog August Bibliothek Wolfenbüttel 
+                        (<ref target="http://diglib.hab.de/?link=012">copyright information</ref>)</p>
+                </availability>
+                <availability status="free">
+                    <p> Sofern nicht anders angegeben </p><licence target="http://creativecommons.org/licenses/by/4.0/">CC BY SA 3.0</licence>                 
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <bibl>
+                        <author>Hans Sachs</author>
+                        <title>Die Wittembergisch Nachtigall<lb/>
+                            Die man yetz höret uberall.</title>
+                            <publisher>Georg Erlinger</publisher>
+                            <pubPlace>Nürnberg</pubPlace>
+                            <date>1523</date>  
+                    <note>
+                        Grundlage der Transkription ist der Druck der Herzog August Bibliothek Wolfenbüttel, Signatur A: 115.2 Quod. (16)
+                    </note>
+                </bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <editorialDecl>               
+                    <p>
+                        Die Transkription ist in einer gemäßigt normalisierten Fassung verfügbar. Es wurden folgende Veränderungen vorgenommen:</p>
+                    <p>
+                        <list>
+                            <item>"ſ" wird stets mit "s" wiedergegeben</item>
+                            <item>"u" &amp; "v" sowie "i" &amp; "j" werden gemäß der phonologischen Entsprechung unterschieden.</item>
+                            <item>Die Umlaute sind mit "ä", "ö" und "ü" transkribiert.</item>
+                            <item>Die Abkürzungen wurden aufgelöst.</item>
+                            <item>Eindeutige Druckfehler wurden korrigiert, die entsprechenden Änderungen sind grafisch durch Unterstreichung gekennzeichnet.</item>
+                        </list>
+                    </p>             
+            </editorialDecl>
+        </encodingDesc>
+    </teiHeader>
+
+    <text>
+        <body>
+            <div>
+                <pb n="2r" facs="00003"/>
+                <head>
+                    <l>Allen liebhabern e<choice><orig>u</orig><reg>v</reg></choice>angeli<choice><orig>ſ</orig><reg>s</reg></choice>cher warheyt</l>
+                    <l>wun<choice><orig>ſ</orig><reg>s</reg></choice>ch ich Johannes Sachs <choice><orig>ſ</orig><reg>s</reg></choice>ch<choice><abbr>uͦ</abbr><expan>uo</expan></choice>macher gnad</l>
+                    <l><choice><orig>v</orig><reg>u</reg></choice>nd fryd in chri<choice><orig>ſ</orig><reg>s</reg></choice>to Jhe<choice><orig>ſ</orig><reg>s</reg></choice>u <choice><orig>v</orig><reg>u</reg></choice>n<choice><orig>ſ</orig><reg>s</reg></choice>erm herren.</l>
+                </head>
+                <lg>
+                    <l><hi rend="initiale">I</hi>R au<choice><orig>ſ</orig><reg>s</reg></choice>erwelt<choice><abbr>ẽ</abbr><expan>en</expan></choice> in chri<choice><orig>ſ</orig><reg>s</reg></choice>to / aller meniglich i<choice><orig>ſ</orig><reg>s</reg></choice>t <choice><orig>v</orig><reg>u</reg></choice>n<choice><orig>u</orig><reg>v</reg></choice>erborg<choice><abbr>ẽ</abbr><expan>en</expan></choice></l>
+                    <l>in teut<choice><orig>ſ</orig><reg>s</reg></choice>cher nation / wie die chri<choice><orig>ſ</orig><reg>s</reg></choice>tlich gemeyn / etwann</l>
+                    <l>lang her vil jar durch men<choice><orig>ſ</orig><reg>s</reg></choice>ch<choice><abbr>ẽ</abbr><expan>en</expan></choice>leer etlicher Sophi<choice><orig>ſ</orig><reg>s</reg></choice>ten</l>
+                    <l>abgef<choice><abbr>uͤ</abbr><reg>ü</reg></choice>rt i<choice><orig>ſ</orig><reg>s</reg></choice>t word<choice><abbr>ẽ</abbr><expan>en</expan></choice> von <choice><abbr>Ȣ</abbr><expan>der</expan></choice> warhaft<choice><abbr>ẽ</abbr><expan>en</expan></choice> freyheit des heilig<choice><abbr>ẽ</abbr><expan>en</expan></choice> e<choice><orig>u</orig><reg>v</reg></choice>an-</l>
+                    <l>geli<choice><abbr>ũ</abbr><expan>um</expan></choice> / <choice><orig>v</orig><reg>u</reg></choice>nder <choice><abbr>dz</abbr><expan>daz</expan></choice> f<choice><abbr>w</abbr><expan>eu</expan></choice>er joch des r<choice><abbr>oͤ</abbr><reg>ö</reg></choice>mi<choice><orig>ſ</orig><reg>s</reg></choice>ch<choice><abbr>ẽ</abbr><expan>en</expan></choice> bi<choice><orig>ſ</orig><reg>s</reg></choice>choffs / welcher <choice><orig>v</orig><reg>u</reg></choice>ns</l>
+                    <l><choice><orig>v</orig><reg>u</reg></choice>berladen hat / mit vil gebotten <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> gese<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice>en  von welchen <choice><orig>v</orig><reg>u</reg></choice>ns</l>
+                    <l>doch chri<choice><orig>ſ</orig><reg>s</reg></choice>tus <choice><orig>v</orig><reg>u</reg></choice>n<choice><orig>ſ</orig><reg>s</reg></choice>er einiger leermei<choice><orig>ſ</orig><reg>s</reg></choice>ter nicht geboten noch ge</l>
+                    <l>leert hat <choice><orig>ſ</orig><reg>s</reg></choice>onder <choice><orig>ſ</orig><reg>s</reg></choice>olch men<choice><orig>ſ</orig><reg>s</reg></choice>chliche tradition verworffen / wa<choice><abbr>ñ</abbr><expan>nn</expan></choice></l>
+                    <l>er <choice><orig>ſ</orig><reg>s</reg></choice>pricht Mathey am xv. vergebens dien<choice><abbr>ẽ</abbr><expan>en</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>y mir in m<choice><abbr>ẽ</abbr><expan>en</expan></choice><choice><orig>ſ</orig><reg>s</reg></choice>chen</l>
+                    <note place="margin-right"><ref type="biblical" cRef="Mt_15">Math. xv</ref></note>
+                    <l>ge<choice><orig>ſ</orig><reg>s</reg></choice>e<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice>en / <choice><orig>v</orig><reg>u</reg></choice>nd kür<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice>lich hernach alle pflan<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice>ung die got mein</l>
+                    <l>hymli<choice><orig>ſ</orig><reg>s</reg></choice>cher vater / nit gepflantzet hat wirt außgereut / lat <choice><orig>ſ</orig><reg>s</reg></choice>y</l>
+                    <l>faren die plinden / plinden leytter / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>olcher <choice><orig>ſ</orig><reg>s</reg></choice>prüch <choice><orig>ſ</orig><reg>s</reg></choice>eynd vil</l>
+                    <l>im e<choice><orig>u</orig><reg>v</reg></choice>angely / wy<choice><abbr>Ȣ</abbr><expan>der</expan></choice> die men<choice><orig>ſ</orig><reg>s</reg></choice>chen <choice><orig>ſ</orig><reg>s</reg></choice>ünt <choice><orig>v</orig><reg>u</reg></choice>nd gepot / aber wir als</l>
+                    <l>veryrte <choice><orig>ſ</orig><reg>s</reg></choice>chefflein / <choice><orig>ſ</orig><reg>s</reg></choice>olcher heyl<choice><orig>ſ</orig><reg>s</reg></choice>amen leer <choice><orig>v</orig><reg>u</reg></choice>nbedacht / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>chyr</l>
+                    <l>gan<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice> verge<choice><orig>ſſ</orig><reg>ss</reg></choice>en / <choice><orig>ſ</orig><reg>s</reg></choice>ind gangen <choice><orig>v</orig><reg>u</reg></choice>nder dem r<choice><abbr>oͤ</abbr><reg>ö</reg></choice>mi<choice><orig>ſ</orig><reg>s</reg></choice>chen joch / mit</l>
+                    <l><choice><orig>ſ</orig><reg>s</reg></choice>chwerer mue <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> gro<choice><orig>ſſ</orig><reg>ß</reg></choice>en <choice><orig>ſ</orig><reg>s</reg></choice>chaden je lenger je mer / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> han dar</l>
+                    <l>durch <choice><abbr>dz</abbr><expan>daz</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>enft joch chri<choice><orig>ſ</orig><reg>s</reg></choice>ti verla<choice><orig>ſſ</orig><reg>s</reg></choice>en / welches <choice><orig>v</orig><reg>u</reg></choice>ns chri<choice><orig>ſ</orig><reg>s</reg></choice>tus <choice><orig>v</orig><reg>u</reg></choice>n-</l>
+                    <l><choice><orig>ſ</orig><reg>s</reg></choice>er <choice><orig>ſ</orig><reg>s</reg></choice>eligmacher befolhen hat / <choice><abbr>dz</abbr><expan>daz</expan></choice> i<choice><orig>ſ</orig><reg>s</reg></choice>t der einig gelaub in chri<choice><orig>ſ</orig><reg>s</reg></choice>to /</l>
+                    <note place="margin-right"><ref type="biblical" cRef="Mt_11">Math. xi.</ref></note>
+                    <l>welches i<choice><orig>ſ</orig><reg>s</reg></choice>t das einig gotlich werck / als chri<choice><orig>ſ</orig><reg>s</reg></choice>tus <choice><orig>ſ</orig><reg>s</reg></choice>agt joha<choice><abbr>ñ</abbr><expan>nn</expan></choice>is</l>
+                    <note place="margin-right"><ref type="biblical" cRef="Io_6">Johann. vi.</ref></note>
+                    <l>am <choice><orig>ſ</orig><reg>s</reg></choice>ech<choice><orig>ſ</orig><reg>s</reg></choice>ten. Zum andern i<choice><orig>ſ</orig><reg>s</reg></choice>t bey <choice><orig>v</orig><reg>u</reg></choice>ns <choice><orig>v</orig><reg>u</reg></choice>nter gang<choice><abbr>ẽ</abbr><expan>en</expan></choice> / die fruch-</l>
+                    <l>bar lieb des nech<choice><orig>ſ</orig><reg>s</reg></choice>ten / in welcher doch allein <choice><orig>ſ</orig><reg>s</reg></choice>teet die erfüll<choice><abbr>ũ</abbr><expan>un</expan></choice>g</l>
+                    <l>des gebot gotes / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> <choice><abbr>Ȣ</abbr><expan>der</expan></choice> propheten / wie chri<choice><orig>ſ</orig><reg>s</reg></choice>tus <choice><orig>ſ</orig><reg>s</reg></choice>pricht <choice><abbr>Ȣ</abbr><expan>der</expan></choice> m<choice><abbr>ũ</abbr><expan>un</expan></choice>d</l>
+                    <l>der warheit  / mathey am <choice><orig>ſ</orig><reg>s</reg></choice>ybend<choice><abbr>ẽ</abbr><expan>en</expan></choice>. Al<choice><orig>ſ</orig><reg>s</reg></choice>o <choice><orig>ſ</orig><reg>s</reg></choice>ey wir allein peiniget</l>
+                    <note place="margin-right"><ref type="biblical" cRef="Mt_7">Math. vii.</ref></note>
+                    <l>gewe<choice><orig>ſ</orig><reg>s</reg></choice>t in den wercken die got nye gehei<choice><orig>ſſ</orig><reg>ß</reg></choice>en noch gepoten hat /</l>
+                    <l><choice><orig>ſ</orig><reg>s</reg></choice>onder die men<choice><orig>ſ</orig><reg>s</reg></choice>chen erticht <choice><orig>v</orig><reg>u</reg></choice>nd erfunden haben / Nach dem</l>
+                    <l>aber vorgemelt r<choice><abbr>oͤ</abbr><reg>ö</reg></choice>mi<choice><orig>ſ</orig><reg>s</reg></choice>ch b<choice><abbr>oͤ</abbr><reg>ö</reg></choice>ß regiment / <choice><orig>ſ</orig><reg>s</reg></choice>o gar <choice><orig>v</orig><reg>u</reg></choice>berhand ge-</l>
+                    <l>nomen / da hat angefangen z<choice><abbr>uͦ</abbr><expan>uo</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>chreyben / doctor Martinus</l>
+                    <l>luther / wy<choice><abbr>Ȣ</abbr><expan>der</expan></choice> vil <choice><orig>j</orig><reg>i</reg></choice>rthu<choice><abbr>m̃</abbr><expan>m</expan></choice> <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> mißbreuch / des gei<choice><orig>ſ</orig><reg>s</reg></choice>tlich<choice><abbr>ẽ</abbr><expan>en</expan></choice> regimen<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice></l>
+                    <l><choice><orig>v</orig><reg>u</reg></choice>nange<choice><orig>ſ</orig><reg>s</reg></choice>ch<choice><abbr>ẽ</abbr><expan>en</expan></choice> einicher per<choice><orig>ſ</orig><reg>s</reg></choice>on / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> das heylig e<choice><orig>u</orig><reg>v</reg></choice>angeli<choice><orig>ſ</orig><reg>s</reg></choice> / <choice><abbr>dz</abbr><expan>daz</expan></choice> wort</l>
+                    <l>gottes (welches vor durch men<choice><orig>ſ</orig><reg>s</reg></choice>ch<choice><abbr>ẽ</abbr><expan>en</expan></choice> leer verdunckelt war) wy<choice><abbr>Ȣ</abbr><expan>der</expan></choice></l>
+                </lg>
+                <pb n="2v" facs="00004"/>
+                <lg>
+                    <l><choice><orig>v</orig><reg>u</reg></choice>mb clar <choice><orig>v</orig><reg>u</reg></choice>nfermi<choice><orig>ſ</orig><reg>s</reg></choice>cht / an den tag gegeb<choice><abbr>ẽ</abbr><expan>en</expan></choice> / deßhalb er v<choice><abbr>õ</abbr><expan>on</expan></choice> dem</l>
+                    <l>r<choice><abbr>oͤ</abbr><reg>ö</reg></choice>mi<choice><orig>ſ</orig><reg>s</reg></choice>chen bi<choice><orig>ſ</orig><reg>s</reg></choice>choff offt z<choice><abbr>uͦ</abbr><expan>uo</expan></choice> wyderruffen gedrung<choice><abbr>ẽ</abbr><expan>en</expan></choice> i<choice><orig>ſ</orig><reg>s</reg></choice>t worden /</l>
+                    <l>yedoch i<choice><orig>ſ</orig><reg>s</reg></choice>t er almal / als ein <choice><orig>v</orig><reg>u</reg></choice>nuberwundner (mitt heyliger</l>
+                    <l><choice><orig>ſ</orig><reg>s</reg></choice>chrifft) vor bek<choice><abbr>ã</abbr><expan>an</expan></choice>ter warheit / <choice><orig>v</orig><reg>u</reg></choice>nwy<choice><abbr>Ȣ</abbr><expan>der</expan></choice>r<choice><abbr>uͤ</abbr><reg>ü</reg></choice>fft beliben / des gleich<choice><abbr>ẽ</abbr><expan>en</expan></choice></l>
+                    <l>hab<choice><abbr>ẽ</abbr><expan>en</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>ich vil doctores gegen <choice><orig>j</orig><reg>i</reg></choice>m mit <choice><orig>ſ</orig><reg>s</reg></choice>chreib<choice><abbr>ẽ</abbr><expan>en</expan></choice> eingelegt / yedoch</l>
+                    <l>auch nichs außgericht wann die g<choice><abbr>oͤ</abbr><reg>ö</reg></choice>tlich warheyt / i<choice><orig>ſ</orig><reg>s</reg></choice>t in z<choice><abbr>uͦ</abbr><expan>uo</expan></choice></l>
+                    <l><choice><orig>ſ</orig><reg>s</reg></choice>tarck gewe<choice><orig>ſ</orig><reg>s</reg></choice>t / <choice><orig>ſ</orig><reg>s</reg></choice>onder <choice><orig>ſ</orig><reg>s</reg></choice>ind <choice><orig>ſ</orig><reg>s</reg></choice>iglos an <choice><orig>j</orig><reg>i</reg></choice>m wordenn / deshalb i<choice><orig>ſ</orig><reg>s</reg></choice>t</l>
+                    <l>egemelter doctor martinus luther / in gro<choice><orig>ſſ</orig><reg>ß</reg></choice>en beruff ko<choice><abbr>m̃</abbr><expan>mm</expan></choice>en /</l>
+                    <l>gen allermenigklich / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>ein leer angenomen als / e<choice><orig>u</orig><reg>v</reg></choice>angeli<choice><orig>ſ</orig><reg>s</reg></choice>ch</l>
+                    <l>chri<choice><orig>ſ</orig><reg>s</reg></choice>tlich / <choice><orig>v</orig><reg>u</reg></choice>nd gut / Nachmalß aber i<choice><orig>ſ</orig><reg>s</reg></choice>t <choice><abbr>Ȣ</abbr><expan>der</expan></choice> r<choice><abbr>oͤ</abbr><reg>ö</reg></choice>mi<choice><orig>ſ</orig><reg>s</reg></choice>ch hauff ver-</l>
+                    <l>zweyfelt / an der <choice><orig>v</orig><reg>u</reg></choice>berwindung / mit dißpudiren / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>chreyben</l>
+                    <l><choice><orig>v</orig><reg>u</reg></choice>nd wollen die chri<choice><orig>ſ</orig><reg>s</reg></choice>tlich gemein  <choice><orig>v</orig><reg>u</reg></choice>nder dem r<choice><abbr>oͤ</abbr><reg>ö</reg></choice>mi<choice><orig>ſ</orig><reg>s</reg></choice>ch<choice><abbr>ẽ</abbr><expan>en</expan></choice> joch be-</l>
+                    <l>halten / mit <choice><orig>ſ</orig><reg>s</reg></choice>chmehen / le<choice><orig>ſ</orig><reg>s</reg></choice>tern / pa<choice><abbr>ñ</abbr><expan>nn</expan></choice>en / verpieten / verfolg<choice><abbr>ẽ</abbr><expan>en</expan></choice> / ver</l>
+                    <l>prennen / begweltigen / welche weyß doch ein b<choice><abbr>oͤ</abbr><reg>ö</reg></choice>ß an<choice><orig>ſ</orig><reg>s</reg></choice>ehen hat /</l>
+                    <l><choice><orig>v</orig><reg>u</reg></choice>nd argwenig i<choice><orig>ſ</orig><reg>s</reg></choice>t / <choice><orig>v</orig><reg>u</reg></choice>ngerechter <choice><orig>ſ</orig><reg>s</reg></choice>ach. ¶ Nun von dy<choice><orig>ſ</orig><reg>s</reg></choice>en ange-</l>
+                    <l>zeygten <choice><orig>ſ</orig><reg>s</reg></choice>tucken allen will ich in einer <choice><orig>ſ</orig><reg>s</reg></choice>u<choice><abbr>m̃</abbr><expan>mm</expan></choice> / ein kur<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice>e erkler<choice><abbr>ũ</abbr><expan>un</expan></choice>g</l>
+                    <l>thon dem gemein<choice><abbr>ẽ</abbr><expan>en</expan></choice> man (<choice><orig>ſ</orig><reg>s</reg></choice>olcher handlung <choice><orig>v</orig><reg>u</reg></choice>nwi<choice><orig>ſſ</orig><reg>ss</reg></choice>ent) z<choice><abbr>uͦ</abbr><expan>uo</expan></choice> <choice><orig>v</orig><reg>u</reg></choice>n<choice><abbr>Ȣ</abbr><expan>der</expan></choice></l>
+                    <l>wey<choice><orig>ſ</orig><reg>s</reg></choice>en <choice><orig>v</orig><reg>u</reg></choice>nd leeren / darauß er mug erkennen die gotlich war-</l>
+                    <l>heit <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> dargegen die men<choice><orig>ſ</orig><reg>s</reg></choice>chlichen lug<choice><abbr>ẽ</abbr><expan>en</expan></choice> dari<choice><abbr>ñ</abbr><expan>nn</expan></choice> wir gewandert</l>
+                    <l>haben. ¶ Zum andern den / <choice><orig>ſ</orig><reg>s</reg></choice>o die g<choice><abbr>oͤ</abbr><reg>ö</reg></choice>tlich warheit vor erkant</l>
+                    <l>haben / die z<choice><abbr>uͦ</abbr><expan>uo</expan></choice> ermanen / der g<choice><abbr>uͤ</abbr><reg>ü</reg></choice>tigen genad gottes / der <choice><orig>v</orig><reg>u</reg></choice>ns <choice><orig>ſ</orig><reg>s</reg></choice>o</l>
+                    <l>reichlichen mit geteylt hat die offenbarung des heilig<choice><abbr>ẽ</abbr><expan>en</expan></choice> e<choice><orig>u</orig><reg>v</reg></choice>an-</l>
+                    <l>gelium / in dy<choice><orig>ſ</orig><reg>s</reg></choice>en le<choice><orig>ſ</orig><reg>s</reg></choice>ten geferlich<choice><abbr>ẽ</abbr><expan>en</expan></choice> zeyten / auf das <choice><orig>ſ</orig><reg>s</reg></choice>y <choice><orig>j</orig><reg>i</reg></choice>m herlich</l>
+                    <l>danck<choice><orig>ſ</orig><reg>s</reg></choice>agen. ¶ Z<choice><abbr>uͦ</abbr><expan>uo</expan></choice> dem dritten den / die <choice><orig>ſ</orig><reg>s</reg></choice>olches wort gotes nit</l>
+                    <l>annemen / <choice><orig>ſ</orig><reg>s</reg></choice>on<choice><abbr>Ȣ</abbr><expan>der</expan></choice> veracht<choice><abbr>ẽ</abbr><expan>en</expan></choice> / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> zum teyl verfolg<choice><abbr>ẽ</abbr><expan>en</expan></choice> / ob <choice><orig>ſ</orig><reg>s</reg></choice>y <choice><abbr>Ȣ</abbr><expan>der</expan></choice> barm-</l>
+                    <l>her<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice>ig got auch erleuchtet <choice><abbr>dz</abbr><expan>daz</expan></choice> <choice><orig>ſ</orig><reg>s</reg></choice>y annemen das tro<choice><orig>ſ</orig><reg>s</reg></choice>tlich e<choice><orig>u</orig><reg>v</reg></choice>an</l>
+                    <l>gelium / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> ablie<choice><orig>ſſ</orig><reg>ß</reg></choice>en v<choice><abbr>õ</abbr><expan>on</expan></choice> dem fal<choice><orig>ſ</orig><reg>s</reg></choice>chen vertrauen / z<choice><abbr>uͦ</abbr><expan>uo</expan></choice> erlang<choice><abbr>ẽ</abbr><expan>en</expan></choice> die</l>
+                    <l><choice><orig>ſ</orig><reg>s</reg></choice>eligkeit / mit <choice><orig>j</orig><reg>i</reg></choice>ren <choice><orig>ſ</orig><reg>s</reg></choice>elberdicht<choice><abbr>ẽ</abbr><expan>en</expan></choice> wercken in welchen got kein ge-</l>
+                    <l>fallen hat / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> li<choice><orig>ſſ</orig><reg>ß</reg></choice>en die er der <choice><orig>ſ</orig><reg>s</reg></choice>eligmachung allein chri<choice><orig>ſ</orig><reg>s</reg></choice>to <choice><orig>v</orig><reg>u</reg></choice>n-</l>
+                    <l><choice><orig>ſ</orig><reg>s</reg></choice>erm herren / welches v<choice><abbr>õ</abbr><expan>on</expan></choice> got <choice><orig>v</orig><reg>u</reg></choice>ns geb<choice><abbr>ẽ</abbr><expan>en</expan></choice> i<choice><orig>ſ</orig><reg>s</reg></choice>t / zur weyßheit / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> zur</l>
+                    <l>gerechtigkeit <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> z<choice><abbr>uͦ</abbr><expan>uo</expan></choice>r heiligung / <choice><orig>v</orig><reg>u</reg></choice><choice><abbr>ñ</abbr><expan>nd</expan></choice> erl<choice><abbr>oͤ</abbr><reg>ö</reg></choice><choice><orig>ſ</orig><reg>s</reg></choice>ung / wie paulus zum</l>
+                    <note place="margin-left"><ref type="biblical" cRef="1.Cor_1">Pau. i. Cor. i.</ref></note>
+                    <l>Corintern in der er<choice><orig>ſ</orig><reg>s</reg></choice>t<choice><abbr>ẽ</abbr><expan>en</expan></choice> epi<choice><orig>ſ</orig><reg>s</reg></choice>tel am er<choice><orig>ſ</orig><reg>s</reg></choice>ten capitel be<choice><orig>ſ</orig><reg>s</reg></choice>chreibt / <choice><orig>v</orig><reg>u</reg></choice>ff</l>
+                    <l><choice><abbr>dz</abbr><expan>daz</expan></choice> al<choice><orig>ſ</orig><reg>s</reg></choice>o wir <choice><orig>ſ</orig><reg>s</reg></choice>emptlilch miteinan<choice><abbr>Ȣ</abbr><expan>der</expan></choice> anhieng<choice><abbr>ẽ</abbr><expan>en</expan></choice> dem ewig<choice><abbr>ẽ</abbr><expan>en</expan></choice> / einig<choice><abbr>ẽ</abbr><expan>en</expan></choice></l>
+                    <l>wort gottes <choice><orig>v</orig><reg>u</reg></choice>n<choice><orig>u</orig><reg>v</reg></choice>ermi<choice><orig>ſ</orig><reg>s</reg></choice>cht <choice><orig>v</orig><reg>u</reg></choice>nd al<choice><orig>ſ</orig><reg>s</reg></choice>o wir ein <choice><orig>ſ</orig><reg>s</reg></choice>chaff<choice><orig>ſ</orig><reg>s</reg></choice>tal wurden</l>
+                    <l><choice><orig>v</orig><reg>u</reg></choice>n<choice><orig>ſ</orig><reg>s</reg></choice>ers hirten ihe<choice><orig>ſ</orig><reg>s</reg></choice>u chri<choice><orig>ſ</orig><reg>s</reg></choice>t des lebendig<choice><abbr>ẽ</abbr><expan>en</expan></choice> gottes <choice><orig>ſ</orig><reg>s</reg></choice>un von y<choice><abbr>&#xA729;</abbr><expan>tz</expan></choice> an</l>
+                    <l>in ewygkeyt Amen.</l>  
+                </lg>
+            </div>
+        </body>
+    </text>
+</TEI>
