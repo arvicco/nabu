@@ -206,12 +206,12 @@ class CorpusCoranicumManuscriptsTest < Minitest::Test
     end
   end
 
-  def test_registered_unwired_requiring_the_clone_source
+  def test_registered_wired_requiring_the_clone_source
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["corpus-coranicum-manuscripts"]
     refute_nil entry
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired only after the verified first sync"
+    assert entry.wired, "wired since the verified first sync"
     assert_equal ["corpus-coranicum"], entry.requires
     assert_equal ADAPTER.manifest, entry.manifest
   end

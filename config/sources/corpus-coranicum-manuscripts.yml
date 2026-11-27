@@ -7,9 +7,9 @@ corpus-coranicum-manuscripts:   # 02-sources row 446
                    # this source reads data/quran_manuscripts/ in that tree
                    # and its own canonical dir holds only the pin record.
   axes: [arabic]
-  wired: false   # first sync not yet run; expected exact: 193 documents /
+  wired: true    # first sync verified 2026-11-27, exact: 193 documents /
                  # 32,182 passages (31,730 verses + 452 sura headings),
-                 # 2,129 records skipped by rule, 0 unrecognized
+                 # 2,129 records skipped by rule, 0 unrecognized, 0 errored
   sync_policy: manual   # the clone is one frozen commit (57cb2b7), pinned with corpus-coranicum
   # Corpus Coranicum (Berlin-Brandenburgische Akademie der Wissenschaften,
   # 2007–2024; the TELOTA TEI export, github.com/telota/corpus-coranicum-tei):

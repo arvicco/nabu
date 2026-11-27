@@ -92,7 +92,7 @@ ancient-near-east:
 ugarit: [rsti]
 hebrew-aramaic: [oshb, bhsa, dss, extrabiblical, etcbc-targum, sefaria, iip, dtucph-sp, dicta-bavli, dicta-library, pgp-geniza, ben-yehuda]
 elephantine: [elephantine]
-arabic-persian: [openiti, ganjoor, diccas, corpus-coranicum, quranic-corpus]
+arabic-persian: [openiti, ganjoor, diccas, corpus-coranicum, quranic-corpus, corpus-coranicum-manuscripts, corpus-coranicum-variants]
 iranian-silk-road: [iedc, skjaervo-khotanese, shkz, perseus-farsilit]
 turkic-mongolic: [atmo, altaica-shm, mnc-wikisource, shiratori-shm, mongolic-pd]
 egyptian: [aes, tla-hf]

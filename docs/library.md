@@ -2688,9 +2688,11 @@ Berlin-Brandenburg Academy's Corpus Coranicum project: 114 suras and
 words carries Rafael Talmon's grammatical analysis as the project edited
 it — transliteration, base, root, part of speech, pattern and
 inflection, with the alternative analyses where the concordance gives
-more than one. Search matches with or without the vowel signs. The
-project's commentary, intertexts, manuscript descriptions and variant
-readings are in the same export and are not yet taken. CC BY-SA 4.0.
+more than one. Search matches with or without the vowel signs, and
+`show --roots` steps from each word to its root's entries in Lane's
+lexicon. The project's manuscripts and variant readings are the two
+shelves below; its commentary and intertexts are in the same export and
+are not yet taken. CC BY-SA 4.0.
 
 **`quranic-corpus`** — the Quranic Arabic Corpus (Kais Dukes, University
 of Leeds), morphology version 0.4: the whole Quran word by word, each
@@ -2701,3 +2703,27 @@ as the corpus gives it. Of its 1,642 roots, 1,603 are headed in Lane's
 lexicon once hamza seats, doubled radicals and weak letters are folded.
 Held for local research only: the corpus's terms allow verbatim copies
 with credit, and no changes.
+
+**`corpus-coranicum-manuscripts`** — the Qurʾān manuscripts of the
+Corpus Coranicum project, word by word: the project's rasm
+transcriptions of 193 manuscripts, from the ḥiǧāzī parchments of the
+first Islamic century (British Library Or. 2165, the qāf 47 codex in
+Cairo and Berlin, the Fusṭāṭ fragments in Paris and St Petersburg)
+through the kūfī codices to maġribī and new-style copies — 32,182 verse
+passages. Every verse is cited sura.verse, so a manuscript's reading
+lines up with the Cairo text verse for verse. Letters the page has lost,
+which the project supplies from the Cairo rasm, read through, and the
+extant reading rides beside them. Each manuscript is dated by its
+copying estimate and placed by its recorded provenance, with its
+shelfmark, library, script style and material. The images are not
+carried. CC BY-SA 4.0.
+
+**`corpus-coranicum-variants`** — the variant readings (qirāʾāt) of the
+Qurʾān in the Corpus Coranicum database: 18,000 readings that the
+classical sources ascribe to 752 readers — the Seven and their
+transmitters, the codices of Ibn Masʿūd and Ubayy, and non-canonical
+readers such as al-Ḥasan al-Baṣrī and al-Aʿmaš. Each reader is a
+document, and his readings of a verse are a passage cited sura.verse
+beside the Cairo text, every word keyed to its place in the verse, in
+the project's transliteration. Readers are dated by their death and
+placed by their city (Kufa, Basra, Medina, Mecca). CC BY-SA 4.0.
