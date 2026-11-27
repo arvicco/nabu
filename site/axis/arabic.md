@@ -19,12 +19,12 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
 |---|---|---|---|---|
 | `althurayya` | feature module | attribution | wired · manual | nothing held yet |
-| `corpus-coranicum` | texts | attribution | not yet wired | not synced yet |
+| `corpus-coranicum` | texts | attribution | wired · manual | 114 docs / 6,236 passages |
 | `diccas` | texts | nc | wired · manual | 10 docs / 879 passages |
 | `kitab` | feature module | nc | wired · manual | nothing held yet |
 | `kitab-reuse` | feature module | nc | wired · manual | nothing held yet |
@@ -32,9 +32,10 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `ociana` | inscriptions | research_private | wired · frozen | 36,794 docs / 36,794 passages |
 | `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
 | `pgp-geniza` | texts | nc | wired · manual | 9,848 docs / 303,860 passages |
+| `quranic-corpus` | texts | research_private | wired · manual | 114 docs / 6,236 passages |
 | `wiktionary-ar` | dictionary | attribution | wired · manual | 36,974 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `ara` 95,499 · `xna` 36,758 · `jrb` 4,068 · `heb` 2,178 · `en` 1,396 · `und` 898 · `fas` 351 · `arc` 283 · `grc` 23 · `ota` 13 … and 9 more (`nabu axis arabic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `ara` 95,613 · `xna` 36,758 · `jrb` 4,068 · `heb` 2,178 · `en` 1,396 · `und` 898 · `fas` 351 · `arc` 283 · `ara-Latn` 114 · `grc` 23 … and 10 more (`nabu axis arabic` lists all).
 
 ## The desk's instruments
 

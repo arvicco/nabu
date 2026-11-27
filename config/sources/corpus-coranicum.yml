@@ -2,7 +2,7 @@ corpus-coranicum:   # 02-sources row 444
   adapter: Nabu::Adapters::CorpusCoranicum
   adopted: "2026-11-27"
   axes: [arabic]
-  wired: false
+  wired: true    # first sync verified 2026-11-27: 114 documents / 6,236 passages, 3,125 files of other grains skipped by rule, 0 errored — exact on the dry parse
   sync_policy: manual   # the repository is one frozen commit (57cb2b7, 2024-12-20), pinned
   # Corpus Coranicum (Berlin-Brandenburgische Akademie der Wissenschaften,
   # 2007–2024; the TELOTA TEI export, github.com/telota/corpus-coranicum-tei):

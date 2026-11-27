@@ -35,9 +35,9 @@ classes:
   documents_display: '30,136'
   sources: 6
 - head: scripture
-  documents: 28451
-  documents_display: '28,451'
-  sources: 46
+  documents: 28679
+  documents_display: '28,679'
+  sources: 48
 - head: dedicatory
   documents: 24327
   documents_display: '24,327'

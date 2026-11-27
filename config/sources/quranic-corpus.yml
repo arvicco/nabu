@@ -2,7 +2,7 @@ quranic-corpus:   # 02-sources row 445
   adapter: Nabu::Adapters::QuranicCorpus
   adopted: "2026-11-27"
   axes: [arabic]
-  wired: false   # until the first real sync lands 114 docs / 6,236 passages / 128,219 tokens
+  wired: true    # first sync verified 2026-11-27: 114 documents / 6,236 passages, 0 skipped, 0 errored — exact on the whole-file census
   # The Quranic Arabic Corpus morphology, version 0.4 (Kais Dukes, University
   # of Leeds; corpus.quran.com): the whole Quran segment by segment in
   # Buckwalter transliteration, each segment with its tag, lemma, root and

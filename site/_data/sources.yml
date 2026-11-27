@@ -594,6 +594,18 @@ sources:
     entries_display: '0'
     holdings: 76 documents / 17,942 passages
     canonical_display: 285 MB
+  corpus-coranicum:
+    name: Corpus Coranicum — the Cairo 1924 Qurʾān with the Talmon concordance (BBAW
+      TEI export)
+    license_class: attribution
+    documents: 114
+    documents_display: '114'
+    passages: 6236
+    passages_display: '6,236'
+    entries: 0
+    entries_display: '0'
+    holdings: 114 documents / 6,236 passages
+    canonical_display: 335 MB
   corpus-corporum:
     name: Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich)
     license_class: nc
@@ -2829,6 +2841,18 @@ sources:
     entries_display: '11,158'
     holdings: 11,158 entries
     canonical_display: 6 MB
+  quranic-corpus:
+    name: Quranic Arabic Corpus — morphology, version 0.4 (Kais Dukes, University
+      of Leeds)
+    license_class: research_private
+    documents: 114
+    documents_display: '114'
+    passages: 6236
+    passages_display: '6,236'
+    entries: 0
+    entries_display: '0'
+    holdings: 114 documents / 6,236 passages
+    canonical_display: 6 MB
   ref:
     name: ReF — Referenzkorpus Frühneuhochdeutsch (1350–1650), v1.0.2
     license_class: attribution
@@ -4506,11 +4530,13 @@ shelves:
     - openiti
     - ganjoor
     - diccas
-    documents: 135254
-    documents_display: '135,254'
-    passages: 36085733
-    passages_display: '36,085,733'
-    size_display: 135,254 / 36,085,733
+    - corpus-coranicum
+    - quranic-corpus
+    documents: 135482
+    documents_display: '135,482'
+    passages: 36098205
+    passages_display: '36,098,205'
+    size_display: 135,482 / 36,098,205
   iranian-silk-road:
     sources:
     - iedc

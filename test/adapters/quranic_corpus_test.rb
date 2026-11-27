@@ -173,11 +173,11 @@ class QuranicCorpusTest < Minitest::Test
 
   # --- registry ----------------------------------------------------------------
 
-  def test_registry_row_is_unwired_and_manual
+  def test_registry_row_is_wired_and_manual
     entry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))["quranic-corpus"]
     refute_nil entry, "config/sources/ must register quranic-corpus"
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired only after the verified first sync"
+    assert entry.wired, "wired since the verified first sync (6,236 verses)"
     assert_equal "manual", entry.sync_policy
   end
 

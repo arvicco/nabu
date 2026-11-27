@@ -2680,3 +2680,24 @@ Early New High German, Middle Low German, Italian and French, page by
 page as keyed; the licence is read per transcript (CC BY, CC BY-SA or
 CC0). Editions that publish no transcript file are skipped by rule and
 counted.
+
+**`corpus-coranicum`** — the Qurʾān in the Cairo edition of 1924 (the
+King Fuʾād edition, Ḥafṣ ʿan ʿĀṣim), the reference text of the
+Berlin-Brandenburg Academy's Corpus Coranicum project: 114 suras and
+6,236 verses, cited sura.verse (`…:2.255`). Every one of its 77,432
+words carries Rafael Talmon's grammatical analysis as the project edited
+it — transliteration, base, root, part of speech, pattern and
+inflection, with the alternative analyses where the concordance gives
+more than one. Search matches with or without the vowel signs. The
+project's commentary, intertexts, manuscript descriptions and variant
+readings are in the same export and are not yet taken. CC BY-SA 4.0.
+
+**`quranic-corpus`** — the Quranic Arabic Corpus (Kais Dukes, University
+of Leeds), morphology version 0.4: the whole Quran word by word, each
+word split into prefix, stem and suffix segments (128,219 in all) with
+part-of-speech tag, lemma, root and inflection. The text is the Tanzil
+project's verified Uthmani text in Buckwalter transliteration, exactly
+as the corpus gives it. Of its 1,642 roots, 1,603 are headed in Lane's
+lexicon once hamza seats, doubled radicals and weak letters are folded.
+Held for local research only: the corpus's terms allow verbatim copies
+with credit, and no changes.
