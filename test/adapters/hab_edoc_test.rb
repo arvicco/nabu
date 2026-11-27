@@ -45,11 +45,11 @@ module Adapters
       assert_empty ADAPTER.materialized_paths, "the mirror is upstream's own tree (+ the fetch state file)"
     end
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       entry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))["hab-edoc"]
       refute_nil entry
       assert_equal ADAPTER, entry.adapter_class
-      refute entry.wired, "wired only after the verified first sync"
+      assert entry.wired, "wired since the verified first sync (472 transcripts)"
       assert_equal "manual", entry.sync_policy
     end
 
