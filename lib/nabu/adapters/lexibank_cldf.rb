@@ -69,17 +69,20 @@ module Nabu
       # defaults to attribution (the CC BY wave); a CC BY-NC dataset
       # declares "nc". +concept_notes+ names extra parameters.csv columns
       # whose value rides the set body under a label (zhangrgyalrong's
-      # Gloss_in_Source — the Chinese character the Old Chinese row reads).
+      # Gloss_in_Source — the Chinese character the Old Chinese row reads);
+      # +judgment_notes+ likewise names extra cognates.csv columns (the
+      # Savelyev & Robbeets per-set Root).
       Dataset = Data.define(:slug, :name, :title, :label, :language, :license, :license_class,
                             :upstream_url, :release, :word_from, :varieties, :proto_varieties,
-                            :concept_notes, :rejected_grains) do
+                            :concept_notes, :judgment_notes, :rejected_grains) do
         def initialize(slug:, name:, title:, label:, language:, license:, upstream_url:, release:,
                        license_class: "attribution", word_from: :form, varieties: {},
-                       proto_varieties: [], concept_notes: {}, rejected_grains: {})
+                       proto_varieties: [], concept_notes: {}, judgment_notes: {}, rejected_grains: {})
           super(slug: slug, name: name, title: title, label: label, language: language, license: license,
                 license_class: license_class, upstream_url: upstream_url, release: release,
                 word_from: word_from, varieties: varieties.freeze, proto_varieties: proto_varieties.freeze,
-                concept_notes: concept_notes.freeze, rejected_grains: rejected_grains.freeze)
+                concept_notes: concept_notes.freeze, judgment_notes: judgment_notes.freeze,
+                rejected_grains: rejected_grains.freeze)
         end
 
         def zenodo? = release.is_a?(ZenodoRelease)
@@ -149,12 +152,17 @@ module Nabu
         )
       end
 
-      # The declared rejected grains present in the tree, one skip each.
+      # The declared rejected grains present in the tree, one skip each — a
+      # directory (raw/, out/) or a single top-level file (savelyevturkic's
+      # turkic.nex), the note spelling which.
       def discovery_skips(workdir)
         present = dataset.rejected_grains.select { |grain, _| File.exist?(File.join(workdir, grain)) }
         Nabu::Adapter::DiscoverySkips.new(
           skipped_by_rule: present.size,
-          notes: present.map { |grain, note| "#{note}, not ingested: #{grain}/" }
+          notes: present.map do |grain, note|
+            shown = File.directory?(File.join(workdir, grain)) ? "#{grain}/" : grain
+            "#{note}, not ingested: #{shown}"
+          end
         )
       end
 
@@ -187,7 +195,8 @@ module Nabu
       def parser
         LexibankCldfParser.new(slug: dataset.slug, language: dataset.language, label: dataset.label,
                                word_from: dataset.word_from, varieties: dataset.varieties,
-                               proto_varieties: dataset.proto_varieties, concept_notes: dataset.concept_notes)
+                               proto_varieties: dataset.proto_varieties, concept_notes: dataset.concept_notes,
+                               judgment_notes: dataset.judgment_notes)
       end
 
       def zenodo_fetch(workdir, progress:, force:)

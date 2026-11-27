@@ -1,0 +1,10 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Source
+Bashkir,Bashkir,bash1264,Bashkir,bak,Eurasia,53.5967,56.5594,Turkic,"Uraksin1996,Uraksin2005"
+CodexCumanicus,Cuman,,,,,,,,Noauthor1880
+CrimeanTatar,Crimean Tatar,crim1257,Crimean Tatar,crh,Eurasia,45.0,34.08,Turkic,Useinov2007
+Gagauz,Gagauz,gaga1249,Gagauz,gag,Eurasia,44.5988,28.0277,Turkic,"Baskakov1973,Radova-Karanastas2016"
+Karaim,Karaim,kara1464,Karaim,kdr,Eurasia,54.5534,25.1054,Turkic,Baskakov1974
+Nogai,Nogai,noga1249,Nogai,nog,Eurasia,43.5917,46.6618,Turkic,"Baskakov1963,Baskakov1956,Kapajev2007"
+NorthAltai,North Altay,nort2686,Northern Altai,atv,Eurasia,50.8998,88.0672,Turkic,Baskakov1985
+OldUyghur,Old Turkic,oldu1238,Old Uighur,oui,Eurasia,,,Turkic,Clauson1972
+Tatar,Kazan Tatar,midd1325,Middle Tatar,,Eurasia,,,Turkic,"Dmitrijev1955,Osmanov1966"

@@ -1,0 +1,12 @@
+ID,Form_ID,Form,Cognateset_ID,Doubt,Cognate_Detection_Method,Source,Alignment,Alignment_Method,Alignment_Source,Root
+NorthAltai-11_askv-2-1,NorthAltai-11_askv-2,øtør,377,false,expert,,ø   t   ø   r   -   -,,,ötör-
+Tatar-11_askv-2-1,Tatar-11_askv-2,øtyn,377,false,expert,,ø   t   -   -   y   n,,,ötün-
+CodexCumanicus-35_childkintermn-1-1,CodexCumanicus-35_childkintermn-1,ogul,138,false,expert,,o   g   u   l   -   -,,,*oglan
+OldUyghur-35_childkintermn-1-1,OldUyghur-35_childkintermn-1,oglan,138,false,expert,,o   g   -   l   a   n,,,*oglan
+Karaim-35_childkintermn-2-1,Karaim-35_childkintermn-2,ulan,138,false,expert,,u   -   -   l   a   n,,,*oglan
+Bashkir-194_spinv-1-1,Bashkir-194_spinv-1,(jep) ilɛ,656,false,expert,,j   e   p   +   -   -   -   i   l   ɛ   -   -   -   -   -   -   -   -   -   -   -   -   -   -,,,jip
+Gagauz-194_spinv-1-1,Gagauz-194_spinv-1,iplik iʃle,656,false,expert,,-   i   p   l   i   k   +   -   -   -   -   -   -   -   -   -   i   ʃ   l   e   -   -   -   -,,,jip
+Nogai-194_spinv-2-1,Nogai-194_spinv-2,(jip) ijir,656,false,expert,,j   i   p   +   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   i   j   i   r,,,jip
+CrimeanTatar-194_spinv-1-1,CrimeanTatar-194_spinv-1,(jip) ʨijrat,656,false,expert,,j   i   p   +   -   -   -   -   -   -   ʨ   i   j   r   a   t   -   -   -   -   -   -   -   -,,,čijrat
+CodexCumanicus-247_with-1-1,CodexCumanicus-247_with-1,birla,896,false,expert,,b   i   r   l   a,,,birle
+OldUyghur-247_with-1-1,OldUyghur-247_with-1,birle,896,false,expert,,b   i   r   l   e,,,birle
