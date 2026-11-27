@@ -17,10 +17,12 @@ module Nabu
     # the 2026-11-16 ninth cut carried the jv~java row repair (PR #49),
     # 265 → 264 codemap; the 2026-11-17 tenth cut carried the Hebrew-wave
     # package (PR #50): 349 → 351 anchors — jrb, smp; the 2026-11-22
-    # eleventh cut added only the roro scripts-table row, census unmoved).
+    # eleventh cut added only the roro scripts-table row, census unmoved;
+    # the 2026-11-27 twelfth cut carried the Middle English periods and the
+    # treebank stages: 178 → 184 stages).
     module RegistryCensus
       ANCHORS = 351
-      STAGES = 178
+      STAGES = 184
       VARIETIES = 33
       CODEMAP_ROWS = 264
 

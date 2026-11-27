@@ -168,13 +168,14 @@ class LectShelfDatesTest < Minitest::Test
   # -- the opt-in parent-anchor fallback (2026-11-09) -------------------------
 
   # A shelf dated below every stage of its code's own anchor reaches the
-  # PARENT anchor's band — LEME's incunable English lexicons (1477–1499)
-  # sit under enm [1100, 1500], not under any en stage.
+  # PARENT anchor's ladder — LEME's incunable English lexicons (1477–1499)
+  # sit under enm [1100, 1500], not under any en stage; since enm carries
+  # the Helsinki periods they land on its last one, enm:m4 [1420, 1500].
   def test_the_fallback_stages_an_outside_band_shelf_onto_the_parent_anchor
     incunable = shelf("leme-1477", years: %w[1477 1499])
     result = stagings(fallback_dates)
     staging = result.fetch(incunable)
-    assert_equal "enm", staging.lect_id
+    assert_equal "enm:m4", staging.lect_id
     assert_equal "rule:date-band", staging.basis
     assert_equal "en", staging.fallback_from
     assert_equal "dated 1477..1499 (lexicon_year) — parent-anchor fallback from en", staging.note
@@ -246,7 +247,7 @@ class LectShelfDatesTest < Minitest::Test
                                overrides: { "leme" => { "en" => "en~latn" } })
     incunable = shelf("leme-1477", years: %w[1477])
     staging = fallback_dates.stagings(catalog: @catalog, registry: surfaced).fetch(incunable)
-    assert_equal "enm~latn", staging.lect_id
+    assert_equal "enm:m4~latn", staging.lect_id
   end
 
   def test_the_document_grain_is_untouched_by_the_fallback
