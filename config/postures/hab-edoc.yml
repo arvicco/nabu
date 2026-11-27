@@ -1,0 +1,27 @@
+sources:
+  hab-edoc:   # 02-sources row 442
+    # kind machine-postured — the hab-edoc fold in kind_map.yml over the edition id (each
+    # edition IS one work or one collection, so the fold is the parse-time call per edition,
+    # the korpus16 siglum mold).
+    lect: {posture: identity, note: "the bare code per edition is the claim, declared in
+        HabEdoc::EDITIONS from what the text is (the TEI's own xml:lang is the header's language
+        and its langUsage lists every language the commentary names): lat (Lipsius, Dasypodius,
+        Kaempfer, Conring, Orsini, Schwartzkopf, Heyden, Klesch's letters, the Lüne L/LD letters,
+        Gabrias's Latin half), de (Sachs, Staindl, Furttenbach, Millinger, Solms-Laubach, Schwarz,
+        the 1539 inventory, the Newe unbekanthe landte), gml (the Lüne D/DL letters by their own
+        file-name language letter — upstream's textLang says nds; Escobar's Modus confitendi, the
+        edition's own 'mndt'), it (the Paesi 1507), fr (Fonteny), grc (Gabrias's Greek half).
+        Deliberately coarse: no stage is asserted — the prints carry EDITION-class years, which
+        never stage"}
+    dating: {posture: partial, note: "the prints carry their imprint year (sourceDesc
+        imprint/publication date, or the prose bibl's year: Helmstedt 1708) in the EDITION class;
+        a manuscript's origDate or a dated letter's correspDesc date rides class-less; undated
+        letters (the Lüne set mostly says 'undatiert') and the editions without a sourceDesc date
+        mint nothing"}
+    places: {posture: named, note: "the imprint pubPlace as the header gives it (Nürnberg,
+        Danzig, Helmstedt, Lemgoviae, Basileae — Latin forms verbatim), else origPlace or a
+        letter's sending place; no gazetteer link. The holding library (msIdentifier) is never
+        the place"}
+    script: {posture: mixed, note: "Latin script as keyed — long s, u/v and i/j as printed, the
+        abbreviation marks (ẽ, ũ, uͦ, ꝫ) kept from the choice's abbr half — beside Greek for
+        Gabrias's Greek fables and the Greek quotations in Lipsius"}

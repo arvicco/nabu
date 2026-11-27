@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- mets.xml für \\edoc\ed000239 Serranus-Edition-->
+<!-- letzte Änderung 2015-12-04  Torsten Schaßan  <schassan@hab.de>-->
+<mets:mets OBJID="edoc/ed000239" TYPE="rare book" 
+    xmlns:mets="http://www.loc.gov/METS/"
+    xmlns:wdb="http://diglib.hab.de/wdb/" 
+    xmlns:rmd="http://diglib.hab.de/rights"
+    xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://www.loc.gov/METS/ http://diglib.hab.de/rules/schema/mets/mets.xsd">
+    <mets:metsHdr CREATEDATE="2012-09-11T10:30:00">
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenbüttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+    <!--
+    <mets:dmdSec ID="dmd_opac">
+      <mets:mdRef LOCTYPE="PURL" MDTYPE="OTHER" OTHERMDTYPE="PICA" MIMETYPE="text/xml"  xlink:href="http://diglib.hab.de/?format=mods&amp;opac=829335145"/>
+    </mets:dmdSec>
+    -->
+    <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods>
+                    <mods:identifier type="purl">http://diglib.hab.de/edoc/ed000239/start.htm</mods:identifier>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Steiger</mods:namePart>
+                        <mods:namePart type="given">Anselm</mods:namePart>
+                        <mods:displayForm>Anselm Steiger (Hrsg.)</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">edt</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:titleInfo>
+                        <mods:title>Johann Arndt: Von wahrem Christenthumb</mods:title>
+                    </mods:titleInfo>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Wolfenbüttel</mods:placeTerm>
+                        </mods:place>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                        <mods:dateIssued encoding="w3cdtf">2015</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title>Editiones Electronicae Guelferbytanae</mods:title>
+                        </mods:titleInfo>
+                        <part>
+                            <detail>
+                                <number>xx</number>
+                            </detail>
+                        </part>
+                        <mods:identifier type="purl">http://diglib.hab.de/?opac=xy</mods:identifier>
+                    </mods:relatedItem>
+                    <mods:recordInfo>
+                        <mods:recordContentSource authority="gbv" authorityURI="http://uri.gbv.de/organization/isil/DE-23">OPAC</mods:recordContentSource>
+                        <mods:recordIdentifier source="opac">xy</mods:recordIdentifier>
+                    </mods:recordInfo>
+                </mods:mods>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+    <!-- Ausgaben des edierten Werkes (Manifestations nach FRBR)-->
+    <mets:dmdSec ID="dmd_frbr_manifestations_ppn">
+        <mets:mdRef LOCTYPE="PURL" MDTYPE="MODS" MIMETYPE="text/xml" xlink:href="http://diglib.hab.de/?format=mods&amp;opac={$opac}"/>
+    </mets:dmdSec>
+    
+    <!-- Rechtesegment -->
+    <mets:amdSec ID="amd_edoc_ed000239">
+        <mets:techMD ID="wdb_parameter">
+            <mets:mdWrap MDTYPE="OTHER">
+                <mets:xmlData>
+                    <wdb:parameter>
+                        <!--  hier wird definiert, welche Anzeigetypen für die/das Fenster zur Verfügung stehen -->
+                        <!-- Titelbaltt oder Einstiegsseite fuer "Werke"; muss gesetzt sein -->
+                        <wdb:param distype="start" firstpage_xml="start.xml" firstpage_xsl="start.xsl"/>
+                        <!-- Inhaltsverzeichnis -->
+                        <wdb:param distype="toc"/>
+                        <!-- Startsprache -->
+                        <wdb:param lang="de"/>
+                        <!-- im Kopf des Menue zu zeigende Logos; Mehrfachlogos sind zulaessig -->
+                        <wdb:logo owner="Uni Hamburg" ownerLogo="uhh-logo.gif" ownerSiteURL="http://www.uni-hamburg.de" ownerContact="xy@xy.de"/>                      
+                        
+                        <!-- Volltextsuche mit Paralleler Volltextsicht; @url fuer Aufgerufenes Skript, nur fuer Menusuche; Extrasuchen unter Behavior -->
+                        <!-- welche XQL Scripte sollen fuer die Suche verwendet werden; wdb ist Standard 
+                                Pfad: exist.hab.de/rest/db/apps/[wdb:param]/search.xql
+                            -->
+                        <!--<wdb:param distype="results-transcript" url="wdb/search/search.xql"/>-->
+                        <!-- Anzeige Parallelsichten -->
+                        <!-- 
+                                wdb:parallelView:
+                                -  @SMLINKID: Link auf die mets:smLink in mets:structLink ID="parallel_views" (hier die Dateien, die verbunden werden)
+                                -  @f1 Prozent der Groesse des linken Fensters
+                                -  @f2 Prozent der Groesse des rechten Fensters
+                                -  @synctype  moegliche Werte: "pb" (Linking ueber pageID), "div", (Anzahl divisions),"sync" (explizite angabe), "none" (unverbunden)
+                            -->
+                        <!--<wdb:parallelView pvID="pv_transcript-facs1602" f1="30" f2="70" synctype="pb"/>-->
+                        <wdb:parallelView pvID="pv_transcript-facs" f1="50" f2="50" synctype="pb"/>
+                    </wdb:parameter>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+        <!-- Bibliotheks Standardlizenz für Retrodigitalisate lt. Benutzungsordnung; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000239_retrodig">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="Benutzungsordnung"/>
+        </mets:rightsMD>
+        <!-- CC Standardlizenz, wenn der Autor zugestimmmt hat; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000239_CC">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/rights/cc_by-sa.html" LABEL="CC BY-SA 3.0"/>
+        </mets:rightsMD>
+        <!-- Lizenz, wenn der Autor/Institution der weiteren Nutzung zustimmmen muss -->
+        <mets:rightsMD ID="rmd_edoc_ed000239_restricted">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="rights restricted"/>
+        </mets:rightsMD>
+        <mets:rightsMD ID="rmd_edoc_ed000239_SLUB">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://digital.slub-dresden.de/nutzungsbestimmungen/" LABEL="CC BY-SA 4.0"/>
+        </mets:rightsMD>
+    </mets:amdSec>
+
+    <mets:fileSec>
+        
+        <!-- Facsimiles -->
+        <mets:fileGrp USE="facsimile_URL">
+            <mets:file ID="drucke_th-82" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/th-82/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="slub_dlf_30538" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://digital.slub-dresden.de/id343144166"/>
+            </mets:file>
+
+            <!-- Einzelseitenaufruf für die Parallel-View-->
+            <!--
+            <mets:file ID="drucke_p-1084-8f-helmst_00002" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/p-1084-8f-helmst/start.htm?image=00002"/>
+            </mets:file>
+            -->
+        </mets:fileGrp>
+        
+        <!--  Transkription  -->
+        <mets:fileGrp USE="transcription">
+            <mets:file ID="edoc_ed000239_transcript_1605" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="tei-transcript-1605.xml"/></mets:file>
+            <mets:file ID="edoc_ed000239_transcript_1610" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="tei-transcript-1610.xml"/></mets:file>
+            <!--<mets:file ID="edoc_ed000239_part_a_transcript" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="part_a.xml"/></mets:file>-->
+        </mets:fileGrp>
+        
+        <!--  Einleitung zu einem Werk  -->
+        <mets:fileGrp USE="introduction">
+            <!-- Werkebene, alle Erläuterung zu einem vorliegen Werk; enspricht der Einleitung einer Edition -->
+            <!--
+            <mets:file ID="edoc_ed000239_introduction" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="tei-introduction.xml"/>
+            </mets:file>
+            -->
+        </mets:fileGrp>
+        <!-- Auflistung aller Dokumente, die außerdem noch zur Edition gehören und in ed000239 liegen -->
+        <mets:fileGrp USE="other_documents">
+            <mets:file ID="edoc_ed000239_mets" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="mets.xml"/></mets:file>
+            <mets:file ID="edoc_ed000239_start" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="start.xml"/></mets:file>
+            <mets:file ID="edoc_ed000239_start_xsl" MIMETYPE="application/xslt+xml"><mets:FLocat LOCTYPE="URL" xlink:href="start.xsl"/></mets:file>
+            <mets:file ID="edoc_ed000239_transcript_xsl" MIMETYPE="application/xslt+xml"><mets:FLocat LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:file>
+            <!--<mets:file ID="ptr2images_drucke_p-1084-8f-helmst" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="facsimile.xml"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_tei-bibliography_xsl" MIMETYPE="application/xslt+xml"><mets:FLocat LOCTYPE="URL" xlink:href="tei-bibliography.xsl"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_tei-introduction_xsl" MIMETYPE="application/xslt+xml"><mets:FLocat LOCTYPE="URL" xlink:href="tei-introduction.xsl"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_tei-phraselevel_xsl" MIMETYPE="application/xslt+xml"><mets:FLocat LOCTYPE="URL" xlink:href="tei-phraselevel.xsl"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_styles_css" MIMETYPE="text/css"><mets:FLocat LOCTYPE="URL" xlink:href="styles.css"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_tei-p5-transcr_xsd" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="schemata/tei-p5-transcr.xsd"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_transcript_sch" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="schemata/transcript.sch"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_title_page" MIMETYPE="image/jpeg"><mets:FLocat LOCTYPE="URL" xlink:href="title_page.jpg"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_tei-revisions" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="tei-revisions.xml"/></mets:file>-->
+            <!--<mets:file ID="edoc_ed000239_tei-revisions_xsl" MIMETYPE="application/xslt+xml"><mets:FLocat LOCTYPE="URL" xlink:href="tei-revisions.xsl"/></mets:file>-->
+        </mets:fileGrp>
+    </mets:fileSec>
+
+
+    <!--    Inhaltliche Struktur ######################################################################################  -->
+    <mets:structMap>
+        <mets:div>
+            <!-- Einleitung-->
+            <!--
+            <mets:div TYPE="introduction" LABEL="Introduction" ID="edoc_ed000239_t_introduction" ADMID="rmd_edoc_ed000239_CC">
+                <mets:fptr FILEID="edoc_ed000239_introduction"/>
+            </mets:div>
+            -->
+
+            <!-- Faksimile -->
+            <mets:div TYPE="submenu" LABEL="Digitalisate" ID="edoc_ed000239_dig">
+                <mets:div TYPE="facsimile" LABEL="Digitalisat 1605" ID="edoc_ed000239_facs-1605" ADMID="rmd_edoc_ed000239_retrodig">
+                    <mets:fptr FILEID="drucke_th-82"/>
+                </mets:div>
+                <mets:div TYPE="facsimile" LABEL="Digitalisat 1610 (SLUB, Theol.ev.asc.1269-1)" ID="edoc_ed000239_facs-1610">
+                    <mets:fptr FILEID="slub_dlf_30538"/>
+                </mets:div>
+            </mets:div>
+            
+            <!--  Transcription-->
+            <mets:div TYPE="submenu" LABEL="Transkription" ID="edoc_ed000239_dokumente">
+                <mets:div TYPE="transcription" LABEL="Edition (1605)" ID="t_edoc_ed000239_transcript_1605"><mets:fptr FILEID="edoc_ed000239_transcript_1605"/></mets:div>            
+                <mets:div TYPE="transcription" LABEL="Edition (1610)" ID="t_edoc_ed000239_transcript_1610"><mets:fptr FILEID="edoc_ed000239_transcript_1610"/></mets:div>            
+                <!--<mets:div TYPE="transcription" LABEL="A" ID="edoc_ed000239_t_part_a_transcript"><mets:fptr FILEID="edoc_ed000239_part_a_transcript"/></mets:div>-->
+                <!--<mets:div TYPE="transcription" LABEL="All" ID="edoc_ed000239_t_transcript"><mets:fptr FILEID="edoc_ed000239_transcript"/></mets:div>-->
+            </mets:div>
+            
+                     
+            <!--  Parallel-View -->
+            <mets:div TYPE="submenu" LABEL="Parallele Ansichten" ID="pv_transcript-facs"><!-- Transcription ↔ Facsimile -->
+                <mets:div TYPE="parallel-view" LABEL="Edition 1605 ↔ Facsimile" ID="pv_1605_transcript-facs">
+                    <mets:fptr>
+                        <mets:par>
+                            <mets:area FILEID="edoc_ed000239_transcript_1605" ID="pv_edoc_ed000239_transcript_1605"/>
+                            <mets:area FILEID="drucke_th-82" ID="pv_drucke_th-82"/>
+                        </mets:par>
+                    </mets:fptr>
+                </mets:div>
+                <mets:div TYPE="parallel-view" LABEL="Edition 1610 ↔ Facsimile" ID="pv_1610_transcript-facs">
+                    <mets:fptr>
+                        <mets:par>
+                            <mets:area FILEID="edoc_ed000239_transcript_1610" ID="pv_edoc_ed000239_transcript_1610"/>
+                            <mets:area FILEID="slub_dlf_30538" ID="pv_slub_dlf_30538"/>
+                        </mets:par>
+                    </mets:fptr>
+                </mets:div>
+                <mets:div TYPE="parallel-view" LABEL="Edition 1605 ↔ Edition 1610" ID="pv_1605_transcript-1610_transcript">
+                    <mets:fptr>
+                        <mets:par>
+                            <mets:area FILEID="edoc_ed000239_transcript_1605" ID="pv_edoc_ed000239_transcript-transcript_1605"/>
+                            <mets:area FILEID="edoc_ed000239_transcript_1610" ID="pv_edoc_ed000239_transcript-transcript_1610"/>
+                        </mets:par>
+                    </mets:fptr>
+                </mets:div>
+                <!--
+                <mets:div TYPE="parallel-view" LABEL="A" ID="pv_a_transcript-facs">
+                    <mets:fptr>
+                        <mets:par>
+                            <mets:area FILEID="edoc_ed000239_part_a_transcript" ID="pv_edoc_ed000239_part_a_transcript"/>
+                            <mets:area FILEID="drucke_p-1084-8f-helmst_00011" ID="pv_drucke_p-1084-8f-helmst_00011"/>
+                        </mets:par>
+                    </mets:fptr>
+                </mets:div>
+                -->
+                <!--
+                <mets:div TYPE="parallel-view" LABEL="All" ID="pv_transcript-facs">
+                    <mets:fptr>
+                        <mets:par>
+                            <mets:area FILEID="edoc_ed000239_transcript" ID="pv_edoc_ed000239_transcript"/>
+                            <mets:area FILEID="drucke_p-1084-8f-helmst" ID="pv_drucke_p-1084-8f-helmst"/>
+                        </mets:par>
+                    </mets:fptr>
+                </mets:div>
+                -->
+         </mets:div>
+           
+            <!--  Revisions-->
+            <!--
+            <mets:div TYPE="revisions" LABEL="Revisions" ID="edoc_ed000239_t_tei-revisions">
+                <mets:fptr FILEID="edoc_ed000239_tei-revisions"/>
+            </mets:div>
+            -->
+        </mets:div>
+        
+    </mets:structMap>
+    
+
+    <!--    Behavior  ######################################################################################  -->
+    <!--  Innerhab der Behavior-Sections werden verschwiedene technische Anzeigeformate definierft. 
+            Unterschiedliche inhaltliche Sichten auf diesselbe Dateien erhalten eine eigene Behavior Section.
+            
+    -->
+    <mets:behaviorSec ID="edoc_ed000239_b_transcript_all">
+        <mets:behavior STRUCTID="t_edoc_ed000239_transcript_1605" ID="b_edoc_ed000239_transcript_1605_html" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="t_edoc_ed000239_transcript_1610" ID="b_edoc_ed000239_transcript_1610_html" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <!--<mets:behavior STRUCTID="edoc_ed000239_t_transcript" ID="edoc_ed000239_b_transcript_01_html" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>-->
+    </mets:behaviorSec>
+
+    <!--
+    <mets:behaviorSec ID="edoc_ed000239_b_introduction">
+        <mets:behavior STRUCTID="edoc_ed000239_t_introduction" ID="edoc_ed000239_b_introduction_01" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-introduction.xsl "/>
+        </mets:behavior>
+    </mets:behaviorSec>
+    -->
+
+
+    <mets:behaviorSec ID="b_pv_edoc_ed000239_transcript-facs">
+        <mets:behavior STRUCTID="pv_edoc_ed000239_transcript_1605" ID="b_pv_transcript_1605-facs" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="pv_edoc_ed000239_transcript_1610" ID="b_pv_transcript_1610-facs" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="pv_edoc_ed000239_transcript-transcript_1605" ID="b_pv_transcript-transcript_1605" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="pv_edoc_ed000239_transcript-transcript_1610" ID="b_pv_transcript-transcript_1610" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <!--
+        <mets:behavior STRUCTID="pv_edoc_ed000239_transcript" ID="pv_transcript-facs_b" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        -->
+    </mets:behaviorSec>
+    
+    <!--
+    <mets:behaviorSec ID="edoc_ed000239_b_revisions">
+        <mets:behavior STRUCTID="edoc_ed000239_t_tei-revisions" ID="edoc_ed000239_b_tei-revisions_01" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-revisions.xsl "/>
+        </mets:behavior>
+    </mets:behaviorSec>
+    -->
+
+</mets:mets>

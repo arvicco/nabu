@@ -3537,3 +3537,43 @@ sources:
       "Contra Apionem": theology/apologetics      # 2 — Josephus' defence of the Jews' antiquity and laws
       #                                            against Apion and other Greek detractors: the faith
       #                                            and its people defended outward — the head's own sense
+  hab-edoc:           # census 2026-11-27: the 22 admitted editions (HabEdoc::EDITIONS), not yet synced
+    metadata: edition # the WDB edition id — upstream carries no genre field the editions share
+    #                   (a few DTA-format headers have a dwds classCode, most nothing), and each
+    #                   edition IS one work or one collection, so the fold is the loop's call per
+    #                   edition on what the text is (the korpus16 siglum mold). Counts = documents.
+    map:
+      "ed000001": scholarly                      # 1 — Lipsius, De bibliothecis syntagma: a learned
+      #                                            treatise on the libraries of antiquity
+      "ed000008": lexical/word-list              # 5 — Dasypodius, Dictionarium Latinogermanicum (the
+      #                                            alphabet parts): a bilingual dictionary
+      "ed000081": scholarly                      # 1 — Kaempfer, Amoenitates exoticae: natural history,
+      #                                            medicine and politics of Persia and Japan
+      "ed000082": administrative/list            # 1 — the 1539 book inventory of Elisabeth von Calenberg
+      "ed000145": literary/diary/travelogue      # 2 — Paesi novamente retrovati / Newe unbekanthe landte:
+      #                                            the collected accounts of the discovery voyages
+      "ed000166": literary/poetry                # 2 — Fonteny's Livre d'enigmes: a sonnet sequence
+      "ed000223": scholarly                      # 1 — Millinger's Weltbeschreibung: a compiled
+      #                                            world-knowledge book (elements, regents, church history)
+      "ed000226": literary/poetry                # 1 — Conring's Latin poems, collected by Böhmer
+      "ed000232": sermon                         # 1 — Millinger's notes of the sermons he heard
+      "ed000236": ritual                         # 1 — Escobar's Modus confitendi: how to make one's
+      #                                            confession — the rite's own manual, not doctrine
+      "ed000238": literary/poetry                # 1 — Hans Sachs's Wittenbergisch Nachtigall: the
+      #                                            Reformation allegory in verse (with its prose preface)
+      "ed000241": scholarly/recipe               # 1 — Staindl's Kochbuch: a cookbook
+      "ed000243": literary/wisdom                # 1 — a mother's admonitions to her children: instruction
+      #                                            in the devotional-didactic mode
+      "ed000245": scholarly                      # 1 — Furttenbach's kupffer radier kunst: an etching
+      #                                            technique manual (the learned-craft treatise)
+      "ed000247": scholarly                      # 1 — Orsini, De bibliothecis commentarium
+      "ed000248": letter                         # 413 — the Lüne convent letters (private and official
+      #                                            mixed — the bare head)
+      "ed000253": literary/poetry                # 1 — Schwartzkopf's Bibliotheca Augusta: verses on the
+      #                                            Wolfenbüttel library
+      "ed000258": literary/poetry                # 1 — Fonteny's Livre d'enigmes (the French edition)
+      "ed000266": literary/narrative/fable       # 3 — Gabrias's Tetrasticha: Aesopic fables in verse
+      "ed000267": school                         # 15 — Heyden's Formulae puerilium colloquiorum:
+      #                                            school dialogues for the Latin classroom
+      "ed000278": literary/poetry                # 1 — Sibylla Schwarz, Deutsche Poëtische Gedichte
+      "ed000279": letter                         # 17 — Klesch's letters to David Hanisius

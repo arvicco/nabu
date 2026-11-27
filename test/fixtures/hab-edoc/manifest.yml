@@ -1,0 +1,55 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Three transcripts and one METS are documented trims (whole: false) — a
+# fresh GET returns the full file, fetched for URL-liveness only; re-apply
+# the README's trim recipe after any refresh. adapter_test is null: the
+# adapter test asserts trim-level counts.
+source: hab-edoc
+adapter_test:
+retrieved: 2026-11-27
+files:
+  - path: ed000238/mets.xml
+    url: https://diglib.hab.de/edoc/ed000238/mets.xml
+    whole: true
+    trim: none
+  - path: ed000238/tei-transcript.xml
+    url: https://diglib.hab.de/edoc/ed000238/tei-transcript.xml
+    whole: false
+    trim: lines 1-154 + 1017-1020 (header, pages 2r-2v) per the README
+  - path: ed000226/mets.xml
+    url: https://diglib.hab.de/edoc/ed000226/mets.xml
+    whole: true
+    trim: none
+  - path: ed000226/tei-transcript.xml
+    url: https://diglib.hab.de/edoc/ed000226/tei-transcript.xml
+    whole: false
+    trim: lines 1-328 + 392-434 + the closing tags per the README
+  - path: ed000278/mets.xml
+    url: https://diglib.hab.de/edoc/ed000278/mets.xml
+    whole: true
+    trim: none
+  - path: ed000278/texts/tei-transcription.xml
+    url: https://diglib.hab.de/edoc/ed000278/texts/tei-transcription.xml
+    whole: false
+    trim: lines 1-294 + the closing tags per the README
+  - path: ed000248/mets.xml
+    url: https://diglib.hab.de/edoc/ed000248/mets.xml
+    whole: false
+    trim: upstream lines 331-742 (the transcript file lines of letters 2-413) removed
+  - path: ed000248/texts/Brief001-D_tei-transcript.xml
+    url: https://diglib.hab.de/edoc/ed000248/texts/Brief001-D_tei-transcript.xml
+    whole: true
+    trim: none
+  - path: ed000020/mets.xml
+    url: https://diglib.hab.de/edoc/ed000020/mets.xml
+    whole: true
+    trim: none
+  - path: ed000132/mets.xml
+    url: https://diglib.hab.de/edoc/ed000132/mets.xml
+    whole: true
+    trim: none
+  - path: ed000239/mets.xml
+    url: https://diglib.hab.de/edoc/ed000239/mets.xml
+    whole: true
+    trim: none

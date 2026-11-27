@@ -347,6 +347,9 @@ class DerivabilityWritersTest < Minitest::Test
   # byte-compared, tmp+rename) and each licensed record's PDFs
   # (.part+rename) into canonical/hrcak-marulana/ inside Adapter#fetch —
   # the litopys_fetch law kind.
+  # hab_edoc_fetch writes each edition's mets.xml and the admitted
+  # transcripts (tmp+rename) plus its state file into canonical/hab-edoc/
+  # inside Adapter#fetch, atticking the vanished — the same law kind.
   WRITER_ALLOWLIST = %w[
     nabu/store/text_normalized_diet.rb
     nabu/ops/rebuild_census.rb nabu/ops/db_snapshot.rb
@@ -375,6 +378,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/fetch/seal_fetch.rb nabu/fetch/aio_fetch.rb nabu/adapters/runesdb_lido_fetch.rb
     nabu/fetch/statutes_realm_fetch.rb
     nabu/adapters/hrcak_marulana_fetch.rb
+    nabu/fetch/hab_edoc_fetch.rb
     nabu/fetch/sefaria_fetch.rb nabu/fetch/titus_fetch.rb nabu/url_download.rb
     nabu/fetch/litopys_fetch.rb
     nabu/fetch/wiki_fetch.rb nabu/fetch/zip_fetch.rb

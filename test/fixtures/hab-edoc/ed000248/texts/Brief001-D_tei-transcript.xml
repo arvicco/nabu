@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="hs15-brief001">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                 <title>Hs. 15, Brief 1: Vermutlich Garnlieferant an eine Weberin im Kloster Lüne, undatiert</title>
+                <respStmt>
+                    <resp>Herausgegeben von</resp>
+                    <name type="person">Eva Schlotheuber</name>
+                    <name type="org">Heinrich-Heine-Universität Düsseldorf</name>
+                    <name type="person">Henrike Lähnemann</name>
+                    <name type="org">Universität Oxford</name>
+                </respStmt>
+                <respStmt>
+                    <resp>Bearbeitet von</resp>
+                    <name type="person">Simone Schultz-Balluff</name>
+                    <name type="org">Universität Bonn</name>
+                    <name type="person">Edmund Wareham</name>
+                    <name type="org">Universität Oxford</name>
+                    <name type="person">Philipp Trettin</name>
+                    <name type="org">Heinrich-Heine-Universität Düsseldorf</name>
+                </respStmt>
+                <respStmt>
+                    <resp>unter Mitarbeit von</resp>
+                    <name type="person">Philipp Stenzig</name>
+                    <name type="org">Heinrich-Heine-Universität Düsseldorf</name>
+                    <name type="person">Timo Bülters</name>
+                    <name type="org"> Universität Bonn</name>
+                    <name type="person">Mai-Britt Wiechmann</name>
+                    <name type="org">Universität Oxford</name>
+                </respStmt>
+                <respStmt>
+                    <resp>digitale Umsetzung</resp>
+                    <name type="person">Wolfgang Seifert</name>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                </respStmt>
+                <funder ref="https://www.gerda-henkel-stiftung.de/">Gerda Henkel Stiftung</funder>
+                <funder ref="http://www.volkswagenstiftung.de/">VolkswagenStiftung</funder>
+                <funder ref="https://www.klosterkammer.de/">Klosterkammer Hannover</funder>
+            </titleStmt>
+            <editionStmt>
+                <edition>Elektronische Ausgabe nach TEI P5</edition>
+                <respStmt>
+                    <resp>TEI-P5 konforme Kodierung durch</resp>
+                    <name type="person">Wolfgang Seifert</name>
+                    <name type="person">Torsten Schaßan</name>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                </respStmt>
+            </editionStmt>
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                    <ptr target="http://www.hab.de"/>
+                </publisher>
+                <date when="2018" type="issued"/>
+                <distributor>Herzog August Bibliothek</distributor>
+                <availability status="restricted">
+                    <licence target="http://creativecommons.org/licenses/by-sa/3.0/de/">
+                        <p>Dieses Dokument steht unter einer Creative Commons Namensnennung-Weitergabe unter gleichen Bedingungen 3.0 Deutschland Lizenz (CC BY-SA).</p>
+                        <p>Herzog August Bibliothek Wolfenbüttel (<ref target="http://diglib.hab.de/?link=012">Nutzungshinweise</ref>)</p>
+                    </licence>
+                </availability>
+                <pubPlace>
+                    <ptr type="purl" target="http://diglib.hab.de/mss/ed000248/start.htm"/>
+                    <!-- 
+                    <ptr type="thumbnailForPresentations" target="http://diglib.hab.de/mss/ed000207/thumbs/00001.jpg"/>
+                -->
+                </pubPlace>
+                <!--
+                    <idno type="URN"> urn:nbn:de:gbv:??? <idno>
+            -->
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc xml:id="mss_lg-kl-hs15-brief001_tei-msDesc" xml:lang="de">
+                    <msIdentifier>
+                        <settlement>Lüneburg</settlement>
+                        <repository>Kloster Lüne</repository>
+                        <idno>Hs. 15, Lage 1, fol. 1r, Brief 1</idno>
+                    </msIdentifier>
+                    <head>
+                        <title type="abstract" xml:lang="de">Abrechnung für Garn</title>
+                        <title type="abstract" xml:lang="en">Price list for wool for weaving</title>
+                        <title type="correspondence">Vermutlich Garnlieferant an eine Weberin im Kloster Lüne</title>
+                    </head>
+                    <msContents>
+                        <summary>
+                            <p xml:lang="de">Abrechnung für eine Garnlieferung.</p>
+                            <p xml:lang="en">Price list for delivery of wool for weaving.</p>
+                        </summary>
+                        <textLang mainLang="nds">Niederdeutsch</textLang>
+                    </msContents>
+                    <physDesc>
+                        <objectDesc form="letter">
+                            <supportDesc material="chart">
+                                <extent>1 Seite</extent>
+                            </supportDesc>
+                        </objectDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <!--
+            <revisionDesc>
+			<change who="" when=""> 
+			</change>
+		    </revisionDesc>
+        -->
+        <encodingDesc>
+            <projectDesc>
+                <p>Edition des Briefes erstellt im Rahmen des Projektes <name type="project" subtype="edition">Netzwerke der Nonnen. Edition und Erschließung der Briefsammlung aus Kloster Lüne (ca. 1460–1555)</name>
+                </p>
+            </projectDesc>
+            <appInfo>
+                <application xml:id="docxtotei" ident="TEI_fromDOCX" version="2.15.0">
+                    <label>DOCX to TEI</label>
+                </application>
+            </appInfo>
+        </encodingDesc>
+        <profileDesc>
+            <correspDesc>
+                <correspAction type="sent">
+                    <rs type="person">vermutlich Garnlieferant</rs>
+                    <rs type="place"/>
+                    <date>undatiert</date>
+                </correspAction>
+                <correspAction type="received">
+                    <rs type="person">vermutlich Weberin</rs>
+                    <rs type="org" ref="#luene_kloster">Kloster Lüne</rs>
+                </correspAction>
+            </correspDesc>
+        </profileDesc>
+    </teiHeader>
+    <facsimile>
+        <graphic xml:id="mss_ed000210_00003" url="https://diglib.hab.de/mss/ed000210/00003.jpg" n="L1f1r"/>
+    </facsimile>
+    <text>
+        <body>
+            <pb n="L1f1r" facs="#mss_ed000210_00003"/>
+            <div>
+                <p>
+                    <lb/>So iß des III <term ref="#stige">stige</term> myn I elen <choice><orig>vnde</orig><reg>unde</reg></choice>
+                    <lb/>wy wilt juw de elen laten to I <w>ſ.</w>
+                    <lb/>Des garnes, dat dar <choice><orig>auer</orig><reg>aver</reg></choice> iß<choice><orig><pc>.</pc></orig><reg><pc>,</pc></reg></choice> iß III £
+                    <lb/>III ₰<note type="crit_app">Lesart unsicher</note> weghen<choice><orig><pc>.</pc></orig><reg><pc>.</pc></reg></choice>
+                </p>
+                <p resp="ndn"><lb/><choice><orig>Vel</orig><reg>Wel</reg></choice> sic de elen <choice><orig>ghe rekent</orig><reg>gherekent</reg></choice> tho XIIII penning,
+                    <lb/>so wil wy juw de<del>to</del> elen laten to I <w>ſ.</w>
+                    <lb/>to fruntschopp<choice><orig><pc>.</pc></orig><reg><pc>.</pc></reg></choice>
+                </p>
+                <p resp="ndn"><lb/>Ift dat garne so cleyne iß, alze to dem
+                    <lb/><term ref="#tafellaken">tafellaken</term> was, so lopp dat £ wol
+                    <lb/>XII elen<choice><orig><pc>.</pc></orig><reg><pc>.</pc></reg></choice>
+                </p>
+            </div>
+        </body>
+    </text>
+</TEI>
