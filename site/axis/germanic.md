@@ -26,9 +26,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 48 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 49 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
 |---|---|---|---|---|
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `blbooks` | texts | open | wired · manual | 2,497 docs / 230,206 passages |
@@ -40,7 +40,7 @@ A source wears every desk it serves — these 48 answer this desk. Holdings are 
 | `corpus-oudnederlands` | texts | research_private | wired · manual | 89 docs / 5,745 passages |
 | `dbnl` | texts | attribution | wired · manual | 3,653 docs / 950,870 passages |
 | `delpher-newspapers` | texts | attribution | wired · manual | 8,559 docs / 68,690 passages |
-| `dio-epidoc` | inscriptions | attribution | not yet wired | not synced yet |
+| `dio-epidoc` | inscriptions | attribution | wired · manual | 978 docs / 2,699 passages |
 | `dta` | texts | attribution | wired · manual | 5,478 docs / 729,090 passages |
 | `ecco-tcp` | texts | open | wired · manual | 3,101 docs / 2,697,714 passages |
 | `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
@@ -49,7 +49,7 @@ A source wears every desk it serves — these 48 answer this desk. Holdings are 
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
 | `fsv-lexica` | dictionary | attribution | wired · manual | 51,811 entries |
 | `grand-tour` | texts | attribution | wired · frozen | 4 docs / 515 passages |
-| `hab-edoc` | texts | attribution | not yet wired | not synced yet |
+| `hab-edoc` | texts | attribution | wired · manual | 472 docs / 4,972 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
 | `leme` | dictionary | attribution | wired · manual | 943,211 entries |
@@ -82,9 +82,9 @@ A source wears every desk it serves — these 48 answer this desk. Holdings are 
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `en` 601,236 · `ita` 167,236 · `lat` 143,047 · `enm` 117,615 · `non` 97,017 · `ang` 71,142 · `fra` 61,677 · `sv` 53,407 · `spa` 28,397 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `en` 601,236 · `ita` 167,236 · `lat` 143,861 · `enm` 117,615 · `non` 97,017 · `ang` 71,142 · `fra` 61,677 · `sv` 53,407 · `spa` 28,397 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `cop` 3 … and 19 more (`nabu axis germanic` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 27 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `cop` 3 … and 19 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 

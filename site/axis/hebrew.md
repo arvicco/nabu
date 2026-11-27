@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
 |---|---|---|---|---|
 | `ben-yehuda` | texts | open | wired · manual | 6,043 docs / 171,359 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
@@ -37,9 +37,9 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `wiktionary-arc` | dictionary | attribution | wired · manual | 2,396 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `hbo` 36,817 · `grc` 6,313 · `arc` 6,093 · `eng` 5,919 · `jrb` 4,068 · `heb` 3,790 · `egy` 3,050 · `ara` 1,954 · `egy-Egyd` 1,424 · `en` 1,396 … and 20 more (`nabu axis hebrew` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `hbo` 36,817 · `grc` 6,313 · `arc` 6,093 · `eng` 5,919 · `jrb` 4,068 · `heb` 3,790 · `egy` 3,050 · `ara` 1,954 · `egy-Egyd` 1,424 · `en` 1,396 … and 20 more (`nabu axis hebrew` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `oge` 5 · `lzh` 4 · `frm` 3 · `fro` 3 … and 21 more (`nabu axis hebrew` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 27 November 2026): `orv` 9 · `oge` 5 · `lzh` 4 · `frm` 3 · `fro` 3 … and 21 more (`nabu axis hebrew` lists all).
 
 ## The desk's instruments
 
