@@ -95,6 +95,84 @@ class ConlluParserTest < Minitest::Test
     annotations = parse(path, urn: "urn:x", language: "cop").first.annotations
     refute annotations.key?("translations"),
            "callers serving translations as sibling documents (old-tibetan) keep them out"
+    dipi = parse(File.join(FIXTURES, "prakrit-dipi", "pra_dipi-ud-test.conllu"), urn: "urn:x", language: "pra")
+    refute dipi.first.annotations.key?("orig"), "the original readings are opt-in too"
+  end
+
+  # The language-tagged translation spelling (`# text[eng] =`, any tag):
+  # Manchu GDUD carries one on nearly every block, under its verbatim key.
+  def test_language_tagged_text_translations_ride_annotations
+    passages = parse_whitelisted(File.join(FIXTURES, "manchu-gdud", "mnc_gdud-ud-test.conllu"), language: "mnc").to_a
+    assert_equal({ "text[eng]" => "I went with that person." }, passages.first.annotations["translations"])
+    tagged = passages.count { |p| p.annotations.dig("translations", "text[eng]") }
+    assert_equal 80, tagged
+    assert_equal 81, passages.count { |p| p.annotations["translations"] }, "plus the one block's text_en"
+  end
+
+  def test_tagged_translations_of_any_language_ride_verbatim
+    io = StringIO.new("# sent_id = 1\n# text = a\n# text[spa] = una\n# text[eng] = \n" \
+                      "1\ta\ta\tX\t_\t_\t0\troot\t_\t_\n\n")
+    assert_equal({ "text[spa]" => "una" }, parse_whitelisted(io, language: "mnc").first.annotations["translations"])
+  end
+
+  # The TuDeT treebanks' per-language translation keys and TUECL's English
+  # `# gloss` sentence rendering.
+  def test_modern_language_text_keys_and_the_tuecl_gloss_ride_translations
+    guarani = parse_whitelisted(File.join(FIXTURES, "guarani-oldtudet", "gn_oldtudet-ud-test.conllu"),
+                                language: "gn").to_a
+    assert_equal({ "text_eng" => "to the men", "text_spa" => "a los hombres" },
+                 guarani.first.annotations["translations"])
+    assert(guarani.any? { |p| p.annotations.dig("translations", "text_port") == "\"Isso é para Deus\"." })
+
+    tuecl = parse_whitelisted(File.join(FIXTURES, "classical-chinese-tuecl", "lzh_tuecl-ud-test-head50.conllu"),
+                              language: "lzh").first
+    assert_equal({ "gloss" => "In the Northern Ocean there is a fish" }, tuecl.annotations["translations"])
+  end
+
+  # Birchbark letters written on two sides split their translations
+  # (`transl_ru-1`, `transl_en_2-1` …); HittB spells one block `translated`.
+  # Comment lines copied verbatim from the live treebanks.
+  def test_split_and_variant_translation_keys_ride_translations
+    io = StringIO.new("# sent_id = 1\n# text = a\n# transl_ru-1 = берестяную грамоту отдай Якиму сам.\n" \
+                      "# transl_en_2-1 = [Outer side] + From Ivan to Dristliv.\n" \
+                      "# translated = And the four which you, Ištanu, have hitched up\n" \
+                      "1\ta\ta\tX\t_\t_\t0\troot\t_\t_\n\n")
+    assert_equal({ "translated" => "And the four which you, Ištanu, have hitched up",
+                   "transl_ru-1" => "берестяную грамоту отдай Якиму сам.",
+                   "transl_en_2-1" => "[Outer side] + From Ivan to Dristliv." },
+                 parse_whitelisted(io, language: "orv").first.annotations["translations"])
+  end
+
+  # --- original readings ---------------------------------------------------
+  # The same sentence in another form beside the `# text` surface: DIPI's
+  # Leiden-bracketed `# orig`, the transliterations (PTNK/GLC `translit`,
+  # CAVaL `transliterated_text`) and BOUN's Ottoman-script `text_arabic`.
+  # Each rides its verbatim key on its OWN sentence (the reference
+  # precedent — never carried across a newdoc's sentences).
+
+  def test_the_dipi_original_reading_rides_its_own_sentence
+    passages = parse_whitelisted(File.join(FIXTURES, "prakrit-dipi", "pra_dipi-ud-test.conllu"), language: "pra").to_a
+    first = passages.first
+    assert_equal "iy[aṃ] dhaṃma-lipī Devānaṃpriyena Priyadasinā rāña lekh[ā]pitā", first.annotations["orig"]
+    assert_equal "iyaṃ dhaṃma-lipī Devānaṃpriyena Priyadasinā rāña lekhāpitā", first.text
+    assert_equal(84, passages.count { |p| p.annotations["orig"] })
+    refute first.annotations.key?("translations")
+  end
+
+  def test_transliterations_and_original_script_readings_ride_verbatim
+    caval = parse_whitelisted(File.join(FIXTURES, "classical-armenian-caval", "xcl_caval-ud-test-head50.conllu"),
+                              language: "xcl").first
+    assert caval.annotations["transliterated_text"].start_with?("Zgoyš lerowkʻ ołormowtʻean jerowm;")
+    assert caval.annotations.dig("translations", "translated_text").start_with?("Take heed")
+
+    ptnk = parse_whitelisted(File.join(FIXTURES, "hebrew-ptnk", "hbo_ptnk-ud-test-head50.conllu"),
+                             language: "hbo").first
+    assert ptnk.annotations["translit"].start_with?("ṿayavoʼu shene hamalʼakhim sedomah")
+
+    boun = parse_whitelisted(File.join(FIXTURES, "ottoman-boun", "ota_boun-ud-test-head50.conllu"),
+                             language: "ota").first
+    assert boun.annotations["text_arabic"].start_with?(". مصاحبه مه نهايت")
+    refute boun.annotations.key?("translations"), "an original-script reading is no translation"
   end
 
   # --- sentence metadata comments (the newdoc-scoped whitelist) ----------

@@ -605,8 +605,9 @@ class UniversalDependenciesTest < Minitest::Test
   end
 
   # What rides from the four: the Ukrainian and Swedish newdoc ids (the
-  # dating lane's year source), the Ashokan Leiden-bracketed Orig= MISC and
-  # the Prakrit MWT compounds, and Manchu's one text_en translation.
+  # dating lane's year source), the Ashokan Leiden-bracketed `# orig`
+  # reading and the Prakrit MWT compounds, and Manchu's translations (80
+  # `# text[eng]` blocks + one `# text_en`).
   def test_ud_219_historical_layers_ride_through
     adapter = Nabu::Adapters::UniversalDependencies.new
     zhelekhivka = adapter.parse(ud_ref("urn:nabu:ud:ukrainian-zhelekhivka:uk_zhelekhivka-ud-test-slices"))
@@ -621,10 +622,12 @@ class UniversalDependenciesTest < Minitest::Test
     forms = edict.annotations["tokens"].map { |token| token["form"] }
     assert_includes forms, "dhaṃma"
     assert_includes forms, "lipī"
+    assert_equal "iy[aṃ] dhaṃma-lipī Devānaṃpriyena Priyadasinā rāña lekh[ā]pitā", edict.annotations["orig"]
 
     manchu = adapter.parse(ud_ref("urn:nabu:ud:manchu-gdud:mnc_gdud-ud-test")).passages
-    translated = manchu.filter_map { |passage| passage.annotations.dig("translations", "text_en") }
-    assert_equal 1, translated.size, "only the one text_en block rides; the 81 text[eng] lines are declared coarseness"
+    assert_equal(1, manchu.count { |passage| passage.annotations.dig("translations", "text_en") })
+    assert_equal(80, manchu.count { |passage| passage.annotations.dig("translations", "text[eng]") })
+    assert(manchu.all? { |passage| passage.annotations["translations"] }, "every grammar example is translated")
   end
 
   # The Romance pack flows through the same unchanged annotation→index

@@ -62,8 +62,9 @@ module Nabu
     #   alongside `LId=` lemma-disambiguators. Sanskrit-Vedic adds extra
     #   sentence-level comments (`# citation_text=…`, `# layer=…`). By
     #   default only sent_id/text/source are interpreted; +sentence_comments+
-    #   arms the translation/reference and METADATA_COMMENTS whitelists
-    #   (the latter newdoc-scoped — see NEWDOC); the rest are ignored.
+    #   arms the translation/reference/original-reading and METADATA_COMMENTS
+    #   whitelists (the latter newdoc-scoped — see NEWDOC); the rest are
+    #   ignored.
     # - License variance is per-treebank (see the UD adapter + fixture README);
     #   the parser is license-agnostic.
     class ConlluParser
@@ -90,9 +91,33 @@ module Nabu
       # "translations" => {key => text}; the reference comment (ittb/llct/
       # dipwbg "reference", egyptian-pc "ref") rides "reference". Empty
       # values mint nothing.
+      #
+      # Widened from the live census of canonical/ud, 2026-11-27: the TuDeT
+      # per-language keys (text_eng 613 [tupinamba, guarani] + 3 [pisandub]
+      # · text_por 584 [tupinamba, many empty] · text_spa 59 · text_port 22
+      # [guarani]), TUECL's English sentence rendering `gloss` (93), HittB's
+      # one-off spelling `translated` (3), and by TRANSLATION_PATTERNS the
+      # language-tagged `text[<tag>]` (Manchu GDUD text[eng], 81 — any tag
+      # rides) and birchbark's two-sided-letter splits (transl_ru-1…4,
+      # transl_en_2-1/2, ~70). Still dropped, as a different class: text_lzh
+      # (MiCA's Chinese SOURCE line the Tangut renders, 503) and OGLauRo's
+      # gk_text/arm_text — parallel witnesses, not translations.
       TRANSLATION_COMMENTS = %w[text_en translation translated_text sent_transl_en sent_transl_ru
-                                transl_en_1 transl_en_2 transl_ru].freeze
+                                transl_en_1 transl_en_2 transl_ru
+                                text_eng text_spa text_por text_port gloss translated].freeze
+      TRANSLATION_PATTERNS = [/\Atext\[[^\]=]+\]\z/, /\Atransl_(?:en|ru)(?:_\d+)?-\d+\z/].freeze
       REFERENCE_COMMENTS = %w[reference ref].freeze
+
+      # The original readings: the same sentence in another FORM beside the
+      # `# text` surface (census as above) — DIPI's Leiden-bracketed `orig`
+      # (84; its per-token copy is MISC Orig=), the transliterations
+      # `translit` (7,112: hebrew-ptnk, old-georgian-glc, middle-armenian-
+      # armtdp, old-turkish-tonqq) and `transliterated_text` (4,781, caval),
+      # and BOUN's Ottoman-script `text_arabic` (514; the passage text is the
+      # Latin transcription). Each rides its verbatim key as a top-level
+      # annotation on its OWN sentence — the reference precedent, never
+      # newdoc-carried. Empty values mint nothing.
+      READING_COMMENTS = %w[orig translit transliterated_text text_arabic].freeze
 
       # The metadata comments (the aggressive-mining law; census of
       # canonical/ud 2026-10-19), upstream key → annotation key. Keys ride
@@ -287,7 +312,7 @@ module Nabu
       # keep them out of the original's passages).
       def sentence_comment_annotations(block)
         result = {}
-        translations = TRANSLATION_COMMENTS.filter_map do |key|
+        translations = (TRANSLATION_COMMENTS + patterned_translation_keys(block)).filter_map do |key|
           value = comment_value(block, key).to_s.strip
           [key, Nabu::Normalize.nfc(value)] unless value.empty?
         end
@@ -295,7 +320,20 @@ module Nabu
         reference = REFERENCE_COMMENTS.lazy.map { |key| comment_value(block, key).to_s.strip }
                                            .find { |value| !value.empty? }
         result["reference"] = reference if reference
+        READING_COMMENTS.each do |key|
+          value = comment_value(block, key).to_s.strip
+          result[key] = Nabu::Normalize.nfc(value) unless value.empty?
+        end
         result
+      end
+
+      # The block's comment keys matching TRANSLATION_PATTERNS, in comment
+      # order, each once.
+      def patterned_translation_keys(block)
+        block.comments.filter_map do |comment|
+          key = comment[/\A([^=]+?)\s*=/, 1]
+          key if key && TRANSLATION_PATTERNS.any? { |pattern| pattern.match?(key) }
+        end.uniq
       end
 
       # A token as a lean hash: `_` placeholders and the dropped DEPS column
