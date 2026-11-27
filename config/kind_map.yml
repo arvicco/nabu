@@ -1756,6 +1756,15 @@ sources:
       "classic": scripture                       # 3 — Yijing, Lunyu: the kanripo KR1 經部 → scripture fold
       "primer": school                           # 2 — 清語老乞大, 三字經: the schoolroom's own texts
       "scripture": scripture                     # 1 — the Acts, Manchu New Testament
+  tr-wikisource:      # the census's own per-inscription genre label (TrWikisource::WORKS), one per
+    #                   document; counts = admitted pages 2026-11-27 (3)
+    facet: genre
+    map:
+      "royal memorial inscription": royal        # 2 — Kül Tigin, Bilge Kağan: the khagan speaking as
+      #                                            khagan on his memorial stele (the mnc stele fold)
+      "monumental inscription": royal            # 1 — Tonyukuk: the statesman's monumental narrative
+      #                                            of the khaganate — the head's "royal and monumental
+      #                                            inscriptions", not a funerary text
   shiratori-shm:
     source_kind: historiography/chronicle   # P164: the Secret History of the Mongols — the
     #                                         Chinggisid house's chronicle, Shiratori's edition
