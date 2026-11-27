@@ -443,6 +443,23 @@ sources:
     # Ḥijāzī-rasm register some scholars separate from the later
     # classical norm) does not exist in the registry and is not claimed.
     ara: { lect: "ara:cla", tier: certain }
+  corpus-coranicum-manuscripts:
+    # The Corpus Coranicum manuscript transcriptions: the same text as
+    # corpus-coranicum — the Qurʾān, the founding document of Classical
+    # Arabic — in its earliest witnesses, so the same claim on the same
+    # node, ara:cla. The undotted rasm is still Arabic script (the held
+    # text's script is Arab, no ~ qualifier); the ḥiǧāzī codices' archaic
+    # orthography is the written norm of the language's first stage, not
+    # a separate lect the registry carries.
+    ara: { lect: "ara:cla", tier: certain }
+  corpus-coranicum-variants:
+    # The variant readings (qirāʾāt) of the Qurʾān as the classical
+    # sources ascribe them to its readers: readings of the founding text
+    # of Classical Arabic, by the readers whose usage the grammarians
+    # codified — ara:cla. The source stores ara-Latn (the readings are held
+    # in Corpus Coranicum's DMG-style transliteration), so the claim
+    # carries the held script, ~latn (the quranic-corpus row's shape).
+    ara-Latn: { lect: "ara:cla~latn", tier: certain }
   wiktionary-gmq-osw:
     # Wiktionary's Old Swedish (gmq-osw, no ISO code; the codemap's own
     # gmq-osw → sv:old row) stored under the held fornsvenska tag sv so

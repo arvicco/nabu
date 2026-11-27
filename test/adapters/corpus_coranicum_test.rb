@@ -10,7 +10,9 @@ require "tmpdir"
 # intertexts, manuscripts, variants) skipped by rule, the CC BY-SA 4.0
 # manifest, and the pinned git fetch. Fixtures: a verbatim cut of suras 1,
 # 111 and 112 from cairoquran.xml, their three whole concordance files, one
-# whole specimen per rejected grain (test/fixtures/corpus-coranicum/README.md).
+# whole specimen per rejected grain — the manuscripts and variants
+# directories holding the sibling sources' fixtures — (test/fixtures/
+# corpus-coranicum/README.md).
 class CorpusCoranicumTest < Minitest::Test
   include AdapterConformance
 
@@ -59,11 +61,16 @@ class CorpusCoranicumTest < Minitest::Test
 
   def test_the_rejected_grains_are_skipped_by_rule
     skips = ADAPTER.new.discovery_skips(FIXTURES)
-    assert_equal 4, skips.skipped_by_rule, "one specimen each: commentary, intertexts, manuscripts, variants"
+    # One specimen each of commentary and intertexts; the manuscripts and
+    # variants directories carry the sibling sources' fixtures (four records
+    # + places.xml; the three variants files), still none of this source's.
+    assert_equal 10, skips.skipped_by_rule
     assert_equal 0, skips.unrecognized
-    %w[quran_commentary quran_intertexts quran_manuscripts quran_variants].each do |dir|
-      assert(skips.notes.any? { |note| note.start_with?("data/#{dir}/: 1 file") }, "a note for #{dir}")
+    { "quran_commentary" => "1 file ", "quran_intertexts" => "1 file ", "quran_manuscripts" => "5 files",
+      "quran_variants" => "3 files" }.each do |dir, count|
+      assert(skips.notes.any? { |note| note.start_with?("data/#{dir}/: #{count}") }, "a note for #{dir}")
     end
+    assert(skips.notes.any? { |note| note.include?("corpus-coranicum-manuscripts source") })
   end
 
   def test_a_stray_file_and_an_orphan_concordance_file_are_loud

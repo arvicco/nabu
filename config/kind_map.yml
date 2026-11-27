@@ -1723,6 +1723,13 @@ sources:
   corpus-coranicum:
     source_kind: scripture   # the Qurʾān (Cairo 1924) — every document is a sura; the commentary
     #                          grain (exegesis) is not taken by this source
+  corpus-coranicum-manuscripts:
+    source_kind: scripture   # Qurʾān manuscripts — every document a witness of the Qurʾān, every
+    #                          passage one of its verses (the cntr/ntvmr witness fold)
+  corpus-coranicum-variants:
+    source_kind: scripture   # the variant readings of the Qurʾān — every passage a reader's reading
+    #                          of a verse's words: the scripture's own text in its transmitted
+    #                          variants (qirāʾāt), not commentary on it
   slavistics-pd:
     source_kind: scholarly   # the PD Slavistics reference shelf — grammars,
     #                          etymological dictionaries, Academy monographs

@@ -40,9 +40,13 @@ module Nabu
     #   commentary by sura), quran_intertexts/ (714: 713 intertext records
     #   + categories.xml), quran_manuscripts/ (2,323: 2,322 manuscript
     #   descriptions + places.xml), quran_variants/ (3: allvariants.xml and
-    #   its reader/source authority files) — REJECTED for this source, each
-    #   its own later packet: skipped by rule, one note per directory with
-    #   its file count.
+    #   its reader/source authority files) — REJECTED for this source:
+    #   skipped by rule, one note per directory with its file count. The
+    #   manuscripts and the variants are taken by the sibling sources that
+    #   read this same clone (corpus-coranicum-manuscripts,
+    #   corpus-coranicum-variants — CorpusCoranicumClone), each reconciling
+    #   its own directory; the commentary and the intertexts are later
+    #   packets.
     # Anything else under data/ is unrecognized. schema/ (the ODD + RNG)
     # and the README are documentation, outside the census; the attic and
     # dot-paths are infrastructure.
@@ -104,7 +108,8 @@ module Nabu
     # == fetch
     #
     # GitFetch (attic + mass-deletion breaker), the whole tree (the
-    # rejected grains are later packets of this same repository), PINNED:
+    # rejected grains are read by the sibling sources or are later packets
+    # of this same repository — the clone is never made twice), PINNED:
     # the repo is one frozen commit, so a moved HEAD is an event to review
     # (license + text), never a cadence — the fetch aborts loudly on drift.
     # A git checkout's identity is its HEAD; nothing is materialized
@@ -147,8 +152,10 @@ module Nabu
       REJECTED_DIRS = {
         "quran_commentary" => "the chronological literary-critical commentary, one file per sura",
         "quran_intertexts" => "the intertext records (late-antique and earlier parallels) and their categories",
-        "quran_manuscripts" => "the manuscript descriptions and their places authority file",
-        "quran_variants" => "the variant readings and their reader/source authority files"
+        "quran_manuscripts" => "the manuscript descriptions and their places authority file (the " \
+                               "transcribed ones are the corpus-coranicum-manuscripts source)",
+        "quran_variants" => "the variant readings and their reader/source authority files (the " \
+                            "corpus-coranicum-variants source)"
       }.freeze
 
       # Concordance seg types that never reach a token (class note).
