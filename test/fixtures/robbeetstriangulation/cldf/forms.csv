@@ -1,0 +1,12 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile
+Baoan-3_gov-2,,Baoan,3_gov,ɵd-,ɵd-,ɵ d,,,24,,^ ɵ d -$,default
+MiddleMongolianMuqaddimataladab-3_gov-1,,MiddleMongolianMuqaddimataladab,3_gov,ot- ~ od-,ot-,o t,,,24,,^ o t -$,default
+MiddleMongolianSecretHistory-3_gov-1,,MiddleMongolianSecretHistory,3_gov,ot-,ot-,o t,,,24,,^ o t -$,default
+Oirat-3_gov-1,,Oirat,3_gov,od-,od-,o d,,,24,,^ o d -$,default
+LateMiddleKorean-9_2sgpronoun-1,,LateMiddleKorean,9_2sgpronoun,ne,ne,n e,,,60,,^ n e $,default
+OldJapanese-9_2sgpronoun-1,,OldJapanese,9_2sgpronoun,na ~ nare,na,n a,,,60,,^ n a $,default
+CodexCumanicus-51_childkintermn-1,,CodexCumanicus,51_childkintermn,ogul,ogul,o g u l,,,529,,^ o g u l $,default
+Karaim-51_childkintermn-2,,Karaim,51_childkintermn,ulan,ulan,u l a n,,,529,,^ u l a n $,default
+OldTurkic-51_childkintermn-1,,OldTurkic,51_childkintermn,oglan,oglan,o g l a n,,,529,,^ o g l a n $,default
+CodexCumanicus-251_with-1,,CodexCumanicus,251_with,birla,birla,b i r l a,,,3152,,^ b i r l a $,default
+OldTurkic-251_with-1,,OldTurkic,251_with,birle,birle,b i r l e,,,3152,,^ b i r l e $,default

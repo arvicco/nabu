@@ -77,6 +77,12 @@ module Nabu
     #   (+concept_notes+, column => label) that ride the body as labeled
     #   lines — zhangrgyalrong's Gloss_in_Source carries the Chinese
     #   character its Old/Middle Chinese rows read.
+    # - JUDGMENT NOTES: likewise extra cognates.csv columns
+    #   (+judgment_notes+, column => label) — the distinct non-blank values
+    #   across the set's judgments ride the body as ONE labeled line, in
+    #   judgment order ("; "-joined). The Savelyev & Robbeets bundles state
+    #   each set's root there ("*oglan", "*u-matu") — the authors' root
+    #   label, not a form row of any variety, so it never heads the set.
     #
     # == Word strategies (declared per dataset, never sniffed)
     #
@@ -112,7 +118,7 @@ module Nabu
       BRACED = /\A(?<trans>[^{}]*?)\s*\{(?<orth>[^{}]*)\}\s*\z/
 
       def initialize(slug:, language:, label:, word_from: :form, varieties: {}, proto_varieties: [],
-                     concept_notes: {})
+                     concept_notes: {}, judgment_notes: {})
         unless WORD_STRATEGIES.include?(word_from)
           raise ArgumentError, "word_from must be one of #{WORD_STRATEGIES.join(', ')}"
         end
@@ -124,6 +130,7 @@ module Nabu
         @varieties = varieties
         @proto_varieties = proto_varieties.to_set
         @concept_notes = concept_notes
+        @judgment_notes = judgment_notes
       end
 
       def read(cldf_dir)
@@ -272,6 +279,7 @@ module Nabu
                     "no reconstruction in this dataset — the concept heads the set"
                   end)
         lines.concat(concept_note_lines(head || members.first.last, tables))
+        lines.concat(judgment_note_lines(members.map(&:first)))
         lines << "set: #{set['Name'].strip}" if informative_name?(set, set_id, head)
         lines.concat(etymon_lines(set, tables))
         lines << "comment: #{set['Comment'].strip}" unless blank?(set["Comment"])
@@ -294,6 +302,16 @@ module Nabu
           next nil if value.empty?
 
           "#{label}: #{python_list_items(value) || value}"
+        end
+      end
+
+      # A dataset's declared extra judgment columns (+judgment_notes+,
+      # column => label): one line per column, its distinct values across
+      # the set's judgments in judgment order.
+      def judgment_note_lines(judgments)
+        @judgment_notes.filter_map do |column, label|
+          values = judgments.map { |judgment| judgment[column].to_s.strip }.reject(&:empty?).uniq
+          values.empty? ? nil : "#{label}: #{values.join('; ')}"
         end
       end
 

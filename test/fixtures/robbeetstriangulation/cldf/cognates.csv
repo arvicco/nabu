@@ -1,0 +1,12 @@
+ID,Form_ID,Form,Cognateset_ID,Doubt,Cognate_Detection_Method,Source,Alignment,Alignment_Method,Alignment_Source,Root
+Baoan-3_gov-2-1,Baoan-3_gov-2,ɵd-,24,false,expert,,,,,*od-
+MiddleMongolianMuqaddimataladab-3_gov-1-1,MiddleMongolianMuqaddimataladab-3_gov-1,ot-,24,false,expert,,,,,*od-
+MiddleMongolianSecretHistory-3_gov-1-1,MiddleMongolianSecretHistory-3_gov-1,ot-,24,false,expert,,,,,*od-
+Oirat-3_gov-1-1,Oirat-3_gov-1,od-,24,false,expert,,,,,*od-
+LateMiddleKorean-9_2sgpronoun-1-1,LateMiddleKorean-9_2sgpronoun-1,ne,60,false,expert,,,,,*ne
+OldJapanese-9_2sgpronoun-1-1,OldJapanese-9_2sgpronoun-1,na,60,false,expert,,,,,*ne
+CodexCumanicus-51_childkintermn-1-1,CodexCumanicus-51_childkintermn-1,ogul,529,false,expert,,,,,*oglan
+Karaim-51_childkintermn-2-1,Karaim-51_childkintermn-2,ulan,529,false,expert,,,,,*oglan
+OldTurkic-51_childkintermn-1-1,OldTurkic-51_childkintermn-1,oglan,529,false,expert,,,,,*oglan
+CodexCumanicus-251_with-1-1,CodexCumanicus-251_with-1,birla,3152,false,expert,,,,,*birle
+OldTurkic-251_with-1-1,OldTurkic-251_with-1,birle,3152,false,expert,,,,,*birle
