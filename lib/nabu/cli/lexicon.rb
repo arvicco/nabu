@@ -153,6 +153,17 @@ module Nabu
       ref, case-insensitively; LIKE patterns pass through. Every card prints
       the entry's own facets on a "facets:" line (refs too under --long).
 
+      --root ROOT looks up a consonantal ROOT instead of a headword — the
+      entries a root-keyed shelf (Lane's Lexicon) files under it. ROOT is
+      Arabic script (رحم), Buckwalter as the Quranic Arabic Corpus writes
+      it (rHm, Amn, Elm) or DMG as Corpus Coranicum writes it (rḥm, ʾmn,
+      ʿlm); the notation is detected (--scheme overrides). Both sides fold
+      alike: vowel signs dropped, hamza seats and alif one hamza, a doubled
+      final radical collapsed (rbb → رب); only on a miss do weak radicals
+      w/y/hamza interchange and C1C2C1C2 reduplication collapse (zlzl → زل),
+      and the header says that looser key answered. `nabu show URN --roots`
+      lists a Quranic passage's tokens with the root each steps to.
+
       Examples:
         nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
         nabu define λόγος              # the long one, whole
@@ -162,6 +173,8 @@ module Nabu
         nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
         nabu define '*bogъ'            # the reconstruction, with its reflexes (quote *)
         nabu define 経 --facet domain=Buddhism  # JMdict's Buddhist-domain senses only
+        nabu define --root rHm         # Lane's رحم article (QAC Buckwalter root)
+        nabu define --root ʿlm         # the same lookup from a DMG root
     HELP
     option :lang, type: :string,
                   desc: "Restrict to one dictionary language (any language on the live " \
@@ -178,9 +191,17 @@ module Nabu
     option :facet, type: :string, repeatable: true, banner: "NAME=PATTERN",
                    desc: "Entry facet filter — domain=medicine, usage=archaic, semantic_field=Kinship, " \
                          "concept=WORLD: matches value or ref, LIKE patterns pass through; repeatable (AND)"
+    option :root, type: :string, banner: "ROOT",
+                  desc: "Look up a consonantal root instead of a headword — Arabic script, Buckwalter (rHm) " \
+                        "or DMG (rḥm): the entries Lane files under it"
+    option :scheme, type: :string, enum: %w[buckwalter dmg arabic],
+                    desc: "With --root: the root's notation (default: detected from its characters)"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
-      raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
+      root = options[:root].to_s.strip
+      raise Thor::Error, "define: give a lemma or --root, not both" if !root.empty? && !lemma.empty?
+      raise Thor::Error, "define: --scheme needs --root" if options[:scheme] && root.empty?
+      raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty? && root.empty?
 
       facets = facet_specs(command: "define", example: "domain=Buddhism")
       config = Nabu::Config.load
@@ -190,6 +211,8 @@ module Nabu
         raise Thor::Error, "no dictionary shelf in this catalog yet — run nabu sync lexica " \
                            "(or nabu rebuild after one)"
       end
+      return define_by_root(root, catalog: catalog, config: config) unless root.empty?
+
       # P106-3: the header answers from the dictionary_stats census when
       # one is derived (the desk-commands law); the live distinct scan
       # stays the pre-036/underived fallback, byte-identical.

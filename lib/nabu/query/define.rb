@@ -7,6 +7,8 @@ require_relative "dictionary_language"
 require_relative "reflex_views"
 require_relative "etymon_ascent"
 require_relative "scan_anchors"
+require_relative "root_link"
+require_relative "../facet_map"
 
 module Nabu
   module Query
@@ -241,6 +243,26 @@ module Nabu
 
       AED_BARE_URN = /\A(urn:nabu:dict:aed:)(\d+)\z/
 
+      # The root lookup (`define --root rHm`): the entries a consonantal
+      # root reaches through Query::RootLink — Buckwalter, DMG or Arabic
+      # script, folded by Nabu::ArabicRoots and probed on the derived
+      # root-key entry facets. Returns [RootLink::Link, Results] — the
+      # Results in the link's order (dictionary, then article order),
+      # the first +limit+ (nil = all); an honest miss is [link, []].
+      def by_root(root, scheme: nil, limit: nil)
+        link = RootLink.new(catalog: @catalog).lookup(root, scheme: scheme)
+        ids = limit ? link.entry_ids.first(limit) : link.entry_ids
+        return [link, []] if ids.empty?
+
+        rows = @catalog[:dictionary_entries]
+               .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+               .join(:sources, id: Sequel[:dictionaries][:source_id])
+               .where(Sequel[:dictionary_entries][:id] => ids)
+               .select(*entry_columns).all
+               .to_h { |row| [row.fetch(:entry_row_id), row] }
+        [link, ids.filter_map { |id| rows[id] && build_result(rows[id]) }]
+      end
+
       def glosses(pairs)
         return {} unless shelf?
 
@@ -403,7 +425,9 @@ module Nabu
       end
 
       # The entry's own facet pairs, read through the entry_id index
-      # (migration 049) — the desk-commands rule: precompiled only. Without
+      # (migration 049) — the desk-commands rule: precompiled only. A keyed
+      # rule's derived comparison keys (FacetMap.key_facet?) are a fold,
+      # not an upstream claim, and stay off the card. Without
       # the index the pair table is never scanned: an entry that carries
       # annotations reads nil (unknown — the card says the index is
       # missing), one without them reads [] (nothing to project). A catalog
@@ -418,6 +442,7 @@ module Nabu
           .order(Sequel[:entry_facet_values][:facet], Sequel[:entry_facet_values][:value])
           .select_map([Sequel[:entry_facet_values][:facet], Sequel[:entry_facet_values][:value],
                        Sequel[:entry_facet_values][:ref]])
+          .reject { |facet, _value, _ref| FacetMap.key_facet?(facet) }
           .map { |facet, value, ref| FacetView.new(facet: facet, value: value, ref: ref) }
       end
 

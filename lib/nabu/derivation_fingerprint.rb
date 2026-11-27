@@ -115,11 +115,12 @@ module Nabu
     # the silver-date footing — a whole-lane re-projection from the
     # local-meter shelf in every builder pass (plus the gold-moved and
     # text-moved sync hooks), with the shelf reader whose parse rules
-    # shape its rows.
+    # shape its rows. The Arabic root fold (arabic_roots.rb) shapes only
+    # the entry facet builder's derived root_key / root_loose_key rows.
     BUILDER_FILES = %w[
       store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb
       store/silver_dates.rb date_shelf.rb store/silver_meter.rb meter_shelf.rb store/passage_facet_builder.rb
-      store/entry_facet_builder.rb store/entity_index.rb
+      store/entry_facet_builder.rb arabic_roots.rb store/entity_index.rb
       kinds.rb store/kind_builder.rb store/sign_concordances.rb
     ].freeze
 
