@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Concordance - Sura 112</title>
+        <respStmt>
+          <persName key="person_39907760" ref="http://viaf.org/viaf/39907760" role="edt">Michael Marx</persName>
+          <persName role="ctb">Tobias J. Jocham</persName>
+          <persName role="ctb">Yasmin Faghihi</persName>
+          <persName role="ctb">Huw Jones</persName>
+          <resp>Edited by Michael Marx in collaboration with Tobias J. Jocham
+        et. al. TEI version created by Yasmin Faghihi
+        and Huw Jones
+    </resp>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Corpus Coranicum</publisher>
+        <date calendar="#Gregorian">19-12-2024</date>
+        <pubPlace>
+          <address>
+            <orgName>Berlin-Brandenburgische Akademie der Wissenschaften</orgName>
+            <street>Jägerstraße 22/23</street>
+            <postCode>10117</postCode>
+            <addrLine>
+              <ref target="https://corpuscoranicum.de/">Corpus Coranicum</ref>
+            </addrLine>
+            <addrLine>
+              <email>corpuscoranicum@bbaw.de</email>
+            </addrLine>
+            <settlement type="city">Berlin</settlement>
+            <country key="de">Germany</country>
+          </address>
+        </pubPlace>
+        <idno type="tuk_DOI">askxxx</idno>
+        <!--the DOI could be repeated here-->
+        <idno type="instID">askxxx</idno>
+        <!--CCint.institutional ID-->
+        <idno type="CCTUKID"/>
+        <!--CCint.msID-->
+      </publicationStmt>
+      <sourceDesc>
+        <p>The Concordance of Rafi Talmon edited by the Corpus Coranicum</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Created as part of
+            <name type="project">Corpus Coranicum Project</name>
+        </p>
+      </projectDesc>
+      <classDecl>
+        <taxonomy xml:id="variantsreader">
+          <bibl>Variants Readers</bibl>
+        </taxonomy>
+        <taxonomy xml:id="variantssource">
+          <bibl>Variants Sources</bibl>
+        </taxonomy>
+        <taxonomy xml:id="tuk.cat">
+          <bibl>TUK Categories</bibl>
+        </taxonomy>
+        <taxonomy xml:id="geoname">
+          <bibl>
+            <ref target="https://www.geonames.org/">Geonames</ref>
+          </bibl>
+        </taxonomy>
+        <taxonomy xml:id="local">
+          <bibl>'Sigle' is a unique id assigned by Michael Marx to a specific reader in the reading
+                variants.
+            </bibl>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change type="TEI_record_creater">
+        <persName role="dtc">Yasmin Faghihi</persName>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div>
+        <ab>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">1</seg>
+            <seg type="word_number">1</seg>
+            <seg type="word_rafi_talmon">qul</seg>
+            <seg type="word_corpus_coranicum">qul</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">qul</seg>
+            <seg type="base_corpus_coranicum">qul</seg>
+            <seg type="root_rafi_talmon">qwl</seg>
+            <seg type="root_corpus_coranicum">qwl</seg>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Verb</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern">Stem1</seg>
+            <seg type="analyse_aspect">Imperative</seg>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality">NonEnergicus</seg>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person">2P</seg>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">qwl+Verb+Stem1+Imperative+2P+Sg+Masc+NonEnergicus</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">1</seg>
+            <seg type="word_number">2</seg>
+            <seg type="word_rafi_talmon">huwa</seg>
+            <seg type="word_corpus_coranicum">huwa</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">huwa</seg>
+            <seg type="base_corpus_coranicum">huwa</seg>
+            <seg type="root_rafi_talmon"/>
+            <seg type="root_corpus_coranicum"/>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Pron</seg>
+            <seg type="analyse_subcategory">Independent</seg>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern"/>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person">3P</seg>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">huwa+Pron+Independent+3P+Sg+Masc</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">1</seg>
+            <seg type="word_number">3</seg>
+            <seg type="word_rafi_talmon">llaah-u</seg>
+            <seg type="word_corpus_coranicum">llāhu</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">llaah</seg>
+            <seg type="base_corpus_coranicum">llāh</seg>
+            <seg type="root_rafi_talmon"/>
+            <seg type="root_corpus_coranicum"/>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Noun</seg>
+            <seg type="analyse_subcategory">ProperName</seg>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern"/>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender"/>
+            <seg type="analyse_number"/>
+            <seg type="analyse_casefld">Nom</seg>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite">Def</seg>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">Def+llaah+ProperName+Nom</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">1</seg>
+            <seg type="word_number">4</seg>
+            <seg type="word_rafi_talmon">'aHad-un</seg>
+            <seg type="word_corpus_coranicum">ʾaḥadun-i</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">'aHad</seg>
+            <seg type="base_corpus_coranicum">ʾaḥad</seg>
+            <seg type="root_rafi_talmon">'Hd</seg>
+            <seg type="root_corpus_coranicum">ʾḥd</seg>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Noun</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic">Adjective</seg>
+            <seg type="analyse_semantic2">Numeral</seg>
+            <seg type="analyse_pattern">fa&amp;al</seg>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld">Nom</seg>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite">Tanwiin</seg>
+            <seg type="analyse_diptotic">Triptotic</seg>
+            <seg type="analyse_full_analyse">'Hd+fa&amp;al+Noun+Triptotic+Adjective+Numeral+Masc+Sg+Nom+Tanwiin</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">2</seg>
+            <seg type="word_number">1</seg>
+            <seg type="word_rafi_talmon">llaah-u</seg>
+            <seg type="word_corpus_coranicum">llāhu</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">llaah</seg>
+            <seg type="base_corpus_coranicum">llāh</seg>
+            <seg type="root_rafi_talmon"/>
+            <seg type="root_corpus_coranicum"/>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Noun</seg>
+            <seg type="analyse_subcategory">ProperName</seg>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern"/>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender"/>
+            <seg type="analyse_number"/>
+            <seg type="analyse_casefld">Nom</seg>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite">Def</seg>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">Def+llaah+ProperName+Nom</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">2</seg>
+            <seg type="word_number">2</seg>
+            <seg type="word_rafi_talmon">l-Samad-u</seg>
+            <seg type="word_corpus_coranicum">ṣ-ṣamadu</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">Samad</seg>
+            <seg type="base_corpus_coranicum">ṣamad</seg>
+            <seg type="root_rafi_talmon">Smd</seg>
+            <seg type="root_corpus_coranicum">ṣmd</seg>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Noun</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic">Adjective</seg>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern">fa&amp;al</seg>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld">Nom</seg>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite">Def</seg>
+            <seg type="analyse_diptotic">Triptotic</seg>
+            <seg type="analyse_full_analyse">Def+Smd+fa&amp;al+Noun+Triptotic+Adjective+Masc+Sg+Nom</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">3</seg>
+            <seg type="word_number">1</seg>
+            <seg type="word_rafi_talmon">lam</seg>
+            <seg type="word_corpus_coranicum">lam</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">lam</seg>
+            <seg type="base_corpus_coranicum">lam</seg>
+            <seg type="root_rafi_talmon"/>
+            <seg type="root_corpus_coranicum"/>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Particle</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic">Negative</seg>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern"/>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender"/>
+            <seg type="analyse_number"/>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">lam+Particle+Negative</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">3</seg>
+            <seg type="word_number">2</seg>
+            <seg type="word_rafi_talmon">yalid</seg>
+            <seg type="word_corpus_coranicum">yalid</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">yalid</seg>
+            <seg type="base_corpus_coranicum">yalid</seg>
+            <seg type="root_rafi_talmon">wld</seg>
+            <seg type="root_corpus_coranicum">wld</seg>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Verb</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern">Stem1</seg>
+            <seg type="analyse_aspect">Imp</seg>
+            <seg type="analyse_actpass">Act</seg>
+            <seg type="analyse_mortality">NonEnergicus</seg>
+            <seg type="analyse_mood">Jussive</seg>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person">3P</seg>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">wld+Verb+Stem1+Imp+Act+3P+Sg+Masc+NonEnergicus+Jussive</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">3</seg>
+            <seg type="word_number">3</seg>
+            <seg type="word_rafi_talmon">wa-lam</seg>
+            <seg type="word_corpus_coranicum">wa-lam</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">lam</seg>
+            <seg type="base_corpus_coranicum">lam</seg>
+            <seg type="root_rafi_talmon"/>
+            <seg type="root_corpus_coranicum"/>
+            <seg type="analyse_prefix1">wa</seg>
+            <seg type="analyse_prefix1_part_of_speech">Particle</seg>
+            <seg type="analyse_prefix1_semantic">Conjunction</seg>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Particle</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic">Negative</seg>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern"/>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix">wa</seg>
+            <seg type="analyse_gender"/>
+            <seg type="analyse_number"/>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">wa+Particle+Conjunction+lam+Particle+Negative</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">3</seg>
+            <seg type="word_number">4</seg>
+            <seg type="word_rafi_talmon">yuulad</seg>
+            <seg type="word_corpus_coranicum">yūlad</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">yuulad</seg>
+            <seg type="base_corpus_coranicum">yūlad</seg>
+            <seg type="root_rafi_talmon">wld</seg>
+            <seg type="root_corpus_coranicum">wld</seg>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Verb</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern">Stem1</seg>
+            <seg type="analyse_aspect">Imp</seg>
+            <seg type="analyse_actpass">Pass</seg>
+            <seg type="analyse_mortality">NonEnergicus</seg>
+            <seg type="analyse_mood">Jussive</seg>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person">3P</seg>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">wld+Verb+Stem1+Imp+Pass+3P+Sg+Masc+NonEnergicus+Jussive</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">4</seg>
+            <seg type="word_number">1</seg>
+            <seg type="word_rafi_talmon">wa-lam</seg>
+            <seg type="word_corpus_coranicum">wa-lam</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">lam</seg>
+            <seg type="base_corpus_coranicum">lam</seg>
+            <seg type="root_rafi_talmon"/>
+            <seg type="root_corpus_coranicum"/>
+            <seg type="analyse_prefix1">wa</seg>
+            <seg type="analyse_prefix1_part_of_speech">Particle</seg>
+            <seg type="analyse_prefix1_semantic">Conjunction</seg>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Particle</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic">Negative</seg>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern"/>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix">wa</seg>
+            <seg type="analyse_gender"/>
+            <seg type="analyse_number"/>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">wa+Particle+Conjunction+lam+Particle+Negative</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">4</seg>
+            <seg type="word_number">2</seg>
+            <seg type="word_rafi_talmon">yakun</seg>
+            <seg type="word_corpus_coranicum">yakun</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">yakun</seg>
+            <seg type="base_corpus_coranicum">yakun</seg>
+            <seg type="root_rafi_talmon">kwn</seg>
+            <seg type="root_corpus_coranicum">kwn</seg>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Verb</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern">Stem1</seg>
+            <seg type="analyse_aspect">Imp</seg>
+            <seg type="analyse_actpass">Act</seg>
+            <seg type="analyse_mortality">NonEnergicus</seg>
+            <seg type="analyse_mood">Jussive</seg>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person">3P</seg>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">kwn+Verb+Stem1+Imp+Act+3P+Sg+Masc+NonEnergicus+Jussive</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">4</seg>
+            <seg type="word_number">3</seg>
+            <seg type="word_rafi_talmon">la-hu</seg>
+            <seg type="word_corpus_coranicum">lahū</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">hu</seg>
+            <seg type="base_corpus_coranicum">hu</seg>
+            <seg type="root_rafi_talmon"/>
+            <seg type="root_corpus_coranicum"/>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Particle</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern"/>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender"/>
+            <seg type="analyse_number"/>
+            <seg type="analyse_casefld"/>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">1</seg>
+            <seg type="analyse_dependent_person">3P</seg>
+            <seg type="analyse_dependent_number">Sg</seg>
+            <seg type="analyse_dependent_gender">Masc</seg>
+            <seg type="analyse_definite"/>
+            <seg type="analyse_diptotic"/>
+            <seg type="analyse_full_analyse">l+Prep+Pron+Dependent+3P+Sg+Masc</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">4</seg>
+            <seg type="word_number">4</seg>
+            <seg type="word_rafi_talmon">kufuw-an</seg>
+            <seg type="word_corpus_coranicum">kufuwan</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">kufuw</seg>
+            <seg type="base_corpus_coranicum">kufuw</seg>
+            <seg type="root_rafi_talmon">kf'</seg>
+            <seg type="root_corpus_coranicum">kfʾ</seg>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Noun</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic"/>
+            <seg type="analyse_semantic2"/>
+            <seg type="analyse_pattern">fu&amp;ul</seg>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld">Acc</seg>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite">Tanwiin</seg>
+            <seg type="analyse_diptotic">Triptotic</seg>
+            <seg type="analyse_full_analyse">kf'+fu&amp;ul+Noun+Triptotic+Masc+Sg+Acc+Tanwiin</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+          <w>
+            <seg type="sura">112</seg>
+            <seg type="verse">4</seg>
+            <seg type="word_number">5</seg>
+            <seg type="word_rafi_talmon">'aHad-un</seg>
+            <seg type="word_corpus_coranicum">ʾaḥadun</seg>
+            <seg type="analysis_number">1</seg>
+            <seg type="base_rafi_talmon">'aHad</seg>
+            <seg type="base_corpus_coranicum">ʾaḥad</seg>
+            <seg type="root_rafi_talmon">'Hd</seg>
+            <seg type="root_corpus_coranicum">ʾḥd</seg>
+            <seg type="analyse_prefix1"/>
+            <seg type="analyse_prefix1_part_of_speech"/>
+            <seg type="analyse_prefix1_semantic"/>
+            <seg type="analyse_prefix2"/>
+            <seg type="analyse_prefix2_part_of_speech"/>
+            <seg type="analyse_prefix2_semantic"/>
+            <seg type="analyse_prefix3"/>
+            <seg type="analyse_prefix3_part_of_speech"/>
+            <seg type="analyse_prefix3_semantic"/>
+            <seg type="analyse_part_of_speech">Noun</seg>
+            <seg type="analyse_subcategory"/>
+            <seg type="analyse_semantic">Adjective</seg>
+            <seg type="analyse_semantic2">Numeral</seg>
+            <seg type="analyse_pattern">fa&amp;al</seg>
+            <seg type="analyse_aspect"/>
+            <seg type="analyse_actpass"/>
+            <seg type="analyse_mortality"/>
+            <seg type="analyse_mood"/>
+            <seg type="analyse_prefix"/>
+            <seg type="analyse_gender">Masc</seg>
+            <seg type="analyse_number">Sg</seg>
+            <seg type="analyse_casefld">Nom</seg>
+            <seg type="analyse_person"/>
+            <seg type="analyse_dependent_pron">0</seg>
+            <seg type="analyse_dependent_person"/>
+            <seg type="analyse_dependent_number"/>
+            <seg type="analyse_dependent_gender"/>
+            <seg type="analyse_definite">Tanwiin</seg>
+            <seg type="analyse_diptotic">Triptotic</seg>
+            <seg type="analyse_full_analyse">'Hd+fa&amp;al+Noun+Triptotic+Adjective+Numeral+Masc+Sg+Nom+Tanwiin</seg>
+            <seg type="created_at">2023-07-19 12:51:20</seg>
+            <seg type="updated_at">2023-07-19 12:51:20</seg>
+          </w>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

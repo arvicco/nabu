@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Authority file for sources of readings</title>
+        <respStmt>
+          <persName key="person_39907760" ref="http://viaf.org/viaf/39907760" role="edt">Michael Marx</persName>
+          <persName role="ctb">Tobias J. Jocham</persName>
+          <persName role="ctb">Yasmin Faghihi</persName>
+          <persName role="ctb">Huw Jones</persName>
+          <resp>Edited by Michael Marx in collaboration with Tobias J. Jocham
+        et. al. TEI version created by Yasmin Faghihi
+        and Huw Jones
+    </resp>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Corpus Coranicum</publisher>
+        <date calendar="#Gregorian">19-12-2024</date>
+        <pubPlace>
+          <address>
+            <orgName>Berlin-Brandenburgische Akademie der Wissenschaften</orgName>
+            <street>Jägerstraße 22/23</street>
+            <postCode>10117</postCode>
+            <addrLine>
+              <ref target="https://corpuscoranicum.de/">Corpus Coranicum</ref>
+            </addrLine>
+            <addrLine>
+              <email>corpuscoranicum@bbaw.de</email>
+            </addrLine>
+            <settlement type="city">Berlin</settlement>
+            <country key="de">Germany</country>
+          </address>
+        </pubPlace>
+        <idno type="tuk_DOI">askxxx</idno>
+        <!--the DOI could be repeated here-->
+        <idno type="instID">askxxx</idno>
+        <!--CCint.institutional ID-->
+        <idno type="CCTUKID"/>
+        <!--CCint.msID-->
+      </publicationStmt>
+      <sourceDesc>
+        <p>Information about the source of readings
+                    <ref>https://corpuscoranicum.de/api/xmltei/variants/sources</ref>
+                </p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Created as part of
+            <name type="project">Corpus Coranicum Project</name>
+        </p>
+      </projectDesc>
+      <classDecl>
+        <taxonomy xml:id="variantsreader">
+          <bibl>Variants Readers</bibl>
+        </taxonomy>
+        <taxonomy xml:id="variantssource">
+          <bibl>Variants Sources</bibl>
+        </taxonomy>
+        <taxonomy xml:id="tuk.cat">
+          <bibl>TUK Categories</bibl>
+        </taxonomy>
+        <taxonomy xml:id="geoname">
+          <bibl>
+            <ref target="https://www.geonames.org/">Geonames</ref>
+          </bibl>
+        </taxonomy>
+        <taxonomy xml:id="local">
+          <bibl>'Sigle' is a unique id assigned by Michael Marx to a specific reader in the reading
+                variants.
+            </bibl>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change type="TEI_record_creater">
+        <persName role="dtc">Yasmin Faghihi</persName>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <listBibl>
+        <biblStruct xml:id="variantssource_1">
+          <monogr>
+            <author>
+              <persName>Ibn Ḫālawaih (gest. 981): Iʿrāb ṯalāṯīna </persName>
+              <persName type="variant">al-Ḥusain b. Aḥmad b. Ḫālawaih, Abū ʿAbdallāh </persName>
+            </author>
+            <title>Iʿrāb ṯalāṯīna sūratin</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_2">
+          <monogr>
+            <author>
+              <persName>Ibn Ḫālawaih (gest. 981): Muḫtaṣar</persName>
+              <persName type="variant">al-Ḥusain b. Aḥmad b. Ḫālawaih, Abū ʿAbdallāh</persName>
+            </author>
+            <title>Muḫtaṣar fī šawāḏḏ al-Qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_4">
+          <monogr>
+            <author>
+              <persName>Ibn Ḫālawaih (gest. 981): al-Ḥuǧǧa </persName>
+              <persName type="variant">al-Ḥusain b. Aḥmad b. Ḫālawaih, Abū ʿAbdallāh </persName>
+            </author>
+            <title>al-Ḥuǧǧa fī al-qirāʾāt as-sabʿ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_5">
+          <monogr>
+            <author>
+              <persName>an-Naḥḥās (gest. 950): Iʿrāb</persName>
+              <persName type="variant">Aḥmad b. Muḥammad b. Ismāʿīl an-Naḥḥās, Abū Ǧaʿfar</persName>
+            </author>
+            <title>Iʿrāb al-Qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_6">
+          <monogr>
+            <author>
+              <persName>al-Bāqūlī (gest. 981): Iʿrāb</persName>
+              <persName type="variant">ʿAlī b. al-Ḥusain aḍ-Ḍarīr al-Bāqūlī, Abū al-Ḥasan</persName>
+            </author>
+            <title>Iʿrāb al-Qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_7">
+          <monogr>
+            <author>
+              <persName>al-ʿUkbarī (gest. 1219): at-Tibyān</persName>
+              <persName type="variant">ʿAbdallāh b. al-Ḥusain Abū al-Bakāʾ Muḥibbaddīn al-ʿUkbarī</persName>
+            </author>
+            <title>at-Tibyān fī iʿrāb al-Qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_8">
+          <monogr>
+            <author>
+              <persName>aṭ-Ṭabarī (gest. 923): Tafsīr</persName>
+              <persName type="variant">Muḥammad b. Ǧarīr b. Yazīd aṭ-Ṭabarī, Abū Ǧaʿfar</persName>
+            </author>
+            <title>Ǧāmiʿ al-bayān fī taʿwīl al-Qurʾān (Tafsīr aṭ-Ṭabarī)</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_9">
+          <monogr>
+            <author>
+              <persName>Ibn Zanǧala (gest. 1012): Ḥuǧǧat </persName>
+              <persName type="variant">ʿAbdarraḥmān b. Muḥammad Abū Zurʿa b. Zanǧala</persName>
+            </author>
+            <title>Ḥuǧǧat al-qirāʾāt</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_10">
+          <monogr>
+            <author>
+              <persName>Ibn Muǧāhid (gest. 936): Kitāb as-sabʿa</persName>
+              <persName type="variant">Aḥmad b. Mūsā b. al-ʿAbbās Abū Bakr at-Tamīmī b. Muǧāhid</persName>
+            </author>
+            <title>Kitāb as-sabʿa fī al-qirāʾāt</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_11">
+          <monogr>
+            <author>
+              <persName>aṭ-Ṭabarsī (gest. 1154): Maǧmaʿ al-bayān</persName>
+              <persName type="variant">Amīnaddīn Abū ʿAlī al-Fāḍl b. al-Ḥasan aṭ-Ṭabarsī [aṭ-Ṭabrisī]</persName>
+            </author>
+            <title>Maǧmaʿ al-bayān fī tafsīr al-Qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_12">
+          <monogr>
+            <author>
+              <persName>Ibn Ǧinnī (gest. 1002): al-Muḥtasab</persName>
+              <persName type="variant">ʿUṯmān b. Ǧinnī, Abū al-Fatḥ</persName>
+            </author>
+            <title>al-Muḥtasab fī tabyīn wuǧūh šawāḏḏ al-qirāʾāt wa-l-īḍāḥ ʿanhā</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_13">
+          <monogr>
+            <author>
+              <persName>ar-Rāzī (gest. 1209): Mafātīḥ al-ġaib</persName>
+              <persName type="variant">Muḥammad b. ʿUmar b. al-Ḥusain Faḫraddīn ar-Rāzī, Abū ʿAbdallāh</persName>
+            </author>
+            <title>Mafātīḥ al-ġaib alias at-tafsīr al-kabīr</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_14">
+          <monogr>
+            <author>
+              <persName>Ibn al-Ǧazarī (gest. 1429): an-Našr</persName>
+              <persName type="variant">Šamsaddīn Muḥammad b. Muḥammad b. Muḥammad b. ʿAlī b. Yūsuf al-Ǧazarī, Abū al-Ḫair</persName>
+            </author>
+            <title>an-Našr fī al-qirāʾāt al-ʿašr</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_15">
+          <monogr>
+            <author>
+              <persName>az-Zamaḫšarī (gest. 1144): al-Kaššāf</persName>
+              <persName type="variant">Ǧārallāh Maḥmūd b. ʿUmar az-Zamaḫšarī al-Ḫawārizmī, Abū l-Qāsim</persName>
+            </author>
+            <title>al-Kaššāf ʿan ḥaqāʾiq at-tanzīl wa-ʿuyūn al-aqāwīl fī wuǧūh at-taʾwīl</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_16">
+          <monogr>
+            <author>
+              <persName>ad-Dānī (gest. 1053): at-Taisīr</persName>
+              <persName type="variant">ʿUṯmān b. Saʿīd b. ʿUmar al-Umawī ad-Dānī, Abū ʿAmr</persName>
+            </author>
+            <title>at-Taisīr fī al-qirāʾāt as-sabʿ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_17">
+          <monogr>
+            <author>
+              <persName>ad-Dānī (gest. 1053): Ǧāmiʿ al-bayān</persName>
+              <persName type="variant">ʿUṯmān b. Saʿīd b. ʿUmar al-Umawī ad-Dānī, Abū ʿAmr</persName>
+            </author>
+            <title>Ǧāmiʿ al-bayān fī al-qirāʾāt as-sabʿ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_18">
+          <monogr>
+            <author>
+              <persName>ad-Dānī (gest. 1053): al-Muḥkam</persName>
+              <persName type="variant">ʿUṯmān b. Saʿīd b. ʿUmar al-Umawī ad-Dānī, Abū ʿAmr</persName>
+            </author>
+            <title>al-Muḥkam fī naqṭ al-maṣāḥif</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_19">
+          <monogr>
+            <author>
+              <persName>an-Nīsābūrī (gest. 1016): Ġarāʾib</persName>
+              <persName type="variant">al-Ḥasan b. Muḥammad b. Ḥabīb b. Ayyūb an-Nīsābūrī, Abū al-Qāsim </persName>
+            </author>
+            <title>Ġarāʾib al-Qurʾān wa-raġāʾib al-furqān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_20">
+          <monogr>
+            <author>
+              <persName>aš-Šaukānī (gest. 1839): Fatḥ al-qadīr</persName>
+              <persName type="variant">Muḥammad b. ʿAlī b. Muḥammad aš-Šaukānī</persName>
+            </author>
+            <title>Fatḥ al-qadīr</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_21">
+          <monogr>
+            <author>
+              <persName>Abū Ḥayyān (gest. 1255): al-Baḥr al-muḥīṭ</persName>
+              <persName type="variant">Aṯīraddīn Muḥammad b. Yūsuf al-Ġarnātī, Abū Ḥayyān</persName>
+            </author>
+            <title>al-Baḥr al-muḥīṭ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_22">
+          <monogr>
+            <author>
+              <persName>Ibn Abī Dāwūd (gest. 929): Kitāb al-Maṣāḥif</persName>
+              <persName type="variant">Ibn Abī Dāwūd ʿAbdallāh b. Sulaimān b. al-Ašʿaṯ as-Siǧistānī</persName>
+            </author>
+            <title>Kitāb al-Maṣāḥif</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_23">
+          <monogr>
+            <author>
+              <persName>al-Bannāʾ (gest. 1705): Itḥāf</persName>
+              <persName type="variant">Aḥmad b. Muḥammad b. Aḥmad b. Muḥammad b. ʿAbdalġanī ad-Dimyāṭī al-Bannāʾ</persName>
+            </author>
+            <title>Itḥāf fuḍalāʾ al-bašar fī al-qirāʾāt al-arbaʿata  ʿašar</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_24">
+          <monogr>
+            <author>
+              <persName>Ibn al-Ǧauzī (gest. 1200): Zād al-masīr</persName>
+              <persName type="variant">ʿAbdarraḥmān b. ʿAlī b. Muḥammad Abū al-Faraǧ b. al-Ǧauzī</persName>
+            </author>
+            <title>Zād al-masīr fī ʿilm at-tafsīr</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_25">
+          <monogr>
+            <author>
+              <persName>az-Zaǧǧāǧ (gest. 923): Maʿānī</persName>
+              <persName type="variant">Ibrāhīm b. as-Sarī az-Zaǧǧāǧ, Abū Isḥāq</persName>
+            </author>
+            <title>Maʿānī al-Qurʾān wa-iʿrābuh</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_26">
+          <monogr>
+            <author>
+              <persName>al-Fīrūzābādī (gest. 1415): Baṣāʾir</persName>
+              <persName type="variant">Muḥammad b. Yaʿqūb b. Muḥammad b. Ibrāhīm Maǧdaddīn aš-Šāfiʿī aš-Šīrāzī al-Fīrūzābādī, Abū ṭ-Ṭāhir</persName>
+            </author>
+            <title>Baṣāʾir ḏawī at-tamyīz</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_27">
+          <monogr>
+            <author>
+              <persName>al-ʿUkbarī (gest. 1219): Iʿrāb</persName>
+              <persName type="variant">ʿAbdallāh b. al-Ḥusain Abū al-Bakāʾ Muḥibbaddīn al-ʿUkbarī</persName>
+            </author>
+            <title>Iʿrāb al-qirāʾāt aš-šawāḏḏ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_28">
+          <monogr>
+            <author>
+              <persName>Ibn ʿAṭiyya (gest. 1152): al-Muḥarrar</persName>
+              <persName type="variant">ʿAbdalḥaqq  b. Ġālib b. ʿAṭiyya al-Andalusī al-Ġarnātī, Abū Muḥammad</persName>
+            </author>
+            <title>al-Muḥarrar al-waǧīz</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_29">
+          <monogr>
+            <author>
+              <persName>Ibn Ḫālawaih (gest. 981): Iʿrāb as-sabʿ</persName>
+              <persName type="variant">al-Ḥusain b. Aḥmad b. Ḫālawaih, Abū ʿAbdallāh</persName>
+            </author>
+            <title>Iʿrāb al-qirāʾāt as-sabʿ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_30">
+          <monogr>
+            <author>
+              <persName>Sībawaih (gest. 796): al-Kitāb (Beck)</persName>
+              <persName type="variant">ʿAmr b. ʿUṯmān b. Qanbar Sībawaih, Abū Bišr</persName>
+            </author>
+            <title>Kitāb Sībawaih (Beck)</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_31">
+          <monogr>
+            <author>
+              <persName>al-Farrāʾ (gest. 822): Maʿānī</persName>
+              <persName type="variant">Yaḥyā b. Ziyād al-Farrāʾ, Abū Zakariyyāʾ</persName>
+            </author>
+            <title>Kitāb al-Maʿānī</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_32">
+          <monogr>
+            <author>
+              <persName>Abū ʿUbaid (gest. 838): Faḍāʾil</persName>
+              <persName type="variant">al-Qāsim b. Sallām al-Harawī al-Baġdādī al-Ḫurāsānī al-Anṣārī, Abū  ʿUbaid</persName>
+            </author>
+            <title>Kitāb Faḍāʾil al-qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_33">
+          <monogr>
+            <author>
+              <persName>al-Ahwāzī (gest. 1055): al-Ḫamsīn</persName>
+              <persName type="variant">al-Ḥasan b. Ibrāhīm al-Ahwāzī, Abū ʿAlī</persName>
+            </author>
+            <title>Kitāb al-Ḫamsīn</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_35">
+          <monogr>
+            <author>
+              <persName>Muqātil (gest. 767): Tafsīr</persName>
+              <persName type="variant">Muqātil b. Sulaimān</persName>
+            </author>
+            <title>Tafsīr Muqātil</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_36">
+          <monogr>
+            <author>
+              <persName>al-Kalbī (gest. 763): Tafsīr</persName>
+              <persName type="variant">Muḥammad b. as-Sāʾib al-Kalbī</persName>
+            </author>
+            <title>Tafsīr al-Kalbī</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_37">
+          <monogr>
+            <author>
+              <persName>Ibn al-Ǧazarī (gest. 1429): Ġāya</persName>
+              <persName type="variant">Šamsaddīn Abū al-Ḫair Muḥammad b. Muḥammad b. Muḥammad b. ʿAlī b. Yūsuf al-Ǧazarī</persName>
+            </author>
+            <title>Ġāyat an-nihāya fī ṭabaqāt al-qurrāʾ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_38">
+          <monogr>
+            <author>
+              <persName>Sībawaih (gest. 796): al-Kitāb (Yaʿqūb)</persName>
+              <persName type="variant">ʿAmr b. ʿUṯmān b. Qanbar Sībawaih, Abū Bišr </persName>
+            </author>
+            <title>Kitāb Sībawaih (Yaʿqūb)</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_39">
+          <monogr>
+            <author>
+              <persName>as-Sayyārī (gest. 940): al-Qirāʾāt</persName>
+              <persName type="variant">Aḥmad b. Muḥammad as-Sayyārī</persName>
+            </author>
+            <title>Kitāb al-qirāʾāt (au) at-Tanzīl wa-t-taḥrīf</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_42">
+          <monogr>
+            <author>
+              <persName>aḏ-Ḏahabī: Maʿrifa(B)</persName>
+              <persName type="variant">Šamsaddīn Abū ʿAbdallāh Muḥammad b. Aḥmad b. ʿUṯmān aḏ-Ḏahabī</persName>
+            </author>
+            <title>Maʿrifat al-qurrāʾ al-kibār ʿalā aṭ-ṭabaqāt wa-l-aʿṣār.</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_43">
+          <monogr>
+            <author>
+              <persName>aḏ-Ḏahabī: Maʿrifa(A)</persName>
+              <persName type="variant">Šamsaddīn Abū ʿAbdallāh Muḥammad b. Aḥmad b. ʿUṯmān aḏ-Ḏahabī</persName>
+            </author>
+            <title>Maʿrifat al-qurrāʾ al-kibār ʿalā aṭ-ṭabaqāt wa-l-aʿṣār. [andere Edition]</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_45">
+          <monogr>
+            <author>
+              <persName>al-Hamaḏānī (gest. 1174): Ġāyat al-iḫtiṣār</persName>
+              <persName type="variant">al-Ḥasan b. Aḥmad al-Hamaḏānī al-ʿAṭṭār, Abū al-ʿAlāʾ</persName>
+            </author>
+            <title>Ġāyat al-iḫtiṣār fī qirāʾāt al-ʿašara aʾimmat al-amṣār</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_46">
+          <monogr>
+            <author>
+              <persName>Sufyān (gest. 778): Tafsīr</persName>
+              <persName type="variant">Sufyān b. Saʿīd b. Masrūq aṯ-Ṯaurī al-Kūfī, Abū ʿAbdallāh</persName>
+            </author>
+            <title>Tafsīr Sufyān aṯ-Ṯaurī</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_47">
+          <monogr>
+            <author>
+              <persName>al-Aḫfaš al-Ausaṭ (gest. 830): Maʿānī</persName>
+              <persName type="variant">Saʿīd b. Masʿada al-Aḫfaš al-Ausaṭ</persName>
+            </author>
+            <title>Maʿānī al-Qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_48">
+          <monogr>
+            <author>
+              <persName>Muǧāhid (gest. 722): Tafsīr</persName>
+              <persName type="variant">Muǧāhid b. Ǧabr al-Makkī, Abū l-Ḥaǧǧāǧ</persName>
+            </author>
+            <title>Tafsīr Muǧāhid b.Ǧabr</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_49">
+          <monogr>
+            <author>
+              <persName>an-Naḥḥās (gest. 950): al-Qaṭʿ wa-l-iʾtināf</persName>
+              <persName type="variant">Aḥmad b. Muḥammad b. Ismāʿīl an-Naḥḥās, Abū Ǧaʿfar</persName>
+            </author>
+            <title>Kitāb al-Qaṭʿ wa-l-iʾtināf</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_50">
+          <monogr>
+            <author>
+              <persName>Abū ʿUbaida (gest. 825): Maǧāz</persName>
+              <persName type="variant">Abū ʿUbaida Maʿmar b. al-Muṯannā at-Taimī</persName>
+            </author>
+            <title>Maǧāz al-qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_51">
+          <monogr>
+            <author>
+              <persName>Ibn Wahb (gest. 812): al-Ǧāmiʿ</persName>
+              <persName type="variant">Abū Muḥammad ʿAbdallāh b. Wahb b. Muslim al-Qurašī al-Fihrī al-Miṣrī</persName>
+            </author>
+            <title>al-Ǧāmiʿ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_52">
+          <monogr>
+            <author>
+              <persName>ʿAbdarrazzāq (gest. 827): Tafsīr</persName>
+              <persName type="variant">Abū Bakr ʿAbdarrazzāq b. Hammām Ibn Nāfiʿ aṣ-Ṣanʿānī al-Yamanī al-Ḥimyarī</persName>
+            </author>
+            <title>Tafsīr</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_56">
+          <monogr>
+            <author>
+              <persName>al-Ḫalīl b. Aḥmad (gest. 791): Kitāb al-ʿain</persName>
+              <persName type="variant">al-Ḫalīl b. Aḥmad al-Farāhīdī, Abū ʿAbdarraḥmān</persName>
+            </author>
+            <title>al-Ḫalīl b. Aḥmad: Kitāb  al-ʿain</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_57">
+          <monogr>
+            <author>
+              <persName>Hūd b. Muḥakkam (gest. 900): Tafsīr</persName>
+              <persName type="variant">Hūd ibn Muḥakkam al-Hawwārī</persName>
+            </author>
+            <title>Tafsīr kitāb Allah al-'aziz</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_58">
+          <monogr>
+            <author>
+              <persName>Yaḥyā b. Sallām (gest. 815): Tafsīr</persName>
+              <persName type="variant">Yaḥyā b. Sallām at-Taimī al-Baṣrī al-Qairawānī</persName>
+            </author>
+            <title>Tafsīr Yaḥyā b. Sallām</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_59">
+          <monogr>
+            <author>
+              <persName>al-Qurṭubī (gest. 1273): al-Ǧāmiʿ</persName>
+              <persName type="variant">al-Qurṭubī</persName>
+            </author>
+            <title>al-Ǧāmiʿ</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_60">
+          <monogr>
+            <author>
+              <persName>Sībawaih (gest. 796): al-Kitāb</persName>
+              <persName type="variant">Abū Bišr Sībawaih (Sēbōe) ʿAmr b. (ʿUṯmān b.) Qanbar oder Qunbura maulā Banī l-Ḥāriṯ b. Kaʿb</persName>
+            </author>
+            <title>Kitāb Sībawaih</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_61">
+          <monogr>
+            <author>
+              <persName>ʿAbdurrazzāq (gest. 827): Muṣṣannaf</persName>
+              <persName type="variant">ʿAbdurrazzāq aṣ-Ṣanʿānī</persName>
+            </author>
+            <title>Muṣannaf</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_62">
+          <monogr>
+            <author>
+              <persName>Ibn Hišām (gest. 1360): Muġnī al-labīb</persName>
+              <persName type="variant">Abū Muhammad ʻAbdallāh b. Yūsuf b. Aḥmad b. ʿAbdallāh b. Yūsuf Ǧamal ad-Din Ibn Hišām</persName>
+            </author>
+            <title>Muġnī al-labīb ʿan kutub al-ʾaʿārīb</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_63">
+          <monogr>
+            <author>
+              <persName>al-Baiḍāwī (gest. 1290): Tafsīr</persName>
+              <persName type="variant">Abū l-Ḫair Abdallah b. ʿUmar Nāṣir ad-Dīn al-Baiḍāwī</persName>
+            </author>
+            <title>ʾanwār at-tanzīl wa-ʾasrār at-taʾwīl</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_64">
+          <monogr>
+            <author>
+              <persName>al-Kirmānī (gest. ca. 1140): Šawāḏḏ al-qirāʾāt</persName>
+              <persName type="variant">Muḥammad b. Abī Naṣr al-Kirmānī, Abū ʿAbdallāh</persName>
+            </author>
+            <title>Šawāḏḏ al-qirāʾāt</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_65">
+          <monogr>
+            <author>
+              <persName>aṯ-Ṯaʿlabī (gest. 1035): al-Kašf wa-l-bayān</persName>
+              <persName type="variant">Abū Isḥāq Aḥmad b. Muḥammad b. Ibrāhīm an-Naisābūrī aṯ-Ṯaʿlabī</persName>
+            </author>
+            <title>al-Kašf wa-l-bayān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+        <biblStruct xml:id="variantssource_66">
+          <monogr>
+            <author>
+              <persName>Ibn Qutaiba (gest. 889): Taʾwīl</persName>
+              <persName type="variant">Abū Muhammad ʿAbdallāh b. Muslim b. Qutaiba ad-Dīnawarī</persName>
+            </author>
+            <title>Taʾwīl muškil al-qurʾān</title>
+            <imprint>
+              <date/>
+            </imprint>
+          </monogr>
+        </biblStruct>
+      </listBibl>
+    </body>
+  </text>
+</TEI>

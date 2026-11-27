@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Printed edition of the Qu'ran, Cairo 1924</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Egyptian Government: Amiri Press: Būlāq (Cairo) and Egyptian Survey (Giza)</publisher>
+        <pubPlace>Cairo</pubPlace>
+        <date when="1924">1924</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>The King Fuʾād edition of the Qurʾān was assembled and typeset in the Amīrī Press in Būlāq and printed in the Egyptian Survey in Gizeh in the year 1342 AH (see appendix of the King Fuʾād edition, p. 17: Miṣr ǧumiʿa wa-ruttiba fi l-maṭbaʿati l-ʾamīrīyati bi-Būlāq wa-ṭubiʿa fī maṣlaḥati l-masāḥati bi-l-Ǧīzati sanata 1342 hiǧrī). As a bibliographical record the following is suggested: al-Qurʾān al-karīm, recension of Ḥafṣ (following ʿĀṣim) according to Taisīr and Šāṭibiyya, consonantal text in archaic orthography (rasm ʿuṯmānī), edited by Muḥammad ʿAli al-Ḥusainī al-Ḥaddād et al., Cairo and Gizeh 1342/1924.</p>
+        <p>The Egyptian printed Qurʾān of 1924 serves as the reference text for spelling, verse separators and reading (Ḥafṣ ʿan ʿĀṣim) of the digital publications of Corpus Coranicum.</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <facsimile>
+    <surface n="2, Q 1:1- Q 1:7" xml:id="i2">
+      <graphic rend="portrait" url="https://corpuscoranicum.de/digitallibrary/servlet/Scaler?fn=/projects/corpus-coranicum/Kairo1924/KairoKoranStabi-002.JPG&amp;dw=3000&amp;mo=q2"/>
+    </surface>
+    <surface n="825, Q 110:1- Q 111:2" xml:id="i825">
+      <graphic rend="portrait" url="https://corpuscoranicum.de/digitallibrary/servlet/Scaler?fn=/projects/corpus-coranicum/Kairo1924/KairoKoranStabi-825.JPG&amp;dw=3000&amp;mo=q2"/>
+    </surface>
+    <surface n="826, Q 111:3- Q 113:3" xml:id="i826">
+      <graphic rend="portrait" url="https://corpuscoranicum.de/digitallibrary/servlet/Scaler?fn=/projects/corpus-coranicum/Kairo1924/KairoKoranStabi-826.JPG&amp;dw=3000&amp;mo=q2"/>
+    </surface>
+  </facsimile>
+  <text>
+    <body>
+      <div type="arabic_text">
+        <lg n="1" xml:id="sura-001">
+          <pb n="2, Q 1:1- Q 1:7" facs="#i2"/>
+          <lg n="1" xml:id="verse-001-001">
+            <l n="+++1">
+              <w xml:id="w-001-001-001">بِسۡمِ</w>
+              <w xml:id="w-001-001-002">ٱللَّهِ</w>
+              <w xml:id="w-001-001-003">ٱلرَّحۡمَٰنِ</w>
+              <w xml:id="w-001-001-004">ٱلرَّحِيمِ</w>
+            </l>
+          </lg>
+          <lg n="2" xml:id="verse-001-002">
+            <l n="+++1">
+              <w xml:id="w-001-002-001">ٱلۡحَمۡدُ</w>
+              <w xml:id="w-001-002-002">لِلَّهِ</w>
+              <w xml:id="w-001-002-003">رَبِّ</w>
+              <w xml:id="w-001-002-004">ٱلۡعَٰلَمِينَ</w>
+            </l>
+          </lg>
+          <lg n="3" xml:id="verse-001-003">
+            <l n="+++1">
+              <w xml:id="w-001-003-001">ٱلرَّحۡمَٰنِ</w>
+              <w xml:id="w-001-003-002">ٱلرَّحِيمِ</w>
+            </l>
+          </lg>
+          <lg n="4" xml:id="verse-001-004">
+            <l n="+++1">
+              <w xml:id="w-001-004-001">مَٰلِكِ</w>
+              <w xml:id="w-001-004-002">يَوۡمِ</w>
+              <w xml:id="w-001-004-003">ٱلدِّينِ</w>
+            </l>
+          </lg>
+          <lg n="5" xml:id="verse-001-005">
+            <l n="+++1">
+              <w xml:id="w-001-005-001">إِيَّاكَ</w>
+              <w xml:id="w-001-005-002">نَعۡبُدُ</w>
+              <w xml:id="w-001-005-003">وَإِيَّاكَ</w>
+              <w xml:id="w-001-005-004">نَسۡتَعِينُ</w>
+            </l>
+          </lg>
+          <lg n="6" xml:id="verse-001-006">
+            <l n="+++1">
+              <w xml:id="w-001-006-001">ٱهۡدِنَا</w>
+              <w xml:id="w-001-006-002">ٱلصِّرَٰطَ</w>
+              <w xml:id="w-001-006-003">ٱلۡمُسۡتَقِيمَ</w>
+            </l>
+          </lg>
+          <lg n="7" xml:id="verse-001-007">
+            <l n="+++1">
+              <w xml:id="w-001-007-001">صِرَٰطَ</w>
+              <w xml:id="w-001-007-002">ٱلَّذِينَ</w>
+              <w xml:id="w-001-007-003">أَنۡعَمۡتَ</w>
+              <w xml:id="w-001-007-004">عَلَيۡهِمۡ</w>
+              <w xml:id="w-001-007-005">غَيۡرِ</w>
+              <w xml:id="w-001-007-006">ٱلۡمَغۡضُوبِ</w>
+              <w xml:id="w-001-007-007">عَلَيۡهِمۡ</w>
+              <w xml:id="w-001-007-008">وَلَا</w>
+              <w xml:id="w-001-007-009">ٱلضَّآلِّينَ</w>
+            </l>
+          </lg>
+        </lg>
+        <lg n="111" xml:id="sura-111">
+          <lg n="1" xml:id="verse-111-001">
+            <l n="+++1">
+              <w xml:id="w-111-001-001">تَبَّتۡ</w>
+              <w xml:id="w-111-001-002">يَدَآ</w>
+              <w xml:id="w-111-001-003">أَبِی</w>
+              <w xml:id="w-111-001-004">لَهَبٍۢ</w>
+              <w xml:id="w-111-001-005">وَتَبَّ</w>
+            </l>
+          </lg>
+          <lg n="2" xml:id="verse-111-002">
+            <l n="+++1">
+              <w xml:id="w-111-002-001">مَآ</w>
+              <w xml:id="w-111-002-002">أَغۡنَىٰ</w>
+              <w xml:id="w-111-002-003">عَنۡهُ</w>
+              <w xml:id="w-111-002-004">مَالُهُۥ</w>
+              <w xml:id="w-111-002-005">وَمَا</w>
+              <w xml:id="w-111-002-006">كَسَبَ</w>
+            </l>
+          </lg>
+          <pb n="826, Q 111:3- Q 113:3" facs="#i826"/>
+          <lg n="3" xml:id="verse-111-003">
+            <l n="+++1">
+              <w xml:id="w-111-003-001">سَيَصۡلَىٰ</w>
+              <w xml:id="w-111-003-002">نَارًۭا</w>
+              <w xml:id="w-111-003-003">ذَاتَ</w>
+              <w xml:id="w-111-003-004">لَهَبٍۢ</w>
+            </l>
+          </lg>
+          <lg n="4" xml:id="verse-111-004">
+            <l n="+++1">
+              <w xml:id="w-111-004-001">وَٱمۡرَأَتُهُۥ</w>
+              <w xml:id="w-111-004-002">حَمَّالَةَ</w>
+              <w xml:id="w-111-004-003">ٱلۡحَطَبِ</w>
+            </l>
+          </lg>
+          <lg n="5" xml:id="verse-111-005">
+            <l n="+++1">
+              <w xml:id="w-111-005-001">فِی</w>
+              <w xml:id="w-111-005-002">جِيدِهَا</w>
+              <w xml:id="w-111-005-003">حَبۡلٌۭ</w>
+              <w xml:id="w-111-005-004">مِّن</w>
+              <w xml:id="w-111-005-005">مَّسَدٍ</w>
+            </l>
+          </lg>
+        </lg>
+        <lg n="112" xml:id="sura-112">
+          <lg n="1" xml:id="verse-112-001">
+            <l n="+++1">
+              <w xml:id="w-112-001-001">قُلۡ</w>
+              <w xml:id="w-112-001-002">هُوَ</w>
+              <w xml:id="w-112-001-003">ٱللَّهُ</w>
+              <w xml:id="w-112-001-004">أَحَدٌ</w>
+            </l>
+          </lg>
+          <lg n="2" xml:id="verse-112-002">
+            <l n="+++1">
+              <w xml:id="w-112-002-001">ٱللَّهُ</w>
+              <w xml:id="w-112-002-002">ٱلصَّمَدُ</w>
+            </l>
+          </lg>
+          <lg n="3" xml:id="verse-112-003">
+            <l n="+++1">
+              <w xml:id="w-112-003-001">لَمۡ</w>
+              <w xml:id="w-112-003-002">يَلِدۡ</w>
+              <w xml:id="w-112-003-003">وَلَمۡ</w>
+              <w xml:id="w-112-003-004">يُولَدۡ</w>
+            </l>
+          </lg>
+          <lg n="4" xml:id="verse-112-004">
+            <l n="+++1">
+              <w xml:id="w-112-004-001">وَلَمۡ</w>
+              <w xml:id="w-112-004-002">يَكُن</w>
+              <w xml:id="w-112-004-003">لَّهُۥ</w>
+              <w xml:id="w-112-004-004">كُفُوًا</w>
+              <w xml:id="w-112-004-005">أَحَدٌ</w>
+            </l>
+          </lg>
+        </lg>
+      </div>
+      <div type="transcription">
+        <lg n="1" xml:id="transcribed-sura-001">
+          <lg n="1" xml:id="transcribed-verse-001-001">
+            <l n="1">
+              <w xml:id="transcribed-w-001-001-001" type="word_cc">bi-smi</w>
+              <w xml:id="transcribed-w-001-001-002" type="word_cc">llāhi</w>
+              <w xml:id="transcribed-w-001-001-003" type="word_cc">r-raḥmāni</w>
+              <w xml:id="transcribed-w-001-001-004" type="word_cc">r-raḥīmi</w>
+            </l>
+          </lg>
+          <lg n="2" xml:id="transcribed-verse-001-002">
+            <l n="1">
+              <w xml:id="transcribed-w-001-002-001" type="word_cc">l-ḥamdu</w>
+              <w xml:id="transcribed-w-001-002-002" type="word_cc">li-llāhi</w>
+              <w xml:id="transcribed-w-001-002-003" type="word_cc">rabbi</w>
+              <w xml:id="transcribed-w-001-002-004" type="word_cc">l-ʿālamīna</w>
+            </l>
+          </lg>
+          <lg n="3" xml:id="transcribed-verse-001-003">
+            <l n="1">
+              <w xml:id="transcribed-w-001-003-001" type="word_cc">r-raḥmāni</w>
+              <w xml:id="transcribed-w-001-003-002" type="word_cc">r-raḥīmi</w>
+            </l>
+          </lg>
+          <lg n="4" xml:id="transcribed-verse-001-004">
+            <l n="1">
+              <w xml:id="transcribed-w-001-004-001" type="word_cc">māliki</w>
+              <w xml:id="transcribed-w-001-004-002" type="word_cc">yaumi</w>
+              <w xml:id="transcribed-w-001-004-003" type="word_cc">d-dīni</w>
+            </l>
+          </lg>
+          <lg n="5" xml:id="transcribed-verse-001-005">
+            <l n="1">
+              <w xml:id="transcribed-w-001-005-001" type="word_cc">ʾiyyāka</w>
+              <w xml:id="transcribed-w-001-005-002" type="word_cc">naʿbudu</w>
+              <w xml:id="transcribed-w-001-005-003" type="word_cc">wa-ʾiyyāka</w>
+              <w xml:id="transcribed-w-001-005-004" type="word_cc">nastaʿīnu</w>
+            </l>
+          </lg>
+          <lg n="6" xml:id="transcribed-verse-001-006">
+            <l n="1">
+              <w xml:id="transcribed-w-001-006-001" type="word_cc">hdina</w>
+              <w xml:id="transcribed-w-001-006-002" type="word_cc">ṣ-ṣirāṭa</w>
+              <w xml:id="transcribed-w-001-006-003" type="word_cc">l-mustaqīma</w>
+            </l>
+          </lg>
+          <lg n="7" xml:id="transcribed-verse-001-007">
+            <l n="1">
+              <w xml:id="transcribed-w-001-007-001" type="word_cc">ṣirāṭa</w>
+              <w xml:id="transcribed-w-001-007-002" type="word_cc">llaḏīna</w>
+              <w xml:id="transcribed-w-001-007-003" type="word_cc">ʾanʿamta</w>
+              <w xml:id="transcribed-w-001-007-004" type="word_cc">ʿalaihim</w>
+              <w xml:id="transcribed-w-001-007-005" type="word_cc">ġairi</w>
+              <w xml:id="transcribed-w-001-007-006" type="word_cc">l-maġḍūbi</w>
+              <w xml:id="transcribed-w-001-007-007" type="word_cc">ʿalaihim</w>
+              <w xml:id="transcribed-w-001-007-008" type="word_cc">wa-la</w>
+              <w xml:id="transcribed-w-001-007-009" type="word_cc">ḍ-ḍāllīna</w>
+            </l>
+          </lg>
+        </lg>
+        <lg n="111" xml:id="transcribed-sura-111">
+          <lg n="1" xml:id="transcribed-verse-111-001">
+            <l n="1">
+              <w xml:id="transcribed-w-111-001-001" type="word_cc">tabbat</w>
+              <w xml:id="transcribed-w-111-001-002" type="word_cc">yadā</w>
+              <w xml:id="transcribed-w-111-001-003" type="word_cc">ʾabī</w>
+              <w xml:id="transcribed-w-111-001-004" type="word_cc">lahabin</w>
+              <w xml:id="transcribed-w-111-001-005" type="word_cc">wa-tabba</w>
+            </l>
+          </lg>
+          <lg n="2" xml:id="transcribed-verse-111-002">
+            <l n="1">
+              <w xml:id="transcribed-w-111-002-001" type="word_cc">mā</w>
+              <w xml:id="transcribed-w-111-002-002" type="word_cc">ʾaġnā</w>
+              <w xml:id="transcribed-w-111-002-003" type="word_cc">ʿanhu</w>
+              <w xml:id="transcribed-w-111-002-004" type="word_cc">māluhū</w>
+              <w xml:id="transcribed-w-111-002-005" type="word_cc">wa-mā</w>
+              <w xml:id="transcribed-w-111-002-006" type="word_cc">kasaba</w>
+            </l>
+          </lg>
+          <lg n="3" xml:id="transcribed-verse-111-003">
+            <l n="1">
+              <w xml:id="transcribed-w-111-003-001" type="word_cc">sa-yaṣlā</w>
+              <w xml:id="transcribed-w-111-003-002" type="word_cc">nāran</w>
+              <w xml:id="transcribed-w-111-003-003" type="word_cc">ḏāta</w>
+              <w xml:id="transcribed-w-111-003-004" type="word_cc">lahabin</w>
+            </l>
+          </lg>
+          <lg n="4" xml:id="transcribed-verse-111-004">
+            <l n="1">
+              <w xml:id="transcribed-w-111-004-001" type="word_cc">wa-mraʾatuhū</w>
+              <w xml:id="transcribed-w-111-004-002" type="word_cc">ḥammālata</w>
+              <w xml:id="transcribed-w-111-004-003" type="word_cc">l-ḥaṭabi</w>
+            </l>
+          </lg>
+          <lg n="5" xml:id="transcribed-verse-111-005">
+            <l n="1">
+              <w xml:id="transcribed-w-111-005-001" type="word_cc">fī</w>
+              <w xml:id="transcribed-w-111-005-002" type="word_cc">ǧīdihā</w>
+              <w xml:id="transcribed-w-111-005-003" type="word_cc">ḥablun</w>
+              <w xml:id="transcribed-w-111-005-004" type="word_cc">min</w>
+              <w xml:id="transcribed-w-111-005-005" type="word_cc">masadin</w>
+            </l>
+          </lg>
+        </lg>
+        <lg n="112" xml:id="transcribed-sura-112">
+          <lg n="1" xml:id="transcribed-verse-112-001">
+            <l n="1">
+              <w xml:id="transcribed-w-112-001-001" type="word_cc">qul</w>
+              <w xml:id="transcribed-w-112-001-002" type="word_cc">huwa</w>
+              <w xml:id="transcribed-w-112-001-003" type="word_cc">llāhu</w>
+              <w xml:id="transcribed-w-112-001-004" type="word_cc">ʾaḥadun-i</w>
+            </l>
+          </lg>
+          <lg n="2" xml:id="transcribed-verse-112-002">
+            <l n="1">
+              <w xml:id="transcribed-w-112-002-001" type="word_cc">llāhu</w>
+              <w xml:id="transcribed-w-112-002-002" type="word_cc">ṣ-ṣamadu</w>
+            </l>
+          </lg>
+          <lg n="3" xml:id="transcribed-verse-112-003">
+            <l n="1">
+              <w xml:id="transcribed-w-112-003-001" type="word_cc">lam</w>
+              <w xml:id="transcribed-w-112-003-002" type="word_cc">yalid</w>
+              <w xml:id="transcribed-w-112-003-003" type="word_cc">wa-lam</w>
+              <w xml:id="transcribed-w-112-003-004" type="word_cc">yūlad</w>
+            </l>
+          </lg>
+          <lg n="4" xml:id="transcribed-verse-112-004">
+            <l n="1">
+              <w xml:id="transcribed-w-112-004-001" type="word_cc">wa-lam</w>
+              <w xml:id="transcribed-w-112-004-002" type="word_cc">yakun</w>
+              <w xml:id="transcribed-w-112-004-003" type="word_cc">lahū</w>
+              <w xml:id="transcribed-w-112-004-004" type="word_cc">kufuwan</w>
+              <w xml:id="transcribed-w-112-004-005" type="word_cc">ʾaḥadun</w>
+            </l>
+          </lg>
+        </lg>
+      </div>
+      <div type="translation" xml:lang="en">
+        <lg n="NAME" xml:id="translated-en-sura-001-en">
+          <lg n="001" xml:id="translated-en-verse-001-001">
+            <l n="1">In the name of Allah, the Beneficent, the Merciful.</l>
+          </lg>
+          <lg n="002" xml:id="translated-en-verse-001-002">
+            <l n="1">Praise be to Allah, Lord of the Worlds,</l>
+          </lg>
+          <lg n="003" xml:id="translated-en-verse-001-003">
+            <l n="1">The Beneficent, the Merciful.</l>
+          </lg>
+          <lg n="004" xml:id="translated-en-verse-001-004">
+            <l n="1">Master of the Day of Judgment,</l>
+          </lg>
+          <lg n="005" xml:id="translated-en-verse-001-005">
+            <l n="1">Thee (alone) we worship; Thee (alone) we ask for help.</l>
+          </lg>
+          <lg n="006" xml:id="translated-en-verse-001-006">
+            <l n="1">Show us the straight path,</l>
+          </lg>
+          <lg n="007" xml:id="translated-en-verse-001-007">
+            <l n="1">The path of those whom Thou hast favoured; Not the (path) of those who earn Thine anger nor of those who go astray.</l>
+          </lg>
+        </lg>
+        <lg n="NAME" xml:id="translated-en-sura-111-en">
+          <lg n="001" xml:id="translated-en-verse-111-001">
+            <l n="1">The power of Abu Lahab will perish, and he will perish.</l>
+          </lg>
+          <lg n="002" xml:id="translated-en-verse-111-002">
+            <l n="1">His wealth and gains will not exempt him.</l>
+          </lg>
+          <lg n="003" xml:id="translated-en-verse-111-003">
+            <l n="1">He will be plunged in flaming Fire,</l>
+          </lg>
+          <lg n="004" xml:id="translated-en-verse-111-004">
+            <l n="1">And his wife, the wood-carrier,</l>
+          </lg>
+          <lg n="005" xml:id="translated-en-verse-111-005">
+            <l n="1">Will have upon her neck a halter of palm-fibre.</l>
+          </lg>
+        </lg>
+        <lg n="NAME" xml:id="translated-en-sura-112-en">
+          <lg n="001" xml:id="translated-en-verse-112-001">
+            <l n="1">Say: He is Allah, the One!</l>
+          </lg>
+          <lg n="002" xml:id="translated-en-verse-112-002">
+            <l n="1">Allah, the eternally Besought of all!</l>
+          </lg>
+          <lg n="003" xml:id="translated-en-verse-112-003">
+            <l n="1">He begetteth not nor was begotten.</l>
+          </lg>
+          <lg n="004" xml:id="translated-en-verse-112-004">
+            <l n="1">And there is none comparable unto Him.</l>
+          </lg>
+        </lg>
+      </div>
+      <div type="translation" xml:lang="de">
+        <lg n="NAME" xml:id="translated-de-sura-001-de">
+          <lg n="000" xml:id="translated-de-verse-001-000">
+            <l n="1">Die Eröffnung</l>
+          </lg>
+          <lg n="001" xml:id="translated-de-verse-001-001">
+            <l n="1">Im Namen des barmherzigen und gnädigen Gottes.</l>
+          </lg>
+          <lg n="002" xml:id="translated-de-verse-001-002">
+            <l n="1">Lob sei Gott, dem Herrn der Menschen in aller Welt,</l>
+          </lg>
+          <lg n="003" xml:id="translated-de-verse-001-003">
+            <l n="1">dem Barmherzigen und Gnädigen,</l>
+          </lg>
+          <lg n="004" xml:id="translated-de-verse-001-004">
+            <l n="1">der am Tag des Gerichts regiert!</l>
+          </lg>
+          <lg n="005" xml:id="translated-de-verse-001-005">
+            <l n="1">Dir dienen wir, und dich bitten wir um Hilfe.</l>
+          </lg>
+          <lg n="006" xml:id="translated-de-verse-001-006">
+            <l n="1">Führe uns den geraden Weg,</l>
+          </lg>
+          <lg n="007" xml:id="translated-de-verse-001-007">
+            <l n="1">den Weg derer, denen du Gnade erwiesen hast, nicht (den Weg) derer, die d(ein)em Zorn verfallen sind und irregehen!</l>
+          </lg>
+        </lg>
+        <lg n="NAME" xml:id="translated-de-sura-111-de">
+          <lg n="000" xml:id="translated-de-verse-111-000">
+            <l n="1">Der Palmfasernstrick Im Namen des barmherzigen und gnädigen Gottes.</l>
+          </lg>
+          <lg n="001" xml:id="translated-de-verse-111-001">
+            <l n="1">Dem Verderben seien die Hände Abu Lahabs preisgegeben! Dem Verderben sei er (mit seiner ganzen Person) preisgegeben! (oder: Und (in der Tat) er ist (schon) dem Verderben preisgegeben?).</l>
+          </lg>
+          <lg n="002" xml:id="translated-de-verse-111-002">
+            <l n="1">Was nützt (w. nützte) ihm sein Vermögen, und was er erworben hat? (oder: Sein Vermögen, und was er erworben hat, nützt (w. nützte) ihm nicht(s)).</l>
+          </lg>
+          <lg n="003" xml:id="translated-de-verse-111-003">
+            <l n="1">Er wird (dereinst) in einem lodernden Feuer schmoren,</l>
+          </lg>
+          <lg n="004" xml:id="translated-de-verse-111-004">
+            <l n="1">(er) und seine Frau, die (elende) Brennholzträgerin (oder: (er) und seine Frau (die dann) als Brennholzträgerin (tätig ist und selber Brennholz für die Hölle herbeischleppt)?).</l>
+          </lg>
+          <lg n="005" xml:id="translated-de-verse-111-005">
+            <l n="1">An ihrem Hals hat sie (als Zeichen ihres Berufs statt des üblichen Schmucks) einen Strick (hängen), einen Palmfasernstrick.</l>
+          </lg>
+        </lg>
+        <lg n="NAME" xml:id="translated-de-sura-112-de">
+          <lg n="000" xml:id="translated-de-verse-112-000">
+            <l n="1">Der Glaube ohne Vorbehalt Im Namen des barmherzigen und gnädigen Gottes.</l>
+          </lg>
+          <lg n="001" xml:id="translated-de-verse-112-001">
+            <l n="1">Sag: Er ist Gott, ein Einziger,</l>
+          </lg>
+          <lg n="002" xml:id="translated-de-verse-112-002">
+            <l n="1">Gott, durch und durch (er selbst)(?) (w. der Kompakte) (oder: der Nothelfer(?), w. der, an den man sich (mit seinen Nöten und Sorgen) wendet, genauer: den man angeht?).</l>
+          </lg>
+          <lg n="003" xml:id="translated-de-verse-112-003">
+            <l n="1">Er hat weder gezeugt, noch ist er gezeugt worden.</l>
+          </lg>
+          <lg n="004" xml:id="translated-de-verse-112-004">
+            <l n="1">Und keiner ist ihm ebenbürtig.</l>
+          </lg>
+        </lg>
+      </div>
+      <div type="translation" xml:lang="fr">
+        <lg n="NAME" xml:id="translated-fr-sura-001-fr">
+          <lg n="001" xml:id="translated-fr-verse-001-001">
+            <l n="1">Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux.</l>
+          </lg>
+          <lg n="002" xml:id="translated-fr-verse-001-002">
+            <l n="1">Louange à Allah, Seigneur de l'univers.</l>
+          </lg>
+          <lg n="003" xml:id="translated-fr-verse-001-003">
+            <l n="1">Le Tout Miséricordieux, le Très Miséricordieux,</l>
+          </lg>
+          <lg n="004" xml:id="translated-fr-verse-001-004">
+            <l n="1">Maître du Jour de la rétribution.</l>
+          </lg>
+          <lg n="005" xml:id="translated-fr-verse-001-005">
+            <l n="1">C'est Toi [Seul] que nous adorons, et c'est Toi [Seul] dont nous implorons secours.</l>
+          </lg>
+          <lg n="006" xml:id="translated-fr-verse-001-006">
+            <l n="1">Guide-nous dans le droit chemin,</l>
+          </lg>
+          <lg n="007" xml:id="translated-fr-verse-001-007">
+            <l n="1">le chemin de ceux que Tu as comblés de faveurs, non pas de ceux qui ont encouru Ta colère, ni des égarés.</l>
+          </lg>
+        </lg>
+        <lg n="NAME" xml:id="translated-fr-sura-111-fr">
+          <lg n="001" xml:id="translated-fr-verse-111-001">
+            <l n="1">Que périssent les deux mains d'Abû-Lahab et que lui-même périsse.</l>
+          </lg>
+          <lg n="002" xml:id="translated-fr-verse-111-002">
+            <l n="1">Sa fortune ne lui sert à rien, ni ce qu'il a acquis.</l>
+          </lg>
+          <lg n="003" xml:id="translated-fr-verse-111-003">
+            <l n="1">Il sera brûlé dans un Feu plein de flammes,</l>
+          </lg>
+          <lg n="004" xml:id="translated-fr-verse-111-004">
+            <l n="1">de même sa femme, la porteuse de bois,</l>
+          </lg>
+          <lg n="005" xml:id="translated-fr-verse-111-005">
+            <l n="1">à son cou, une corde de fibres.</l>
+          </lg>
+        </lg>
+        <lg n="NAME" xml:id="translated-fr-sura-112-fr">
+          <lg n="001" xml:id="translated-fr-verse-112-001">
+            <l n="1">Dis: «Il est Allah, Unique.</l>
+          </lg>
+          <lg n="002" xml:id="translated-fr-verse-112-002">
+            <l n="1">Allah, Le Seul à être imploré pour ce que nous désirons.</l>
+          </lg>
+          <lg n="003" xml:id="translated-fr-verse-112-003">
+            <l n="1">Il n'a jamais engendré, n'a pas été engendré non plus.</l>
+          </lg>
+          <lg n="004" xml:id="translated-fr-verse-112-004">
+            <l n="1">Et nul n'est égal à Lui».</l>
+          </lg>
+        </lg>
+      </div>
+    </body>
+  </text>
+</TEI>

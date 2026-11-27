@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="mysql_id_2504">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Rotterdam, Bibliotheek Rotterdam, 96D17</title>
+        <funder>Corpus Coranicum (BBAW)</funder>
+        <respStmt>
+          <persName key="person_39907760" ref="http://viaf.org/viaf/39907760" role="edt">Michael Marx</persName>
+          <persName role="ctb">Tobias J. Jocham</persName>
+          <persName role="ctb">Yasmin Faghihi</persName>
+          <persName role="ctb">Huw Jones</persName>
+          <resp>Edited by Michael Marx in collaboration with Tobias J. Jocham
+        et. al. TEI version created by Yasmin Faghihi
+        and Huw Jones
+    </resp>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Corpus Coranicum</publisher>
+        <pubPlace>
+          <address>
+            <orgName>Berlin-Brandenburgische Akademie der Wissenschaften</orgName>
+            <street>Jägerstraße 22/23</street>
+            <postCode>10117</postCode>
+            <addrLine>
+              <ref target="https://corpuscoranicum.de/">Corpus Coranicum</ref>
+            </addrLine>
+            <addrLine>
+              <email>corpuscoranicum@bbaw.de</email>
+            </addrLine>
+            <settlement type="city">Berlin</settlement>
+            <country key="de">Germany</country>
+          </address>
+        </pubPlace>
+      </publicationStmt>
+      <sourceDesc>
+        <msDesc xml:lang="en">
+          <msIdentifier>
+            <repository key="113">Bibliotheek Rotterdam
+                            , Rotterdam</repository>
+            <idno>96D17</idno>
+          </msIdentifier>
+          <msContents>
+            <summary>
+                        
+                    </summary>
+          </msContents>
+          <physDesc>
+            <objectDesc>
+              <supportDesc material="parchment">
+                                                                                                            </supportDesc>
+              <layoutDesc>
+                <layout writtenLines="0">0 - 0 lines to a page
+                                </layout>
+              </layoutDesc>
+            </objectDesc>
+            <handDesc>
+              <handNote/>
+            </handDesc>
+            <scriptDesc>
+              <scriptNote>
+                                                                
+                            </scriptNote>
+            </scriptDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origDate/>
+            </origin>
+          </history>
+          <additional>
+            <adminInfo>
+              <recordHist>
+                <p/>
+              </recordHist>
+              <availability>
+                <p/>
+              </availability>
+            </adminInfo>
+          </additional>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <p>(No content available)</p>
+    </body>
+  </text>
+</TEI>

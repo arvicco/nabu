@@ -1720,6 +1720,9 @@ sources:
     #                          numbers ride their own regions; the book is the New Testament whole
   etcbc-syrnt:
     source_kind: scripture   # the Syriac New Testament — every document is an NT book
+  corpus-coranicum:
+    source_kind: scripture   # the Qurʾān (Cairo 1924) — every document is a sura; the commentary
+    #                          grain (exegesis) is not taken by this source
   slavistics-pd:
     source_kind: scholarly   # the PD Slavistics reference shelf — grammars,
     #                          etymological dictionaries, Academy monographs
