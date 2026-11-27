@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0"
+     xml:lang="de"
+     xml:base="http://localhost/iri/">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Grabplatte für Christoph Michaelis</title>
+            <author>Jürgen Herold, Christine Magin</author>
+         </titleStmt>
+         <editionStmt>
+            <edition>Deutsche Inschriften on Epigraf: <ref type="external" target="articles/epi-article/mv~477"/>
+            </edition>
+         </editionStmt>
+         <publicationStmt>
+            <authority>Akademie der Wissenschaften und der Literatur | Mainz - Digitale Akademie</authority>
+            <publisher>Deutsche Inschriften Online</publisher>
+            <date when="2024-11-12T01:38:53+00:00"/>
+            <availability>
+               <licence target="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 for the text</licence>
+               <p>Please note that linked images may be published under more restricted licenses.</p>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title>Die Deutschen Inschriften</title>
+               <biblScope unit="platform">Epigraf</biblScope>
+               <biblScope unit="server">http://localhost/</biblScope>
+               <biblScope unit="database">stage</biblScope>
+               <biblScope unit="volume" sameAs="projects/epi/mv~hgw">Greifswald (hgw)</biblScope>
+               <biblScope unit="issue" sameAs="articles/epi-article/mv~477">246</biblScope>
+            </bibl>
+            <msDesc>
+               <msIdentifier>
+                  <idno type="iri">articles/epi-article/mv~477</idno>
+                  <idno type="urn">urn:nbn:de:0238-di077g014k0024606</idno>
+               </msIdentifier>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>
+                           <p>Grabplatte für Christoph Michaelis (<ref target="sections/inscription/mv~267177">B</ref>).<note type="numeric">In der Gesterding’schen Genealogie der Familie Michaelis ist kein Christoph aufgeführt. Siehe <ref target="properties/literature/mv~21001">Gesterding, Zweite Fortsetzung</ref>, S. 201–205.</note> Kalkstein. Hochrechteckige Platte zwischen dem vierten und fünften Joch des nördlichen Seitenschiffs.<link type="grundriss"/> Die linke obere Ecke fehlt, im unteren Drittel ein diagonaler Bruch. In der Mitte der rechten Langseite eine senkrecht verlaufende, völlig abgetretene Inschrift. Im oberen Drittel die stark abgetretene Inschrift <ref target="sections/inscription/mv~267176">A</ref>. Oberhalb der Plattenmitte Inschrift <ref target="sections/inscription/mv~267177">B</ref> für Christoph Michaelis, darüber eine Hausmarke (<ref target="properties/brands/mv~26136">HM184.1122</ref>). Rechts der Hausmarke, zwischen <ref target="sections/inscription/mv~267176">A</ref> und <ref target="sections/inscription/mv~267177">B</ref>, undeutlich die Nummerierung <ref target="sections/inscription/mv~267178">C</ref>. Alle Inschriften sind eingehauen. </p>
+                           <objectType>Grabplatte</objectType>
+                           <material>von Gotland</material>
+                           <dimensions>
+                              <depth unit="cm" quantity="228">Länge: 228 cm</depth>
+                              <width unit="cm" quantity="103">Breite: 103 cm</width>
+                           </dimensions>
+                        </support>
+                        <condition>Objekt und Inschrift erhalten</condition>
+                     </supportDesc>
+                  </objectDesc>
+                  <scriptDesc>
+                     <p n="A">Schriftart: arabische Ziffern</p>
+                     <p n="A">Schriftart: Kapitalis</p>
+                     <p n="B">Schriftart: arabische Ziffern</p>
+                     <p n="B">Schriftart: Kapitalis mit Versal</p>
+                     <p n="C">Schriftart: arabische Ziffern</p>
+                     <p n="A">Schrifthöhe: 4,5</p>
+                     <p n="B">Schrifthöhe: 3,5</p>
+                     <p n="B">Schrifthöhe: 5,5</p>
+                     <p n="C">Schrifthöhe: 5,0</p>
+                     <p n="A">Ausführung: vertieft</p>
+                     <p n="B">Ausführung: vertieft</p>
+                     <p n="C">Ausführung: vertieft</p>
+                  </scriptDesc>
+               </physDesc>
+               <history>
+                  <origin>
+                     <origPlace>St. Nikolai, Greifswald</origPlace>
+                     <origDate>1575</origDate>
+                  </origin>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p>Encoded by transforming Epigraf data, following EpiDoc guidelines 9.6 where possible. Version 1.0-beta of the Epigraf transformation workflow.</p>
+      </encodingDesc>
+      <profileDesc>
+         <creation>
+            <date when="2004-04-15T00:00:00+00:00">2004-04-15</date>
+         </creation>
+         <textClass>
+            <keywords>
+               <term n="A">Eigentumsvermerk</term>
+               <term n="B">Eigentumsvermerk</term>
+               <term n="C">Nummerierung</term>
+            </keywords>
+         </textClass>
+         <langUsage>
+            <language n="A" ident="">niederdeutsch</language>
+            <language n="B" ident="">hochdeutsch</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+         <change when="2024-11-12T01:38:53+00:00">2024-11-12</change>
+      </revisionDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <div type="edition">
+            <div n="A1" type="textpart">
+               <head>Inschrift A1</head>
+               <ab type="block">
+                  <del>
+                     <gap reason="lost" quantity="0" unit="character"/>
+                  </del>
+                  <lb rend="neue Zeile"/> ERVEN 1575</ab>
+            </div>
+            <div n="B1" type="textpart">
+               <head>Inschrift B1</head>
+               <ab type="block">
+                  <hi rend="versal">D</hi>ISER STEIN VND BEGREBNIS <lb rend="neue Zeile"/> GEHÖRET CHRISTOFER <lb rend="neue Zeile"/> MICHGELIS<app>
+                     <note type="alphabetic">
+                        <q>MICHGELIS</q>] Verhauen für <q>MICHAELIS</q>.</note>
+                  </app> VND SEINEN <lb rend="neue Zeile"/> ERBEN <add>A</add>N<supplied reason="omitted">NO</supplied> 16<unclear>5</unclear>6</ab>
+            </div>
+            <div n="C1" type="textpart">
+               <head>Inschrift C1</head>
+               <ab type="block">160</ab>
+            </div>
+         </div>
+         <div type="translation"/>
+         <div type="commentary">
+            <p/>
+         </div>
+      </body>
+   </text>
+</TEI>

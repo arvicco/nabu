@@ -1,0 +1,65 @@
+{
+    "@context": {
+        "@base": "http:\/\/epigraf.inschriften.net\/iri\/",
+        "epi": "http:\/\/epigraf.inschriften.net\/iri\/",
+        "rdf": "http:\/\/www.w3.org\/1999\/02\/22-rdf-syntax-ns#",
+        "schema": "http:\/\/schema.org\/",
+        "crm": "http:\/\/www.cidoc-crm.org\/cidoc-crm\/"
+    },
+    "@set": [
+        {
+            "@id": "articles\/epi-article\/nsn~3212",
+            "@type": "schema:ScholarlyArticle",
+            "schema:title": {
+                "@value": "n\u00f6rdliches Portal der Klostermauer"
+            },
+            "schema:about": [
+                {
+                    "@id": "articles\/epi-article\/nsn~3212#inscriptions"
+                },
+                {
+                    "@id": "articles\/epi-article\/nsn~3212#object"
+                }
+            ]
+        },
+        {
+            "@id": "articles\/epi-article\/nsn~3212#inscriptions",
+            "@type": "schema:Collection",
+            "schema:dateCreated": {
+                "@value": "1145"
+            },
+            "schema:hasPart": {
+                "@id": "sections\/inscription\/nsn~115693#"
+            },
+            "schema:description": {
+                "@value": "Das in der Inschrift angegebene Datum wird allgemein als Gr\u00fcndungsjahr des Klosters angesehen. Urkundlich belegt ist das urspr\u00fcnglich als \u201eMarienzelle\u201c bezeichnete Kloster erstmals 1146 in einer Urkunde Heinrichs des L\u00f6wen (\u2020 1195), welche die Schenkung des Dorfes Ritdageshvsen an das Kloster vorsieht. Noch 1147 wird das Kloster mitunter als Cella sancte Marie bezeichnet, findet jedoch gleichzeitig bereits die Erw\u00e4hnung als Riddageshusen."
+            }
+        },
+        {
+            "@id": "articles\/epi-article\/nsn~3212#object",
+            "@type": "crm:E19_Physical_Object",
+            "schema:additionalType": {
+                "@value": "Bauglied \u203a Portal"
+            },
+            "schema:location": {
+                "@value": "Braunschweig \u203a Riddagshausen \u203a Kloster"
+            },
+            "schema:description": {
+                "@value": "Inschriftenstein am n\u00f6rdlichen Portal der Klostermauer. Die heute nicht mehr erhaltene Inschrift war bereits 1759 stark verwittert und nur noch unvollst\u00e4ndig lesbar."
+            },
+            "crm:P128_carries": {
+                "@id": "sections\/inscription\/nsn~115693#"
+            }
+        },
+        {
+            "@id": "sections\/inscription\/nsn~115693#",
+            "@type": "crm:E34_Inscription",
+            "schema:inLanguage": {
+                "@value": "lateinisch"
+            },
+            "schema:text": {
+                "@value": "M CXLVo \u2022 FV(N)DAT(A) ABB(AT)IA \u2022 R(IDDAGSHVSANA)"
+            }
+        }
+    ]
+}

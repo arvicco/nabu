@@ -219,7 +219,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 217, lect.size,
+    assert_equal 218, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -522,7 +522,9 @@ class PosturesTest < Minitest::Test
                  "med-headwords ADDED — identity enm (the MED editors' headword list; a dictionary " \
                  "shelf carrying no per-entry date or dialect): 215→216; " \
                  "dbbe ADDED — dates (the occurrences' copying dates band into grc:byz; the " \
-                 "undated types stay bare grc): 216→217"
+                 "undated types stay bare grc): 216→217; " \
+                 "dio-epidoc ADDED — dates (the DI inscriptions' lat/deu stage by their own origDate " \
+                 "band, the memis shape; gml bare, no stages): 217→218"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -649,6 +651,7 @@ class PosturesTest < Minitest::Test
     # coarse): 158→159.
     # med-headwords joins identity (enm, the MED headword list): 159→160.
     # dbbe joins dates (the occurrences band into grc:byz by copying date): 33→34.
-    assert_equal({ "dates" => 34, "codemap" => 22, "identity" => 160, "pending" => 1 }, by_posture)
+    # dio-epidoc joins dates (lat/deu staged by origDate band): 34→35.
+    assert_equal({ "dates" => 35, "codemap" => 22, "identity" => 160, "pending" => 1 }, by_posture)
   end
 end

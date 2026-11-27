@@ -1,0 +1,27 @@
+<?xml version='1.0'?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:epi="http://epigraf.inschriften.net/iri/" xmlns:schema="http://schema.org/" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xml:base="http://epigraf.inschriften.net/iri/">
+  <rdf:Description rdf:about="articles/epi-article/nsn~3212">
+    <rdf:type rdf:resource="http://schema.org/ScholarlyArticle" />
+    <schema:title>nördliches Portal der Klostermauer</schema:title>
+    <schema:about rdf:resource="articles/epi-article/nsn~3212#inscriptions" />
+    <schema:about rdf:resource="articles/epi-article/nsn~3212#object" />
+  </rdf:Description>
+  <rdf:Description rdf:about="articles/epi-article/nsn~3212#inscriptions">
+    <rdf:type rdf:resource="http://schema.org/Collection" />
+    <schema:dateCreated>1145</schema:dateCreated>
+    <schema:hasPart rdf:resource="sections/inscription/nsn~115693#" />
+    <schema:description>Das in der Inschrift angegebene Datum wird allgemein als Gründungsjahr des Klosters angesehen. Urkundlich belegt ist das ursprünglich als „Marienzelle“ bezeichnete Kloster erstmals 1146 in einer Urkunde Heinrichs des Löwen († 1195), welche die Schenkung des Dorfes Ritdageshvsen an das Kloster vorsieht. Noch 1147 wird das Kloster mitunter als Cella sancte Marie bezeichnet, findet jedoch gleichzeitig bereits die Erwähnung als Riddageshusen.</schema:description>
+  </rdf:Description>
+  <rdf:Description rdf:about="articles/epi-article/nsn~3212#object">
+    <rdf:type rdf:resource="http://www.cidoc-crm.org/cidoc-crm/E19_Physical_Object" />
+    <schema:additionalType>Bauglied › Portal</schema:additionalType>
+    <schema:location>Braunschweig › Riddagshausen › Kloster</schema:location>
+    <schema:description>Inschriftenstein am nördlichen Portal der Klostermauer. Die heute nicht mehr erhaltene Inschrift war bereits 1759 stark verwittert und nur noch unvollständig lesbar.</schema:description>
+    <crm:P128_carries rdf:resource="sections/inscription/nsn~115693#" />
+  </rdf:Description>
+  <rdf:Description rdf:about="sections/inscription/nsn~115693#">
+    <rdf:type rdf:resource="http://www.cidoc-crm.org/cidoc-crm/E34_Inscription" />
+    <schema:inLanguage>lateinisch</schema:inLanguage>
+    <schema:text>M CXLVo • FV(N)DAT(A) ABB(AT)IA • R(IDDAGSHVSANA)</schema:text>
+  </rdf:Description>
+</rdf:RDF>

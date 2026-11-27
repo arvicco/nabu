@@ -523,6 +523,109 @@ sources:
       #                                            named person; upstream's own note ("subtype
       #                                            of construction, commemoration") folds here
       #                                            as the votive act, ruled 2026-11-04
+  dio-epidoc:         # the articles' keywords/term — Die Deutschen Inschriften's own
+    #                   Textsorte per inscription (German; "X / X" doublets fold once at
+    #                   parse time). Counts = DOCUMENTS carrying the label, the full-dump
+    #                   census through the adapter 2026-11-27 (978 articles, 82 labels; an
+    #                   article carries one label per inscription, so most carry several).
+    #                   Every fold lands on an existing head; the naming/number/layout
+    #                   labels are declared deliberate below.
+    facet: genre
+    map:
+      # -- marks on things: the grave slab's owner, numbering, captions, makers
+      "Eigentumsvermerk": mark/ownership         # 452 — "S(epulcrum) … und seiner Erben": the
+      #                                            grave slab's ownership claim (Greifswald/
+      #                                            Stralsund slabs pass between families)
+      "Besitzvermerk": mark/ownership            # 1
+      "Nummerierung": mark/label                 # 284 — the grave's number cut in the slab
+      "Bildbeischrift": mark/label               # 54 — the caption naming an image
+      "Wappenbeischrift": mark/label             # 50 — the caption naming a coat of arms
+      "Maßangabe": mark/label                    # 20 — a gauge/measure mark on a vessel or stone
+      "Preisangabe": mark/label                  # 1 — a price cut on the object
+      "Archivsignatur": mark/label               # 1 — a shelf/archive mark
+      "Montieranweisung": mark/label             # 1 — an assembly mark for the joiner
+      "Glockenrede": mark/label                  # 3 — the bell speaking its own name/office
+      "Namensansage": mark/label                 # 2 — the bell's name announced ("Maria heiße ich")
+      "Herstellungsvermerk": mark/maker          # 12
+      "Herstellervermerk": mark/maker            # 7
+      "Herstellervermerk Name": mark/maker       # 1
+      "Name als Herstellervermerk": mark/maker   # 1
+      "Meisterinschrift": mark/maker             # 7
+      "Meistername": mark/maker                  # 5
+      "Gießervermerk": mark/maker                # 5 — the bell/brass founder
+      "Autornennung": mark/maker                 # 3 — the author of the inscribed text named
+      "Herstellungsjahr": mark/maker             # 10 — the year of making, a maker's note
+      "Herstellungsdatum": mark/maker            # 9
+      # -- the dead
+      "Sterbevermerk": funerary                  # 192 — "anno … obiit": the death notice
+      "Grabbezeugung": funerary                  # 61 — "hic iacet": the burial attestation
+      "Grabschrift": funerary/epitaph            # 25
+      "Gedenkinschrift": funerary                # 35 — the ogham precedent (commemorative →
+      #                                            funerary, the house's memorial head)
+      "Bestattungsvermerk": funerary             # 6
+      "Lebenslauf": funerary                     # 8 — the vita of the epitaph
+      "Setzungsvermerk": funerary                # 13 — who set up the epitaph/stone; in these
+      #                                            volumes it rides the funerary monuments
+      "Liegezeitverfügung": funerary             # 9 — the grave's term of rest provided for
+      "Todesmahnung": funerary                   # 6 — memento mori on the grave monument
+      # -- gifts and foundations
+      "Stiftervermerk": dedicatory               # 39
+      "Stiftervermerk Name": dedicatory          # 2
+      "Stiftername": dedicatory                  # 18
+      "Stiftungsvermerk": dedicatory             # 5
+      "Schenkungsvermerk": dedicatory            # 4
+      "Weihevermerk": dedicatory                 # 5 — the consecration of the object
+      "Widmung": dedicatory                      # 1
+      "Auftraggebervermerk": dedicatory          # 5 — the patron who commissioned the work
+      "Spendenaufruf": dedicatory                # 1 — the alms box's call to give
+      # -- buildings and their history
+      "Bauinschrift": building                   # 15
+      "Baujahr": building                        # 5
+      "Baudatum": building                       # 1
+      "Renovierungsvermerk": building            # 11
+      "Gründungsnachricht": building             # 3 — the foundation of the church/house
+      "historische Nachricht": historiography    # 20 — the inscribed record of an event
+      # -- scripture, prayer, wisdom, verse
+      "Bibelzitat": scripture                    # 80
+      "Bibelstellenangabe": scripture            # 29 — the chapter-and-verse reference
+      "Bibelparaphrase": scripture               # 2
+      "Kreuztitulus": scripture                  # 33 — INRI, the titulus of John 19:19
+      "Bibeldichtung": literary/poetry           # 1 — scripture recast as verse
+      "Fürbitte": hymn-prayer/prayer             # 47 — "cuius anima requiescat in pace"
+      "Aufforderung zur Fürbitte": hymn-prayer/prayer  # 45 — "orate pro eo"
+      "Gebet": hymn-prayer/prayer                # 33
+      "Glockengebet": hymn-prayer/prayer         # 2
+      "Anrufung": hymn-prayer/prayer             # 9 — invocation of God or a saint
+      "Didaxe": literary/wisdom                  # 17 — the edifying maxim
+      "Sprichwort": literary/wisdom              # 16
+      "Devise": literary/wisdom                  # 33 — the personal motto
+      "Hausspruch": literary/wisdom              # 1
+      "Neidspruch": literary/wisdom              # 1 — the house's saying against the envious
+      "Glockenspruch": literary/wisdom           # 1
+      "Erbaulicher Text": literary/wisdom        # 1
+      "Literaturzitat": literary                 # 1
+      "Anagramm": literary                       # 1
+      "Chronostichon": literary/poetry           # 2 — the verse chronogram
+      "Chronodistichon": literary/poetry         # 1
+      # -- law
+      "Rechtssicherung": legal                   # 4 — the clause securing a right
+      "Drohung": legal                           # 2 — the sanction threatened against a violator
+      "Kaufvermerk": legal/contract              # 1 — the grave bought
+      "Verkaufsanzeige": legal/contract          # 1
+    deliberate:
+      "Name": "a personal name standing alone — a naming element, not a genre (42)"
+      "Namensinitialen": "initials — a naming element, not a genre (4)"
+      "Titel": "a title or rank standing alone, not a genre (6)"
+      "Funktionsbezeichnung": "an office named standing alone, not a genre (5)"
+      "Amtsträgernennung": "the office-holders of a church or guild named — beside the bell's or
+        building's own genre label, never a genre of its own (23)"
+      "Altersangabe": "an age statement — on epitaphs and portraits alike, beside their own genre (31)"
+      "Lebensdaten": "life dates — on epitaphs and portraits alike, beside their own genre (3)"
+      "Geburtsvermerk": "a birth date — beside the epitaph's own labels (6)"
+      "Jahreszahl": "a bare year — not a genre (2)"
+      "Jahresangabe": "a bare year — not a genre (1)"
+      "Gewandsauminschrift": "a POSITION (the hem of a painted garment, often pseudo-script), not a genre (3)"
+      "Buchstabenfolge": "a letter sequence of unknown sense, not a genre (1)"
   cdli:               # 288,629 docs — the largest vocabulary by rows
     facet: genre
     map:

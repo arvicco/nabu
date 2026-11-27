@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0"
+     xml:lang="de"
+     xml:base="https://epigraf.inschriften.net/iri/">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Grabplatte für Heinrich Sten</title>
+            <author>Christine Magin</author>
+         </titleStmt>
+         <editionStmt>
+            <edition>Deutsche Inschriften on Epigraf: <ref type="external" target="articles/epi-article/mv~2048"/>
+            </edition>
+         </editionStmt>
+         <publicationStmt>
+            <authority>Akademie der Wissenschaften und der Literatur | Mainz - Digitale Akademie</authority>
+            <publisher>Deutsche Inschriften Online</publisher>
+            <date when="2024-11-12T00:40:02+01:00"/>
+            <availability>
+               <licence target="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 for the text</licence>
+               <p>Please note that linked images may be published under more restricted licenses.</p>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title>Die Deutschen Inschriften</title>
+               <biblScope unit="platform">Epigraf</biblScope>
+               <biblScope unit="server">https://epigraf.inschriften.net/</biblScope>
+               <biblScope unit="database">stage</biblScope>
+               <biblScope unit="volume" sameAs="projects/epi/mv~hst">Stralsund (HST)</biblScope>
+               <biblScope unit="issue" sameAs="articles/epi-article/mv~2048">083</biblScope>
+            </bibl>
+            <msDesc>
+               <msIdentifier>
+                  <idno type="iri">articles/epi-article/mv~2048</idno>
+                  <idno type="urn">urn:nbn:de:0238-di102g018k0008309</idno>
+               </msIdentifier>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>
+                           <p>Grabplatte für Heinrich Sten (<ref target="sections/inscription/mv~269823">B</ref>). Kalkstein. Heute aufrecht an der Nordseite im nördlichen Bereich des Chorumgangs, 1736 noch liegend im Chor.<note type="numeric">
+                                 <ref target="properties/literature/mv~20939">PfA St. Nikolai, Nr. 130 (Richter, Begräbnisse)</ref>, S. 5 (Nr. 35).</note> Im oberen Bereich der hochrechteckigen Platte unter einer Rundbogenarchitektur im Flachrelief vor vertieftem Grund ein Vollwappen. In den Zwickeln zwei Löwenköpfe, die eine Blattgirlande halten. Unterhalb des Wappenfeldes die Inschriften <ref target="sections/inscription/mv~269823">B</ref> und <ref target="sections/inscription/mv~269824">C</ref>, beide erhaben in vertiefter Zeile ausgeführt. Das Fragment <ref target="sections/inscription/mv~277814">A</ref> in der rechten oberen Ecke zeugt von einer früheren Nutzung des Steins.</p>
+                           <objectType>mit Wappen, mit bildlicher Darstellung</objectType>
+                           <material>Sandstein</material>
+                           <dimensions>
+                              <width unit="cm" quantity="134">Br.: 134 cm</width>
+                              <height unit="cm" quantity="241">H.: 241 cm</height>
+                           </dimensions>
+                        </support>
+                        <condition>Objekt und Inschrift erhalten</condition>
+                     </supportDesc>
+                  </objectDesc>
+                  <scriptDesc>
+                     <p n="A">Schriftart: gotische Minuskel</p>
+                     <p n="B">Schriftart: Mischschrift aus gotischer Minuskel und Fraktur </p>
+                     <p n="C">Schriftart: Kapitalis mit Versalien</p>
+                     <p n="A">Schrifthöhe: 6</p>
+                     <p n="B">Schrifthöhe: 8–9</p>
+                     <p n="C">Schrifthöhe: ca. 7</p>
+                     <p n="A">Ausführung: erhaben in vertiefter Zeile</p>
+                     <p n="B">Ausführung: erhaben in vertiefter Zeile</p>
+                     <p n="C">Ausführung: erhaben in vertiefter Zeile</p>
+                  </scriptDesc>
+                  <decoDesc>
+                     <decoNote>
+                        <heraldry>Sten {1}: Schrägbalken, darüber und darunter je zwei Steine; geflügelter Greif</heraldry>
+                     </decoNote>
+                  </decoDesc>
+               </physDesc>
+               <msContents>
+                  <msItem n="C">
+                     <locus target="sections/inscription/mv~269824">Inschrift C</locus>
+                     <incipit>Mors tua Christe</incipit>
+                  </msItem>
+               </msContents>
+               <history>
+                  <origin>
+                     <origPlace>St. Nikolai, Stralsund</origPlace>
+                     <origDate>M.14.–M.15.Jh.</origDate>
+                  </origin>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p>Encoded by transforming Epigraf data, following EpiDoc guidelines 9.6 where possible. Version 1.0-beta of the Epigraf transformation workflow.</p>
+      </encodingDesc>
+      <profileDesc>
+         <creation>
+            <date when="2003-09-29T22:00:00+02:00">2003-09-29</date>
+         </creation>
+         <textClass>
+            <keywords>
+               <term n="B">Eigentumsvermerk</term>
+               <term n="C">Devise</term>
+            </keywords>
+         </textClass>
+         <langUsage>
+            <language n="B" ident="">niederdeutsch </language>
+            <language n="C" ident="">lateinisch </language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+         <change when="2024-11-12T00:40:02+01:00">2024-11-12</change>
+      </revisionDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <div type="edition">
+            <div n="A1" type="textpart">
+               <head>Inschrift A1</head>
+               <ab type="block">
+                  <del>
+                     <gap reason="lost" quantity="0" unit="character"/>
+                  </del>en</ab>
+            </div>
+            <div n="B1" type="textpart">
+               <head>Inschrift B1</head>
+               <ab type="block">her hinrick Sten vnd sine<supplied reason="omitted">n</supplied>
+                  <lb rend="neue Zeile"/> Eruen</ab>
+            </div>
+            <div n="C1" type="textpart">
+               <head>Inschrift C1</head>
+               <ab type="block">
+                  <lb type="verse" rend="keine Angabe"/>
+                  <hi rend="versal">M</hi>ORS TVA CHRISTE MIHI VITA EST VICTORIA <lb type="verse" rend="eingerückt"/> REGNVM <lb type="verse" rend="eingerückt"/>
+                  <hi rend="versal">L</hi>ABE MEA MORIOR SANGVINE VIVO TVO<g rend="Punkt">·</g>
+                  <note type="numeric">Nach <ref target="properties/literature/mv~21154">Walther (Hg.), Proverbia</ref>, Nr. 15207, ist der Spruch nachgewiesen in einer 1576 in Basel gedruckten Sammlung. Auch auf einem Epitaph des Jahres 1567 in Jena kommen die Verse vor, die somit schon vor der Publikation der Baseler Sammlung bekannt gewesen sein müssen; vgl. <ref target="properties/literature/mv~21334">DI 33 (Stadt Jena)</ref>, Nr. 83. Tatsächlich werden sie dem niederländischen Juristen Julius of Jucke van Beyma († 1598) zugeschrieben, der zeitweilig auch an der Universität Wittenberg tätig war. Zur Person siehe <ref target="properties/literature/mv~21883">Nieuw Nederlandsch Biografisch Woordenboek (NNBW)</ref> 1 (1911), S. 342f. (Online-Version, 11.2.2014). </note>
+               </ab>
+            </div>
+         </div>
+         <div type="translation">
+            <div n="C1" type="textpart">
+               <head>Inschrift C1</head>
+               <ab>Dein Tod, Christus, ist für mich Leben, Sieg und Reich. Durch meinen Fall sterbe ich, durch dein Blut lebe ich.</ab>
+            </div>
+         </div>
+         <div type="commentary">
+            <p>Inschrift <ref target="sections/inscription/mv~269823">B</ref> zeigt Frakturelemente wie gebogenen <q>h</q>-Bogen, mandelförmiges <q>d</q>, <q>v</q> mit Schwellzug am linken Schaft und Schaft-<q>s</q> mit Unterlänge. Ihre hohen, schlanken Proportionen, Schaftbrechungen und Schleifenornamente im Oberlängenbereich erinnern aber auch an die Spätform der gotischen Minuskel.<note type="numeric">Vgl. etwa <ref target="properties/literature/mv~21379">DI 77 (Greifswald)</ref>, Nr. 215.</note>
+               <lb/>Heinrich Sten (von Stein, <ref target="sections/inscription/mv~269823">B</ref>), seit 1556 Ratsherr, vertrat Stralsund auf einem Hansetag dieses Jahres. Im Jahr 1567 wurde er geadelt. Er bewohnte ein Haus in der Semlowerstraße. Mit seiner Ehefrau Katharina Beseris († 2. Januar 1562) hatte er die Kinder Jürgen, Anna, verheiratet mit Joachim Ketel (vgl. <ref target="articles/epi-article/mv~4701">219</ref>), Gertrud und Arnold. Er verstarb am 12. Dezember 1573.<note type="numeric">Biografische Informationen nach <ref target="properties/literature/mv~21783">StA Stralsund, Hs. 359 (Dinnies, Verzeichnis 1)</ref>, S. 683f.; <ref target="properties/literature/mv~21745">StA Stralsund, Hs. 365 (Dinnies, Stammtafeln 2)</ref>, S. 127a–128; der Todestag nach <ref target="properties/literature/mv~20939">PfA St. Nikolai, Nr. 130 (Richter, Begräbnisse)</ref>, S. 7.</note>
+            </p>
+         </div>
+         <div type="bibliography">
+            <listBibl>
+               <bibl sameAs="properties/literature/mv~20873">Haselberg, Stadtkreis Stralsund = Ernst von Haselberg, Die Baudenkmäler des Regierungsbezirks Stralsund, H. 5: Der Stadtkreis Stralsund (Die Baudenkmäler der Provinz Pommern 1), Stettin 1902</bibl>
+            </listBibl>
+         </div>
+      </body>
+   </text>
+</TEI>

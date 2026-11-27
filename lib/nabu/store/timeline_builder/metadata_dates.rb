@@ -182,6 +182,9 @@ module Nabu
           "digar-corpora" => :structured, # the ERB record's 008 date1 (u-digits widen to
           #                                 the decade), class edition; place = the 260 imprint
           #                                 place in the print's own form (Perno, Riia)
+          "dio-epidoc" => :structured, # DI 7/77/102: origDate German prose (years, ranges,
+          #                              A./M./E. and n.H./n.V./n.D. century fractions, vor/nach/
+          #                              "o. früher" open ends); place = Epigraf's location string
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "divinum-officium" => :place_only, # no dating (undatable); the local-calendar proper's
