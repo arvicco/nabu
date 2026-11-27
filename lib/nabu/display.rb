@@ -72,13 +72,24 @@ module Nabu
     # A named codepoint set. +codepoints+ is an array of Integer/Range;
     # +replacement+ is what each stripped codepoint becomes — "" for combining
     # marks; maqaf becomes a space so the two words it joins never fuse.
+    # +regexp+ is derived from the codepoints unless a class needs context
+    # (quranic-marks: the maddah only where it does not sit on an alef).
     MarkClass = Data.define(:name, :codepoints, :replacement, :regexp) do
-      def initialize(codepoints:, replacement: "", **rest)
+      def initialize(codepoints:, replacement: "", regexp: nil, **rest)
         chars = codepoints.flat_map { |c| c.is_a?(Range) ? c.to_a : [c] }
         super(codepoints: codepoints, replacement: replacement,
-              regexp: /[#{chars.map { |c| format('\u{%04X}', c) }.join}]/, **rest)
+              regexp: regexp || /[#{chars.map { |c| format('\u{%04X}', c) }.join}]/, **rest)
       end
     end
+
+    # The Quranic recitation marks (class note below) less the maddah, and
+    # the maddah wherever it is not an alef's: under the NFD round-trip آ
+    # (U+0622) decomposes to alef + U+0653, and that maddah is part of the
+    # letter (hamza + long ā), so the strip must never reach it — a vowel
+    # sign NFD may have ordered between the two is looked past.
+    QURANIC_SIGNS = [0x06D6..0x06DC, 0x06DF, 0x06E0, 0x06E2, 0x06E3, 0x06E4, 0x06EA..0x06ED].freeze
+    QURANIC_MARKS_REGEXP = /[ۖ-ۜ۟۠ۢ-۪ۤ-ۭ]|(?<!ا)(?<!ا[ً-ْٰ])ٓ/
+    private_constant :QURANIC_SIGNS, :QURANIC_MARKS_REGEXP
 
     # == The mark classes (named codepoint sets — the one data-driven place)
     #
@@ -112,6 +123,33 @@ module Nabu
     #                 subscript (U+0345); the acute survives. A strip, not a
     #                 polytonic→monotonic conversion (conversion — grave→acute
     #                 etc. — is a display MODE for a later packet).
+    #   tashkeel      pointed Arabic's vocalization — the Hebrew `points`
+    #                 analogue. Census: the whole Cairo 1924 text
+    #                 (corpus-coranicum, 77,429 words, stored NFC): fatḥa
+    #                 U+064E ×122,927, ḍamma U+064F ×37,319, kasra U+0650
+    #                 ×45,965, the tanwīn U+064B/064C/064D ×3,741/2,516/2,633,
+    #                 shadda U+0651 ×22,672, sukūn U+0652 ×4 and its Quranic
+    #                 form U+06E1 ×37,146, dagger alif U+0670 ×9,725, and the
+    #                 supplied vowel letters small waw U+06E5 ×1,257, small
+    #                 yeh U+06E6 ×957, small high yeh U+06E7 ×36, small high
+    #                 noon U+06E8 ×1 (the dagger alif's kin: letters the
+    #                 orthography adds to the consonantal skeleton for the
+    #                 reading). NOT in the set: hamza above/below U+0654/0655
+    #                 (×495/×80 standalone — hamza is a consonant, and under
+    #                 NFD they are the seats of أ إ ؤ ئ), high hamza U+0674,
+    #                 alef wasla U+0671 (×13,483 — a letter), tatweel U+0640.
+    #   quranic-marks the recitation layer printed over the Cairo text — the
+    #                 Hebrew `cantillation` analogue: the pause signs U+06D6–
+    #                 06DC (×1,745/721/25/53/1,647/12/6), the small high
+    #                 rounded and upright-rectangular zeros U+06DF/06E0
+    #                 (×3,986/×66 — letters written but not read), the small
+    #                 meem of iqlāb U+06E2/06ED (×2,353/×4,793), the small seen
+    #                 U+06E3 (×2), the small high madda U+06E4 (×393), the
+    #                 stops U+06EA–06EC (×1 each), and the maddah U+0653 where
+    #                 it marks prolongation over a non-alef (×2,038; the
+    #                 alef's maddah is the letter آ and stays — see
+    #                 QURANIC_MARKS_REGEXP). Censused ×0 and so not in the
+    #                 set: U+06DD/06DE/06E9 (end of ayah, rub el hizb, sajda).
     MARK_CLASSES = {
       "cantillation" => MarkClass.new(name: "cantillation", codepoints: [0x0591..0x05AF]),
       "points" => MarkClass.new(name: "points", codepoints: [0x05B0..0x05BD, 0x05C1, 0x05C2, 0x05C7]),
@@ -119,7 +157,10 @@ module Nabu
       "vedic-accents" => MarkClass.new(name: "vedic-accents", codepoints: [0x0951, 0x0952]),
       "titla" => MarkClass.new(name: "titla", codepoints: [0x0483, 0x0487, 0x2DE0..0x2DFF]),
       "monotonic" => MarkClass.new(name: "monotonic",
-                                   codepoints: [0x0300, 0x0313, 0x0314, 0x0342, 0x0343, 0x0345])
+                                   codepoints: [0x0300, 0x0313, 0x0314, 0x0342, 0x0343, 0x0345]),
+      "tashkeel" => MarkClass.new(name: "tashkeel", codepoints: [0x064B..0x0652, 0x0670, 0x06E1, 0x06E5..0x06E8]),
+      "quranic-marks" => MarkClass.new(name: "quranic-marks", codepoints: [*QURANIC_SIGNS, 0x0653],
+                                       regexp: QURANIC_MARKS_REGEXP)
     }.freeze
 
     # One language's display policy from config/display.yml. +strip+ applies
@@ -266,6 +307,20 @@ module Nabu
     ISOLATES = "rtl isolates"
     RLI = "⁧"
     PDI = "⁩"
+
+    # Direction follows the SCRIPT of the surface, not the language. A
+    # policy's `isolates: true` is a claim about the language's HOME script
+    # (Hebrew, Arabic); a passage whose tag names another script — the
+    # quranic-corpus Buckwalter shelf (ara-Latn), any romanized -Latn
+    # document of an RTL language — is left-to-right and is never wrapped.
+    # The script is read from the BCP-47 script subtag (ara-Latn → Latn)
+    # or a lect's ~script surface facet (ara:cla~latn → Latn); a tag that
+    # names no script keeps the policy's verdict. The set is the scripts
+    # Unicode gives a right-to-left bidi class (R/AL), ISO 15924 codes.
+    RTL_SCRIPTS = %w[
+      Adlm Arab Aran Armi Avst Chrs Cprt Elym Hatr Hebr Hung Khar Lydi Mand Mani Mend Narb Nbat Nkoo
+      Orkh Ougr Palm Phli Phlp Phnx Prti Rohg Samr Sarb Sogd Sogo Syrc Syre Syrj Syrn Thaa Yezi
+    ].freeze
 
     # Grapheme spacing (P27-2): the Ogham block and its own space mark —
     # U+1680 renders as a stemline segment, so spaced letters stay one stem.
@@ -425,8 +480,25 @@ module Nabu
       # BEFORE rendering, so it can cut the isolate at highlight boundaries
       # instead of letting the brackets ride inside the isolated run.
       def isolates?(language:, mode:, policies:)
-        policy = policies[Normalize.primary_subtag(language)]
+        policy = policy_for(language, policies)
         !policy.nil? && mode.isolates?(policy)
+      end
+
+      # The ISO 15924 script a tag declares (titlecased), or nil when it
+      # names none: the BCP-47 script subtag (the first four-letter subtag
+      # after the primary — ara-Latn, san-Deva, sr-Latn-RS) or a lect's
+      # ~script surface facet (ara:cla~latn).
+      def declared_script(language)
+        tag = language.to_s
+        code = tag[/~([A-Za-z]{4})\z/, 1] || tag.split("-").drop(1).find { |subtag| subtag.match?(/\A[A-Za-z]{4}\z/) }
+        code&.capitalize
+      end
+
+      # Is +language+'s surface right-to-left? A declared script decides;
+      # with none, nil — the policy's own isolates verdict stands.
+      def right_to_left?(language)
+        script = declared_script(language)
+        script && RTL_SCRIPTS.include?(script)
       end
 
       # Render one run of +text+ for the terminal: look up the language's
@@ -441,7 +513,7 @@ module Nabu
       # (P27-2) applies after the mode render when policy and mode allow.
       def render(text, language:, mode:, policies:, source: nil, annotations: nil, source_policies: {},
                  gaiji_map: {}, gaiji_ids: {}, gaiji_substitutes: {})
-        policy = policies[Normalize.primary_subtag(language)]
+        policy = policy_for(language, policies)
         edition = edition_context(mode, source, annotations, source_policies,
                                   gaiji_map, gaiji_ids, gaiji_substitutes)
         return Rendered.new(text: text, applied: []) if text.empty? || (policy.nil? && edition.nil?)
@@ -590,6 +662,17 @@ module Nabu
       end
 
       private
+
+      # The language's policy (primary subtag, like the fold tables), with
+      # its isolates switched OFF when the tag declares a left-to-right
+      # script — the one place direction is decided (RTL_SCRIPTS note), so
+      # every mode and the snippet path's isolates? agree.
+      def policy_for(language, policies)
+        policy = policies[Normalize.primary_subtag(language)]
+        return policy unless policy&.isolates && right_to_left?(language) == false
+
+        policy.with(isolates: false)
+      end
 
       # One ref's descent down the ladder (P38-2): the first rung that holds it
       # wins. Bumps the matching rung's counter and returns the surface. The

@@ -38,7 +38,7 @@ classes:
 languages:
   hbo: { strip: [cantillation], keep: [points, maqaf], isolates: true }
   arc: { strip: [cantillation], isolates: true }
-  ara: { isolates: true }           # OpenITI Arabic (P41-3) — isolates only, see §1d
+  ara: { strip: [quranic-marks], keep: [tashkeel], isolates: true }  # pointed Arabic, see §1d
   fas: { isolates: true }           # OpenITI Persian — same row, same reasons
   san: { strip: [vedic-accents] }   # Devanagari-script text; IAST untouched
   chu: { strip: [titla] }
@@ -56,6 +56,8 @@ bytes:
 | `vedic-accents` | U+0951, U+0952 | udatta/anudatta on Devanagari text; the IAST shelves (DCS) carry none |
 | `titla` | U+0483, U+0487, U+2DE0–2DFF | titlo, pokrytie, combining superscript letters; palatalization U+0484 is *not* a titlo and stays |
 | `monotonic` | U+0300, 0313, 0314, 0342, 0343, 0345 | Greek, **definable but not defaulted** — opt in via display.yml |
+| `tashkeel` | U+064B–0652, 0670, 06E1, 06E5–06E8 | Arabic vocalization (vowel signs, tanwīn, shadda, both sukūns, dagger alif, the small supplied vowel letters) — the `points` analogue: kept by default, stripped by `plain`; hamza signs, ٱ and آ are letters and stay |
+| `quranic-marks` | U+06D6–06DC, 06DF, 06E0, 06E2–06E4, 06EA–06ED, 0653 (not on alef) | the Qurʾānic recitation layer (pause signs, small zeros, iqlāb meem, small seen, prolongation madda) — the `cantillation` analogue: stripped by default |
 
 **Modes: `--display MODE`** on the render commands:
 
@@ -171,19 +173,35 @@ inside left-to-right layout lines; where bidi is absent the characters are
 invisible and harmless. Width math (KWIC columns) excludes them, so
 alignment never shifts.
 
+**Direction follows the script, not the language.** `isolates: true` is a
+claim about the language's home script. A passage whose tag declares
+another script — the BCP-47 script subtag (`ara-Latn`, the quranic-corpus
+Buckwalter shelf; any `hbo-Latn`/`fas-Latn` romanization) or a lect's
+`~script` surface (`ara:cla~latn`) — is rendered left to right and never
+wrapped, in every mode and on the search snippet path alike. The rule is
+one table (`Nabu::Display::RTL_SCRIPTS`, the ISO 15924 scripts Unicode
+gives a right-to-left bidi class), applied once over every policy, never
+per language; a tag naming no script keeps the policy's verdict.
+
 ### 1d. Arabic and Persian (ara/fas — OpenITI, P41-3)
 
 The Arabic-script shelves reuse the hbo/arc machinery wholesale — the same
 `isolates: true` wrapping, the same modes, the same honesty footer. What is
 deliberately DIFFERENT from the Hebrew row:
 
-- **No mark classes, so nothing to strip.** The P41-g census of the OpenITI
-  fixtures found standard-block consonantal text only — no tashkeel
-  (U+064B–0652), no Quranic annotation marks. Census-first: a `tashkeel`
-  mark class (the obvious analogue of Hebrew `points`) is a future rule for
-  when a pointed Arabic corpus lands, argued then, not minted now. Until
-  then `default`, `plain` and `full` render the same bytes for ara/fas
-  (isolates aside).
+- **Mark classes since the pointed corpus landed.** The P41-g census of the
+  OpenITI fixtures found standard-block consonantal text only, so the row
+  began isolates-only. The Cairo 1924 Qurʾān (`corpus-coranicum`) is the
+  pointed corpus that rule waited for, and the `ara` row now carries the
+  Hebrew split, censused over the whole Cairo text (counts on
+  `Nabu::Display::MARK_CLASSES`): `default` strips the recitation layer
+  (`quranic-marks` — the cantillation analogue) and keeps the
+  vocalization (`tashkeel` — the points analogue); `plain` strips both to
+  the bare consonantal text (`قل هو ٱلله أحد`); `full` is the stored verse
+  byte for byte. So the default does not show everything, exactly as the
+  Hebrew default does not, and the footer names the strip. OpenITI text
+  carries none of these marks, so every mode renders its stored bytes
+  (isolates aside); `fas` stays isolates-only.
 - **No `--display translit`.** Arabic romanization is contested — DIN
   31635, ALA-LC, IJMES and EI conventions disagree, and any readable
   romanization needs vowels the unpointed text does not carry (it would be

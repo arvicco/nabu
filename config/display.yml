@@ -7,7 +7,10 @@
 #   strip:    mark classes removed in the default display mode
 #   keep:     classes kept by default but stripped by `--display plain`
 #   isolates: wrap rendered runs in U+2067/U+2069 (RTL isolate) — harmless
-#             where bidi is absent, correct where present
+#             where bidi is absent, correct where present. A claim about the
+#             language's HOME script: a tag declaring a left-to-right script
+#             (ara-Latn, hbo-Latn, a lect's ~latn surface) is never wrapped —
+#             direction follows the script (Nabu::Display::RTL_SCRIPTS)
 #   spacing:  insert a separator between grapheme clusters (P27-2) — the
 #             Ogham legibility knob; between two Ogham letters the separator
 #             is U+1680 OGHAM SPACE MARK, so the stemline stays continuous
@@ -41,11 +44,24 @@ languages:
   hbo: { strip: [cantillation], keep: [points, maqaf], isolates: true }
   arc: { strip: [cantillation], isolates: true }
   # P41-3: Arabic/Persian (OpenITI) reuse the hbo/arc RTL isolate path.
-  # Isolates-only deliberately: the P41-g fixture census found NO tashkeel
-  # (U+064B-0652) or Quranic annotation marks in the corpus sample, so there
-  # is no mark class to strip — census-first, a `tashkeel` class is a future
-  # rule for when a pointed Arabic corpus lands, argued then.
-  ara: { isolates: true }
+  # The pointed corpus the OpenITI row waited for has landed — the Cairo
+  # 1924 Qurʾān (corpus-coranicum) — and the ara row now carries the
+  # Hebrew split, argued from the Hebrew precedent: the RECITATION layer
+  # (`quranic-marks`: pause signs, the small zeros, iqlāb meem, small
+  # seen, the prolongation maddah — the cantillation analogue) is stripped
+  # by default, the VOCALIZATION (`tashkeel`: vowel signs, tanwīn, shadda,
+  # both sukūns, dagger alif and the small supplied vowel letters — the
+  # points analogue) is kept by default, and `plain` strips both to the
+  # bare consonantal text (hamza seats, ٱ and the alef's آ stay letters).
+  # So the default does NOT show everything — exactly as hbo's does not:
+  # stacked over the vowel signs the recitation marks crowd a terminal
+  # line, and the footer names the strip; `--display full` is the stored
+  # Cairo text byte for byte. Census in Nabu::Display::MARK_CLASSES. The
+  # OpenITI text carries none of these marks (P41-g census), so default
+  # and plain are byte no-ops there; ara-Latn (Buckwalter) holds no Arabic
+  # codepoints and is untouched. fas stays isolates-only: no pointed
+  # Persian corpus is censused.
+  ara: { strip: [quranic-marks], keep: [tashkeel], isolates: true }
   fas: { isolates: true }
   san: { strip: [vedic-accents] } # Devanagari-script text; the IAST shelves are untouched
   chu: { strip: [titla] }

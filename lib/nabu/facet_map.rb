@@ -29,6 +29,13 @@ module Nabu
   # dictionary_entries.annotations_json keys that project into the entry
   # facet tables (Store::EntryFacetBuilder) — JMdict's domain labels,
   # WOLD's semantic fields, TLS's concept assignments. Same rules again.
+  # An entry rule may instead be {facet, keys}: the field still projects
+  # verbatim under +facet+, and +keys+ names a comparison-key scheme
+  # (KEY_SCHEMES) whose derived keys the builder mints beside it under
+  # the key facets (FacetMap.key_facets) — Lane's root heading keyed for
+  # the Quranic root link (Nabu::ArabicRoots, Query::RootLink). The keys
+  # are a fold, never an upstream claim, so they ride their own facet
+  # names and the define card hides them (FacetMap.key_facet?).
   #
   # The token grain feeds the PASSAGE tables: token_fields name CoNLL-U
   # MISC keys carried on each stored token (passages.annotations_json
@@ -50,6 +57,18 @@ module Nabu
     # entry ids the values are (nil when the values are bare labels).
     TokenField = Data.define(:facet, :shelf)
 
+    # The comparison-key schemes an entry rule may name (keys: …); the
+    # builder implements each (Store::EntryFacetBuilder::KEY_SCHEMES).
+    KEY_SCHEMES = %w[arabic-root].freeze
+
+    # The derived key facets of +facet+: the strict key, then the loose
+    # (fallback-tier) key.
+    KEY_SUFFIXES = %w[_key _loose_key].freeze
+    def self.key_facets(facet) = KEY_SUFFIXES.map { |suffix| "#{facet}#{suffix}" }
+
+    # Whether +name+ is a derived key facet (hidden from entry cards).
+    def self.key_facet?(name) = name.to_s.end_with?(*KEY_SUFFIXES)
+
     def self.load(path)
       new(YAML.safe_load_file(path) || {})
     end
@@ -67,6 +86,7 @@ module Nabu
       @fields = {}
       @passage_fields = {}
       @entry_fields = {}
+      @entry_keys = {}
       @token_fields = {}
       @passage_order = []
       parse_sources(doc["sources"] || {})
@@ -90,6 +110,10 @@ module Nabu
 
     # {annotation_field => facet_name} for +slug+'s dictionary entries, or nil.
     def entry_fields_for(slug) = @entry_fields[slug]
+
+    # {annotation_field => key scheme} for +slug+'s keyed entry rules, or
+    # nil when none.
+    def entry_keys_for(slug) = @entry_keys[slug]
 
     # {misc_key => TokenField} for +slug+'s tokens, or nil when unruled.
     def token_fields_for(slug) = @token_fields[slug]
@@ -122,10 +146,30 @@ module Nabu
         if spec.key?("passage_fields")
           @passage_fields[slug] = parse_lane(slug, "passage_fields", spec["passage_fields"])
         end
-        @entry_fields[slug] = parse_lane(slug, "entry_fields", spec["entry_fields"]) if spec.key?("entry_fields")
+        parse_entry_lane(slug, spec["entry_fields"]) if spec.key?("entry_fields")
         @token_fields[slug] = parse_token_lane(slug, spec["token_fields"]) if spec.key?("token_fields")
         @passage_order << slug if spec.key?("passage_fields") || spec.key?("token_fields")
       end
+    end
+
+    # entry_fields: plain {field: facet} rules, or {field: {facet, keys}}
+    # keyed rules (the facet projects as usual; the scheme is recorded).
+    def parse_entry_lane(slug, fields)
+      keys = {}
+      plain = (fields.is_a?(Hash) ? fields : {}).to_h do |field, rule|
+        next [field, rule] unless rule.is_a?(Hash)
+
+        facet = rule["facet"]
+        scheme = rule["keys"]
+        unless facet.is_a?(String) && !facet.strip.empty? && KEY_SCHEMES.include?(scheme)
+          raise ConfigError, "facet_map: #{slug} entry_fields #{field.inspect} → #{rule.inspect} must be a facet " \
+                             "name or {facet: NAME, keys: #{KEY_SCHEMES.join('|')}}"
+        end
+        keys[field.to_s] = scheme
+        [field, facet]
+      end
+      @entry_fields[slug] = parse_lane(slug, "entry_fields", fields.is_a?(Hash) ? plain : fields)
+      @entry_keys[slug] = keys unless keys.empty?
     end
 
     def parse_token_lane(slug, fields)

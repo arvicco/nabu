@@ -1,10 +1,10 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# Three transcripts and one METS are documented trims (whole: false) — a
-# fresh GET returns the full file, fetched for URL-liveness only; re-apply
-# the README's trim recipe after any refresh. adapter_test is null: the
-# adapter test asserts trim-level counts.
+# The documented trims (whole: false) — a fresh GET returns the full file,
+# fetched for URL-liveness only; re-apply the README's trim recipe after
+# any refresh. adapter_test is null: the adapter test asserts trim-level
+# counts.
 source: hab-edoc
 adapter_test:
 retrieved: 2026-11-27
@@ -53,3 +53,63 @@ files:
     url: https://diglib.hab.de/edoc/ed000239/mets.xml
     whole: true
     trim: none
+  - path: ed000146/mets.xml
+    url: https://diglib.hab.de/edoc/ed000146/mets.xml
+    whole: false
+    trim: upstream lines 276-762 (the transcription file entries after the Abauzit pair) removed
+  - path: ed000146/abauzit_offenbarung_ue.xml
+    url: https://diglib.hab.de/edoc/ed000146/abauzit_offenbarung_ue.xml
+    whole: true
+    trim: none
+  - path: ed000146/abauzit_offenbarung_org.xml
+    url: https://diglib.hab.de/edoc/ed000146/abauzit_offenbarung_org.xml
+    whole: true
+    trim: none
+  - path: ed000228/mets.xml
+    url: https://diglib.hab.de/edoc/ed000228/mets.xml
+    whole: false
+    trim: upstream lines 258-656, 664-1062, 1247, 1249-2317 removed (other months) per the README
+  - path: ed000228/1621_11.xml
+    url: https://diglib.hab.de/edoc/ed000228/1621_11.xml
+    whole: false
+    trim: lines 1-29 + 669-958 + 1115-1116 (header registers cut, the first diary entry) per the README
+  - path: ed000233/mets.xml
+    url: https://diglib.hab.de/edoc/ed000233/mets.xml
+    whole: false
+    trim: upstream lines 99-158 (the file entries of letters 2-21) removed
+  - path: ed000233/briefe/0001.xml
+    url: https://diglib.hab.de/edoc/ed000233/briefe/0001.xml
+    whole: true
+    trim: none
+  - path: ed000233/einleitung/editionsrichtlinien.xml
+    url: https://diglib.hab.de/edoc/ed000233/einleitung/editionsrichtlinien.xml
+    whole: true
+    trim: none
+  - path: ed000249/mets.xml
+    url: https://diglib.hab.de/edoc/ed000249/mets.xml
+    whole: false
+    trim: all file entries but three letters and two descriptions removed per the README
+  - path: ed000249/texts/h-fmg-rara-fmg-artot-de-padilla-d-001/h-fmg-rara-fmg-artot-de-padilla-d-001_tei-transcript.xml
+    url: https://diglib.hab.de/edoc/ed000249/texts/h-fmg-rara-fmg-artot-de-padilla-d-001/h-fmg-rara-fmg-artot-de-padilla-d-001_tei-transcript.xml
+    whole: true
+    trim: none
+  - path: ed000249/texts/h-fmg-rara-fmg-artot-de-padilla-d-001/h-fmg-rara-fmg-artot-de-padilla-d-001_tei-msDesc_fmg.xml
+    url: https://diglib.hab.de/edoc/ed000249/texts/h-fmg-rara-fmg-artot-de-padilla-d-001/h-fmg-rara-fmg-artot-de-padilla-d-001_tei-msDesc_fmg.xml
+    whole: true
+    trim: none
+  - path: ed000249/texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-transcript.xml
+    url: https://diglib.hab.de/edoc/ed000249/texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-transcript.xml
+    whole: true
+    trim: none
+  - path: ed000249/texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg.xml
+    url: https://diglib.hab.de/edoc/ed000249/texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg.xml
+    whole: true
+    trim: none
+  - path: ed000251/mets.xml
+    url: https://diglib.hab.de/edoc/ed000251/mets.xml
+    whole: false
+    trim: upstream lines 168-185 (the six other report file entries) removed
+  - path: ed000251/texts/München 1603.xml
+    url: https://diglib.hab.de/edoc/ed000251/texts/M%C3%BCnchen%201603.xml
+    whole: false
+    trim: lines 1-193 + 1596-1599 (header, folios 127v and 127ar) per the README

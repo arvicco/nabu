@@ -1373,6 +1373,24 @@ namespace :builders do
   ensure
     catalog&.disconnect
   end
+
+  # The narrow sibling: one source's dictionary-entry facet slice
+  # (Store::EntryFacetBuilder.refresh_source! — the post-sync seam), for a
+  # facet_map.yml entry_fields edit (a keyed rule's derived keys included)
+  # that needs no re-parse. Seconds, where the whole refresh is minutes.
+  desc "Re-project ONE source's dictionary-entry facets from the loaded entries (facet_map.yml entry_fields)"
+  task :entry_facets, [:slug] do |_task, args|
+    abort "usage: rake builders:entry_facets[SLUG]" if args[:slug].to_s.strip.empty?
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    config = Nabu::Config.load
+    catalog = Sequel.connect("sqlite://#{File.join(config.db_dir, 'catalog.sqlite3')}")
+    rows = Nabu::Store::EntryFacetBuilder.refresh_source!(catalog: catalog, slug: args[:slug],
+                                                          facet_map: Nabu::FacetMap.load_default(config: config))
+    puts "builders:entry_facets #{args[:slug]} — #{rows} entry facet pairs"
+  ensure
+    catalog&.disconnect
+  end
 end
 
 # The demo slice (Nabu::DemoBuild): the self-contained, open/attribution-

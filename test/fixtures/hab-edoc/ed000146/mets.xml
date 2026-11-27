@@ -1,0 +1,889 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mets - Muster für einen alten Druck mit Strukturdaten  -->
+<mets:mets OBJID="edoc/ed000146" TYPE="rare book" 
+    xmlns:mets="http://www.loc.gov/METS/" 
+    xmlns:wdb="http://diglib.hab.de/wdb/" 
+    xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:rmd="http://diglib.hab.de/rights" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
+    xsi:schemaLocation="http://www.loc.gov/METS/ http://diglib.hab.de/rules/schema/mets/v1.9/wdb-mets-2.xsd">
+   
+    <mets:metsHdr CREATEDATE="2013-03-22T12:30:00">
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenbüttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+
+    <!-- Katalogeintrag, verwendet wird die PPN der elektronischen Ressource oder der Ressource, die den Link enthält -->
+
+    <mets:dmdSec ID="dmd_ref">
+        <mets:mdRef LOCTYPE="PURL" MDTYPE="MODS" MIMETYPE="text/xml" xlink:href="http://diglib.hab.de/?format=mods&amp;opac=679732853"/>
+    </mets:dmdSec>
+    
+     <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods>
+                    <mods:identifier type="purl"
+                        >http://diglib.hab.de/edoc/ed000146/start.htm</mods:identifier>
+                    <mods:name type="corporate">
+                        <mods:namePart>Lessing-Akademie Wolfenbüttel</mods:namePart>
+                        <mods:displayForm>Lessing-Akademie Wolfenbüttel (Hrsg.)</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:titleInfo>
+                        <mods:title>Lessings Übersetzungen</mods:title>
+                    </mods:titleInfo>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Wolfenbüttel</mods:placeTerm>
+                        </mods:place>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                        <mods:dateIssued encoding="w3cdtf">2011</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title>Editiones Electronicae Guelferbytanae</mods:title>
+                        </mods:titleInfo>
+                        <part>
+                            <detail>
+                                <number>8</number>
+                            </detail>
+                        </part>
+                        <mods:identifier type="purl"
+                            >http://diglib.hab.de/?opac=679732853</mods:identifier>
+                    </mods:relatedItem>
+                    <mods:recordInfo>
+                        <mods:recordContentSource authority="gbv"
+                            authorityURI="http://uri.gbv.de/organization/isil/DE-23"
+                            >OPAC</mods:recordContentSource>
+                        <mods:recordIdentifier source="opac">679732853</mods:recordIdentifier>
+                    </mods:recordInfo>
+                </mods:mods>
+            </mets:xmlData>
+        </mets:mdWrap>
+     </mets:dmdSec>
+    
+    <mets:amdSec ID="amd_edoc_ed000146">
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+        <!-- Bibliotheks Standardlizenz für Retrodigitalisate lt. Benutzungsordnung; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000146_retrodig">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/rights/copyright.html" LABEL="copyright"/>
+        </mets:rightsMD>
+        <!-- CC Standardlizenz, wenn der Autor zugestimmmt hat; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000146_CC">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/rights/cc_by-sa.html" LABEL="CC BY-SA 3.0"/>
+            <mets:mdWrap MDTYPE="OTHER" LABEL="CC Namensnennung">
+                <mets:xmlData>
+                    <wdb:rights type="copyright" url="http://www.lessing-akademie.de/" label="©  2011 Lessing-Akademie Wolfenbüttel e.V">
+                        <wdb:rights type="copyright_logo" url="images/logo_lessingakademie.gif" label="Logo Lessingakademie"/>
+                        <wdb:rights type="copyright_content" url="url_zum_rechtetxt" label="Rechtebeschreibung Lessingakadmie">
+                            <p xml:lang="de">Nutzung dieses Dokumentes nur mit folgender Namensnennung: <a href="http://diglib.hab.de/edoc/ed000146/start.htm">©  2011 Lessing-
+                                Akademie Wolfenbüttel e.V</a></p>
+                        </wdb:rights>
+                    </wdb:rights>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        
+        <!-- Autorlizenz; Rückfrage beim Auto erforderlich: rvgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000146_author"/>
+            
+        
+        
+        
+    </mets:amdSec>
+
+    <!-- files  ##############################################################################################   -->
+    <mets:fileSec>
+        <!-- Config-Bereich -->
+        <mets:fileGrp USE="config">
+            <mets:file ID="wdb_parameter" USE="navigator">
+                <mets:FContent>
+                    <mets:xmlData>
+                        <wdb:parameter>
+                            <!--  hier wird definiert, welche Anzeigetypen für die/das Fenster zur Verfügung stehen -->
+                            <!-- Titelbaltt oder Einstiegsseite fuer "Werke" -->
+                            <wdb:param distype="start" firstpage_xml="start.xml" firstpage_xsl="start.xsl"/>
+                            
+                            <!-- Inhaltsverzeichnis -->
+                            <wdb:param distype="toc"/>
+                            
+                            <!-- Startsprache -->
+                            <wdb:param lang="de"/> 
+                            
+                            <!-- Volltextsuche mit Paralleler Volltextsicht; @url fuer Aufgerufenes Skript, nur fuer Menusuche; Extrasuchen unter Behavior -->
+                            <!-- welche XQL Scripte sollen fuer die Suche verwendet werden; wdb ist Standard 
+                                Pfad: exist.hab.de/rest/db/apps/[wdb:param]/search.xql
+                            -->
+                            <wdb:param distype="results-transcript" url="projekte/lessingsuebersetzungen/search/search.xql"/>
+                            <!-- Anzeige Parallelsichten -->
+                            <!-- 
+                                Zu jedem parallel view Eintrag unten muss ein korrespondieren Eintrag hier erfolgen, der die Anzeige im Programm steuert:
+                                wdb:parallelView - Parameter:
+                                -  @ pvID ID des PV-Paares oder Paare; verweist auf div in structMap
+                                -  @f1 Prozent der Groesse des linken Fensters
+                                -  @f2 Prozent der Groesse des rechten Fensters
+                                -  @synctype  moegliche Werte: "pb" (Linking ueber pageID), "div", (Anzahl divisions),"joins" (manuell mit Identifieren festgelegt, im pv Bereich mit area @BEGIN definiert), "none" (unverbunden)
+                                mehrere syntypes mit Leerzeichen trennen, z.B. synctype="joins pb"
+                            -->
+                            <wdb:parallelView pvID="edoc_ed000146_abauzit_offenbarung" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_anonym_eraclio" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_calderon_traum" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_cessieres_lieben" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_chassiron_betrachtungen" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_corneille_discourses" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_crebillon_catilina" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_crisp_virginia" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_diderot_hausvater" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_dryden_werke" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_freny_geschichte" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_friedrich_schreiben" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_gellert_abhandlungen" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_horaz_carminaI" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_horaz_carminaII" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_klopstock_messias" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_leibniz_versuch" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_lessing_palaion" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_lezay_liebe" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_luyando_virginia" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_lyttleton_vorrede" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_marivaux_hannibal" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_noverre_tanzkunst" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_plautus_gefangenen" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_schauspielkunst" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_richardson_sittenlehre" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_saint_foix_mode" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_seneca_hercules" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_seneca_thyest" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_vockerodt_remarks" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_arellano_fenix" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_dubos_reflexions" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_huarte_examen" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_marigny_araberI" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_marigny_araberII" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_hutcheson_sittenlehre" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_hutcheson_sittenlehreII" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_law_ermunterung" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_rollin_histore4" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_rollin_histore5" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_rollin_histore6" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_sophokles_ajax" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_thomson_agamemnon" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_thomson_leben" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_thomson_tancred" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_voltaire_schriften" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_diderot_sohn" f1="50" f2="50" synctype="joins"/>
+                            
+                            <!-- neu hinzugefügt -->
+                            
+                            <wdb:parallelView pvID="edoc_ed000146_coypel_defiant" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_coypel_education" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_coypel_impatient" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_gandini_bohemiens" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_gandini_mari" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_gandini_scaramouche" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_gandini_vengeance" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_gandini_voleurs" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_grecourt_europa" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_lisle_astrologue" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_lisle_caprices" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_lisle_mogul" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_motte_portrait" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_imposteur" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_italien" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_joueur" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_marie" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_metempsicose" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_pere" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_sincere" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_riccoboni_soupconneux" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_saint_foix_contraste" f1="50" f2="50" synctype="joins"/>
+                            <wdb:parallelView pvID="edoc_ed000146_saint_foix_veuve" f1="50" f2="50" synctype="joins"/>
+                        </wdb:parameter>
+                    </mets:xmlData>
+                </mets:FContent>
+            </mets:file>
+        </mets:fileGrp>
+        <!-- Titel  mit bibliographischen Metadaten zu einem Zeitpunkt X (download-opac)-->
+        <mets:fileGrp USE="title" VERSDATE="2012-10-30T00:00:00">
+            <mets:file ID="edoc_145_title" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="dmd.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+
+        <!-- Facsimiles -->
+        <mets:fileGrp USE="facsimile_URL">
+            <mets:file ID="drucke_ed000011-1_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/ed000011-1/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_ed000011-2_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/ed000011-2/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_ed000018_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/ed000018/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_lm-1107_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/lm-1107/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_lo-4718-2_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/lo-4718-2/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_wa-1280_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/wa-1280/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_lo-4882_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/lo-4882/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_ed000020_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/ed000020/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_lm-1162-3b_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/lm-1162-3b/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_ll-153_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/ll-153/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_lo-4788_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/lo-4788/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_lo-4812_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/lo-4812/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_gg-500-4_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/gg-500-4/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_gg-500-5_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/gg-500-5/start.htm?distype=imgs"/>
+            </mets:file>
+            <mets:file ID="drucke_gg-500-6_fg_facs" MIMETYPE="text/html">
+                <mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/drucke/gg-500-6/start.htm?distype=imgs"/>
+            </mets:file>
+        </mets:fileGrp>
+
+        <!--  Transkription mit TEI Kodierung -->
+        <mets:fileGrp USE="transcription">
+            <mets:file ID="edoc_ed000146_fg_abauzit_offenbarung_org" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="abauzit_offenbarung_org.xml"/>
+            </mets:file>
+            <mets:file ID="edoc_ed000146_fg_abauzit_offenbarung_ue" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="abauzit_offenbarung_ue.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+
+        <!--  Einleitung  -->
+        <mets:fileGrp USE="introduction">
+            <mets:file ID="edoc_ed000146_fg_introduction" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="tei-introduction.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+        <!--  Register  -->
+        <mets:fileGrp USE="index">
+            <mets:file ID="edoc_ed000146_fg_index" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="tei-introduction.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+        <!--  Revisionen  -->
+        <mets:fileGrp USE="revision">
+            <mets:file ID="edoc_ed000146_fg_revision" MIMETYPE="text/xml">
+                <mets:FLocat LOCTYPE="URL" xlink:href="tei-introduction.xml"/>
+            </mets:file>
+        </mets:fileGrp>
+
+    </mets:fileSec>
+
+
+    <!-- structure ##############################################################################################   -->
+    <mets:structMap>
+        <mets:div ID="edoc_ed000146_toc">
+            <!--  Einleitung -->
+            <mets:div TYPE="introduction" LABEL="Einleitung" ID="edoc_ed000146_introduction" ADMID="rmd_edoc_ed000146_CC">
+                <mets:fptr FILEID="edoc_ed000146_fg_introduction"/>
+            </mets:div>
+
+            <!-- Facsimiles  **************************************************** -->
+            <mets:div TYPE="submenu" LABEL="Quellen" ID="edoc_ed000146_facs" ADMID="rmd_edoc_ed000146_CC">
+                
+                <mets:div TYPE="facsimile" LABEL="Chassiron: Reflexions Sur Le Comique-Larmoyant. Paris 1749." ID="edoc_ed000146_drucke_ed000018_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_ed000018_fg_facs"/>
+                </mets:div>
+                               
+                <mets:div TYPE="facsimile" LABEL="Diderot: Das Theater des Herrn Diderot. Zweyter Theil. Berlin 1760." ID="edoc_ed000146_drucke_lo-4718-2_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_lo-4718-2_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="Diderot: Oeuvres de Theatre. Tome Second. Le Pere de Famille. Amsterdam 1759." ID="edoc_ed000146_drucke_lm-1107_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_lm-1107_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="Dubos: Réflexions critiques sur la Poesie et sur la Peinture. Tome Troisième. Dresden 1760." ID="edoc_ed000146_drucke_lm-1162-3b_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_lm-1162-3b_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="Huarte: Examen de in genios para las Sciencias. Amsterdam 1662." ID="edoc_ed000146_drucke_ll-153_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_ll-153_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="[Huarte]: Johann Huart's Prüfung der Köpfe zu den Wissenschaften. Wittenberg 1785." ID="edoc_ed000146_drucke_lo-4788_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_lo-4788_fg_facs"/>
+                </mets:div>
+
+                <mets:div TYPE="facsimile" LABEL="Law: Eine ernsthafte Ermunterung an alle Christen zu einem frommen und heiligen Leben. Leipzig 1756." ID="edoc_ed000146_drucke_lo-4812_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_lo-4812_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="Marigny: Histoire des Arabes sous le gouvernement des Califes. Paris 1750-1752. Tome I." ID="edoc_ed000146_facs_1702" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_ed000011-1_fg_facs"/>
+                </mets:div>
+                <mets:div TYPE="facsimile" LABEL="Marigny: Histoire des Arabes sous le gouvernement des Califes. Paris 1750-1752. Tome II." ID="edoc_ed000146_drucke_ed000011-2_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_ed000011-2_fg_facs"/>
+                </mets:div>
+                                
+                <mets:div TYPE="facsimile" LABEL="Noverre: Lettres sur la Danse. Lyon 1760." ID="edoc_ed000146_drucke_wa-1280_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_wa-1280_fg_facs"/>
+                </mets:div>
+                <mets:div TYPE="facsimile" LABEL="Noverre: Briefe über die Tanzkunst und über die Ballette, vom Herrn Noverre. Hamburg und Bremen 1769." ID="edoc_ed000146_drucke_lo-4882_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_lo-4882_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="Richardson: Aesop's fables. London 1740. " ID="edoc_ed000146_drucke_ed000020_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_ed000020_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="Rollin: Histoire Romaine. Tome Quatrieme. Amsterdam 1742." ID="edoc_ed000146_drucke_gg-500-4_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_gg-500-4_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="Rollin: Histoire Romaine. Tome Cinquieme. Amsterdam 1742." ID="edoc_ed000146_drucke_gg-500-5_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_gg-500-5_fg_facs"/>
+                </mets:div>
+                
+                <mets:div TYPE="facsimile" LABEL="Rollin: Histoire Romaine. Tome Sixieme. Amsterdam 1742." ID="edoc_ed000146_drucke_gg-500-6_fg_facs" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="drucke_gg-500-6_fg_facs"/>
+                </mets:div>
+          </mets:div>
+
+            <!--  Transcriptionen **************************************************** -->
+
+
+            <!--  Uebersetzung *************************************************************** -->
+
+            <!--  Bibliographie ******************************************************************************** -->
+
+
+            <!-- Register ************************************************************************************ -->
+
+            <mets:div TYPE="submenu" LABEL="Register" ID="edoc_ed000146_index" ADMID="rmd_edoc_ed000146_CC">
+                <mets:div TYPE="index" LABEL="Personen" ID="edoc_ed000146_index_persons" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="edoc_ed000146_fg_index"/>
+                </mets:div>
+                <mets:div TYPE="index" LABEL="Begriffe" ID="edoc_ed000146_index_concepts" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="edoc_ed000146_fg_index"/>
+                </mets:div>
+                <mets:div TYPE="index" LABEL="Titel" ID="edoc_ed000146_index_titles" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="edoc_ed000146_fg_index"/>
+                </mets:div>
+                <mets:div TYPE="index" LABEL="Bibelstellen" ID="edoc_ed000146_index_bible" ADMID="rmd_edoc_ed000146_CC">
+                    <mets:fptr FILEID="edoc_ed000146_fg_index"/>
+                </mets:div>
+                
+             </mets:div>
+
+            <!--  Revision ******************************************************************************** -->
+            <mets:div TYPE="index" LABEL="Revisionen" ID="edoc_ed000146_revision" ADMID="rmd_edoc_ed000146_CC">
+                <mets:fptr FILEID="edoc_ed000146_fg_revision"/>
+            </mets:div>
+
+            <!--    Parallelsichten  ######################################################################################  -->
+            <!--  wegen der Moeglichkeit des synchronen Blaetterns koennen nicht beliebige Kombinationen angeboten werden, sondern 
+                muessen hier definiert werden. Parallelsichten werden in einem neuen Fenster geoeffnet;
+                Groesse der jeweiliigen resultierenden  Anzeigefenster und die Art des Syncronisierungsschlüssels wird in wdb:parallelViews festgelegt -->
+
+            <!--  Parallele Sichten  ******************************************************************************** -->
+            <!--            @TYPE = 'parallel_views' muss gesetzt sein -->
+            <mets:div TYPE="parallel_views" ID="parallel_views">
+                <mets:div ID="edoc_ed000146_arellano_fenix" LABEL="Arellano: Fenix">
+                    <mets:mptr LOCTYPE="URL" xlink:href="arellano-fenix-mets-inc.xml"/>
+                 </mets:div>
+                <mets:div ID="edoc_ed000146_abauzit_offenbarung" LABEL="Abauzit: Offenbarung">
+                    <mets:mptr LOCTYPE="URL" xlink:href="abauzit-offenbarung-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_anonym_eraclio" LABEL="[Anonym]: Eraclio und Argila">
+                    <mets:mptr LOCTYPE="URL" xlink:href="anonym-eraclio-mets-inc.xml"/>  
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_calderon_traum" LABEL="Calderon: Das Leben ist ein Traum">
+                    <mets:mptr LOCTYPE="URL" xlink:href="calderon-traum-mets-inc.xml"/> 
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_cessieres_lieben" LABEL="Cessières: L' art d'aimer">
+                    <mets:mptr LOCTYPE="URL" xlink:href="cessieres-lieben-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_chassiron_betrachtungen" LABEL="Chassiron: Betrachtungen">
+                    <mets:mptr LOCTYPE="URL" xlink:href="chassiron-betrachtungen-mets-inc.xml"/>
+                    </mets:div>                
+                <mets:div ID="edoc_ed000146_corneille_discourses" LABEL="Corneille: Abhandlung">
+                    <mets:mptr LOCTYPE="URL" xlink:href="corneille-discourses-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_coypel_defiant" LABEL="Coypel: Defiant">
+                    <mets:mptr LOCTYPE="URL" xlink:href="coypel-defiant-mets-inc.xml"/>   
+                </mets:div>
+                <mets:div ID="edoc_ed000146_coypel_education" LABEL="Coypel: Education">
+                    <mets:mptr LOCTYPE="URL" xlink:href="coypel-education-mets-inc.xml"/>   
+                </mets:div>
+                <mets:div ID="edoc_ed000146_coypel_impatient" LABEL="Coypel: Impatient">
+                    <mets:mptr LOCTYPE="URL" xlink:href="coypel-impatient-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_crebillon_catilina" LABEL="Crebillon: Catilina">
+                    <mets:mptr LOCTYPE="URL" xlink:href="crebillon-catilina-mets-inc.xml"/>
+                    </mets:div>                
+                <mets:div ID="edoc_ed000146_crisp_virginia" LABEL="Crisp: Virginia">
+                    <mets:mptr LOCTYPE="URL" xlink:href="crisp-virgina-mets-inc.xml"/>
+                    </mets:div>                
+                <mets:div ID="edoc_ed000146_diderot_dichtkunst" LABEL="Diderot: Dichtkunst">
+                    <mets:mptr LOCTYPE="URL" xlink:href="diderot-dichtkunst-mets-inc.xml"/>
+                        </mets:div>
+                <mets:div ID="edoc_ed000146_diderot_hausvater" LABEL="Diderot: Der Hausvater">
+                    <mets:mptr LOCTYPE="URL" xlink:href="diderot-hausvater-mets-inc.xml"/>
+                                        </mets:div>
+                <mets:div ID="edoc_ed000146_diderot_sohn" LABEL="Diderot: Sohn">
+                    <mets:mptr LOCTYPE="URL" xlink:href="diderot-sohn-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_dubos_reflexions" LABEL="Dubos: Ausschweifung">
+                    <mets:mptr LOCTYPE="URL" xlink:href="dubos-reflexions-mets-inc.xml"/>
+                            </mets:div>                        
+                <mets:div ID="edoc_ed000146_dryden_werke" LABEL="Dryden: Werke">
+                    <mets:mptr LOCTYPE="URL" xlink:href="dryden-werke-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_freny_geschichte" LABEL="du Frény: Eine Geschichte">
+                    <mets:mptr LOCTYPE="URL" xlink:href="freny-geschichte-mets-inc.xml"/>
+                    </mets:div>                
+                <mets:div ID="edoc_ed000146_friedrich_schreiben" LABEL="Friedrich der Große: Schreiben">                    
+                    <mets:mptr LOCTYPE="URL" xlink:href="friedrich-schreiben-mets-inc.xml"/>
+                </mets:div>           
+                <mets:div ID="edoc_ed000146_gandini_bohemiens" LABEL="Gandini: Bohemiens">
+                    <mets:mptr LOCTYPE="URL" xlink:href="gandini-bohemiens-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_gandini_mari" LABEL="Gandini: Mari">
+                    <mets:mptr LOCTYPE="URL" xlink:href="gandini-mari-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_gandini_scaramouche" LABEL="Gandini: Scaramouche">
+                    <mets:mptr LOCTYPE="URL" xlink:href="gandini-scaramouche-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_gandini_vengeance" LABEL="Gandini: Vengeance">
+                    <mets:mptr LOCTYPE="URL" xlink:href="gandini-vengeance-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_gandini_voleurs" LABEL="Gandini: Voleurs">
+                    <mets:mptr LOCTYPE="URL" xlink:href="gandini-voleurs-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_gellert_abhandlungen" LABEL="Gellert: Abhandlungen">
+                    <mets:mptr LOCTYPE="URL" xlink:href="gellert-abhandlungen-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_grecourt_europa" LABEL="Grecourt: Europa">
+                    <mets:mptr LOCTYPE="URL" xlink:href="grecourt-europa-mets-inc.xml"/>
+                </mets:div>                
+                <mets:div ID="edoc_ed000146_horaz_carminaI" LABEL="Horaz: Ode 8. Lib. II.">
+                    <mets:mptr LOCTYPE="URL" xlink:href="horaz-carminaI-mets-inc.xml"/>
+                    </mets:div>                
+                <mets:div ID="edoc_ed000146_horaz_carminaII" LABEL="Horaz: Ode 8. Lib. II.">
+                    <mets:mptr LOCTYPE="URL" xlink:href="horaz-carminaII-mets-inc.xml"/>
+                    </mets:div>                
+                <mets:div ID="edoc_ed000146_huarte_examen" LABEL="Huarte: Prüfung der Köpfe">
+                    <mets:mptr LOCTYPE="URL" xlink:href="huarte-examen-mets-inc.xml"/>
+                            </mets:div>                        
+                <mets:div ID="edoc_ed000146_hutcheson_sittenlehre" LABEL="Hutcheson: Sittenlehre 1">
+                    <mets:mptr LOCTYPE="URL" xlink:href="hutcheson-sittenlehre-mets-inc.xml"/>                    
+                        </mets:div>
+                <mets:div ID="edoc_ed000146_hutcheson_sittenlehreII" LABEL="Hutcheson: Sittenlehre 2">
+                    <mets:mptr LOCTYPE="URL" xlink:href="hutcheson-sittenlehreII-mets-inc.xml"/>
+                        </mets:div>                    
+                <mets:div ID="edoc_ed000146_klopstock_messias" LABEL="Klopstock: Messias">
+                    <mets:mptr LOCTYPE="URL" xlink:href="klopstock-messias-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_law_ermunterung" LABEL="Law: Ermunterung">
+                    <mets:mptr LOCTYPE="URL" xlink:href="law-ermunterung-mets-inc.xml"/>
+                </mets:div>                
+                <mets:div ID="edoc_ed000146_leibniz_versuch" LABEL="Leibniz: Versuch">
+                    <mets:mptr LOCTYPE="URL" xlink:href="leibniz-versuch-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_lessing_palaion" LABEL="Lessing: Palaion">
+                    <mets:mptr LOCTYPE="URL" xlink:href="lessing-palaion-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_lezay_liebe" LABEL="[Lezay]: Liebe">
+                    <mets:mptr LOCTYPE="URL" xlink:href="lezay-liebe-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_lisle_astrologue" LABEL="Lisle: Astrologue">
+                    <mets:mptr LOCTYPE="URL" xlink:href="lisle-astrologue-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_lisle_caprices" LABEL="Lisle: Caprices">
+                    <mets:mptr LOCTYPE="URL" xlink:href="lisle-caprices-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_lisle_mogul" LABEL="Lisle: Mogul">
+                    <mets:mptr LOCTYPE="URL" xlink:href="lisle-mogul-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_luyando_virginia" LABEL="Luyando: Virginia">
+                    <mets:mptr LOCTYPE="URL" xlink:href="luyando-virginia-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_lyttleton_vorrede" LABEL="Lyttleton: Vorrede">
+                    <mets:mptr LOCTYPE="URL" xlink:href="lyttleton-vorrede-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_marigny_araberI" LABEL="Marigny: Geschichte der Araber I">
+                    <mets:mptr LOCTYPE="URL" xlink:href="marigny-araberI-mets-inc.xml"/>
+                            </mets:div>
+                <mets:div ID="edoc_ed000146_marigny_araberII" LABEL="Marigny: Geschichte der Araber II">
+                    <mets:mptr LOCTYPE="URL" xlink:href="marigny-araberII-mets-inc.xml"/>
+                            </mets:div>                       
+                <mets:div ID="edoc_ed000146_marivaux_hannibal" LABEL="Marivaux: Hannibal">
+                    <mets:mptr LOCTYPE="URL" xlink:href="marivaux-hannibal-mets-inc.xml"/>
+                    </mets:div>    
+                <mets:div ID="edoc_ed000146_motte_portrait" LABEL="Motte: Portrait">
+                    <mets:mptr LOCTYPE="URL" xlink:href="lisle-portrait-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_noverre_tanzkunst" LABEL="Noverre: Tanzkunst">
+                    <mets:mptr LOCTYPE="URL" xlink:href="noverre-tanzkunst-mets-inc.xml"/>
+                    </mets:div>            
+                <mets:div ID="edoc_ed000146_plautus_gefangenen" LABEL="Plautus: Die Gefangenen">
+                    <mets:mptr LOCTYPE="URL" xlink:href="plautus-gefangenen-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_imposteur" LABEL="Riccoboni: Imposteur">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-imposteur-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_italien" LABEL="Riccoboni: Italien">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-italien-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_joueur" LABEL="Riccoboni: Joueur">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-joueur-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_marie" LABEL="Riccoboni: Marie">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-marie-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_metempsicose" LABEL="Riccoboni: Metempsicose">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-metempsicose-mets-inc.xml"/>                     
+                </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_pere" LABEL="Riccoboni: Pere">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-pere-mets-inc.xml"/> 
+                </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_schauspielkunst" LABEL="Riccoboni: Die Schauspielkunst">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-schauspielkunst-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_sincere" LABEL="Riccoboni: Sincere">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-sincere-mets-inc.xml"/> 
+                </mets:div>
+                <mets:div ID="edoc_ed000146_richardson_sittenlehre" LABEL="Richardson: Sittenlehre">
+                    <mets:mptr LOCTYPE="URL" xlink:href="richardson-sittenlehre-mets-inc.xml"/>
+                </mets:div>
+                <mets:div ID="edoc_ed000146_riccoboni_soupconneux" LABEL="Riccoboni: Soupconneux">
+                    <mets:mptr LOCTYPE="URL" xlink:href="riccoboni-soupconneux-mets-inc.xml"/> 
+                </mets:div>     
+                <mets:div ID="edoc_ed000146_rollin_histoire4" LABEL="Rollin: Histoire 4">
+                    <mets:mptr LOCTYPE="URL" xlink:href="rollin-histoire4-mets-inc.xml"/>
+                        </mets:div>                
+                <mets:div ID="edoc_ed000146_rollin_histoire5" LABEL="Rollin: Histoire 5">
+                    <mets:mptr LOCTYPE="URL" xlink:href="rollin-histoire5-mets-inc.xml"/>
+                        </mets:div>                
+                <mets:div ID="edoc_ed000146_rollin_histoire6" LABEL="Rollin: Histoire 6"> 
+                    <mets:mptr LOCTYPE="URL" xlink:href="rollin-histoire6-mets-inc.xml"/>
+                        </mets:div> 
+                <mets:div ID="edoc_ed000146_saint_foix_contraste" LABEL="Saint-Foix: Contraste">
+                    <mets:mptr LOCTYPE="URL" xlink:href="saint-foix-contraste-mets-inc.xml"/> 
+                </mets:div>
+                <mets:div ID="edoc_ed000146_saint_foix_mode" LABEL="Saint-Foix: Mode">
+                    <mets:mptr LOCTYPE="URL" xlink:href="saint-foix-mode-mets-inc.xml"/>
+                    </mets:div>
+                <mets:div ID="edoc_ed000146_saint_foix_veuve" LABEL="Saint-Foix: Veuve">
+                    <mets:mptr LOCTYPE="URL" xlink:href="saint-foix-veuve-mets-inc.xml"/> 
+                </mets:div>
+                <mets:div ID="edoc_ed000146_seneca_hercules" LABEL="Seneca: Hercules">
+                    <mets:mptr LOCTYPE="URL" xlink:href="seneca-herules-mets-inc.xml"/>
+                    </mets:div>               
+                <mets:div ID="edoc_ed000146_seneca_thyest" LABEL="Seneca: Thyest">
+                    <mets:mptr LOCTYPE="URL" xlink:href="seneca-thyest-mets-inc.xml"/>
+                    </mets:div>               
+                <mets:div ID="edoc_ed000146_sophokles_ajax" LABEL="Sophokles: Ajax">
+                    <mets:mptr LOCTYPE="URL" xlink:href="sophokles-ajax-mets-inc.xml"/>                           
+                </mets:div>                
+                <mets:div ID="edoc_ed000146_thomson_agamemnon" LABEL="Thomson: Agamemnon">
+                    <mets:mptr LOCTYPE="URL" xlink:href="thomson-agamemnon-mets-inc.xml"/>
+                        </mets:div>               
+                <mets:div ID="edoc_ed000146_thomson_leben" LABEL="Thomson: Leben">
+                    <mets:mptr LOCTYPE="URL" xlink:href="thomson-leben-mets-inc.xml"/>
+                        </mets:div>               
+                <mets:div ID="edoc_ed000146_thomson_tancred" LABEL="Thomson: Tancred">
+                    <mets:mptr LOCTYPE="URL" xlink:href="thomson-tancred-mets-inc.xml"/>
+                        </mets:div>
+                <mets:div ID="edoc_ed000146_vockerodt_remarks" LABEL="Vockerodt: Remarks">
+                    <mets:mptr LOCTYPE="URL" xlink:href="vockerodt-remarks-mets-inc.xml"/>
+                    </mets:div>              
+                <mets:div ID="edoc_ed000146_voltaire_schriften" LABEL="Voltaire: Schriften">
+                    <mets:mptr LOCTYPE="URL" xlink:href="voltaire-schriften-mets-inc.xml"/>   
+                        </mets:div>
+                </mets:div>    
+        </mets:div>
+    </mets:structMap>
+
+    <!-- noch nicht in Funktion -->
+    <mets:structLink>
+        <mets:smLink xlink:from="edoc_ed000146_toc" xlink:to="edoc_ed000146_title"/>
+    </mets:structLink>
+
+    <!--    Behavior  ######################################################################################  -->
+    <!--  Innerhab der Behavior-Sections werden verschwiedene technische Anzeigeformate und Sichten auf die selbe Datei, z.B. tei-transcription.xml definiert. 
+            Unterschiedliche Sichten auf verschiedene Dateien erhalten eine eigene Behavior Section.
+     -->
+    <!--Transkription-->
+    <mets:behaviorSec ID="edoc_ed000146_b_transcript_all">
+        <!--Transkription-->
+        <mets:behavior ID="edoc_ed000146_b_transcript_01" STRUCTID="edoc_ed000146_abauzit_offenbarung" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript-chapters.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_02" STRUCTID="edoc_ed000146_anonym_eraclio" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_03" STRUCTID="edoc_ed000146_calderon_traum" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_04" STRUCTID="edoc_ed000146_cessieres_lieben" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_05" STRUCTID="edoc_ed000146_chassiron_betrachtungen" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_06" STRUCTID="edoc_ed000146_corneille_discourses" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_07" STRUCTID="edoc_ed000146_crebillon_catilina" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_08" STRUCTID="edoc_ed000146_crisp_virginia" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_09" STRUCTID="edoc_ed000146_diderot_hausvater" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_10" STRUCTID="edoc_ed000146_dryden_werke" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_11" STRUCTID="edoc_ed000146_freny_geschichte" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_12" STRUCTID="edoc_ed000146_friedrich_schreiben" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_13" STRUCTID="edoc_ed000146_gellert_abhandlungen" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_14" STRUCTID="edoc_ed000146_horaz_carminaI" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_15" STRUCTID="edoc_ed000146_horaz_carminaII" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_16" STRUCTID="edoc_ed000146_klopstock_messias" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_17" STRUCTID="edoc_ed000146_leibniz_versuch" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_18" STRUCTID="edoc_ed000146_lessing_palaion" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_19" STRUCTID="edoc_ed000146_lezay_liebe" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_20" STRUCTID="edoc_ed000146_luyando_virginia" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_21" STRUCTID="edoc_ed000146_lyttleton_vorrede" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_22" STRUCTID="edoc_ed000146_marivaux_hannibal" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_23" STRUCTID="edoc_ed000146_noverre_tanzkunst" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_24" STRUCTID="edoc_ed000146_plautus_gefangenen" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_25" STRUCTID="edoc_ed000146_riccoboni_schauspielkunst" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_26" STRUCTID="edoc_ed000146_richardson_sittenlehre" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_27" STRUCTID="edoc_ed000146_saint_foix_mode" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_28" STRUCTID="edoc_ed000146_seneca_hercules" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_29" STRUCTID="edoc_ed000146_seneca_thyest" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_30" STRUCTID="edoc_ed000146_vockerodt_remarks" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_31" STRUCTID="edoc_ed000146_arellano_fenix" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_32" STRUCTID="edoc_ed000146_diderot_dichtkunst" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_33" STRUCTID="edoc_ed000146_marigny_araberI" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_33a" STRUCTID="edoc_ed000146_marigny_araberII" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_34" STRUCTID="edoc_ed000146_dubos_reflexions" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_35" STRUCTID="edoc_ed000146_huarte_examen" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_36" STRUCTID="edoc_ed000146_hutcheson_sittenlehre" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript-chapters.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_36a" STRUCTID="edoc_ed000146_hutcheson_sittenlehreII" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_37" STRUCTID="edoc_ed000146_law_ermunterung" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_38" STRUCTID="edoc_ed000146_rollin_histoire4" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_38a" STRUCTID="edoc_ed000146_rollin_histoire5" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_38b" STRUCTID="edoc_ed000146_rollin_histoire6" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+       <mets:behavior ID="edoc_ed000146_b_transcript_39" STRUCTID="edoc_ed000146_sophokles_ajax" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_40" STRUCTID="edoc_ed000146_thomson_agamemnon" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_41" STRUCTID="edoc_ed000146_thomson_leben" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_42" STRUCTID="edoc_ed000146_thomson_tancred" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+      <mets:behavior ID="edoc_ed000146_b_transcript_43" STRUCTID="edoc_ed000146_diderot_sohn" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_44" STRUCTID="edoc_ed000146_voltaire_schriften" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        
+        <!-- hinzugefügt -->
+              
+        <mets:behavior ID="edoc_ed000146_b_transcript_45" STRUCTID="edoc_ed000146_coypel_defiant" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_46" STRUCTID="edoc_ed000146_coypel_education" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_47" STRUCTID="edoc_ed000146_coypel_impatient" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_48" STRUCTID="edoc_ed000146_gandini_bohemiens" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_49" STRUCTID="edoc_ed000146_gandini_mari" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_50" STRUCTID="edoc_ed000146_gandini_scaramouche" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_51" STRUCTID="edoc_ed000146_gandini_vengeance" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_52" STRUCTID="edoc_ed000146_gandini_voleurs" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_53" STRUCTID="edoc_ed000146_grecourt_europa" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_54" STRUCTID="edoc_ed000146_lisle_astrologue" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_55" STRUCTID="edoc_ed000146_lisle_caprices" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_56" STRUCTID="edoc_ed000146_lisle_mogul" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_57" STRUCTID="edoc_ed000146_motte_portrait" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_58" STRUCTID="edoc_ed000146_riccoboni_imposteur" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_59" STRUCTID="edoc_ed000146_riccoboni_italien" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_60" STRUCTID="edoc_ed000146_riccoboni_joueur" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_61" STRUCTID="edoc_ed000146_riccoboni_marie" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_62" STRUCTID="edoc_ed000146_riccoboni_metempsicose" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_63" STRUCTID="edoc_ed000146_riccoboni_pere" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_64" STRUCTID="edoc_ed000146_riccoboni_sincere" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_65" STRUCTID="edoc_ed000146_riccoboni_soupconneux" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_66" STRUCTID="edoc_ed000146_saint_foix_contraste" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+        <mets:behavior ID="edoc_ed000146_b_transcript_67" STRUCTID="edoc_ed000146_saint_foix_veuve" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/>
+        </mets:behavior>
+
+    </mets:behaviorSec>
+
+    <!--    Anzeige  Einleitung-->
+    <mets:behaviorSec ID="edoc_ed000146_b_introduction">
+        <mets:behavior STRUCTID="edoc_ed000146_introduction" ID="edoc_ed000146_b_introduction_01" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-introduction.xsl "/>
+        </mets:behavior>
+    </mets:behaviorSec>
+
+    <!--    Anzeige  Register-->
+    <mets:behaviorSec ID="edoc_ed000146_b_register">
+        <mets:behavior STRUCTID="edoc_ed000146_index_concepts" ID="edoc_ed000146_b_register_01" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-register-concepts.xsl "/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000146_index_persons" ID="edoc_ed000146_b_register_02" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-register-persons.xsl "/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000146_index_titles" ID="edoc_ed000146_b_register_03" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-register-titles.xsl "/>
+        </mets:behavior>
+        <mets:behavior STRUCTID="edoc_ed000146_index_bible" ID="edoc_ed000146_b_register_04" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-register-bible.xsl "/>
+        </mets:behavior>
+    </mets:behaviorSec>
+    
+    <!-- Revisionen -->
+    <mets:behaviorSec ID="edoc_ed000146_b_revision">
+        <mets:behavior STRUCTID="edoc_ed000146_revision" ID="edoc_ed000146_b_revision_01" LABEL="HTML">
+            <mets:mechanism LOCTYPE="URL" xlink:href="tei-revision.xsl "/>
+        </mets:behavior>
+    </mets:behaviorSec>
+
+</mets:mets>

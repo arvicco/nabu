@@ -19,12 +19,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
 |---|---|---|---|---|
 | `althurayya` | feature module | attribution | wired · manual | nothing held yet |
 | `corpus-coranicum` | texts | attribution | wired · manual | 114 docs / 6,236 passages |
+| `corpus-coranicum-manuscripts` | texts | attribution | wired · manual | 193 docs / 32,182 passages |
+| `corpus-coranicum-variants` | texts | attribution | wired · manual | 753 docs / 22,658 passages |
 | `diccas` | texts | nc | wired · manual | 10 docs / 879 passages |
 | `kitab` | feature module | nc | wired · manual | nothing held yet |
 | `kitab-reuse` | feature module | nc | wired · manual | nothing held yet |
@@ -35,14 +37,19 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `quranic-corpus` | texts | research_private | wired · manual | 114 docs / 6,236 passages |
 | `wiktionary-ar` | dictionary | attribution | wired · manual | 36,974 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `ara` 95,613 · `xna` 36,758 · `jrb` 4,068 · `heb` 2,178 · `en` 1,396 · `und` 898 · `fas` 351 · `arc` 283 · `ara-Latn` 114 · `grc` 23 … and 10 more (`nabu axis arabic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `ara` 95,806 · `xna` 36,758 · `jrb` 4,068 · `heb` 2,178 · `en` 1,396 · `und` 898 · `ara-Latn` 867 · `fas` 351 · `arc` 283 · `grc` 23 … and 10 more (`nabu axis arabic` lists all).
 
 ## The desk's instruments
 
-- **No gold lemmas — OpenITI is unannotated.** The corpus carries no
-  morphology or lemma layer, so `--lemma`, `vocab` and `formulas` do not
-  apply to this desk; its instruments are **full-text search** across the
-  whole Islamicate shelf and the **timeline**.
+- **Lemmas and morphology on the Qurʾān; OpenITI is unannotated.** The
+  two Qurʾān shelves are annotated word by word — `corpus-coranicum`
+  (the Cairo 1924 text with Rafael Talmon's concordance: lemma, root,
+  part of speech and inflection per word) and `quranic-corpus` (the
+  Quranic Arabic Corpus morphology, per segment) — so `--lemma` and
+  `--morph` reach them (`--morph stem=x,conjugation=impf`: the verb
+  forms I–XII, the Semitic conjugations, mood, voice, case). OpenITI
+  carries no morphology or lemma layer; on the Islamicate shelf the
+  instruments are **full-text search** and the **timeline**.
 - **The ara/fas Arabic-script fold:** one search skeleton across
   the ی/ي and ک/ك keyboard split, maqsura, taa marbuta, tashkeel, tatweel
   and ZWNJ — so a query typed on either keyboard reaches the stored form

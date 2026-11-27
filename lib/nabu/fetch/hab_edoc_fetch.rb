@@ -23,8 +23,9 @@ module Nabu
   # ed<NNNNNN>/mets.xml from 1 upward, through the last id the census
   # knows, then on until MISS_RUN consecutive misses (a 404, or a body
   # that is not METS — some ids answer with a portal page). Then, for
-  # every edition the caller admits, each transcript its METS lists
-  # (+want+ decides) is fetched unless already on disk — resume at the
+  # every edition the caller admits, each file its METS offers (+files+:
+  # the transcripts, plus the caller's own-name texts and letter
+  # descriptions; +want+ decides) is fetched unless already on disk — resume at the
   # file grain; a 404 is recorded in the state file's "missing" map (a
   # listed-but-unserved file, censused, never a hole).
   #
@@ -70,11 +71,17 @@ module Nabu
       "#{BASE_URL}/#{id}/#{href.split('/').map { |part| ERB::Util.url_encode(part) }.join('/')}"
     end
 
+    # The files an edition's METS offers to hold: its WDB-named transcripts
+    # (the default; the adapter adds its per-edition own-name texts and
+    # the letters' description files).
+    TRANSCRIPTS = ->(_id, mets) { mets.transcripts.map(&:href) }
+
     # +want+ (id, href) → true for every transcript to hold (the adapter's
-    # admitted editions and files).
-    def self.sync!(dir:, attic_dir:, want:, http: ZipFetch.default_http, delay: DELAY,
+    # admitted editions and files); +files+ (id, mets) → the candidate
+    # hrefs +want+ filters.
+    def self.sync!(dir:, attic_dir:, want:, files: TRANSCRIPTS, http: ZipFetch.default_http, delay: DELAY,
                    progress: nil, guard: nil, last_known: LAST_KNOWN_ID)
-      fetch = new(dir: dir, attic_dir: attic_dir, want: want, http: http, delay: delay,
+      fetch = new(dir: dir, attic_dir: attic_dir, want: want, files: files, http: http, delay: delay,
                   progress: progress, last_known: last_known)
       fetch.prepare!
       guard&.call(fetch.doomed_paths)
@@ -90,11 +97,12 @@ module Nabu
       {}
     end
 
-    def initialize(dir:, attic_dir:, want:, http: ZipFetch.default_http, delay: DELAY,
+    def initialize(dir:, attic_dir:, want:, files: TRANSCRIPTS, http: ZipFetch.default_http, delay: DELAY,
                    progress: nil, last_known: LAST_KNOWN_ID)
       @dir = dir
       @attic_dir = attic_dir
       @want = want
+      @files = files
       @http = http
       @delay = delay
       @progress = progress
@@ -151,9 +159,9 @@ module Nabu
 
     def wanted
       @wanted ||= @mets.flat_map do |id, body|
-        Adapters::HabEdocMets.new(body).transcripts.map(&:href)
-                             .select { |href| safe?(href) && @want.call(id, href) }
-                             .map { |href| [id, href] }
+        @files.call(id, Adapters::HabEdocMets.new(body))
+              .select { |href| safe?(href) && @want.call(id, href) }
+              .map { |href| [id, href] }
       end
     end
 

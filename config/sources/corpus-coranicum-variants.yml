@@ -1,0 +1,27 @@
+corpus-coranicum-variants:   # 02-sources row 447
+  adapter: Nabu::Adapters::CorpusCoranicumVariants
+  adopted: "2026-11-27"
+  requires: [corpus-coranicum]   # a parse-time read of the corpus-coranicum
+                   # clone (CorpusCoranicumClone — the bhsa → bridging shape):
+                   # this source reads data/quran_variants/ in that tree and
+                   # its own canonical dir holds only the pin record.
+  axes: [arabic]
+  wired: true    # first sync verified 2026-11-27, exact: 753 documents /
+                 # 22,658 passages, 1 file skipped by rule (sources.xml),
+                 # 0 unrecognized, 0 errored
+  sync_policy: manual   # the clone is one frozen commit (57cb2b7), pinned with corpus-coranicum
+  # Corpus Coranicum (Berlin-Brandenburgische Akademie der Wissenschaften,
+  # 2007–2024; the TELOTA TEI export): Michael Marx's database of the variant
+  # readings (qirāʾāt) the classical sources ascribe to the Qurʾān's readers
+  # — 18,000 readings, word-keyed against the text, in DMG-style
+  # transliteration — one document per reader (752, plus the unattributed
+  # readings), one passage per verse the reader has readings in, cited
+  # sura.verse (urn:nabu:corpus-coranicum-variants:reader-40:112.4), the
+  # words keyed in the tokens. Readers dated by their death (an open-start
+  # bound, composition class) and placed by their residence. The source
+  # authority (sources.xml) is cited by no reading and is skipped by rule.
+  # Family corpus-coranicum-tei.
+  # LICENSE: README verbatim "© Berlin-Brandenburgische Akademie der
+  # Wissenschaften 2024 / Creative Commons CC BY-SA 4.0
+  # https://creativecommons.org/licenses/by-sa/4.0/" (read 2026-11-27) →
+  # attribution, share-alike.

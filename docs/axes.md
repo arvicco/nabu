@@ -155,7 +155,7 @@ The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta ma
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
-**Members** (11): `althurayya`, `corpus-coranicum`, `diccas`, `kitab`, `kitab-reuse`, `lane-lexicon`, `ociana`, `openiti`, `pgp-geniza`, `quranic-corpus`, `wiktionary-ar`
+**Members** (13): `althurayya`, `corpus-coranicum`, `corpus-coranicum-manuscripts`, `corpus-coranicum-variants`, `diccas`, `kitab`, `kitab-reuse`, `lane-lexicon`, `ociana`, `openiti`, `pgp-geniza`, `quranic-corpus`, `wiktionary-ar`
 
 ### hittite
 

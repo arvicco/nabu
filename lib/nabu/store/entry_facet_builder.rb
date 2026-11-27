@@ -2,6 +2,8 @@
 
 require "json"
 require_relative "passage_facet_builder"
+require_relative "../facet_map"
+require_relative "../arabic_roots"
 
 module Nabu
   module Store
@@ -24,6 +26,15 @@ module Nabu
     # entry ids (NULL annotations_json, the common case, is never fetched),
     # then their JSON in id slices by primary key.
     #
+    # Keyed rules ({facet, keys} in entry_fields): beside the verbatim
+    # value, the rule's comparison-key scheme mints DERIVED key values
+    # under FacetMap.key_facets(facet) — the strict key under <facet>_key,
+    # the loose fallback key under <facet>_loose_key (one per head; a
+    # Lane heading listing several roots keys each). A fold of the
+    # verbatim value, re-derived by every builder pass like the rest, so
+    # the lookup that probes it (Query::RootLink) reads precompiled rows
+    # through the (facet, value) index — never a scan.
+    #
     # Lifecycle: wholesale per source (every value row belongs to one
     # source) — #refresh_source! is SyncRunner's post-load seam, #rebuild!
     # clears both tables and re-projects every ruled source.
@@ -31,6 +42,11 @@ module Nabu
       # What one rebuild projected: entries carrying ≥1 facet pair, total
       # pairs, distinct dictionary values.
       Summary = Data.define(:entries, :rows, :values)
+
+      # scheme name → (value → [[strict, loose], …]); one per FacetMap::KEY_SCHEMES.
+      KEY_SCHEMES = {
+        "arabic-root" => ->(value) { Nabu::ArabicRoots.heading_keys(value) }
+      }.freeze
 
       # Entries whose JSON is fetched per primary-key slice, and pairs per
       # multi-row insert.
@@ -48,7 +64,8 @@ module Nabu
             source_id = catalog[:sources].where(slug: slug).get(:id)
             next if source_id.nil?
 
-            project_source(catalog, source_id, facet_map.entry_fields_for(slug), page)
+            project_source(catalog, source_id, facet_map.entry_fields_for(slug), page,
+                           schemes: facet_map.entry_keys_for(slug))
               .each_with_index { |count, i| totals[i] += count }
           end
           Summary.new(entries: totals[0], rows: totals[1], values: totals[2])
@@ -64,7 +81,7 @@ module Nabu
         catalog.transaction do
           drop_source(catalog, source_id)
           fields = facet_map&.entry_fields_for(slug)
-          fields ? project_source(catalog, source_id, fields, page)[1] : 0
+          fields ? project_source(catalog, source_id, fields, page, schemes: facet_map.entry_keys_for(slug))[1] : 0
         end
       end
 
@@ -76,14 +93,15 @@ module Nabu
 
       # One source's ruled fields → dictionary values + pairs. Returns
       # [entries, rows, values].
-      def project_source(catalog, source_id, fields, page)
+      def project_source(catalog, source_id, fields, page, schemes: nil)
         dictionary = {}
         buffer = []
         entries = 0
         rows = 0
         annotated_ids(catalog, source_id).each_slice(page) do |slice|
           catalog[:dictionary_entries].where(id: slice).select_map(%i[id annotations_json]).each do |entry_id, json|
-            keys = PassageFacetBuilder.facet_keys(JSON.parse(json), fields)
+            annotations = JSON.parse(json)
+            keys = PassageFacetBuilder.facet_keys(annotations, fields) + derived_keys(annotations, fields, schemes)
             next if keys.empty?
 
             entries += 1
@@ -95,6 +113,25 @@ module Nabu
         end
         rows += flush(catalog, buffer)
         [entries, rows, dictionary.size]
+      end
+
+      # The [key facet, key, nil] triples a keyed rule derives from the
+      # field's verbatim value(s) — strict then loose, deduped.
+      def derived_keys(annotations, fields, schemes)
+        return [] if schemes.nil? || !annotations.is_a?(Hash)
+
+        schemes.flat_map do |field, scheme|
+          strict_facet, loose_facet = FacetMap.key_facets(fields.fetch(field))
+          raw = annotations[field]
+          (raw.is_a?(Array) ? raw : [raw]).flat_map do |element|
+            value, = PassageFacetBuilder.value_and_ref(element)
+            next [] unless value
+
+            KEY_SCHEMES.fetch(scheme).call(value).flat_map do |strict, loose|
+              [[strict_facet, strict, nil], [loose_facet, loose, nil]]
+            end
+          end
+        end.uniq
       end
 
       # The live, annotated entries of +source_id+'s dictionaries, id order.

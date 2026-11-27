@@ -316,6 +316,8 @@ decoded ones:
 | AES (aes) | `numerus` `genus` `status` `pronoun` `inflection` `voice` `number` | one upstream field per category (`status` → `state` incl. `pron`, the pronominal state); `morphology` holds Egyptian morpheme labels, never read — the AES row precedes the unscoped `morphology` row | `numerus=singular genus=feminine status=st_absolutus` |
 | TraCES (traces) | `person` `number` `gender` `case` `state` `tam` | one upstream feature per category; `tam` under the Semitic keys (Perfect/Imperfect → `conjugation` perf/impf); the layered noun number/gender (`SingularP UnmarkedS`) stay undecoded | `tam=Perfect person=Third gender=Feminine` |
 | TLA glossing (tla-hf) | `gloss` | GRAMMATICAL Leipzig-style label (not a word meaning): head + atoms joined by `. : - = ~ \`; a head-less person label is a personal pronoun; an article's `-` segment is its possessor, dropped | `-3sg.m`, `N.m:pl`, `V\res-3sg.m`, `ART.poss:f.sg` |
+| Corpus Coranicum (corpus-coranicum) | `pos` `pattern` `aspect` `actpass` `mood` `gender` `number` `casefld` `person` `definite` `subcategory` | Talmon's explicit fields, first analysis only; `aspect` under the Semitic keys (Imp/Perf/Imperative/ActPart/PassPart → `conjugation` impf/perf/impv/ptca/ptcp), `Stem1`…`Stem12` → `stem` i…xii on Verb tokens, `Obliquus` → acc\|gen; the attached pronoun's `dependent_*` fields never decode onto the host | `pattern=Stem10 aspect=Imp mood=Indic person=1P` |
+| Quranic Arabic Corpus (quranic-corpus) | `features` | the segment's `\|`-joined feature string: PGN codes, case, aspect, `MOOD:`, voice, `PCPL`, `VN`, `INDEF`, verb form `(II)`…`(XII)`; Form I inferred on an unmarked triliteral, active on an unmarked V; a SUFFIX decodes only as a pronoun | `STEM\|POS:V\|IMPF\|(X)\|…\|1P`, `SUFFIX\|PRON:3MP` |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query
@@ -671,6 +673,32 @@ stored `tokens` annotation's form fields (upstream's own clean words:
 shape. Scope: properties of the HSMS transcription convention, so both
 rules live in the hsms family, not in `LANGUAGE_FOLDS`; each
 derivation is deterministic, so two parses and rebuilds agree.
+
+**Buckwalter rendering (quranic-corpus — PARSER-SCOPED, the same
+contract).** The Quranic Arabic Corpus stores its forms in extended
+Buckwalter transliteration (`ara-Latn`), which is case-significant (`S`
+ص vs `s` س, `H` ح vs `h` ه, `A` alef vs `a` fatḥa) and spells letters
+with punctuation characters (`{` ٱ, `$` ش, `*` ذ, `>` أ, `~` shadda) —
+folded as Latin, the downcase merged the emphatics and the tokenizer
+split words at those characters. The pristine text stays upstream's
+bytes; `text_normalized` is minted through the one boundary over
+`QuranicCorpus.search_source(text)` — the Arabic the Buckwalter encodes,
+one character to one codepoint (`Nabu::Adapters::Buckwalter`, the
+corpus's own table) — so the ara rule folds it exactly as Arabic script:
+Q 112:1 `qulo huwa {ll~ahu >aHadN` indexes as `قل هو الله احد`, the same
+form corpus-coranicum's Cairo text mints (5,916 of 6,236 verses and
+76,970 of 77,430 words fold identically; the residue is orthographic —
+the Cairo high hamza ٴ U+0674 against the corpus's ء, and the small
+waw/yeh U+06E5/06E6, letters the ara rule does not fold). An
+Arabic-script query reaches the shelf unscoped. A Buckwalter-typed
+query reaches it only when the search is scoped to it (`--source
+quranic-corpus`, or `--lang ara-Latn`): `Query::Search` then adds the
+query read as Buckwalter — rendered on its raw case, folded the same
+way — to the union. Unscoped it never does, since any Latin query read
+as Buckwalter grows an Arabic variant (English *man* → من) that would
+match the Arabic shelves library-wide (the P79-1 noise genus). Known
+limit: the snippet highlight folds the stored Buckwalter as Latin, so a
+hit on this shelf is returned with its snippet unbracketed.
 
 Changing any rule here changes every `text_normalized` and therefore every
 passage `content_sha256`: plan a full `nabu rebuild` (drop + re-derive), not

@@ -232,6 +232,62 @@ module Nabu
     #   "gen" — the genitival adjective, never the genitive case) and the
     #   head-only labels (V 18,478, PREP 23,947, PTCL, PERSN, DIVN, TITL,
     #   "(undefined)" 8,341 …) decode nothing. 109,181 tokens decode.
+    # - Corpus Coranicum explicit fields (corpus-coranicum): Rafael Talmon's
+    #   concordance fields, the token's FIRST analysis only (the CEIPoM
+    #   rule — "alternatives" may be other roots). Censused over all 114
+    #   concordance files (91,285 analyses, 77,429 of them first). Decoded:
+    #   gender Masc 46,085 / Fem 8,909 / Masc/Fem 3,053 (common → masc|fem
+    #   alternatives); number Sg 36,539 / Pl 17,604 / BrokenPl 3,500
+    #   (→ plur) / Dual 913; case (casefld) Gen 12,848 / Acc 11,011 / Nom
+    #   8,179 and the two-case forms Rectus 832 (→ nom) / Obliquus 1,986
+    #   (→ acc|gen); person 3P 15,888 / 2P 6,827 / 1P 3,196; mood Indic
+    #   6,560 / Subj 2,727 / Jussive 2,305 (→ ind/sub/jus); voice (actpass)
+    #   Act 19,894 / Pass 1,766; definite Def 12,225 / Tanwiin 9,420 (→ ind);
+    #   aspect under the Semitic keys, never a Greek tense — Imp 11,960 /
+    #   Perf 9,700 / Imperative 2,390 / ActPart 3,472 / PassPart 753 →
+    #   conjugation impf/perf/impv/ptca/ptcp (mood imp/part derived, the
+    #   ETCBC rule), NomenAction 850 → verbform vnoun (UD's verbal noun);
+    #   the verb form (pattern Stem1…Stem12 on the 29,128 Verb analyses:
+    #   17,772 / 1,927 / 1,026 / 5,330 / 830 / 255 / 83 / 1,351 / 21 / 512
+    #   / 0 / 21) → stem i…xii, one spelling with the QAC row; the pronoun
+    #   subcategory on Pron (Interrogative 2,693, Relative 1,938,
+    #   Independent 1,752, DemonstrativeRemote 729, DemonstrativeNear 367,
+    #   Dependent 90 → prontype int/rel/prs/dem). Deliberately NOT decoded:
+    #   pos (Noun 29,719, Verb 29,128, Particle 24,052, Pron 7,569, Prep 1,
+    #   empty 816 — the façade has no pos facet; pos only gates stem and
+    #   prontype); aspect Letters 30 (the disjoined letters); the energic
+    #   flag (mortality Energicus 588 / NonEnergicus 13,753 — no UD
+    #   facet); the dependent_* fields (15,808 attached pronouns — the
+    #   SUFFIX's person/number/gender, never the host's, as TLA's possessor
+    #   rule); diptotic (Triptotic 26,976, Diptotic 2,668, Frozen 587,
+    #   FrozenLess 907, SemiFrozen 258 — a lexical inflection class); the
+    #   179 nominal patterns (fa&l 7,381 …, the lexical wazn); subcategory
+    #   ProperName 4,485 / NominalPrep 1,114 / Negative 5; semantic and
+    #   semantic2 (Negative 4,070 includes lau and kai — lexical semantics,
+    #   not polarity); the prefix1–3 fields; full_analyse. Keyed on "form".
+    # - Quranic Arabic Corpus feature strings (quranic-corpus): one token
+    #   per SEGMENT, so a suffix pronoun's features are its own. Censused
+    #   over the whole file (128,219 segments: 28,670 PREFIX, 77,915 STEM,
+    #   21,634 SUFFIX; 45 tags). Decoded STEM atoms: PGN codes (3MS 7,786,
+    #   MP 6,002, M 13,195, F 3,106, P 386 …) → person/gender/number; NOM
+    #   8,954 / ACC 10,331 / GEN 12,629; PERF 9,150 / IMPF 8,330 / IMPV
+    #   1,876 → conjugation perf/impf/impv; MOOD:JUS 1,418 / MOOD:SUBJ
+    #   1,330; PASS 1,691 / ACT 2,974 (the latter only on participles);
+    #   PCPL 3,525 → ptca/ptcp by its voice; VN 674 → verbform vnoun; INDEF
+    #   8,672 → definite ind; the verb forms (II) 1,615 … (XII) 13 → stem;
+    #   tags PRON/DEM/REL → prontype prs/dem/rel; SUFFIX "PRON:<pgn>"
+    #   (21,384) → prontype prs + its PGN. Two unmarked defaults, decoded
+    #   because upstream marks only their opposites: Form I on a verb,
+    #   participle or verbal noun of a TRILITERAL root (14,564 segments —
+    #   the 14 form-less quadriliteral base stems stay undecoded), and
+    #   voice act on a V segment without PASS. Not inferred: the
+    #   indicative (unmarked, but so is the energic stem — its nūn is a
+    #   separate EMPH segment). Not decoded: POS:*, LEM/ROOT, SP:* (the
+    #   kāna/inna/kāda groups, 3,870 — lexical); the 24 PREFIX strings
+    #   (particles, the article Al+ 8,377 among them — definiteness lives
+    #   on the DET segment, never on the stem); SUFFIX +n:EMPH 243, +VOC 5,
+    #   l:P+ 2; and the other 42 tags (NEG, INTG, CONJ … — no inflection).
+    #   Keyed on "features".
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -575,6 +631,56 @@ module Nabu
         "ADJR" => "cmp", "ADVR" => "cmp", "QR" => "cmp", "ADJS" => "sup", "ADVS" => "sup", "QS" => "sup"
       }.freeze
 
+      # The Arabic verb forms (I–XII) as stem values, lowercased roman
+      # numerals — one spelling for both Quran sources (Talmon "Stem4",
+      # the QAC "(IV)").
+      # const: the grammatical inventory of Arabic verb forms (not a corpus census)
+      ARABIC_STEMS = %w[i ii iii iv v vi vii viii ix x xi xii].freeze
+
+      # Corpus Coranicum (Talmon's concordance; class note): field →
+      # {value → [facet, value(s)]}. Values not listed are skipped.
+      CORANICUM_FIELDS = {
+        "mood" => { "Indic" => %w[mood ind], "Subj" => %w[mood sub], "Jussive" => %w[mood jus] },
+        "actpass" => { "Act" => %w[voice act], "Pass" => %w[voice pass] },
+        "gender" => { "Masc" => %w[gender masc], "Fem" => %w[gender fem], "Masc/Fem" => ["gender", %w[masc fem]] },
+        "number" => { "Sg" => %w[number sing], "Pl" => %w[number plur], "BrokenPl" => %w[number plur],
+                      "Dual" => %w[number dual] },
+        "casefld" => { "Nom" => %w[case nom], "Acc" => %w[case acc], "Gen" => %w[case gen], "Rectus" => %w[case nom],
+                       "Obliquus" => ["case", %w[acc gen]] },
+        "person" => { "1P" => %w[person 1], "2P" => %w[person 2], "3P" => %w[person 3] },
+        "definite" => { "Def" => %w[definite def], "Tanwiin" => %w[definite ind] }
+      }.freeze
+      # Talmon aspect → the shared Semitic conjugation (ETCBC spellings;
+      # mood follows through CONJUGATION_MOODS), or the verbal noun.
+      CORANICUM_ASPECTS = {
+        "Perf" => { "conjugation" => "perf" }, "Imp" => { "conjugation" => "impf" },
+        "Imperative" => { "conjugation" => "impv" }, "ActPart" => { "conjugation" => "ptca" },
+        "PassPart" => { "conjugation" => "ptcp" }, "NomenAction" => { "verbform" => "vnoun" }
+      }.freeze
+      CORANICUM_PRONOUNS = {
+        "Independent" => "prs", "Dependent" => "prs", "Relative" => "rel", "Interrogative" => "int",
+        "DemonstrativeNear" => "dem", "DemonstrativeRemote" => "dem"
+      }.freeze
+      CORANICUM_STEM = /\AStem(\d+)\z/
+
+      # Quranic Arabic Corpus feature atoms (class note) → [facet, value];
+      # a person-gender-number atom matches QAC_PGN, a verb form QAC_FORM.
+      QAC_ATOMS = {
+        "NOM" => %w[case nom], "ACC" => %w[case acc], "GEN" => %w[case gen],
+        "PERF" => %w[conjugation perf], "IMPF" => %w[conjugation impf], "IMPV" => %w[conjugation impv],
+        "MOOD:JUS" => %w[mood jus], "MOOD:SUBJ" => %w[mood sub],
+        "ACT" => %w[voice act], "PASS" => %w[voice pass],
+        "VN" => %w[verbform vnoun], "INDEF" => %w[definite ind]
+      }.freeze
+      QAC_PGN = /\A([123])?([MF])?([SDP])?\z/
+      QAC_FORM = /\A\(([IVX]+)\)\z/
+      QAC_PERSONS = { "1" => "1", "2" => "2", "3" => "3" }.freeze
+      QAC_GENDERS = { "M" => "masc", "F" => "fem" }.freeze
+      QAC_NUMBERS = { "S" => "sing", "D" => "dual", "P" => "plur" }.freeze
+      QAC_PRONOUNS = { "PRON" => "prs", "DEM" => "dem", "REL" => "rel" }.freeze
+      # const: the triliteral root length that makes an unmarked form Form I
+      QAC_TRILITERAL = 3
+
       # The per-tagset decoder seam: [token key, decode method, source scope]
       # in precedence order (scope nil = any source; otherwise the slugs
       # whose tokens the row decodes — class note). The first APPLICABLE row
@@ -599,7 +705,9 @@ module Nabu
         ["pos", :helipad_features, %w[helipad].freeze],
         ["analysis", :corph_features, %w[corph].freeze],
         ["form", :traces_features, %w[traces].freeze],
-        ["gloss", :tla_features, %w[tla-hf].freeze]
+        ["gloss", :tla_features, %w[tla-hf].freeze],
+        ["form", :coranicum_features, %w[corpus-coranicum].freeze],
+        ["features", :qac_features, %w[quranic-corpus].freeze]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -883,6 +991,88 @@ module Nabu
         add_values(out, "prontype", ["rel"]) if head == "PRON" && atoms.include?("rel")
         add_values(out, "prontype", ["prs"]) if head.nil? && out.key?("person")
         out
+      end
+
+      # Corpus Coranicum: Talmon's explicit fields off the token's FIRST
+      # analysis (class note) — "alternatives" are never read, and the
+      # dependent_* fields (the attached pronoun's) never decode onto the
+      # host. A Stem pattern decodes only on a Verb token; prontype only on
+      # a Pron token.
+      def coranicum_features(_form, token)
+        out = {}
+        CORANICUM_FIELDS.each do |field, table|
+          facet, value = table[token[field]]
+          add_values(out, facet, Array(value)) if facet
+        end
+        out.merge!(CORANICUM_ASPECTS.fetch(token["aspect"], {}))
+        pronoun = CORANICUM_PRONOUNS[token["subcategory"]] if token["pos"] == "Pron"
+        out["prontype"] = pronoun if pronoun
+        stem = CORANICUM_STEM.match(token["pattern"].to_s) if token["pos"] == "Verb"
+        add_verbal(out, stem: stem && ARABIC_STEMS[stem[1].to_i - 1], conjugation: out.delete("conjugation"),
+                        mood: out.delete("mood")&.first)
+      end
+
+      # Quranic Arabic Corpus: one SEGMENT's feature string (class note).
+      # PREFIX segments are particles (nothing decodes); a SUFFIX decodes
+      # only as a pronoun ("PRON:3MP" — the segment IS the pronoun); a
+      # STEM's atoms decode through QAC_ATOMS / QAC_PGN / QAC_FORM, the
+      # tag giving prontype. Form I — the one unmarked form — is inferred
+      # on a verb, participle or verbal noun of a TRILITERAL root; a
+      # finite verb without PASS is active (the passive is marked, the
+      # active never). No mood is inferred: the unmarked imperfect is
+      # indicative OR energic (the energic nūn is a separate segment).
+      def qac_features(features, token)
+        kind, *atoms = features.to_s.split("|")
+        case kind
+        when "SUFFIX" then qac_suffix(atoms)
+        when "STEM" then qac_stem(atoms, token["tag"].to_s)
+        else {}
+        end
+      end
+
+      def qac_suffix(atoms)
+        pgn = atoms.first.to_s.delete_prefix("PRON:")
+        return {} if pgn == atoms.first.to_s
+
+        out = { "prontype" => ["prs"] }
+        qac_pgn(out, pgn)
+        out
+      end
+
+      def qac_stem(atoms, tag)
+        out = {}
+        form = nil
+        root = nil
+        atoms.each do |atom|
+          if (facet, value = QAC_ATOMS[atom]) then add_values(out, facet, [value])
+          elsif (match = QAC_FORM.match(atom)) then form = match[1].downcase
+          elsif atom.start_with?("ROOT:") then root = atom.delete_prefix("ROOT:")
+          elsif !atom.empty? && QAC_PGN.match?(atom) then qac_pgn(out, atom)
+          end
+        end
+        qac_verbal(out, tag, form: form, root: root, participle: atoms.include?("PCPL"))
+      end
+
+      # PGN codes ("3MS", "MP", "1P", "F") → person/gender/number.
+      def qac_pgn(out, code)
+        person, gender, number = QAC_PGN.match(code).captures
+        add_values(out, "person", [QAC_PERSONS[person]]) if person
+        add_values(out, "gender", [QAC_GENDERS[gender]]) if gender
+        add_values(out, "number", [QAC_NUMBERS[number]]) if number
+      end
+
+      # The verbal keys: a participle's conjugation from its voice (ptca /
+      # ptcp), Form I on an unmarked triliteral, the finite active default,
+      # and prontype from the tag.
+      def qac_verbal(out, tag, form:, root:, participle:)
+        out["conjugation"] = [out["voice"] == ["pass"] ? "ptcp" : "ptca"] if participle
+        out["voice"] ||= ["act"] if tag == "V"
+        verbal = tag == "V" || participle || out.key?("verbform")
+        form ||= "i" if verbal && root&.length == QAC_TRILITERAL
+        pronoun = QAC_PRONOUNS[tag]
+        out["prontype"] = [pronoun] if pronoun
+        conjugation = out.delete("conjugation")&.first
+        add_verbal(out, stem: verbal ? form : nil, conjugation: conjugation, mood: out.delete("mood")&.first)
       end
 
       # CorPH `analysis`: "."-joined atoms, a "/"-led segment continuing

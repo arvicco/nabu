@@ -3,17 +3,17 @@
 as_of: 27 November 2026
 classes:
 - head: literary
-  documents: 832074
-  documents_display: '832,074'
+  documents: 832519
+  documents_display: '832,519'
   sources: 65
 - head: administrative
   documents: 501271
   documents_display: '501,271'
   sources: 28
 - head: historiography
-  documents: 359307
-  documents_display: '359,307'
-  sources: 38
+  documents: 359308
+  documents_display: '359,308'
+  sources: 39
 - head: ritual
   documents: 194704
   documents_display: '194,704'
@@ -27,32 +27,32 @@ classes:
   documents_display: '54,975'
   sources: 42
 - head: letter
-  documents: 42196
-  documents_display: '42,196'
+  documents: 42288
+  documents_display: '42,288'
   sources: 33
 - head: royal
   documents: 30136
   documents_display: '30,136'
   sources: 6
 - head: scripture
-  documents: 28679
-  documents_display: '28,679'
-  sources: 48
+  documents: 29626
+  documents_display: '29,626'
+  sources: 51
 - head: dedicatory
   documents: 24327
   documents_display: '24,327'
   sources: 12
 - head: hymn-prayer
-  documents: 21222
-  documents_display: '21,222'
-  sources: 30
+  documents: 21236
+  documents_display: '21,236'
+  sources: 31
 - head: divination
   documents: 21140
   documents_display: '21,140'
   sources: 17
 - head: lexical
-  documents: 18859
-  documents_display: '18,859'
+  documents: 18882
+  documents_display: '18,882'
   sources: 29
 - head: scholarly
   documents: 18611
@@ -75,17 +75,17 @@ classes:
   documents_display: '11,692'
   sources: 6
 - head: sermon
-  documents: 8100
-  documents_display: '8,100'
+  documents: 8101
+  documents_display: '8,101'
   sources: 17
 - head: building
   documents: 8094
   documents_display: '8,094'
   sources: 9
 - head: theology
-  documents: 6785
-  documents_display: '6,785'
-  sources: 11
+  documents: 6786
+  documents_display: '6,786'
+  sources: 12
 - head: school
   documents: 5307
   documents_display: '5,307'

@@ -2,7 +2,8 @@ hab-edoc:   # 02-sources row 442
   adapter: Nabu::Adapters::HabEdoc
   adopted: "2026-11-27"
   axes: [germanic, romance]
-  wired: true    # first sync verified 2026-11-27: 472 documents / 4,972 passages, 308 skipped by rule, 0 errored
+  wired: true    # verified 2026-11-27: 1,050 documents / 37,229 passages, 319 skipped by rule, 0 errored
+                 # (the first sync held 472 / 4,972; the per-edition review added 578 the same day)
   sync_policy: manual
   # The Herzog August Bibliothek Wolfenbüttel's digital editions
   # (diglib.hab.de/edoc/): the Editiones Electronicae Guelferbytanae, the
@@ -26,3 +27,15 @@ hab-edoc:   # 02-sources row 442
   # editions (70 listed files) + 1 unserved file + 7 superseded parts;
   # page passages ≈ 5,000–10,000 (unmeasured — the transcripts total
   # ≈ 20 MB, estimated from the first file of each edition).
+  # PER-EDITION REVIEW (2026-11-27): the editions keeping their texts under
+  # their own names reviewed one by one (HabEdoc::EDITIONS) — 12 admitted
+  # by a rule (517 own-name texts: Grimmelshausen, Lessing's translations,
+  # Serranus, Christian II's diaries, Bahnsen, the Middle Low German
+  # psalter, Rist, Hainhofer, Duchess Sibylla, Liber modorum, Tuberinus,
+  # Hartlieb) and the FMG letters (ed000249) through their description
+  # files' textLang; 18 held back with their reasons (Rubens, the
+  # Magdeburg Centuries, Karlstadt, Opitz, the FG letters …). SYNCED
+  # 2026-11-27: 578 of the 580 listed texts landed (Lessing's
+  # law_ermunterung.xml is listed and not served; Serranus's part_back.xml
+  # is a textless shell, held back by rule) → 1,050 documents / 37,229
+  # page passages, 319 skipped by rule, 0 errored.

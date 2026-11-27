@@ -1723,6 +1723,13 @@ sources:
   corpus-coranicum:
     source_kind: scripture   # the Qurʾān (Cairo 1924) — every document is a sura; the commentary
     #                          grain (exegesis) is not taken by this source
+  corpus-coranicum-manuscripts:
+    source_kind: scripture   # Qurʾān manuscripts — every document a witness of the Qurʾān, every
+    #                          passage one of its verses (the cntr/ntvmr witness fold)
+  corpus-coranicum-variants:
+    source_kind: scripture   # the variant readings of the Qurʾān — every passage a reader's reading
+    #                          of a verse's words: the scripture's own text in its transmitted
+    #                          variants (qirāʾāt), not commentary on it
   slavistics-pd:
     source_kind: scholarly   # the PD Slavistics reference shelf — grammars,
     #                          etymological dictionaries, Academy monographs
@@ -3666,7 +3673,8 @@ sources:
       "Contra Apionem": theology/apologetics      # 2 — Josephus' defence of the Jews' antiquity and laws
       #                                            against Apion and other Greek detractors: the faith
       #                                            and its people defended outward — the head's own sense
-  hab-edoc:           # census 2026-11-27: the 22 admitted editions (HabEdoc::EDITIONS), not yet synced
+  hab-edoc:           # census 2026-11-27: the admitted editions (HabEdoc::EDITIONS) — the 22 first synced +
+    #                   the 13 of the per-edition review of the own-name editions
     metadata: edition # the WDB edition id — upstream carries no genre field the editions share
     #                   (a few DTA-format headers have a dwds classCode, most nothing), and each
     #                   edition IS one work or one collection, so the fold is the loop's call per
@@ -3679,13 +3687,26 @@ sources:
       "ed000081": scholarly                      # 1 — Kaempfer, Amoenitates exoticae: natural history,
       #                                            medicine and politics of Persia and Japan
       "ed000082": administrative/list            # 1 — the 1539 book inventory of Elisabeth von Calenberg
+      "ed000133": literary/narrative             # 30 — Grimmelshausen's works: the Simplicissimus books
+      #                                            and their continuations, Courasche, Springinsfeld …
+      #                                            (the Ewig-währender Calender rides along: told
+      #                                            stories and lore, the edition's bulk is narrative)
+      "ed000146": literary                       # 71 — Lessing's translations: drama theory, history,
+      #                                            theology and tales mixed — the bare head
       "ed000145": literary/diary/travelogue      # 2 — Paesi novamente retrovati / Newe unbekanthe landte:
       #                                            the collected accounts of the discovery voyages
       "ed000166": literary/poetry                # 2 — Fonteny's Livre d'enigmes: a sonnet sequence
+      "ed000215": lexical/word-list              # 24 — Serranus, Dictionarium Latinogermanicum (1538):
+      #                                            a bilingual dictionary in alphabet parts
       "ed000223": scholarly                      # 1 — Millinger's Weltbeschreibung: a compiled
       #                                            world-knowledge book (elements, regents, church history)
       "ed000226": literary/poetry                # 1 — Conring's Latin poems, collected by Böhmer
+      "ed000228": literary/diary                 # 338 — Christian II of Anhalt-Bernburg's diaries, one
+      #                                            file per month (1621–1656)
       "ed000232": sermon                         # 1 — Millinger's notes of the sermons he heard
+      "ed000233": letter                         # 21 — Benedikt Bahnsen's letters to Duke August
+      "ed000235": scripture                      # 1 — the Middle Low German psalter (with its psalm
+      #                                            prefaces): scripture in the vernacular
       "ed000236": ritual                         # 1 — Escobar's Modus confitendi: how to make one's
       #                                            confession — the rite's own manual, not doctrine
       "ed000238": literary/poetry                # 1 — Hans Sachs's Wittenbergisch Nachtigall: the
@@ -3693,16 +3714,26 @@ sources:
       "ed000241": scholarly/recipe               # 1 — Staindl's Kochbuch: a cookbook
       "ed000243": literary/wisdom                # 1 — a mother's admonitions to her children: instruction
       #                                            in the devotional-didactic mode
+      "ed000244": hymn-prayer/hymn               # 14 — Rist's Katechismus-Andachten and Seelenparadies:
+      #                                            devotional song books (title, prefaces, songs, index)
       "ed000245": scholarly                      # 1 — Furttenbach's kupffer radier kunst: an etching
       #                                            technique manual (the learned-craft treatise)
       "ed000247": scholarly                      # 1 — Orsini, De bibliothecis commentarium
       "ed000248": letter                         # 413 — the Lüne convent letters (private and official
       #                                            mixed — the bare head)
+      "ed000249": letter                         # 65 — the FMG letters of musicians, 1800–2000
+      "ed000251": literary/diary/travelogue      # 7 — Hainhofer's travel and collection reports
       "ed000253": literary/poetry                # 1 — Schwartzkopf's Bibliotheca Augusta: verses on the
       #                                            Wolfenbüttel library
       "ed000258": literary/poetry                # 1 — Fonteny's Livre d'enigmes (the French edition)
       "ed000266": literary/narrative/fable       # 3 — Gabrias's Tetrasticha: Aesopic fables in verse
       "ed000267": school                         # 15 — Heyden's Formulae puerilium colloquiorum:
       #                                            school dialogues for the Latin classroom
+      "ed000269": letter                         # 6 — Duchess Sibylla's letters to Johann Valentin Andreae
+      "ed000271": sermon                         # 1 — Liber modorum: a manuscript sermon collection
+      "ed000275": historiography                 # 1 — Tuberinus's Historie von Simon zu Trient (1475): the
+      #                                            blood-libel account told as a report of events
+      "ed000276": theology/treatise              # 1 — Hartlieb's Buch aller verbotenen Kunst: the
+      #                                            forbidden arts catalogued and condemned
       "ed000278": literary/poetry                # 1 — Sibylla Schwarz, Deutsche Poëtische Gedichte
       "ed000279": letter                         # 17 — Klesch's letters to David Hanisius

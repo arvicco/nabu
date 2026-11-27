@@ -811,6 +811,16 @@ module Query
       assert_empty define("μῆνις").first.facets, "an untagged entry carries none"
     end
 
+    # Derived comparison keys (a keyed rule's <facet>_key / _loose_key) are a
+    # fold, not an upstream claim — the card shows the verbatim facet only.
+    def test_derived_key_facets_stay_off_the_card
+      tag_entry("λόγος", "root", "ربّ")
+      tag_entry("λόγος", "root_key", "رب")
+      tag_entry("λόγος", "root_loose_key", "رب")
+      shown = define("λόγος").first.facets.map { |f| [f.facet, f.value] }
+      assert_equal [%w[root ربّ]], shown
+    end
+
     # Desk-commands rule: a catalog that has not applied the entry_id index
     # never scans the pair table — an ANNOTATED entry reads nil (honestly
     # unknown, the card hints), an unannotated one [] (it can carry none).

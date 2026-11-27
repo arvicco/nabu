@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets OBJID="edoc/ed000249" 
+    xmlns:mets="http://www.loc.gov/METS/"
+    xmlns:wdb="http://diglib.hab.de/wdb/"
+    xmlns:rmd="http://diglib.hab.de/rights"
+    xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://www.loc.gov/METS/ http://diglib.hab.de/rules/schema/mets/v1.9/wdb-mets-2.xsd">
+    <mets:metsHdr CREATEDATE="2013-09-03T10:30:00">
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenbüttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+
+    <!-- Katalogeintrag, verwendet wird in der Regel die PPN der elektronischen Ressource oder der Ressource, die den Link enthält -->
+    <!--<mets:dmdSec ID="dmd_opac">
+              <mets:mdRef LOCTYPE="PURL" MDTYPE="OTHER" OTHERMDTYPE="PICA" MIMETYPE="text/xml"  xlink:href="http://diglib.hab.de/?format=mods&amp;opac=539364371"/>
+    </mets:dmdSec>
+    -->
+    <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods>
+                    <mods:identifier type="purl">http://diglib.hab.de/edoc/ed000249/start.htm</mods:identifier>
+                    <mods:titleInfo>
+                        <mods:title>Erschließen, Forschen, Vermitteln: Identität und Netzwerke / Mobilität und Kulturtransfer im musikbezogenen Handeln von Frauen zwischen 1800 und 2000</mods:title>
+                        <mods:subTitle>Hrsg. vom Forschungszentrum Musik und Gender Hannover in Kooperation mit der Herzog August Bibliothek Wolfenbüttel unter Leitung von Nicole K. Strohmann und Mitarbeit von Maren Bagge, Anne Fiebig, Viola Herbst, Felisa Mesuere, Katharina Talkner und Christine Weber sowie Susanne Rode-Breymann. Technische Umsetzung durch Torsten Schaßan</mods:subTitle>
+                    </mods:titleInfo>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Wolfenbüttel</mods:placeTerm>
+                        </mods:place>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                        <mods:dateIssued encoding="w3cdtf">2016-2023</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title>Wolfenbütteler Digitale Editionen</mods:title>
+                        </mods:titleInfo>
+                        <mods:part>
+                            <mods:detail>
+                                <mods:number>6</mods:number>
+                            </mods:detail>
+                        </mods:part>
+                        <!--<mods:identifier type="purl">https://diglib.hab.de/?opac=xxx</mods:identifier> -->                       
+                    </mods:relatedItem>
+                    
+                    <!--
+                    <mods:recordInfo>
+                        <mods:recordContentSource authority="gbv" authorityURI="http://uri.gbv.de/organization/isil/DE-23">OPAC</mods:recordContentSource>
+                        <mods:recordIdentifier source="opac">xxx</mods:recordIdentifier>
+                    </mods:recordInfo>
+                    -->
+                </mods:mods>
+                
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+
+    <!-- Rechtesegment -->
+    <mets:amdSec ID="amd_edoc_ed000249">
+        
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+        <!-- Bibliotheks Standardlizenz für Retrodigitalisate lt. Benutzungsordnung; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000249_retrodig">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="Benutzungsordnung"/>
+        </mets:rightsMD>
+        <!-- CC Standardlizenz, wenn der Autor zugestimmmt hat; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000249_CC">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/rights/cc_by-sa.html" LABEL="CC BY-SA 3.0"/>
+        </mets:rightsMD>
+        <!-- Lizenz, wenn der Autor/Institution der weiteren Nutzung zustimmmen muss -->
+        <mets:rightsMD ID="rmd_edoc_ed000249_restricted">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="rights restricted"/>
+        </mets:rightsMD>
+    </mets:amdSec>
+    
+    
+    <mets:fileSec>
+        <!--      ****Filesection ************************************************************************************** -->
+          <!-- Konfigurationsparameter -->
+            <mets:fileGrp USE="config">
+                <mets:file  ID="wdb_parameter">
+                    <mets:FContent>
+                        <mets:xmlData>
+                            <wdb:parameter>
+                                <!-- Titelbaltt oder Einstiegsseite fuer "Werke"; muss gesetzt sein -->
+                                <wdb:param distype="start" firstpage_xml="texts/start.xml" firstpage_xsl="scripts/start.xsl"/>
+                                
+                                <!-- Sprache -->
+                                <wdb:param lang="de"/>
+                                
+                                <!-- owner logo -->
+                                <!--
+                                <wdb:logo owner="FMG" ownerLogo="https://diglib.hab.de/images/logo-.png" ownerSiteURL="http://www..de" ownerContact=""/>
+                                -->
+                                
+                                <!-- Volltextsuche mit Paralleler Volltextsicht; @url fuer Aufgerufenes Skript, nur fuer Menusuche; Extrasuchen unter Behavior -->
+                                <!-- welche XQL Scripte sollen fuer die Suche verwendet werden; wdb ist Standard 
+                                    Pfad: exist.hab.de/rest/db/apps/[wdb:param]/search.xql
+                                -->
+                              
+                              <!-- Volltextsuche -->
+                            <!--    <wdb:param distype="results-transcript" url="exist.hab.de/rest/db/apps/edoc/ed000249/search/search-ocr.xql"/> -->
+                                <!--<wdb:param distype="results-transcript" url="wdb/search/search.xql"/>-->
+                                
+                                
+                              
+                                
+                                <!-- Anzeige Parallelsichten  -->
+                                <!-- 
+                                    wdb:parallelView:
+                                    -  @SMLINKID: Link auf die mets:smLink in mets:structLink ID="parallel_views" (hier die Dateien, die verbunden werden)
+                                    -  @f1 Prozent der Groesse des linken Fensters
+                                    -  @f2 Prozent der Groesse des rechten Fensters
+                                    -  @synctype  moegliche Werte: "pb" (Linking ueber pageID), "div", (Anzahl divisions),"sync" (explizite angabe), "none" (unverbunden)
+                                -->
+                                <!--<wdb:parallelView pvID="pv_transcript-facs1602" f1="30" f2="70" synctype="pb"/>-->
+                                <wdb:parallelView pvID="pv_transcript-facs" f1="50" f2="50" synctype="pb"/>
+                                
+                                <!-- im Kopf des Menue zu zeigende Logos -->
+                                <!--<wdb:logo owner="Uni xy" ownerLogo="xy.png" ownerSiteURL="http://xy" ownerContact="xy@xy.de"/>;  Mehrfachlogos sind zulaessig -->
+                               </wdb:parameter>
+                        </mets:xmlData>
+                    </mets:FContent>
+                </mets:file>
+            </mets:fileGrp>
+        
+        <!-- Facsimiles-->
+
+        <mets:fileGrp USE="facsimile_URL">
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-abrams-h-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-abrams-h-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-ackte-a-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-ackte-a-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-agoult-m-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-agoult-m-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-agoult-m-002" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-agoult-m-002/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-albani-e-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-albani-e-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-albani-e-002" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-albani-e-002/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-albert-m-001-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-albert-m-001-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-albert-m-001-002" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-albert-m-001-002/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-alboni-m-001-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-alboni-m-001-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-alboni-m-001-002" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-alboni-m-001-002/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-alboni-m-001-003" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-alboni-m-001-003/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-amann-weinlich-j-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-amann-weinlich-j-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-amann-weinlich-j-002" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-amann-weinlich-j-002/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-amann-weinlich-j-003" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-amann-weinlich-j-003/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-andre-gedalge-a-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-andre-gedalge-a-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-anonym-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-anonym-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-artot-de-padilla-d-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-artot-de-padilla-d-001/start.htm?distype=imgs"/></mets:file>
+<mets:file ID="edoc_ed000249_varia_fmg_rara-fmg-bahr-mildenburg-a-001" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/varia/fmg/rara-fmg-bahr-mildenburg-a-001/start.htm?distype=imgs"/></mets:file>
+        </mets:fileGrp>
+
+        <!--  Transkription  -->
+        <mets:fileGrp USE="transcription">
+            <mets:file ID="edoc_ed000249_h-fmg-rara-fmg-artot-de-padilla-d-001_tei-transcript" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/h-fmg-rara-fmg-artot-de-padilla-d-001/h-fmg-rara-fmg-artot-de-padilla-d-001_tei-transcript.xml"/></mets:file>
+            <mets:file ID="edoc_ed000249_h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-transcript" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-transcript.xml"/></mets:file>
+            <mets:file ID="edoc_ed000249_h-fmg-rara-fmg-orgeni-a-002-1_tei-transcript" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/h-fmg-rara-fmg-orgeni-a-002-1/h-fmg-rara-fmg-orgeni-a-002-1_tei-transcript.xml"/></mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="descriptions">
+            <mets:file ID="edoc_ed000249_h-fmg-rara-fmg-artot-de-padilla-d-001_tei-msDesc_fmg" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/h-fmg-rara-fmg-artot-de-padilla-d-001/h-fmg-rara-fmg-artot-de-padilla-d-001_tei-msDesc_fmg.xml"/></mets:file>
+            <mets:file ID="edoc_ed000249_h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg.xml"/></mets:file>
+        </mets:fileGrp>
+        
+        <!--  Einleitungen  -->
+        
+        <mets:fileGrp USE="introduction">
+            <mets:file ID="edoc_ed000249_introduction_f001" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/tei-introduction.xml"/></mets:file>
+            <mets:file ID="edoc_ed000249_richtlinien_f001" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/EFV-Editionsrichtlinien.xml"/></mets:file>
+        </mets:fileGrp>
+        
+        <!-- Registerdateien -->
+        <mets:fileGrp USE="indices">
+            <mets:file ID="edoc_ed000249_index_person_all"                MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/person.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_role_org"           MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/role_org.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_role_rcp"           MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/role_rcp.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_role_mentioned"     MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/role_mentioned.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_role_dpc"           MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/role_dpc.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_unk"                MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/role_unk.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_arr"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_arr.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_act"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_act.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_cnd"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_cnd.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_edt"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_edt.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_professor"   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_professor.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_itr"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_itr.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_cmp"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_cmp.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_art"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_art.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_pat"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_pat.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_mod"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_mod.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_trader"      MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_trader.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_maker"       MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_maker.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_tch"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_tch.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_manager"     MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_manager.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_cur"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_cur.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_sng"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_sng.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_col"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_col.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_aut"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_aut.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_cre"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_cre.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_trl"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_trl.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_pbl"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_pbl.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_fields_res"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/occupation_res.html"/></mets:file>
+            
+            <mets:file ID="edoc_ed000249_index_person_sex_f"              MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/sex_f.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_sex_m"              MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/sex_m.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_person_sex_u"              MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/sex_u.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_org_all"                   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/org.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_place_all"                 MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/place.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_place_birth"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/place_birth.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_place_death"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/place_death.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_place_sent"                MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/place_sent.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_place_received"            MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/place_received.html"/></mets:file>
+            <!--<mets:file ID="edoc_ed000249_index_place_events"              MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/place_events.html"/></mets:file>-->
+            <mets:file ID="edoc_ed000249_index_place_mentioned"           MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/place_mentioned.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_keyword_identity"          MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/keyword_identity.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_keyword_transfer"          MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/keyword_transfer.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_keyword_mobility"          MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/keyword_mobility.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_keyword_networks"          MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/keyword_networks.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_all"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_all.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_album"             MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_album.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_iconFormal"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_iconFormal.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_iconFormal_postcard" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_iconFormal_postcard.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_iconFormal_foto"   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_iconFormal_foto.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_iconFormal_print"  MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_iconFormal_print.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_iconFormal_drawing" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_iconFormal_drawing.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_iconFormal_other"  MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_iconFormal_other.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_concert_ticket"    MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_concert_ticket.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_concert_ann"       MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_concert_ann.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_concert_program"   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_concert_program.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_concert_review"    MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_concert_review.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_corresp_all"       MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_corresp_all.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_corresp_letter"    MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_corresp_letter.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_corresp_mailing"   MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_corresp_mailing.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_corresp_vcard"     MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_corresp_vcard.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_corresp_other"     MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_corresp_other.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_press"             MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_press.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_ad"                MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_ad.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_other_handwritten" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_other_handwritten.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_other_typewritten" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_other_typewritten.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_docType_other_printed"     MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/docType_other_printed.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_content_building"          MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/contentType_building.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_content_person"            MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/contentType_person.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_content_group"             MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/contentType_group.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_content_cartoon"           MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/contentType_cartoon.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_content_roleModel"         MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/contentType_roleModel.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_content_imageOther"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/contentType_imageOther.html"/></mets:file>
+            
+            <mets:file ID="edoc_ed000249_index_origDate_1700-1799"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1700-1799.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_1800-1824"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1800-1824.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_1825-1849"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1825-1849.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_1850-1874"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1850-1874.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_1875-1899"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1875-1899.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_1900-1924"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1900-1924.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_1925-1949"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1925-1949.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_1950-1974"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1950-1974.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_1975-1999"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/1975-1999.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_origDate_2000-2019"        MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/2000-2019.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_textLang_de"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/textLang_de.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_textLang_en"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/textLang_en.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_textLang_fr"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/textLang_fr.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_textLang_it"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/textLang_it.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_textLang_other"            MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/textLang_other.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_signatur"                  MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/html/signatur.html"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_status_full"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/view/index.xql?list=status&amp;id=full"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_status_short"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/view/index.xql?list=status&amp;id=bibl"/></mets:file>
+            <mets:file ID="edoc_ed000249_index_status_none"               MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="http://diglib.hab.de/edoc/ed000249/view/index.xql?list=status&amp;id=none"/></mets:file>
+        </mets:fileGrp>
+        
+        <!-- statische Register -->
+        <mets:fileGrp USE="indices_static">
+            <mets:file ID="edoc_ed000249_listOrg"      MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/index/listOrg.xml"/></mets:file>
+            <mets:file ID="edoc_ed000249_listPerson"   MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/index/listPerson.xml"/></mets:file>
+            <mets:file ID="edoc_ed000249_listPlace"    MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/index/listPlace.xml"/></mets:file>
+            <mets:file ID="edoc_ed000249_listRelation" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/index/listRelation.xml"/></mets:file>
+            <mets:file ID="edoc_ed000249_listWork"     MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="texts/index/listWork.xml"/></mets:file>
+        </mets:fileGrp>
+        <!--
+        <mets:fileGrp>
+            <mets:file ID="pr" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="http://diglib.hab.de/edoc/ed000249/personenregister.html" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+        -->
+        <!--Links -->
+        <!--
+        <mets:fileGrp>
+            <mets:file ID="FID1" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="http://" xlink:show="new" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+        -->
+    </mets:fileSec>
+
+
+    <!--    Inhaltliche Struktur ######################################################################################  -->
+    <mets:structMap>
+        <mets:div ID="edoc_ed000249_index_sm">
+
+            <!-- Einleitung, praefationes *************************************************************  -->
+            <mets:div TYPE="introduction" LABEL="Einleitung" ID="edoc_ed000249_introduction" ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_introduction_f001"/></mets:div>
+            <mets:div TYPE="richtlinien" LABEL="Editionsrichtlinien" ID="edoc_ed000249_richtlinien" ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_richtlinien_f001"/></mets:div>
+            
+
+            <!--  Auflisten nach **************************************************** -->
+           
+            <!-- 
+                Three-digit values taken from MARC Code List for Relators Scheme
+                http://id.loc.gov/vocabulary/relators.html
+                URI: http://id.loc.gov/vocabulary/relators/ + value
+            -->
+            
+            <mets:div TYPE="submenu"   LABEL="Person"                           ID="edoc_ed000249_index_person_sm">
+                <mets:div TYPE="index" LABEL="Alle"                             ID="edoc_ed000249_index_person_all_sm"               ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_all"/></mets:div>
+                <mets:div TYPE="submenu"   LABEL="Rolle"                        ID="edoc_ed000249_index_person_role_sm">
+                    <mets:div TYPE="index" LABEL="Absender*in / Urheber*in"     ID="edoc_ed000249_index_person_role_org_sm"          ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_role_org"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Empfänger*in"                 ID="edoc_ed000249_index_person_role_rcp_sm"          ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_role_rcp"/></mets:div>
+                    <mets:div TYPE="index" LABEL="erwähnt"                      ID="edoc_ed000249_index_person_role_mentioned_sm"    ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_role_mentioned"/></mets:div>
+                    <mets:div TYPE="index" LABEL="abgebildet"                   ID="edoc_ed000249_index_person_role_dpc_sm"          ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_role_dpc"/></mets:div>
+                    <mets:div TYPE="index" LABEL="unbekannt"                    ID="edoc_ed000249_index_person_unk_sm"               ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_unk"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="submenu" LABEL="Wirkungsfeld"                   ID="edoc_ed000249_index_person_fields_sm">
+                    <mets:div TYPE="index" LABEL="Arrangeur*in"                 ID="edoc_ed000249_index_person_fields_arr_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_arr"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Darstellende*r Künstler*in"   ID="edoc_ed000249_index_person_fields_act_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_act"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Dirigent*in"                  ID="edoc_ed000249_index_person_fields_cnd_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_cnd"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Herausgeber*in"               ID="edoc_ed000249_index_person_fields_edt_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_edt"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Hochschullehrer*in"           ID="edoc_ed000249_index_person_fields_professor_sm"  ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_professor"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Instrumental&#x00AD;musiker*in"       ID="edoc_ed000249_index_person_fields_itr_sm"       ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_itr"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Komponist*in"                 ID="edoc_ed000249_index_person_fields_cmp_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_cmp"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Künstler*in"                  ID="edoc_ed000249_index_person_fields_art_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_art"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Mäzen*in"                     ID="edoc_ed000249_index_person_fields_pat_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_pat"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Moderator*in"                 ID="edoc_ed000249_index_person_fields_mod_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_mod"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Musikalienhändler*in"         ID="edoc_ed000249_index_person_fields_trader_sm"     ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_trader"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Musikinstrumenten&#x00AD;bauer*in"    ID="edoc_ed000249_index_person_fields_maker_sm"     ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_maker"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Musiklehrer*in"               ID="edoc_ed000249_index_person_fields_tch_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_tch"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Musikmanager*in"              ID="edoc_ed000249_index_person_fields_manager_sm"    ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_manager"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Nachlassverwalter*in"         ID="edoc_ed000249_index_person_fields_cur_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_cur"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Sänger*in"                    ID="edoc_ed000249_index_person_fields_sng_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_sng"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Sammler*in"                   ID="edoc_ed000249_index_person_fields_col_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_col"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Schriftsteller*in"            ID="edoc_ed000249_index_person_fields_aut_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_aut"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Theaterschaffende*r"          ID="edoc_ed000249_index_person_fields_cre_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_cre"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Übersetzer*in"                ID="edoc_ed000249_index_person_fields_trl_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_trl"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Verleger*in"                  ID="edoc_ed000249_index_person_fields_pbl_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_pbl"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Wissenschaftler*in"           ID="edoc_ed000249_index_person_fields_res_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_fields_res"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="submenu" LABEL="Geschlecht"                     ID="edoc_ed000249_index_person_sex_sm">
+                    <mets:div TYPE="index" LABEL="Weiblich"                     ID="edoc_ed000249_index_person_sex_f_sm"             ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_person_sex_f"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Männlich"                     ID="edoc_ed000249_index_person_sex_m_sm"             ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_person_sex_m"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Unbekannt / Sonstiges"        ID="edoc_ed000249_index_person_sex_u_sm"             ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_person_sex_u"/></mets:div>
+                </mets:div>
+            </mets:div>
+            <mets:div TYPE="index" LABEL="Institution"                          ID="edoc_ed000249_index_org_all_sm"                  ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_org_all"/></mets:div>
+            <mets:div TYPE="submenu" LABEL="Ort"                                ID="edoc_ed000249_index_place_sm">
+                <mets:div TYPE="index" LABEL="Alle"                             ID="edoc_ed000249_index_place_all_sm"                ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_place_all"/></mets:div>
+                <mets:div TYPE="index" LABEL="Geburtsort"                       ID="edoc_ed000249_index_place_birth_sm"              ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_place_birth"/></mets:div>
+                <mets:div TYPE="index" LABEL="Sterbeort"                        ID="edoc_ed000249_index_place_death_sm"              ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_place_death"/></mets:div>
+                <mets:div TYPE="index" LABEL="Absendeort"                       ID="edoc_ed000249_index_place_sent_sm"               ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_place_sent"/></mets:div>
+                <mets:div TYPE="index" LABEL="Empfangsort"                      ID="edoc_ed000249_index_place_received_sm"           ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_place_received"/></mets:div>
+                <!--<mets:div TYPE="index" LABEL="Veranstaltungsort"                ID="edoc_ed000249_index_place_events_sm"             ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_place_events"/></mets:div>-->
+                <mets:div TYPE="index" LABEL="erwähnter Ort"                    ID="edoc_ed000249_index_place_mentioned_sm"          ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_place_mentioned"/></mets:div>
+            </mets:div>
+            <mets:div TYPE="submenu" LABEL="Schlagwort"                         ID="edoc_ed000249_index_keyword_sm">
+                <mets:div TYPE="index" LABEL="Identität"                        ID="edoc_ed000249_index_keyword_identity_sm"         ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_keyword_identity"/></mets:div>
+                <mets:div TYPE="index" LABEL="Kulturtransfer"                   ID="edoc_ed000249_index_keyword_transfer_sm"         ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_keyword_transfer"/></mets:div>
+                <mets:div TYPE="index" LABEL="Mobilität"                        ID="edoc_ed000249_index_keyword_mobility_sm"         ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_keyword_mobility"/></mets:div>
+                <mets:div TYPE="index" LABEL="Netzwerke"                        ID="edoc_ed000249_index_keyword_networks_sm"         ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_keyword_networks"/></mets:div>
+            </mets:div>
+            <mets:div TYPE="submenu" LABEL="Dokumenttyp"                        ID="edoc_ed000249_index_docType_sm">
+                <mets:div TYPE="index"   LABEL="Alle"                                                   ID="edoc_ed000249_index_docType_all_sm"                 ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_all"/></mets:div>
+                <mets:div TYPE="index" LABEL="Albumblatt (inkl. Gästebucheintrag und Poesiealbum)"      ID="edoc_ed000249_index_docType_album_sm"               ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_album"/></mets:div>
+                <mets:div TYPE="submenu" LABEL="Ikonografie (formal bezogen auf die Herstellungsart)"   ID="edoc_ed000249_index_docType_iconFormal_sm"          ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_iconFormal"/>
+                    <mets:div TYPE="index" LABEL="Bildpostkarte"                                        ID="edoc_ed000249_index_docType_iconFormal_postcard_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_iconFormal_postcard"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Fotografie"                                           ID="edoc_ed000249_index_docType_iconFormal_foto_sm"     ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_iconFormal_foto"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Druckgrafik (hier Stich, Lithografie etc.)"           ID="edoc_ed000249_index_docType_iconFormal_print_sm"    ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_iconFormal_print"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Zeichnung"                                            ID="edoc_ed000249_index_docType_iconFormal_drawing_sm"  ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_iconFormal_drawing"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Sonstige Bilder (formal)"                             ID="edoc_ed000249_index_docType_iconFormal_other_sm"    ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_iconFormal_other"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="submenu" LABEL="Konzertbezogenes Dokument"                              ID="edoc_ed000249_index_docType_concert_sm">
+                    <mets:div TYPE="index" LABEL="Eintrittskarte"                                       ID="edoc_ed000249_index_docType_concert_ticket_sm"      ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_concert_ticket"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Konzertankündigung"                                   ID="edoc_ed000249_index_docType_concert_ann_sm"         ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_concert_ann"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Konzertprogramm"                                      ID="edoc_ed000249_index_docType_concert_program_sm"     ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_concert_program"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Rezension"                                            ID="edoc_ed000249_index_docType_concert_review_sm"      ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_concert_review"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="submenu" LABEL="Korrespondenz"                                          ID="edoc_ed000249_index_docType_correspondence_sm">
+                    <mets:div TYPE="index"   LABEL="Alle"                                               ID="edoc_ed000249_index_docType_corresp_all_sm"         ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_corresp_all"/></mets:div>
+                    <mets:div TYPE="index"   LABEL="Brief"                                              ID="edoc_ed000249_index_docType_corresp_letter_sm"      ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_corresp_letter"/></mets:div>
+                    <mets:div TYPE="index"   LABEL="Offene Briefsendung"                                ID="edoc_ed000249_index_docType_corresp_mailing_sm"     ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_corresp_mailing"/></mets:div>
+                    <mets:div TYPE="index"   LABEL="Visitenkarte"                                       ID="edoc_ed000249_index_docType_corresp_vcard_sm"       ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_corresp_vcard"/></mets:div>
+                    <mets:div TYPE="index"   LABEL="Sonstige Korrespondenzen"                           ID="edoc_ed000249_index_docType_corresp_other_sm"       ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_corresp_other"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="index"   LABEL="Presseerzeugnis"                                        ID="edoc_ed000249_index_docType_press_sm"               ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_press"/></mets:div>
+                <mets:div TYPE="index"   LABEL="Werbung"                                                ID="edoc_ed000249_index_docType_ad_sm"                  ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_ad"/></mets:div>
+                <mets:div TYPE="submenu" LABEL="Sonstige Dokumente"                                     ID="edoc_ed000249_index_docType_other_sm">
+                    <mets:div TYPE="index" LABEL="Handschriftlich"                                      ID="edoc_ed000249_index_docType_other_handwritten_sm"   ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_other_handwritten"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Maschinenschriftlich"                                 ID="edoc_ed000249_index_docType_other_typewritten_sm"   ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_other_typewritten"/></mets:div>
+                    <mets:div TYPE="index" LABEL="Gedruckt"                                             ID="edoc_ed000249_index_docType_other_printed_sm"       ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_docType_other_printed"/></mets:div>
+                </mets:div>
+            </mets:div>
+            <mets:div TYPE="submenu" LABEL="Inhaltstyp Ikonographien"                                   ID="edoc_ed000249_index_content_sm">
+                <mets:div TYPE="index" LABEL="Bauwerk"                                                  ID="edoc_ed000249_index_content_building_sm"            ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_content_building"/></mets:div>
+                <mets:div TYPE="index" LABEL="Einzelperson"                                             ID="edoc_ed000249_index_content_peron_sm"               ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_content_person"/></mets:div>
+                <mets:div TYPE="index" LABEL="Gruppe"                                                   ID="edoc_ed000249_index_content_group_sm"               ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_content_group"/></mets:div>
+                <mets:div TYPE="index" LABEL="Karikatur"                                                ID="edoc_ed000249_index_content_cartoon_sm"             ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_content_cartoon"/></mets:div>
+                <mets:div TYPE="index" LABEL="Rollenbild"                                               ID="edoc_ed000249_index_content_roleModel_sm"           ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_content_roleModel"/></mets:div>
+                <mets:div TYPE="index" LABEL="Sonstige Bilder"                                          ID="edoc_ed000249_index_content_imageOther_sm"          ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_content_imageOther"/></mets:div>
+            </mets:div>
+            <mets:div TYPE="submenu" LABEL="Datierung"                                                  ID="edoc_ed000249_index_origDate_sm">
+                <mets:div TYPE="index" LABEL="1700 &#x2014; 1799" ID="edoc_ed000249_index_origDate_1700-1799_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1700-1799"/></mets:div>
+                <mets:div TYPE="index" LABEL="1800 &#x2014; 1824" ID="edoc_ed000249_index_origDate_1800-1824_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1800-1824"/></mets:div>
+                <mets:div TYPE="index" LABEL="1825 &#x2014; 1849" ID="edoc_ed000249_index_origDate_1825-1849_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1825-1849"/></mets:div>
+                <mets:div TYPE="index" LABEL="1850 &#x2014; 1874" ID="edoc_ed000249_index_origDate_1850-1874_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1850-1874"/></mets:div>
+                <mets:div TYPE="index" LABEL="1875 &#x2014; 1899" ID="edoc_ed000249_index_origDate_1875-1899_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1875-1899"/></mets:div>
+                <mets:div TYPE="index" LABEL="1900 &#x2014; 1924" ID="edoc_ed000249_index_origDate_1900-1924_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1900-1924"/></mets:div>
+                <mets:div TYPE="index" LABEL="1925 &#x2014; 1949" ID="edoc_ed000249_index_origDate_1925-1949_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1925-1949"/></mets:div>
+                <mets:div TYPE="index" LABEL="1950 &#x2014; 1974" ID="edoc_ed000249_index_origDate_1950-1974_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1950-1974"/></mets:div>
+                <mets:div TYPE="index" LABEL="1975 &#x2014; 1999" ID="edoc_ed000249_index_origDate_1975-1999_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_1975-1999"/></mets:div>
+                <mets:div TYPE="index" LABEL="2000 &#x2014; 2019" ID="edoc_ed000249_index_origDate_2000-2019_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_origDate_2000-2019"/></mets:div>
+            </mets:div>
+            <mets:div TYPE="submenu" LABEL="Sprache"                                                    ID="edoc_ed000249_index_textLang_sm">
+                <mets:div TYPE="index" LABEL="Deutsch"            ID="edoc_ed000249_index_textLang_de_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_textLang_de"/></mets:div>
+                <mets:div TYPE="index" LABEL="Englisch"           ID="edoc_ed000249_index_textLang_en_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_textLang_en"/></mets:div>
+                <mets:div TYPE="index" LABEL="Französisch"        ID="edoc_ed000249_index_textLang_fr_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_textLang_fr"/></mets:div>
+                <mets:div TYPE="index" LABEL="Italienisch"        ID="edoc_ed000249_index_textLang_it_sm"        ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_textLang_it"/></mets:div>
+                <mets:div TYPE="index" LABEL="Sonstige Sprachen"  ID="edoc_ed000249_index_textLang_other_sm"     ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_textLang_other"/></mets:div>
+            </mets:div>
+            <mets:div TYPE="index" LABEL="Signaturübersicht (inkl. Bearbeitungsstatus)"                 ID="edoc_ed000249_index_signatur_sm"                    ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_index_signatur"/></mets:div>
+            <!--
+            <mets:div TYPE="submenu" LABEL="Bearbeitungsstatus"                 ID="edoc_ed000249_index_status_sm">
+                <mets:div TYPE="index" LABEL="Beschreibung und Transkription"   ID="edoc_ed000249_index_status_full_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_status_full"/></mets:div>
+                <mets:div TYPE="index" LABEL="Kurzbeschreibung"                 ID="edoc_ed000249_index_status_short_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr  FILEID="edoc_ed000249_index_status_short"/></mets:div>
+            </mets:div>
+            -->
+            
+            <!--<mets:div TYPE="transcript" LABEL="Itinerar" ID="edoc_ed000249_itinerar_sm" ADMID="rmd_edoc_ed000249_CC"><mets:fptr FILEID="edoc_ed000249_register_itinerar"/></mets:div>-->
+            
+            <!--  Uebersetzung *************************************************************** -->
+            <!--  Bibliographie ************************************************************** -->
+            <!--  Register ******************************************************************* -->
+            <!--  Revision ******************************************************************* -->
+            
+            <!--  Parallele Sichten  ********************************************************* -->
+            <!--
+            <mets:div TYPE="parallel_views" ID="parallel_views">
+                <mets:div TYPE="submenu" LABEL="Briefe" ID="edoc_ed000249_parallel_view_Briefe">
+                    <mets:div TYPE="submenu" LABEL="mittelniederdeutsch" ID="edoc_ed000249_parallel_view_Briefe-D">
+                        <mets:div ID="pv_transcript_facs_Brief028-D" LABEL="Brief 028 - D - Transcription ↔ Facsimile"><mets:fptr><mets:par><mets:area FILEID="edoc_ed000249_transcript_Brief028-D" ID="edoc_ed000249_pv_transcript_Brief028-D"/><mets:area FILEID="edoc_ed000249_mss_ed000210_00118"/></mets:par></mets:fptr></mets:div>
+                    </mets:div>
+                </mets:div>
+            </mets:div>
+            -->
+        </mets:div>
+    </mets:structMap>
+
+    <!--  Behavior Section ######################################################################################  -->
+    <!--  
+        Innerhab der Behavior-Sections werden verschwiedene technische Anzeigeformate definiert.
+        Unterschiedliche inhaltliche Sichten auf diesselbe Dateien erhalten eine eigene Behavior Section.
+    -->
+
+    <mets:behaviorSec ID="edoc_ed000249_introduction_b">
+        <mets:behavior ID="edoc_ed000249_introduction_index" STRUCTID="edoc_ed000249_index_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/tei-introduction.xsl"/></mets:behavior>
+    </mets:behaviorSec>
+    <mets:behaviorSec ID="edoc_ed000249_b">
+        <mets:behavior ID="edoc_ed000249_transcript_index" STRUCTID="edoc_ed000249_index_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/tei-transcript.xsl"/></mets:behavior>
+    </mets:behaviorSec>
+    
+    <!-- parallel views-->
+    <mets:behaviorSec ID="edoc_ed000248_pv1">
+        <mets:behavior ID="edoc_ed000248_transcript_pv_index" STRUCTID="edoc_ed000249_index_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="scripts/tei-transcript.xsl"/></mets:behavior>
+    </mets:behaviorSec>
+</mets:mets>

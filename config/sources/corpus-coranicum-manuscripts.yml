@@ -1,0 +1,31 @@
+corpus-coranicum-manuscripts:   # 02-sources row 446
+  adapter: Nabu::Adapters::CorpusCoranicumManuscripts
+  adopted: "2026-11-27"
+  requires: [corpus-coranicum]   # a parse-time read of the corpus-coranicum
+                   # clone (CorpusCoranicumClone — the bhsa → bridging shape):
+                   # the TEI repository is cloned ONCE, by corpus-coranicum;
+                   # this source reads data/quran_manuscripts/ in that tree
+                   # and its own canonical dir holds only the pin record.
+  axes: [arabic]
+  wired: true    # first sync verified 2026-11-27, exact: 193 documents /
+                 # 32,182 passages (31,730 verses + 452 sura headings),
+                 # 2,129 records skipped by rule, 0 unrecognized, 0 errored
+  sync_policy: manual   # the clone is one frozen commit (57cb2b7), pinned with corpus-coranicum
+  # Corpus Coranicum (Berlin-Brandenburgische Akademie der Wissenschaften,
+  # 2007–2024; the TELOTA TEI export, github.com/telota/corpus-coranicum-tei):
+  # the project's word-by-word rasm transcriptions of 193 Qurʾān
+  # manuscripts — ḥiǧāzī and kūfī parchments of the first Islamic
+  # centuries, later maġribī and new-style codices — one document per
+  # manuscript, one passage per verse cited sura.verse beside the Cairo text
+  # (urn:nabu:corpus-coranicum-manuscripts:manuscript-00012:7.42), supplied /
+  # unclear letters read through and counted, the extant reading beside.
+  # Each manuscript dated by its copying estimate, placed by its recorded
+  # provenance (the holding library rides as repository), with its script
+  # style, material, shelfmark and folio contents. The 2,129 records without
+  # a transcription are skipped by rule; the images are links only and are
+  # not carried. Family corpus-coranicum-tei.
+  # LICENSE: README verbatim "© Berlin-Brandenburgische Akademie der
+  # Wissenschaften 2024 / Creative Commons CC BY-SA 4.0
+  # https://creativecommons.org/licenses/by-sa/4.0/" (read 2026-11-27) →
+  # attribution, share-alike; the records' availability statements are
+  # image credits ("Image credits: …", status restricted) — images not taken.

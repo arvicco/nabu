@@ -142,6 +142,13 @@ module Nabu
           "corpus-coranicum" => :work_era, # the Qurʾān's attributed proclamation era, 610–632
           #                                  (config/work_eras.yml, keyed on metadata "work");
           #                                  the 1924 edition_year is edition-class, not rowed
+          "corpus-coranicum-manuscripts" => :structured, # each manuscript's origDate copying estimate
+          #                                                ("640-680", "-750" before 750; no class —
+          #                                                an artifact date); place = upstream's provenance
+          #                                                (al-Fusṭāṭ, Damascus …), never the holding library
+          "corpus-coranicum-variants" => :structured, # the reader's death as an open-start bound (the
+          #                                             readings are his by then), class composition;
+          #                                             place = the reader's residence (Kufa, Basra …)
           "corpus-corporum" => :structured,
           "corpus-gysseling" => :bounds_keys,
           "corpus-oudfries" => :bounds_keys, # the WITNESS span (manuscript_year_*); the composition

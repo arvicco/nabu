@@ -1,0 +1,22 @@
+sources:
+  corpus-coranicum-variants:
+    # kind: machine-postured — kind_map.yml source_kind scripture (every
+    # reading is a reading of the Qurʾān text, word-keyed to it).
+    # lect: machine-postured — the ara-Latn → ara:cla~latn row in
+    # config/lect_overrides.yml (the quranic-corpus shape: Classical Arabic
+    # held in Latin transliteration).
+    dating: {posture: partial, note: "the reader's <death> prose read into an open-start bound —
+        not_after the latest CE year it names ('796', 'st. 190 (805-6)', '168 AH = 784-785',
+        '758 oder 770'), class composition (the readings are his by the time he died; the diccas
+        author-life precedent): 194 of the 753 documents. AH-only, 'nach …' (died after),
+        unknown and century-in-AH values bound nothing; the unattributed readings carry no
+        reader and no date"}
+    places: {posture: named, note: "the reader's residence verbatim (Kufa 14 · Basra 13 · Medina
+        11 · Mekka 9 · Bagdad · Region Syrien …; 68 of 753) — the reading tradition's city, named,
+        no gazetteer refs; upstream's non-places ('unbekannt', 'WO???', 'badw' — the bedouin, a
+        people) place nothing and stay in metadata residence"}
+    script: {posture: qualified, note: "the readings in the project's DMG-style transliteration
+        (ʾ ʿ ā ī ū ḥ ḫ ḏ ṯ ǧ š ṣ ḍ ṭ ẓ ġ, hyphenated article and proclitics: 'l-qurāna',
+        'li-tašqā'), verbatim, never rendered into Arabic script (the Arabic field upstream
+        provides is empty on all 34,172 words); '…' = the word as in the standard text, '|'
+        separates a source's alternatives"}
