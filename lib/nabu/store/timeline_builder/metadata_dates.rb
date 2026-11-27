@@ -139,6 +139,9 @@ module Nabu
           "cme" => :edition_year_text,
           "comenius" => :structured, # P153: the title page's docDate @when (one year), its
           #                            printed wording raw ("LÉTA PÁNĚ MDCXIX")
+          "corpus-coranicum" => :work_era, # the Qurʾān's attributed proclamation era, 610–632
+          #                                  (config/work_eras.yml, keyed on metadata "work");
+          #                                  the 1924 edition_year is edition-class, not rowed
           "corpus-corporum" => :structured,
           "corpus-gysseling" => :bounds_keys,
           "corpus-oudfries" => :bounds_keys, # the WITNESS span (manuscript_year_*); the composition
@@ -361,6 +364,9 @@ module Nabu
           #                       catalog's unfilled 0030–0800 default mints none; place =
           #                       the work's dct:spatial Pleiades id. A work without a span
           #                       falls back to its edition's year (EDITION_FALLBACK)
+          "quranic-corpus" => :work_era, # the Quran's attributed composition era
+          #                                (config/work_eras.yml, keyed on metadata "work");
+          #                                the morphology file carries no date field
           "ref" => :structured,
           "rem" => :structured,
           "ren" => :structured,

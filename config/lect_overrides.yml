@@ -142,6 +142,14 @@ sources:
     # OpenITI is the premodern Classical Arabic written tradition —
     # approximation (the fas rows are untouched). Owner ruling, P58 D58-d.
     ara: { lect: "ara:cla", tier: approximation }
+  quranic-corpus:
+    # The Quranic Arabic Corpus annotates the Quran — the founding text of
+    # Classical Arabic and the norm its grammarians described: the
+    # registry's ara:cla stage by the corpus's own definition. The shelf
+    # stores ara-Latn (the forms are held in Buckwalter transliteration,
+    # ASCII), so the claim carries the held script, ~latn (the Egyd row's
+    # shape). Tier certain: the text IS the stage's canonical corpus.
+    ara-Latn: { lect: "ara:cla~latn", tier: certain }
   dss:
     # The Scrolls' Aramaic IS the corpus the registry stage is named for
     # ("Biblical (Qumran) Aramaic") — certain. The source carries zero
@@ -333,6 +341,18 @@ sources:
     # band [1600, 1800] is the guaraní jesuítico convention); revisit if
     # a modern gn-coded treebank ever registers.
     gn: { lect: "gn:old", tier: certain }
+    # Three historical treebanks of release 2.19, each the ONLY ud
+    # document claiming its bare code (census 2026-11-27), so a per-code
+    # override is exact; the registry nodes were minted for them:
+    # prakrit-dipi is the Ashokan edicts (the treebank's own README dates
+    # them to the reign), swedish-modern is the 1526 New Testament — the
+    # opening text of äldre nysvenska — and ukrainian-zhelekhivka is
+    # printed in the Zhelekhivka spelling its own name declares (an
+    # orthography claim, not a stage). Revisit if a modern pra/sv/uk
+    # treebank ever registers.
+    pra: { lect: "pra:aso", tier: certain }
+    sv: { lect: "sv:early", tier: certain }
+    uk: { lect: "uk@zhelekh", tier: certain }
   jv-wikisource:
     # The jv~java repair (2026-11-16, the nabu-lects PR #49 merge tail):
     # the post-rebuild surface byte guard measured the jav-Java-tagged
@@ -412,6 +432,16 @@ sources:
     # registry's ara:cla stage. The shelf stores ara (the house Arabic
     # tag, which wiktionary-ar and openiti also carry); this row
     # transcribes the book's own definition onto the existing node.
+    ara: { lect: "ara:cla", tier: certain }
+  corpus-coranicum:
+    # The Cairo 1924 Qurʾān: the text of the Qurʾān is the founding
+    # document of Classical Arabic — the ʿarabiyya the grammarians
+    # standardized on it and on the pre-Islamic poetry — the registry's
+    # ara:cla stage, the node lane-lexicon resolves to. The source stores
+    # ara (the house Arabic tag); this row transcribes the text's standing
+    # onto the existing node. A finer Qurʾānic-Arabic stage (the
+    # Ḥijāzī-rasm register some scholars separate from the later
+    # classical norm) does not exist in the registry and is not claimed.
     ara: { lect: "ara:cla", tier: certain }
   wiktionary-gmq-osw:
     # Wiktionary's Old Swedish (gmq-osw, no ISO code; the codemap's own

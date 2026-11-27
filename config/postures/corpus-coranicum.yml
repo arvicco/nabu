@@ -1,0 +1,19 @@
+sources:
+  corpus-coranicum:
+    # kind: machine-postured — kind_map.yml source_kind scripture (every
+    # document is a sura of the Qurʾān).
+    # lect: machine-postured — the ara → ara:cla row in
+    # config/lect_overrides.yml (the Qurʾān is the founding text of the
+    # classical language, the lane-lexicon node).
+    dating: {posture: dated, note: "the asset carries only the edition's print year (Cairo
+        1924 — class edition, metadata edition_year); every sura bands through the work's
+        attributed composition era in config/work_eras.yml (610–632 CE, the proclamation;
+        MetadataDates :work_era, composition class, precision era). One envelope for all 114
+        suras is declared coarseness: no per-sura chronology rides the accepted grains"}
+    places: {posture: unplaced, note: "the text names no place of composition or copying and the
+        Cairo file carries none; the edition's imprint (Būlāq and Gīza) is the 1924 print's, not
+        the work's"}
+    script: {posture: implied, note: "Arabic script, fully vocalized, in the Cairo edition's
+        rasm ʿuṯmānī with its Qurʾānic annotation signs (small high letters, pause marks) as
+        upstream encodes them; the concordance's transliterations (DMG-style and Talmon's ASCII)
+        ride the tokens, never the text"}

@@ -664,6 +664,84 @@ anchors:
     band: [1100, 1500]
     band_note: "ISO 639-2/MARC reference name"
     parent: ang
+    note: "The stages follow the sub-periodization of the Helsinki Corpus of
+           English Texts (diachronic part, compiled under Matti Rissanen,
+           Helsinki 1991; Merja Kytö's Manual, 1991, 3rd ed. 1996) — M1
+           1150–1250, M2 1250–1350, M3 1350–1420, M4 1420–1500 — which
+           the Penn-Helsinki
+           Parsed Corpus of Middle English (PPCME2; Kroch and Taylor, 2000)
+           adopted unchanged for its prose and the Parsed Corpus of Middle
+           English Poetry (PCMEP; Zimmermann, 2025) carries for verse,
+           halving M1 and M2 into a/b bands (those halves stay consumer
+           metadata, not stages). M1–M2 are the conventional Early Middle
+           English, M3–M4 Late Middle English. Where a Helsinki/PPCME2
+           period code pairs two sub-periods (M23, M34 …) the first digit
+           is the text's composition, the second its manuscript: the stage
+           claim is the composition, the manuscript date a separate fact.
+           The decades 1100–1150 fall before M1 (Helsinki files them as Old
+           English, O4 1050–1150) and stay bare enm. Dialect varieties —
+           Northern, East and West Midland, Southern, Kentish, and the
+           localized profiles of the Linguistic Atlas of Late Mediaeval
+           English (McIntosh, Samuels and Benskin, 1986) — are deliberately
+           not minted"
+    stages:
+      m1: {name: Middle English I, band: [1150, 1250], ord: 10,
+           band_note: "Helsinki Corpus sub-period M1 (as carried by
+                       PPCME2 and PCMEP M1a/M1b); the composition date",
+           note: "Early Middle English after the late Old English written
+                  standard gives way: the Peterborough Chronicle's Final
+                  Continuation (to 1154), the Poema Morale, the Ormulum
+                  (c. 1180, North-East Midland, in Orm's own
+                  consonant-doubling spelling), Laȝamon's Brut (c. 1200,
+                  Worcestershire), the West Midland 'AB language' of
+                  Ancrene Wisse and the Katherine Group (c. 1200–1230), the
+                  Lambeth and Trinity homilies. Inflections level to -e
+                  [ə], grammatical gender is lost, word order fixes;
+                  Scandinavian loans surface in the North and East
+                  Midlands (Orm's þeȝȝ 'they'), French borrowing is still
+                  modest. No supraregional norm: each text spells its own
+                  dialect"}
+      m2: {name: Middle English II, band: [1250, 1350], ord: 20,
+           band_note: "Helsinki Corpus sub-period M2 (as carried by
+                       PPCME2 and PCMEP M2a/M2b); the composition date",
+           note: "the thinnest English prose record of the period — Latin
+                  and Anglo-Norman hold administration and much of
+                  literature — so verse carries it: King Horn and Havelok,
+                  the South English Legendary, Cursor Mundi (Northern,
+                  c. 1300), Robert Mannyng's Handlyng Synne (1303), the
+                  Auchinleck manuscript (London, c. 1330s), the Harley
+                  lyrics (MS Harley 2253, c. 1340); in prose chiefly Dan
+                  Michel's Ayenbite of Inwit (1340, a dated Kentish
+                  autograph). French loans flood in (borrowing peaks
+                  c. 1250–1400); Northern innovations (3sg -s, the
+                  Scandinavian th- pronouns) spread south only slowly.
+                  PCMEP was built to fill this prose gap with the verse of
+                  the same decades"}
+      m3: {name: Middle English III, band: [1350, 1420], ord: 30,
+           band_note: "Helsinki Corpus sub-period M3 (as carried by
+                       PPCME2 and PCMEP M3); the composition date",
+           note: "Late Middle English, the Ricardian flowering: English
+                  re-enters the courts (the Statute of Pleading, 1362) and
+                  its literature peaks — Chaucer, Gower's Confessio
+                  Amantis, Langland's Piers Plowman, the Gawain poet
+                  (MS Cotton Nero A.x, North-West Midland), the Wycliffite
+                  Bible (1380s–90s), Trevisa's Polychronicon (1387).
+                  London English moves to the type of the Chaucer
+                  manuscripts (Samuels's Type III, after the Auchinleck
+                  Type II; the Wycliffite Central Midland Type I beside
+                  it); final -e is falling silent in speech while verse
+                  still counts it"}
+      m4: {name: Middle English IV, band: [1420, 1500], ord: 40,
+           band_note: "Helsinki Corpus sub-period M4 (as carried by
+                       PPCME2); the composition date. Its 1500 close is the
+                       anchor's, where en:early picks up the seam",
+           note: "fifteenth-century English: the Chancery Standard taking
+                  shape from the 1420s–30s (Samuels's Type IV), the Paston
+                  and Cely letters, Lydgate, Malory's Morte Darthur
+                  (1469–70), Caxton's press at Westminster from 1476.
+                  The Great Vowel Shift is under way and the Northern
+                  they/their/them and 3sg -s gain ground in the south;
+                  regional spelling recedes before the written standard"}
 
   en:
     name: English
@@ -1662,6 +1740,33 @@ anchors:
            members in the codemap. pgd (Gāndhārī) stays unminted — no
            consumer holds a Gāndhārī text; the collective stays the
            claim for everything a source does not distinguish"
+    stages:
+      aso: {name: Ashokan Prakrit, band: [-268, -232], ord: 10,
+            band_note: "Ashoka's regnal span by the conventional
+                        chronology (accession c. 268 BCE, death c. 232
+                        BCE); the dated edicts fall in regnal years
+                        8-27, so the whole record sits inside it",
+            note: "the language of the rock, pillar and cave edicts of
+                   Ashoka Maurya — the earliest dated record of Middle
+                   Indo-Aryan and of Indian writing at scale (Brāhmī
+                   throughout, Kharoṣṭhī at Shāhbāzgaṛhī and
+                   Mānsehrā). Not one dialect: the edicts were issued
+                   in an eastern chancery idiom (the Pāṭaliputra
+                   court's, Magadhan in type: l for r, nominative
+                   singular in -e) and re-dialected for the regions —
+                   a western form at Girnār, a north-western form at
+                   the two Kharoṣṭhī sites that stands closest to
+                   later Gāndhārī, with the eastern form kept at
+                   Kālsī, Dhauli and Jaugaḍa and on the pillars
+                   (Hultzsch, CII I, 1925; Bloch 1950). A STAGE of the
+                   collective, not a member: it is a dated corpus
+                   spanning several dialects, so no member code (pgd,
+                   a Māgadhī) could carry it honestly; the dialect
+                   geography stays prose until a consumer tags the
+                   recensions. ISO 639-3 has no code. Consumer: the
+                   Universal Dependencies Ashokan Prakrit treebank
+                   (DIPI, 84 sentences from six edict sites),
+                   previously on bare pra"}
 
   pka:
     name: Ardhamāgadhī
@@ -2137,6 +2242,24 @@ anchors:
   uk:
     name: Ukrainian
     parent: orv
+    orthos:
+      zhelekh: {name: Zhelekhivka, script: cyrl,
+                note: "the phonetic orthography of Yevhen
+                       Zhelekhivskyi's Ukrainian-German dictionary
+                       (Lviv 1886), official in the schools of
+                       Austrian Galicia and Bukovyna from 1893 and
+                       general in western Ukrainian print until the
+                       1920s norms superseded it. Its mark against
+                       the modern norm is ї after softened dentals
+                       where today's spelling writes і (дїд, нїч,
+                       тїло, continuing etymological ě and e), and
+                       the particle ся written apart. An orthography,
+                       not a stage or dialect: the texts are modern
+                       literary Ukrainian in its Galician print form.
+                       No IANA variant subtag exists; the tag is the
+                       registry's own. Consumer: the Universal
+                       Dependencies Zhelekhivka treebank (348
+                       sentences from prints of 1892-1921)"}
 
   be:
     name: Belarusian
@@ -2648,6 +2771,25 @@ anchors:
                         fornsvenska, Äldre Västgötalagen's era to the
                         Gustav Vasa Bible; covers the klassisk/yngre
                         internal split"}
+      early: {name: Early Modern Swedish, band: [1526, 1732], ord: 20,
+              band_note: "äldre nysvenska by Swedish philological
+                          convention: opened by the New Testament of
+                          1526 (the first printed Swedish Bible text,
+                          whose spelling the Gustav Vasa Bible of 1541
+                          fixed for two centuries) and closed by
+                          Dalin's Then Swänska Argus (1732), the
+                          conventional start of yngre nysvenska;
+                          adjacent to sv:old with no gap",
+              note: "the Reformation and Great Power era written
+                     language: the Bible translations of 1526 and
+                     1541 set a conservative norm (the letters å ä ö,
+                     full case and verbal plural endings on the
+                     page long after speech had lost them) that the
+                     1703 Charles XII Bible still follows. Post-1732
+                     Swedish stays bare sv — no consumer holds it.
+                     Consumer: the Universal Dependencies treebank of
+                     the 1526 New Testament (735 sentences),
+                     previously on bare sv"}
 
   "no":
     name: Norwegian

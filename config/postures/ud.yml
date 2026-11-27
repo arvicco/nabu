@@ -28,10 +28,10 @@ sources:
     # mnc (manchu-gdud, parent tuw), sv (swedish-modern — the 1526 New
     # Testament sits exactly on sv:old's upper bound, so the bare anchor's
     # post-1526 open end is the honest node) and uk (ukrainian-zhelekhivka,
-    # bare anchor under orv). Finer candidates stay bare under D57-f, named
-    # for a registry package: an Ashokan member under pra (the edicts'
-    # dialects), an early-modern sv stage (äldre nysvenska, 1526–1732) and
-    # a Zhelekhivka orthography on uk (the sl bohoric pattern).
+    # bare anchor under orv). Since 2026-11-27 three of them ride finer
+    # registry nodes through per-code overrides (config/lect_overrides.yml):
+    # pra → pra:aso (the Ashokan stage), sv → sv:early (äldre nysvenska,
+    # 1526–1732) and uk → uk@zhelekh (the Zhelekhivka orthography).
     dating: {posture: partial, note: "the sentence-comment dates of four treebanks (census
         2026-10-19): birchbark date_created on 1,203 letters (25 bands), rnc created on 56
         documents, ruthenian date/created on 83, egyptian-pc date on 3,089 sentences (5th/6th

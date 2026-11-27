@@ -51,11 +51,14 @@ corpus-wide catalogue dump:
   the EpiDoc. **REJECTED**, never fetched; a `.ttl`/`.rdf`/`.jsonld` file
   in the workdir is skipped by rule (specimens pinned above).
 - **`epigraf-public-cgif-001.zip`** (published 2025-09-14) — the 31,197
-  legacy DIO-portal articles as Culture Graph Interchange Format TTL:
-  titles, keywords, year spans, the volume's area as a Wikidata entity,
-  image URLs; no transcriptions. **REJECTED**, never fetched (a catalogue,
-  not an edition); no specimen pinned (one corpus-wide file, no text grain
-  to test).
+  legacy DIO-portal articles in the Culture Graph Interchange Format
+  (the page says TTL; the one member is JSON-LD, 54 MB — opened and
+  censused 2026-11-27): per record a title, entity-id keywords, a year
+  span, the licence (CC BY 4.0) and image URLs; no transcription,
+  translation, place or literature on any of the 31,197 records, and the
+  three EpiDoc volumes' 978 articles are among them. **REJECTED** (a
+  catalogue, not an edition); no specimen pinned (one corpus-wide file,
+  no text grain to test).
 
 ## Census of the three EpiDoc zips (2026-11-27, every file read)
 
