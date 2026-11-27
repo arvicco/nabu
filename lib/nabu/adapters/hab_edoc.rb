@@ -95,11 +95,14 @@ module Nabu
     # Hainhofer 7, ed000269 Duchess Sibylla 6, ed000271, 275, 276 one
     # each; and ed000249's 67 FMG letters admitted through their
     # descriptions (65 listed; 2 — orgeni-a-002-1/-2 — without one,
-    # skipped by rule). Expected after the next sync: 472 + 580 = 1,052
-    # documents if every listed file is served and every description
-    # states a mapped textLang; 316 skipped by rule (200 transcript-less
-    # editions + 18 reviewed held-back editions + ed000132 1 + ed000239 2
-    # + ed000146 83 + ed000133 2 + ed000249 2 + ed000008 1 + ed000223 7).
+    # skipped by rule). First sync of the widened set, 2026-11-27: 472 +
+    # 578 = 1,050 documents / 37,229 page passages, 0 errored — two short
+    # of the listed 580: Lessing's law_ermunterung.xml is listed and not
+    # served (404), and Serranus's part_back.xml is a textless shell
+    # (held back by rule); 319 skipped by rule on the live count — the 316 planned (200
+    # transcript-less editions + 18 reviewed held-back editions + ed000132
+    # 1 + ed000239 2 + ed000146 83 + ed000133 2 + ed000249 2 + ed000008 1
+    # + ed000223 7), those two, and the per-file weighting of the held-back notes.
     #
     # == The licence law (per transcript)
     #
@@ -252,7 +255,9 @@ module Nabu
         "ed000214" => { skip: "the Fruchtbringende Gesellschaft letters 1637–1638: each letter file wraps " \
                               "the letter in the editors' summary, source description and commentary " \
                               "divs, and no file states its language" },
-        "ed000215" => { language: "lat", texts: { group: "transcription" } }, # Serranus, Dictionarium
+        "ed000215" => { language: "lat", texts: { group: "transcription" }, # Serranus, Dictionarium
+                        held: { /\Apart_back\.xml\z/ => "the back-matter part (part_back.xml): a 4.8 KB " \
+                                                        "shell with no transcribed text" } },
         #                                    Latinogermanicum (Nürnberg 1538): Latin lemmata, part_*.xml
         "ed000216" => { skip: "the Karlstadt critical edition (75 texts, 1507–1518): Latin and German " \
                               "works, and no file states its language" },

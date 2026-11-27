@@ -2,7 +2,8 @@ hab-edoc:   # 02-sources row 442
   adapter: Nabu::Adapters::HabEdoc
   adopted: "2026-11-27"
   axes: [germanic, romance]
-  wired: true    # first sync verified 2026-11-27: 472 documents / 4,972 passages, 308 skipped by rule, 0 errored
+  wired: true    # verified 2026-11-27: 1,050 documents / 37,229 passages, 319 skipped by rule, 0 errored
+                 # (the first sync held 472 / 4,972; the per-edition review added 578 the same day)
   sync_policy: manual
   # The Herzog August Bibliothek Wolfenbüttel's digital editions
   # (diglib.hab.de/edoc/): the Editiones Electronicae Guelferbytanae, the
@@ -33,11 +34,8 @@ hab-edoc:   # 02-sources row 442
   # psalter, Rist, Hainhofer, Duchess Sibylla, Liber modorum, Tuberinus,
   # Hartlieb) and the FMG letters (ed000249) through their description
   # files' textLang; 18 held back with their reasons (Rubens, the
-  # Magdeburg Centuries, Karlstadt, Opitz, the FG letters …). EXPECTED NEXT
-  # SYNC: 649 new files (517 texts + 67 letters + 65 descriptions) →
-  # 1,052 documents (472 + 580: 2 Grimmelshausen texts under the METS
-  # "Benutzungsordnung" label and 2 description-less letters skipped);
-  # skipped by rule 316 (200 transcript-less editions + 18 reviewed
-  # held-back editions + 3 held-back files of ed000132/239 + 83 Lessing
-  # originals + 2 + 2 + 1 unserved + 7 superseded); new page passages
-  # ≈ 12,000–20,000 (unmeasured; Christian II's 338 diary months the bulk).
+  # Magdeburg Centuries, Karlstadt, Opitz, the FG letters …). SYNCED
+  # 2026-11-27: 578 of the 580 listed texts landed (Lessing's
+  # law_ermunterung.xml is listed and not served; Serranus's part_back.xml
+  # is a textless shell, held back by rule) → 1,050 documents / 37,229
+  # page passages, 319 skipped by rule, 0 errored.

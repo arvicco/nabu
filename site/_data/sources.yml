@@ -605,7 +605,30 @@ sources:
     entries: 0
     entries_display: '0'
     holdings: 114 documents / 6,236 passages
-    canonical_display: 335 MB
+    canonical_display: 334 MB
+  corpus-coranicum-manuscripts:
+    name: Corpus Coranicum — Qurʾān manuscript transcriptions (BBAW TEI export)
+    license_class: attribution
+    documents: 193
+    documents_display: '193'
+    passages: 32182
+    passages_display: '32,182'
+    entries: 0
+    entries_display: '0'
+    holdings: 193 documents / 32,182 passages
+    canonical_display: "<1 MB"
+  corpus-coranicum-variants:
+    name: Corpus Coranicum — the variant readings of the Qurʾān by reader (BBAW TEI
+      export)
+    license_class: attribution
+    documents: 753
+    documents_display: '753'
+    passages: 22658
+    passages_display: '22,658'
+    entries: 0
+    entries_display: '0'
+    holdings: 753 documents / 22,658 passages
+    canonical_display: "<1 MB"
   corpus-corporum:
     name: Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich)
     license_class: nc
@@ -1576,14 +1599,14 @@ sources:
     name: Herzog August Bibliothek Wolfenbüttel — digital editions (Editiones Electronicae
       Guelferbytanae, Wolfenbütteler Digitale Editionen)
     license_class: attribution
-    documents: 472
-    documents_display: '472'
-    passages: 4972
-    passages_display: '4,972'
+    documents: 1050
+    documents_display: '1,050'
+    passages: 37229
+    passages_display: '37,229'
     entries: 0
     entries_display: '0'
-    holdings: 472 documents / 4,972 passages
-    canonical_display: 33 MB
+    holdings: 1,050 documents / 37,229 passages
+    canonical_display: 232 MB
   haga-jinmei:
     name: Haga Jinmei Dictionary Dataset (芳賀矢一『日本人名辞典』1914; NIHU)
     license_class: open
@@ -3721,7 +3744,7 @@ sources:
     entries: 0
     entries_display: '0'
     holdings: 4,772 documents / 1,130,632 passages
-    canonical_display: 3.0 GB
+    canonical_display: 3.1 GB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -4532,11 +4555,13 @@ shelves:
     - diccas
     - corpus-coranicum
     - quranic-corpus
-    documents: 135482
-    documents_display: '135,482'
-    passages: 36098205
-    passages_display: '36,098,205'
-    size_display: 135,482 / 36,098,205
+    - corpus-coranicum-manuscripts
+    - corpus-coranicum-variants
+    documents: 136428
+    documents_display: '136,428'
+    passages: 36153045
+    passages_display: '36,153,045'
+    size_display: 136,428 / 36,153,045
   iranian-silk-road:
     sources:
     - iedc
@@ -4794,11 +4819,11 @@ shelves:
     - dbnl
     - delpher-newspapers
     - nb-no
-    documents: 54423
-    documents_display: '54,423'
-    passages: 3563235
-    passages_display: '3,563,235'
-    size_display: 54,423 / 3,563,235
+    documents: 55001
+    documents_display: '55,001'
+    passages: 3595492
+    passages_display: '3,595,492'
+    size_display: 55,001 / 3,595,492
   africa:
     sources:
     - africa-pd
@@ -4828,6 +4853,6 @@ shelves:
     passages_display: '15,130'
     size_display: 1,490 / 15,130
 disk:
-  canonical_display: 173 GB
+  canonical_display: 174 GB
   derived_display: 204 GB
   starter_display: 693 MB

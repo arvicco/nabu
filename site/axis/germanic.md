@@ -49,7 +49,7 @@ A source wears every desk it serves — these 49 answer this desk. Holdings are 
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
 | `fsv-lexica` | dictionary | attribution | wired · manual | 51,811 entries |
 | `grand-tour` | texts | attribution | wired · frozen | 4 docs / 515 passages |
-| `hab-edoc` | texts | attribution | wired · manual | 472 docs / 4,972 passages |
+| `hab-edoc` | texts | attribution | wired · manual | 1,050 docs / 37,229 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
 | `leme` | dictionary | attribution | wired · manual | 943,211 entries |
@@ -82,7 +82,7 @@ A source wears every desk it serves — these 49 answer this desk. Holdings are 
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `en` 601,236 · `ita` 167,236 · `lat` 143,861 · `enm` 117,615 · `non` 97,017 · `ang` 71,142 · `fra` 61,677 · `sv` 53,407 · `spa` 28,397 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `en` 601,240 · `ita` 167,236 · `lat` 143,885 · `enm` 117,615 · `non` 97,017 · `ang` 71,142 · `fra` 61,677 · `sv` 53,407 · `spa` 28,397 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 27 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `cop` 3 … and 19 more (`nabu axis germanic` lists all).
 

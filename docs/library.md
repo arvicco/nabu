@@ -2675,11 +2675,21 @@ Latin-German dictionary, the *Paesi novamente retrovati* with its German
 *Newe unbekanthe landte*, Sebald Heyden's school colloquies in fifteen
 printings, Gabrias's fables, Conring's Latin poems, Sibylla Schwarz's
 poems (1650), a sixteenth-century cookbook, and the letters of the nuns
-of Kloster Lüne (c. 1460–1555). 472 transcripts / 4,972 pages in Latin,
-Early New High German, Middle Low German, Italian and French, page by
-page as keyed; the licence is read per transcript (CC BY, CC BY-SA or
-CC0). Editions that publish no transcript file are skipped by rule and
-counted.
+of Kloster Lüne (c. 1460–1555). Since the per-edition review the shelf
+also holds Grimmelshausen's works, Lessing's German translations,
+Serranus's Latin–German dictionary (1538), the diaries of Christian II of
+Anhalt-Bernburg (1621–1656, month by month), Benedikt Bahnsen's letters
+to Duke August and Duchess Sibylla's to Johann Valentin Andreae, Philipp
+Hainhofer's travel reports, a Middle Low German psalter, Johann Rist's
+catechism songs, Hartlieb's *Buch aller verbotenen Kunst*, Tuberinus's
+*Historie von Simon zu Trient* (1475), and the letters of nineteenth-
+and twentieth-century musicians from the Forschungszentrum Musik und
+Gender (German, French, English). 1,050 transcripts / 37,229 pages in
+Latin, Early New High German, Middle Low German, Italian, French and
+English, page by page as keyed; the licence is read per transcript
+(CC BY, CC BY-SA, CC BY-NC or CC0). Editions that publish no transcript,
+state no language for their texts, or embed the editors' commentary in
+them are skipped by rule and counted.
 
 **`corpus-coranicum`** — the Qurʾān in the Cairo edition of 1924 (the
 King Fuʾād edition, Ḥafṣ ʿan ʿĀṣim), the reference text of the
