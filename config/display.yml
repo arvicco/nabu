@@ -7,7 +7,10 @@
 #   strip:    mark classes removed in the default display mode
 #   keep:     classes kept by default but stripped by `--display plain`
 #   isolates: wrap rendered runs in U+2067/U+2069 (RTL isolate) — harmless
-#             where bidi is absent, correct where present
+#             where bidi is absent, correct where present. A claim about the
+#             language's HOME script: a tag declaring a left-to-right script
+#             (ara-Latn, hbo-Latn, a lect's ~latn surface) is never wrapped —
+#             direction follows the script (Nabu::Display::RTL_SCRIPTS)
 #   spacing:  insert a separator between grapheme clusters (P27-2) — the
 #             Ogham legibility knob; between two Ogham letters the separator
 #             is U+1680 OGHAM SPACE MARK, so the stemline stays continuous

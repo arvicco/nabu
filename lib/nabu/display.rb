@@ -267,6 +267,20 @@ module Nabu
     RLI = "⁧"
     PDI = "⁩"
 
+    # Direction follows the SCRIPT of the surface, not the language. A
+    # policy's `isolates: true` is a claim about the language's HOME script
+    # (Hebrew, Arabic); a passage whose tag names another script — the
+    # quranic-corpus Buckwalter shelf (ara-Latn), any romanized -Latn
+    # document of an RTL language — is left-to-right and is never wrapped.
+    # The script is read from the BCP-47 script subtag (ara-Latn → Latn)
+    # or a lect's ~script surface facet (ara:cla~latn → Latn); a tag that
+    # names no script keeps the policy's verdict. The set is the scripts
+    # Unicode gives a right-to-left bidi class (R/AL), ISO 15924 codes.
+    RTL_SCRIPTS = %w[
+      Adlm Arab Aran Armi Avst Chrs Cprt Elym Hatr Hebr Hung Khar Lydi Mand Mani Mend Narb Nbat Nkoo
+      Orkh Ougr Palm Phli Phlp Phnx Prti Rohg Samr Sarb Sogd Sogo Syrc Syre Syrj Syrn Thaa Yezi
+    ].freeze
+
     # Grapheme spacing (P27-2): the Ogham block and its own space mark —
     # U+1680 renders as a stemline segment, so spaced letters stay one stem.
     OGHAM_BLOCK = (0x1680..0x169F)
@@ -425,8 +439,25 @@ module Nabu
       # BEFORE rendering, so it can cut the isolate at highlight boundaries
       # instead of letting the brackets ride inside the isolated run.
       def isolates?(language:, mode:, policies:)
-        policy = policies[Normalize.primary_subtag(language)]
+        policy = policy_for(language, policies)
         !policy.nil? && mode.isolates?(policy)
+      end
+
+      # The ISO 15924 script a tag declares (titlecased), or nil when it
+      # names none: the BCP-47 script subtag (the first four-letter subtag
+      # after the primary — ara-Latn, san-Deva, sr-Latn-RS) or a lect's
+      # ~script surface facet (ara:cla~latn).
+      def declared_script(language)
+        tag = language.to_s
+        code = tag[/~([A-Za-z]{4})\z/, 1] || tag.split("-").drop(1).find { |subtag| subtag.match?(/\A[A-Za-z]{4}\z/) }
+        code&.capitalize
+      end
+
+      # Is +language+'s surface right-to-left? A declared script decides;
+      # with none, nil — the policy's own isolates verdict stands.
+      def right_to_left?(language)
+        script = declared_script(language)
+        script && RTL_SCRIPTS.include?(script)
       end
 
       # Render one run of +text+ for the terminal: look up the language's
@@ -441,7 +472,7 @@ module Nabu
       # (P27-2) applies after the mode render when policy and mode allow.
       def render(text, language:, mode:, policies:, source: nil, annotations: nil, source_policies: {},
                  gaiji_map: {}, gaiji_ids: {}, gaiji_substitutes: {})
-        policy = policies[Normalize.primary_subtag(language)]
+        policy = policy_for(language, policies)
         edition = edition_context(mode, source, annotations, source_policies,
                                   gaiji_map, gaiji_ids, gaiji_substitutes)
         return Rendered.new(text: text, applied: []) if text.empty? || (policy.nil? && edition.nil?)
@@ -590,6 +621,17 @@ module Nabu
       end
 
       private
+
+      # The language's policy (primary subtag, like the fold tables), with
+      # its isolates switched OFF when the tag declares a left-to-right
+      # script — the one place direction is decided (RTL_SCRIPTS note), so
+      # every mode and the snippet path's isolates? agree.
+      def policy_for(language, policies)
+        policy = policies[Normalize.primary_subtag(language)]
+        return policy unless policy&.isolates && right_to_left?(language) == false
+
+        policy.with(isolates: false)
+      end
 
       # One ref's descent down the ladder (P38-2): the first rung that holds it
       # wins. Bumps the matching rung's counter and returns the surface. The

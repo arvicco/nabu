@@ -171,6 +171,16 @@ inside left-to-right layout lines; where bidi is absent the characters are
 invisible and harmless. Width math (KWIC columns) excludes them, so
 alignment never shifts.
 
+**Direction follows the script, not the language.** `isolates: true` is a
+claim about the language's home script. A passage whose tag declares
+another script — the BCP-47 script subtag (`ara-Latn`, the quranic-corpus
+Buckwalter shelf; any `hbo-Latn`/`fas-Latn` romanization) or a lect's
+`~script` surface (`ara:cla~latn`) — is rendered left to right and never
+wrapped, in every mode and on the search snippet path alike. The rule is
+one table (`Nabu::Display::RTL_SCRIPTS`, the ISO 15924 scripts Unicode
+gives a right-to-left bidi class), applied once over every policy, never
+per language; a tag naming no script keeps the policy's verdict.
+
 ### 1d. Arabic and Persian (ara/fas — OpenITI, P41-3)
 
 The Arabic-script shelves reuse the hbo/arc machinery wholesale — the same

@@ -177,6 +177,41 @@ class DisplayTest < Minitest::Test
     assert_equal HAFIZ_LINE, render(HAFIZ_LINE, "fas", mode: "full").text
   end
 
+  # Direction follows the SCRIPT of the surface, not the language: the
+  # quranic-corpus shelf stores Q 112:1 in Buckwalter transliteration under
+  # ara-Latn (real stored bytes, QuranicCorpus over the checked-in
+  # fixture) — Latin text, left to right, never wrapped in an RTL isolate.
+  QAC_112_1 = "qulo huwa {ll~ahu >aHadN"
+
+  def test_a_latin_script_subtag_is_left_to_right_whatever_the_language
+    %w[ara-Latn hbo-Latn arc-Latn fas-Latn ara-latn].each do |lang|
+      %w[default plain reading].each do |mode|
+        rendered = render(QAC_112_1, lang, mode: mode)
+        assert_equal QAC_112_1, rendered.text, "#{lang} under #{mode}: Latin text is never isolated"
+        refute_includes rendered.applied, Nabu::Display::ISOLATES
+      end
+      refute Nabu::Display.isolates?(language: lang, mode: Nabu::Display.mode("default"), policies: policies),
+             "the bracket-safe snippet path asks the same rule (#{lang})"
+    end
+  end
+
+  def test_a_latin_lect_surface_is_left_to_right
+    # The resolved lect's ~script facet is the same claim (ara:cla~latn).
+    refute_includes render(QAC_112_1, "ara:cla~latn").applied, Nabu::Display::ISOLATES
+  end
+
+  def test_a_right_to_left_script_subtag_keeps_the_isolates
+    [[DIWAN_LINE, "ara-Arab"], [GEN_1_1, "hbo-Hebr"], [HAFIZ_LINE, "fas-Arab"]].each do |text, lang|
+      rendered = render(text, lang)
+      assert rendered.text.start_with?(RLI), "#{lang}: an RTL script subtag keeps the policy's isolates"
+      assert Nabu::Display.isolates?(language: lang, mode: Nabu::Display.mode("default"), policies: policies)
+    end
+  end
+
+  def test_the_script_rule_never_adds_isolates_a_policy_lacks
+    refute_includes render(ZOGR, "chu-Arab").text, RLI, "no isolates: true in the policy, no wrap"
+  end
+
   # -- East-Asian display width (P35-7) — the one column-math seam ----------
   #
   # Real Han from the kanripo fixture (KR1h0004 Lunyu): 其為人也 etc. Fullwidth
