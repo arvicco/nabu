@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mets xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <fileSec>
+    
+    <fileGrp USE="image">
+      
+        <file ID="image1">
+          <FLocat xlink:href="3262_759523.jpg" href="3262_759523.jpg"/>
+        </file>
+      
+        <file ID="image2">
+          <FLocat xlink:href="3262_759525.jpg" href="3262_759525.jpg"/>
+        </file>
+      
+    </fileGrp>
+    
+    <fileGrp USE="export">
+      
+        <file ID="export1">
+          <FLocat xlink:href="3262_759523.xml" href="3262_759523.xml"/>
+        </file>
+      
+        <file ID="export2">
+          <FLocat xlink:href="3262_759525.xml" href="3262_759525.xml"/>
+        </file>
+      
+    </fileGrp>
+  </fileSec>
+  <structMap TYPE="physical">
+    <div TYPE="document">
+      
+      <div TYPE="page">
+        <fptr FILEID="image1"/>
+        <fptr FILEID="export1"/>
+      </div>
+      
+      <div TYPE="page">
+        <fptr FILEID="image2"/>
+        <fptr FILEID="export2"/>
+      </div>
+      
+    </div>
+  </structMap>
+</mets>
