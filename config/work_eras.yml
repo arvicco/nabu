@@ -274,3 +274,19 @@ sources:
       "Shirata": {band: [250, 400], label: "late 3rd – 4th c. CE", note: "Mekhilta de-Rabbi
         Ishmael, the tannaitic midrash on Exodus — redacted after the mid-3rd c. (Strack &
         Stemberger 1996); Wacholder's 8th-c. dating is declared, not followed"}
+  corpus-coranicum:
+    # The Cairo 1924 Qurʾān (114 sura documents), keyed on metadata "work"
+    # = the adapter's WORK constant. The asset carries only the edition's
+    # print year (1924, class edition, riding metadata edition_year); the
+    # work's attributed composition era is ruled here. One envelope for
+    # every sura — declared coarseness: the asset carries no per-sura
+    # chronology (the Meccan/Medinan periodization lives in the held
+    # repository's commentary grain, not taken by this source).
+    key: work
+    works:
+      "Qurʾān": {band: [610, 632], label: "the Prophet's proclamation, 610–632 CE", note: "the
+        traditional span of Muḥammad's proclamation, from the first revelation to his death in
+        632 (Nöldeke–Schwally, Geschichte des Qorāns, 1909–1938; Neuwirth, Der Koran als Text
+        der Spätantike, 2010); the codification under ʿUṯmān (c. 650) fixed the consonantal text
+        and is a redaction, declared, not dated; the radiocarbon dates of the earliest
+        manuscripts (Birmingham, Tübingen: 7th c.) sit inside or just after the envelope"}

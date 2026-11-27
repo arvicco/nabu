@@ -1,0 +1,48 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Raw URLs name the pinned commit 57cb2b7 (the repository's only commit),
+# so every whole file is byte-comparable. cairoquran.xml is a line trim of
+# the 17.5 MB file, so adapter_test stays null (a count-based adapter test
+# re-run against the whole file would false-fail).
+source: corpus-coranicum
+adapter_test: null
+retrieved: 2026-11-27
+files:
+  - path: data/cairo_quran/cairoquran.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/cairo_quran/cairoquran.xml
+    whole: false
+    trim: >-
+      Whole lines only, in file order: the header through <facsimile>; the
+      surfaces i2, i825, i826 (of 826); every body div's opening and closing
+      lines; inside each div only the sura lg blocks of suras 001, 111 and 112
+      (arabic_text, transcription, translation en/de/fr). 493 of 265,701 lines
+      (recipe in README.md).
+  - path: data/quran_concordance/sura001.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_concordance/sura001.xml
+    whole: true
+    trim: none
+  - path: data/quran_concordance/sura111.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_concordance/sura111.xml
+    whole: true
+    trim: none
+  - path: data/quran_concordance/sura112.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_concordance/sura112.xml
+    whole: true
+    trim: none
+  - path: data/quran_commentary/sura-00103.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_commentary/sura-00103.xml
+    whole: true
+    trim: none
+  - path: data/quran_intertexts/intertext-01010.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_intertexts/intertext-01010.xml
+    whole: true
+    trim: none
+  - path: data/quran_manuscripts/manuscript-02504.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_manuscripts/manuscript-02504.xml
+    whole: true
+    trim: none
+  - path: data/quran_variants/sources.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_variants/sources.xml
+    whole: true
+    trim: none

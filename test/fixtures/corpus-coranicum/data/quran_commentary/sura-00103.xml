@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Sure 103 — <foreign xml:lang="ar-Latn">al-ʿAṣr</foreign> — »Der Nachmittag«</title>
+        <editor role="translator">Nicolai Sinai</editor>
+      </titleStmt>
+      <publicationStmt>
+        <p>Corpus Coranicum Project</p>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Übersetzt und analysiert von Nicolai Sinai</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="Textstruktur" resp="an">
+        <lg type="sura" xml:id="sura-103">
+          <lg type="Hauptteil" n="h-000">
+            <lg type="Abschnitt" n="a-000">
+              <lg type="Gesaetz" n="g-000">
+                <lg type="Vers" n="v-000">
+                  <lg type="Teilvers" n="t-000" rhyme="2n/m">
+                    <l n="0" xml:lang="ar">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ</l>
+                    <l n="0" xml:lang="de">Im Namen Gottes, des barmherzigen Erbarmers!</l>
+                  </lg>
+                </lg>
+                <lg type="Vers" n="v-001">
+                  <lg type="Teilvers" n="t-001" rhyme="3Kr">
+                    <l n="1" xml:lang="ar">وَٱلۡعَصۡرِ</l>
+                    <l n="1" xml:lang="de">Beim Spätnachmittag!</l>
+                  </lg>
+                </lg>
+                <lg type="Vers" n="v-002">
+                  <lg type="Teilvers" n="t-002" rhyme="3Kr">
+                    <l n="2" xml:lang="ar">إِنَّ ٱلۡإِنسَٰنَ لَفِی خُسۡرٍ</l>
+                    <l n="2" xml:lang="de">Der Mensch steckt im Verlust!</l>
+                  </lg>
+                </lg>
+                <lg type="Vers" n="v-003">
+                  <lg type="Teilvers" n="t-003" rhyme="3Kr">
+                    <l n="3" xml:lang="ar" ana="einschub">إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ</l>
+                    <l n="3" xml:lang="de" ana="einschub">Außer denen, die glauben und gute Werke tun</l>
+                    <l n="4" xml:lang="ar" ana="einschub">وَتَوَاصَوۡا۟ بِٱلۡحَقِّ وَتَوَاصَوۡا۟ بِٱلصَّبۡرِ</l>
+                    <l n="4" xml:lang="de" ana="einschub">und einander zur Wahrheit und Geduld anhalten.</l>
+                  </lg>
+                </lg>
+              </lg>
+            </lg>
+          </lg>
+        </lg>
+      </div>
+      <div resp="an" type="datierung">
+        <ab type="title">Mekka I (Gruppe I)</ab>
+        <p>Die ursprünglich nur aus zwei kurzen Versen bestehende Sure gehört zu Gruppe I der
+    frühmekkanischen Suren, genauer gesagt zu den kurzen, nur aus einfachen Versgruppen aufgebauten
+    Droh- und Scheltworten <ref type="koran" target="koran-095:000-095:008">Q 95</ref>, <ref type="koran" target="koran-104:000-104:009">104</ref>, <ref type="koran" target="koran-107:000-107:007">107</ref> und <ref type="koran" target="koran-111:000-111:005">111</ref>.
+    Die Gruppe dieser prägnanten Ansagen einer fundamentalen Störung des Gott-Mensch-Verhältnisses
+    ist chronologisch wohl nach <ref type="koran" target="koran-105:000-105:005">Q 105</ref> und
+     <ref type="koran" target="koran-106:000-106:004">Q 106</ref> und wahrscheinlich vor
+    detaillierteren Ausmalungen des Jüngsten Gerichts wie <ref type="koran" target="koran-100:000-100:011">Q 100</ref> und <ref type="koran" target="koran-101:000-101:011">101</ref>
+    anzusetzen (vgl. die Einleitung zu <ref type="kommentar" target="kommentar-105:000-105:005">Q
+     105</ref>).</p>
+      </div>
+      <div resp="an" type="literarkritik">
+        <ab type="title">V. 3 Einschub</ab>
+        <p>Von ʿAlī b. abī Ṭālib und Ibn Masʿūd werden ausführlichere Versionen der Sure überliefert
+    (vgl. <bibl type="zotero" key="zotero-KVFTU3XN">Muʿǧam, ad loc.</bibl>):</p>
+        <p>
+          <table rend="boxed" rows="4" cols="2">
+            <head>ʿAlī:</head>
+            <row>
+              <cell>
+                <hi rend="superscript">
+                  <ref type="koran" target="koran-103:001-103:001">1</ref>
+                </hi>
+              </cell>
+              <cell>Beim späten Nachmittag</cell>
+            </row>
+            <row>
+              <cell>
+                <hi rend="superscript">
+                  <ref type="koran" target="koran-103:002-103:002">2</ref>
+                </hi>
+              </cell>
+              <cell>und bei den Schicksalsschlägen, welche die Zeit bringt
+       (<foreign xml:lang="ar-Latn">"nawāʾibi d-dahr</foreign>)!</cell>
+            </row>
+            <row>
+              <cell>
+                <hi rend="superscript">
+                  <ref type="koran" target="koran-103:003-103:003">3</ref>
+                </hi>
+              </cell>
+              <cell>Der Mensch ist in einem Zustand des Verlustes,</cell>
+            </row>
+            <row>
+              <cell>
+                <hi rend="superscript">
+                  <ref type="koran" target="koran-103:004-103:004">4</ref>
+                </hi>
+              </cell>
+              <cell>und darin ist er bis zum Ende der Zeit
+       (<foreign xml:lang="ar-Latn">ʾilā ʾāḫiri d-dahri</foreign>)!</cell>
+            </row>
+          </table>
+          <table rend="boxed" rows="3" cols="2">
+            <head>Ibn Masʿūd:</head>
+            <row>
+              <cell>
+                <hi rend="superscript">
+                  <ref type="koran" target="koran-103:001-103:001">1</ref>
+                </hi>
+              </cell>
+              <cell>Beim späten Nachmittag!</cell>
+            </row>
+            <row>
+              <cell>
+                <hi rend="superscript">
+                  <ref type="koran" target="koran-103:002-103:002">2</ref>
+                </hi>
+              </cell>
+              <cell>Wir haben den Menschen zu einem Zustand des Verlustes
+       (<foreign xml:lang="ar-Latn">li-ḫusrin</foreign>) geschaffen,</cell>
+            </row>
+            <row>
+              <cell>
+                <hi rend="superscript">
+                  <ref type="koran" target="koran-103:003-103:003">3</ref>
+                </hi>
+              </cell>
+              <cell>und darin ist er bis zum Ende der Zeit!</cell>
+            </row>
+          </table>
+        </p>
+        <p>Lässt sich zeigen, dass eine der drei Versionen ursprünglicher als die anderen beiden ist?
+    Zugunsten der von ʿAlī tradierten Langfassung spricht die Möglichkeit, dass man (vielleicht
+    bereits noch während der allerersten Phase der Textüberlieferung vor dem Tod Muḥammads) am
+    Auftauchen des später (<ref type="koran" target="koran-045:024-045:024">45:24</ref>) explizit
+    kritisierten Terminus <foreign xml:lang="ar-Latn">dahr</foreign> (die zerstörerische „Zeit“ bzw. die
+    Schicksalsmacht) Anstoß genommen haben könnte und die beiden diesen Ausdruck enthaltenden Verse
+    deshalb aus dem Text verdrängt worden sein mögen. Dagegen steht jedoch, dass der Begriff
+    <foreign xml:lang="ar-Latn">dahr</foreign> auch in <ref type="koran" target="koran-026:001-026:001">26:1</ref> erscheint und dort nicht eliminiert wurde. Der Name Ibn Masʿūds
+    wiederum verbindet sich auch sonst mit über den <foreign xml:lang="lat-Latn">textus receptus</foreign>
+    hinausgehenden Lesevarianten, die sich häufig als exegetisch motiviert herausstellen und damit
+    sekundär sein dürften (vgl. <bibl type="zotero" key="zotero-URM79786">Goldziher 1920, 8 ff.</bibl>). Auch unter
+    diesem Gesichtspunkt ist es wohl am wahrscheinlichsten, dass die kanonische und ja tatsächlich
+    außerordentlich kurz wirkende Textversion nachträglich zu den beiden obigen Langfassungen
+    erweitert worden ist.</p>
+        <p>Bei <ref type="koran" target="koran-103:003-103:003">V. 3</ref> des
+    <foreign xml:lang="lat-Latn">textus receptus</foreign> handelt es sich um eine nachträglich eingefügte
+    Ausnahme der Gläubigen von der vorangehenden Rüge. Als solche gibt sie sich durch ihre Länge (13
+    Silben im Gegensatz zu 2 und 8 Silben in <ref type="koran" target="koran-103:001-103:002">V. 1.2</ref>) und durch ihre bereits formelhaft geprägte Terminologie zu erkennen: Die Wendung
+    <foreign xml:lang="ar-Latn">allaḏīna ʾāmanū wa-ʿamilŭ ṣ-ṣāliḥāti</foreign> ist charakteristisch für
+    spätmekkanische und medinensische Texte (vgl. <ref type="koran" target="koran-098:007-098:007">98:7</ref>, <ref type="koran" target="koran-065:011-065:011">65:11</ref>, <ref type="koran" target="koran-048:029-048:029">48:29</ref>, <ref type="koran" target="koran-047:012-047:012">47:12</ref>, <ref type="koran" target="koran-045:021-045:021">45:21</ref>.<ref type="koran" target="koran-045:030-045:030">30</ref>, <ref type="koran" target="koran-042:022-042:023">42:22.23</ref>.<ref type="koran" target="koran-042:026-042:026">26</ref>, <ref type="koran" target="koran-041:008-041:008">41:8</ref> u. a.); in den drei Fällen, in denen die Formulierung sonst noch in
+    frühmekkanischen Suren erscheint (<ref type="koran" target="koran-095:006-095:006">95:6</ref>, <ref type="koran" target="koran-085:011-085:011">85:11</ref> und <ref type="koran" target="koran-084:025-084:025">84:25</ref>) handelt es sich mit großer Wahrscheinlichkeit
+    ebenfalls um Einschübe (s. die Abschnitte <ref type="literarkritik" target="literarkritik-095:000-095:008">Literarkritik zu Q 95</ref>, <ref type="literarkritik" target="literarkritik-085:000-085:022">85</ref> und <ref type="literarkritik" target="literarkritik-084:000-084:025">84</ref>). Überdies weist <ref type="koran" target="koran-103:003-103:003">103:3</ref>
+    (<foreign xml:lang="ar-Latn">ʾillă llaḏīna ʾāmanū … wa-tawāṣau bi-l-ḥaqqi wa-tawāṣau bi-ṣ-ṣabr</foreign>)
+    große Ähnlichkeit mit <ref type="koran" target="koran-090:017-090:017">90:17</ref>
+    (<foreign xml:lang="ar-Latn">ṯumma kāna mina llaḏīna ʾāmanū wa-tawāṣau bi-ṣ-ṣabri wa-tawāṣau bi-l-marḥamah</foreign>)
+    auf, bei dem es sich gleichfalls um einen späteren Zusatz handeln dürfte (s. den Abschnitt <ref type="literarkritik" target="literarkritik-090:000-090:020">Literarkritik zu Q 90</ref>).
+    Angesichts dieses Befundes erscheint es nicht überzeugend, die auffällige Länge von <ref type="koran" target="koran-103:003-103:003">103:3</ref> mit Michel Cuypers als einen
+    „effet de style, opposant au caractère abrupt et irréparable de la perdition, la longue patience
+    nécessaire pour échapper à ce décret brutal“ (<bibl type="zotero" key="zotero-TWPKV5E5">Cuypers 1999, 47</bibl>) zu erklären.
+    Wie bei <ref type="koran" target="koran-084:025-084:025">Q 84:25</ref> und <ref type="koran" target="koran-095:006-095:006">Q 95:6</ref> (vgl. die entsprechenden Surenkommentare) wird
+    damit ein früher Text, der noch ganz vom Vorwurf der Sündhaftigkeit und Undankbarkeit
+    menschlichen Tuns überhaupt beherrscht ist, in die im Zuge der mekkanischen Gemeindebildung
+    entstandene Dichotomie von „Gläubigen“ und „Ungläubigen“ eingepasst. <bibl type="zotero" key="zotero-NTVJTTM9">Robinson 2003</bibl>
+    (162–164) argumentiert auf Grund phonetischer Ähnlichkeiten zwischen <ref type="koran" target="koran-103:003-103:003">V. 3</ref> und dem Wort
+    <foreign xml:lang="ar-Latn">ʿaṣr</foreign> für die Ursprünglichkeit des Schlussverses. Angesichts der
+    strukturellen Ähnlichkeit des Verses zu anderen <foreign xml:lang="ar-Latn">ʾillā</foreign>-Zusätzen,
+    seiner auch von Robinson keineswegs befriedigend erklärten Überlänge und der Tatsache, dass
+    <foreign xml:lang="ar-Latn">ʾinsān</foreign>-Sprüche in der Regel nicht durch Einschränkungen
+    qualifiziert werden (vgl. <ref type="koran" target="koran-075:014-075:015">75:14.15</ref>, <ref type="koran" target="koran-089:015-089:016">89:15.16</ref>, <ref type="koran" target="koran-090:004-090:011">90:4–11</ref>, <ref type="koran" target="koran-095:004-095:005">95:4.5</ref>, <ref type="koran" target="koran-096:006-096:007">96:6.7</ref>,
+     <ref type="koran" target="koran-100:006-100:008">100:6–8</ref>; die auf <ref type="koran" target="koran-070:019-070:021">70:19–21</ref> folgende
+    <foreign xml:lang="ar-Latn">ʾillā</foreign>-Passage ist ebenfalls sekundär) dürfte eine
+    Erweiterungshypothese aber doch wahrscheinlicher sein.</p>
+      </div>
+      <div resp="an" type="aufbauinhalt">
+        <p/>
+      </div>
+      <div resp="an" type="ueberblick">
+        <p/>
+      </div>
+      <div resp="an" type="anmerkungen">
+        <div ana="kommentar-000">
+          <p><app><lem>bi-smi llāhi r-raḥmāni r-raḥīm]</lem></app> Zur Basmala s. die entsprechende <ref type="anmerkung" target="anmerkung-093:000-093:000">Anmerkung zu 93</ref>; zum Gottesnamen
+    <foreign xml:lang="ar-Latn">raḥmān</foreign> s. die <ref type="anmerkung" target="anmerkung-055:001-055:001">Anmerkung zu 55:1</ref>.</p>
+        </div>
+        <div ana="kommentar-001">
+          <p><app><lem>wa-l-ʿaṣr]</lem></app> Die arabischen Lexika verzeichnen eine Reihe von z. T. gegensätzlichen
+    Bedeutungen: „Zeit, Zeitspanne“, „Tageszeit“, „Morgen“, „Nachmittag, Abend“; der Dual
+    <foreign xml:lang="ar-Latn">al-ʿaṣrān</foreign> wird mit „Tag und Nacht“ erklärt (<bibl type="zotero" key="zotero-8WQ6CTDE">Lane,
+     Bd. 5, 2062b</bibl>). Da auch andere Suren von Schwüren eröffnet werden, die bestimmte
+    Tageszeiten wie Tagesanbruch, Morgen oder – besonders häufig – die Nacht nennen (<ref type="koran" target="koran-074:033-074:033">Q 74:33</ref>, <ref type="koran" target="koran-081:017-081:017">81:17</ref>, <ref type="koran" target="koran-089:001-089:001">89:1</ref>.<ref type="koran" target="koran-089:004-089:004">4</ref>, <ref type="koran" target="koran-091:001-091:004">91:1</ref>.<ref type="koran" target="koran-091:004-091:004">4</ref>, <ref type="koran" target="koran-092:001-092:001">92:1</ref>, <ref type="koran" target="koran-093:001-093:002">93:1.2</ref>), stellt wohl auch
+    <foreign xml:lang="ar-Latn">ʿaṣr</foreign> eine spezifische Zeitangabe dar und bezeichnet nicht
+    allgemein „Zeitspanne“ o. Ä. (so ohne weitere Begründung <bibl type="zotero" key="zotero-TWPKV5E5">Cuypers 1999, 47</bibl>). Falls wirklich
+    der Spätnachmittag intendiert ist, so hebt sich <ref type="koran" target="koran-103:000-103:003">Q 103</ref> von allen anderen frühmekkanischen Schwüren bei Tages- und
+    Nachtzeiten ab, die entweder die Nacht oder verschiedene Stadien des Morgens und Vormittags
+    evozieren. Zu grundsätzlichen Hinweisen zu den koranischen Schwüren sowie ihrer
+    wahrscheinlichen, aber bis dato noch nicht hinreichend untersuchten Anlehnung an ein
+    charakteristisches Ausdrucksmittel altarabischer Seher (<foreign xml:lang="ar-Latn">kuhhān</foreign>)
+    s. die <ref type="anmerkung" target="anmerkung-100:001-100:005">Anmerkung zu 100:1–5</ref>; zu
+    Aufbau und Funktion des hier vorliegenden Schwurtypus s. die <ref type="anmerkung" target="anmerkung-093:001-093:002">Anmerkung zu 93:1.2</ref> mit zahlreichen
+    Parallelstellen.</p>
+          <p><hi rend="italic">Versabteilung</hi>: Medina II zieht <ref type="koran" target="koran-103:001-103:001">V. 1</ref> zu <ref type="koran" target="koran-103:002-103:002">V. 2</ref>
+     (<bibl type="zotero" key="zotero-WCNUUFAC">Spitaler, Verszählung,
+     72</bibl>). Wie die anderen Schwüre am Surenanfang ist aber auch
+    <foreign xml:lang="ar-Latn">wa-l-ʿaṣr</foreign> als eigenständiger Vers zu sehen (<bibl type="zotero" key="zotero-4WEWN8NZ">Neuwirth,
+     Studien, 35</bibl>).</p>
+        </div>
+        <div ana="kommentar-002">
+          <p><app><lem>ʾinna l-ʾinsāna la-fī ḫusr]</lem></app> Die Übersetzung folgt <bibl type="zotero" key="zotero-J7GZ5X57">Zirker</bibl>. – Gemeint ist vielleicht, dass der Mensch aufgrund
+    seines Verhaltens der jenseitigen Seligkeit verlustig geht. Von einem eschatologischen „Verlust“
+    ist, wie <bibl type="zotero" key="zotero-3X9AXHK6">Torrey 1892, 32</bibl>, anmerkt, auch in <ref type="bibel" subtype="Lk" target="bibel-009:024-009:024">Lukas 9:24</ref> („Denn wer sein Leben retten will, wird es verlieren; wer aber
+    sein Leben um meinetwillen verliert, der wird es retten“) die Rede; in der Pschitta steht hier
+    für gr. <foreign xml:lang="gr-Grek">ἀπόλλῡμι</foreign> syr. <foreign xml:lang="syc-Latn">ḥsar</foreign>,
+    also die dem arabischen <foreign xml:lang="ar-Latn">ḫasira</foreign> bzw.
+    <foreign xml:lang="ar-Latn">ḫusr</foreign> entsprechende Wurzel (s. <ref target="#TUK178">TUK, Nr.
+     178</ref>). Vgl. a. <ref type="bibel" subtype="Phil" target="bibel-003:007-003:008">Paulus
+     Brief an die Philipper 3:7.8</ref> (<ref target="#TUK179">TUK, Nr. 179</ref>). Für einen
+    eschatologischen Gebrauch von <foreign xml:lang="ar-Latn">ḫasira</foreign>,
+    <foreign xml:lang="ar-Latn">ḫusr</foreign> im Koran gibt es noch zahlreiche weitere Belege, s. <bibl type="zotero" key="zotero-3X9AXHK6">Torrey 1892,
+     30–32</bibl>. In frühmekkanischer Zeit vgl. noch <ref type="koran" target="koran-079:012-079:012">79:12</ref>
+    (<foreign xml:lang="ar-Latn">qālū tilka ʾiḏan karratun ḫāsirah</foreign>).</p>
+        </div>
+        <div ana="kommentar-003">
+          <p><app><lem>allaḏīna ʾāmanū]</lem></app> Zum Verb <foreign xml:lang="ar-Latn">ʾāmana</foreign> s. die <ref type="anmerkung" target="anmerkung-069:033-069:033">Anmerkung zu 69:33</ref>.</p>
+          <p><app><lem>wa-tawāṣau bi-l-ḥaqqi wa-tawāṣau bi-ṣ-ṣabr]</lem></app> Vgl. <ref type="koran" target="koran-090:017-090:017">90:17</ref>
+    (<foreign xml:lang="ar-Latn">ṯumma kāna mina llaḏīna ʾāmanū wa-tawāṣau bi-ṣ-ṣabri wa-tawāṣau bi-l-marḥamah</foreign>).
+    Zu der für spätmekkanische und medinensische Texte charakteristischen Wendung
+    <foreign xml:lang="ar-Latn">allaḏīna ʾāmanū wa-ʿamilŭ ṣ-ṣāliḥāt</foreign> s. den Abschnitt <ref type="literarkritik" target="literarkritik-103:000-103:003">Literarkritik</ref> weiter oben.</p>
+          <p><hi rend="italic">Versabteilung</hi>: Medina II setzt einen Verstrenner nach
+    <foreign xml:lang="ar-Latn">ḥaqq</foreign> (<bibl type="zotero" key="zotero-WCNUUFAC">Spitaler, Verszählung, 35</bibl>). Dabei ergäbe sich zwar
+    ein Reim, jedoch würden zwei gedanklich zusammengehörende und parallel gebaute Satzteile
+    getrennt (<bibl type="zotero" key="zotero-4WEWN8NZ">Neuwirth, Studien, 35</bibl>). Da <ref type="koran" target="koran-103:003-103:003">V.
+     3</ref> vermutlich ein späterer Zusatz ist (s. o.), ist die übermäßige Länge des Verses ohnehin
+    nicht überraschend.</p>
+        </div>
+      </div>
+      <div resp="an" type="kommentar">
+        <div ana="kommentar-001-003">
+          <p>Die auf <hi rend="italic">3Kr</hi> reimende Sure besteht aus einem eingliedrigen Schwur „beim
+    späten Nachmittag“ mit rügendem <foreign xml:lang="ar-Latn">ʾinsān</foreign>-Spruch als Schwuraussage;
+     <ref type="koran" target="koran-103:003-103:003">V. 3</ref> nimmt in Gestalt eines kurzen
+    Tugendkatalogs die Gläubigen von dem in <ref type="koran" target="koran-103:002-103:002">V.
+     2</ref> artikulierten Vorwurf aus und schränkt damit die vorangehende Verurteilung des Menschen
+    schlechthin im Sinne einer Differenzierung von Guten und Bösen ein.</p>
+          <p>Interpretatorisch ist insbesondere die Frage nach dem Zusammenhang von <ref type="koran" target="koran-103:001-103:002">V. 1.2</ref> von Interesse. Neuwirth schreibt Schwüren bei
+    Tages- und Nachtzeiten allgemein die Funktion zu, „die durch Nennung bestimmter
+    Gottesdienstzeiten evozierbaren liturgischen Erfahrungen des Offenbarungs-Empfängers
+    festzuhalten 〈…〉 und damit der gesamten Sure einen hymnischen Grund-Tenor zu unterlegen“ (<bibl type="zotero" key="zotero-8BMDDSSC">Neuwirth, „Horizont“, 21</bibl>). Eine solche hymnische Konnotation klingt jedoch im
+    vorliegenden Text nirgends nach (vgl. auch die kritische Erörterung von Neuwirths Hypothese in
+    der <ref type="anmerkung" target="anmerkung-093:001-093:002">Anmerkung zu 93:1.2</ref>). Den
+    inhaltlichen Bezug zum Folgevers macht deshalb am ehesten Robinsons profane Deutung des
+    <foreign xml:lang="ar-Latn">ʿaṣr</foreign> als des Zeitpunkts, zu dem Händler am Ende eines Markttags
+    ihre Einnahmen berechnen (<bibl type="zotero" key="zotero-NTVJTTM9">Robinson 2003,
+     163</bibl>), verständlich. Der <foreign xml:lang="ar-Latn">ʾinsān</foreign>-Spruch in <ref type="koran" target="koran-103:002-103:002">V. 2</ref> würde dann dem durch den einleitenden Schwur
+    evozierten Bild finanziellen Gewinns eine Ansage des dem Menschen drohenden eschatologischen
+    „Verlustes“ entgegenstellen. Robinsons Interpretation überzeugt auch angesichts des sich
+    ergebenden Bezugs zu <ref type="koran" target="koran-104:000-104:009">Q 104</ref>, wo
+    ebenfalls irdischer Reichtum und jenseitige Verdammung kontrastiert werden. Gleichwohl ist nicht
+    mit letzter Sicherheit auszuschließen, dass mit dem Nachmittag doch eine Gebetszeit gemeint sein
+    könnte (so <bibl type="zotero" key="zotero-X6J8ZZSZ">Neuwirth, Frühmekkanische Suren, 157</bibl>).</p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

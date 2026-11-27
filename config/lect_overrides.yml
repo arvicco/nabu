@@ -425,6 +425,16 @@ sources:
     # tag, which wiktionary-ar and openiti also carry); this row
     # transcribes the book's own definition onto the existing node.
     ara: { lect: "ara:cla", tier: certain }
+  corpus-coranicum:
+    # The Cairo 1924 Qurʾān: the text of the Qurʾān is the founding
+    # document of Classical Arabic — the ʿarabiyya the grammarians
+    # standardized on it and on the pre-Islamic poetry — the registry's
+    # ara:cla stage, the node lane-lexicon resolves to. The source stores
+    # ara (the house Arabic tag); this row transcribes the text's standing
+    # onto the existing node. A finer Qurʾānic-Arabic stage (the
+    # Ḥijāzī-rasm register some scholars separate from the later
+    # classical norm) does not exist in the registry and is not claimed.
+    ara: { lect: "ara:cla", tier: certain }
   wiktionary-gmq-osw:
     # Wiktionary's Old Swedish (gmq-osw, no ISO code; the codemap's own
     # gmq-osw → sv:old row) stored under the held fornsvenska tag sv so

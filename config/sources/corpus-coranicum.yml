@@ -1,0 +1,21 @@
+corpus-coranicum:   # 02-sources row 444
+  adapter: Nabu::Adapters::CorpusCoranicum
+  adopted: "2026-11-27"
+  axes: [arabic]
+  wired: false
+  sync_policy: manual   # the repository is one frozen commit (57cb2b7, 2024-12-20), pinned
+  # Corpus Coranicum (Berlin-Brandenburgische Akademie der Wissenschaften,
+  # 2007–2024; the TELOTA TEI export, github.com/telota/corpus-coranicum-tei):
+  # the Cairo 1924 vocalized Qurʾān (the King Fuʾād edition, Ḥafṣ ʿan ʿĀṣim)
+  # as 114 sura documents and 6,236 verse passages
+  # (urn:nabu:corpus-coranicum:sura-002:2.255), every one of its 77,432
+  # words carrying Rafael Talmon's concordance analysis as the project
+  # edited it — transliteration, base, root (rḥm), part of speech, pattern
+  # and the morphological features, further analyses as alternatives. New
+  # family corpus-coranicum-tei. The commentary, intertext, manuscript and
+  # variant grains of the same repository are skipped by rule (later
+  # packets); the translations inside the Cairo file are not carried.
+  # LICENSE: README verbatim "© Berlin-Brandenburgische Akademie der
+  # Wissenschaften 2024 / Creative Commons CC BY-SA 4.0
+  # https://creativecommons.org/licenses/by-sa/4.0/" (read 2026-11-27) →
+  # attribution, share-alike.
