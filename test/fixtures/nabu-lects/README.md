@@ -7,6 +7,16 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
+- **Retrieved 2026-11-27 (twelfth cut)** — the Middle English stages
+  (enm:m1–m4, the Helsinki periods), the Ashokan Prakrit stage
+  (pra:aso), Early Modern Swedish (sv:early) and the Zhelekhivka
+  orthography on uk; the treebank overrides in
+  `config/lect_overrides.yml` target the last three. Copied verbatim
+  from canonical/nabu-lects (commit `2adee5213aa4`, `main`).
+  `lects.yml` 298,534 B, sha256
+  `ab8db595cca18d06b2037a62a5472bf83afc764d49d3078678e45a9a0202ee27`;
+  `codemap.yml` 16,014 B, sha256
+  `18125c8c7f559797a7170ea2fee4e5bc8d0e1907c5d6476c9c23b27717cace27`.
 - **Retrieved 2026-11-22 (eleventh cut)** — the roro (Rongorongo,
   ISO 15924 Roro 620, unencoded in Unicode) scripts-table row, minted
   for the artifact-script field of the CEIPP rongorongo corpus (held as
