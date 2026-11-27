@@ -1,0 +1,126 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The ALTO/METS files are members of nested zips inside the Zenodo deposit
+# zip (no per-file URL) and the byte-range captures are slices of it, so
+# those entries are refetchable: false. The record JSON carries live statistics, so it is pinned as read.
+source: makhzan
+adapter_test:
+retrieved: '2026-11-27'
+files:
+- path: Doc102/102_14122.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of Doc102.zip inside https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range) — no per-file URL
+- path: Doc102/METS.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of Doc102.zip inside https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range) — no per-file URL
+- path: Doc3178/3178_748159.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of Doc3178.zip inside https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range) — no per-file URL
+- path: Doc3178/METS.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of Doc3178.zip inside https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range) — no per-file URL
+- path: Doc3262/3262_759523.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of Doc3262.zip inside https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range) — no per-file URL
+- path: Doc3262/3262_759525.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of Doc3262.zip inside https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range) — no per-file URL
+- path: Doc3262/METS.xml
+  whole: false
+  trim: pages 3-10 removed (file entries + page divs), structure intact
+  refetchable: false
+  reason: a member of Doc3262.zip inside https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content — no per-file URL
+- path: OpenITI-Makhzan_Metadata_2026-1-2.tsv
+  whole: false
+  trim: header + the rows of the documents this fixture carries (see README)
+  refetchable: false
+  reason: a row subset of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Metadata_2026-1-2.tsv/content
+- path: fetch/metadata.tsv
+  whole: false
+  trim: header + the rows of the documents this fixture carries (see README)
+  refetchable: false
+  reason: a row subset of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Metadata_2026-1-2.tsv/content
+- path: fetch/ranges/0-0.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/15022828-15030772.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/15030773-15031106.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/15031107-15031278.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/15031203-15031300.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/2436256415-2436256444.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/2436256484-2436256820.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/2440700560-2440708931.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/2440708932-2440709107.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/2440709032-2440709129.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/6109842440-6109859617.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/6109859618-6109859715.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/ranges/8125527-8125556.bin
+  whole: false
+  trim: one byte range of the deposit zip, named <first>-<last>
+  refetchable: false
+  reason: a slice of https://zenodo.org/api/records/19861912/files/OpenITI-Makhzan_Data_2026-1-2.zip/content (read by HTTP Range)
+- path: fetch/record.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: the API response of https://zenodo.org/api/records/19861912 carries live view/download
+    statistics, so a fresh GET always differs; the fetch reads only its version and file list

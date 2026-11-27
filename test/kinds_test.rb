@@ -599,6 +599,21 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # The OpenITI MAKHZAN Ottoman manuscripts: the TSV's Genre column, case-folded.
+  def test_shipped_makhzan_folds_the_tsv_genres
+    shipped = shipped_kinds
+    assert_equal %w[genre], shipped.metadata_for("makhzan")
+    assert_equal ["literary/narrative/tale"], shipped.normalize("makhzan", "popular story")
+    assert_equal ["scholarly/medicine"], shipped.normalize("makhzan", "Medicine"), "either case"
+    assert_equal %w[exegesis literary/poetry], shipped.normalize("makhzan", "Commentary, Poetry")
+    assert_empty shipped.normalize("makhzan", "Miscellany"), "a codex form, declared deliberate"
+    ["Sufism", "cosmology", "hagiography/biography", "Hagiography", "History", "Biography, Poetry", "Literature",
+     "commentary", "Legal works", "medicine", "Astrology", "Encyclopedias", "agriculture", "Grammar",
+     "Grammar, Dictionaries, Linguistics"].each do |genre|
+      refute_empty shipped.normalize("makhzan", genre), "#{genre}: every censused genre folds"
+    end
+  end
+
   # P104-1: the ETCSL composition-number taxonomy (c.0–c.6) folds through
   # a frozen prefix map — the Sumerian literary canon's first genre view.
   def test_shipped_etcsl_folds_the_composition_number_blocks

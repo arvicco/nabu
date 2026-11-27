@@ -295,6 +295,9 @@ module Nabu
           #                         original's artifact year (no class), a copy's act year
           #                         (class composition); place = the place of issue verbatim
           "local-library" => :year_key,
+          "makhzan" => :structured, # each Ottoman manuscript's Volume Date (the copy: a year,
+          #                           "c. 1500" circa, "17th c." a century), no class; place =
+          #                           upstream's Place of Origin when named (polity grain)
           "mazarinades" => :structured, # the bibliographic entry's typed dates (Moreau,
           #                               Mazarine, Carrier …: the narrowest year envelope);
           #                               place = the imprint pubPlace + its GeoNames ref
