@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0"
+     xml:lang="de"
+     xml:base="https://epigraf.inschriften.net/iri/">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>nördliches Portal der Klostermauer</title>
+            <author>Anna Weissmüller</author>
+         </titleStmt>
+         <editionStmt>
+            <edition>Deutsche Inschriften on Epigraf: <ref type="external" target="articles/epi-article/nsn~3212"/>
+            </edition>
+         </editionStmt>
+         <publicationStmt>
+            <authority>Akademie der Wissenschaften und der Literatur | Mainz - Digitale Akademie</authority>
+            <publisher>Deutsche Inschriften Online</publisher>
+            <date when="2024-11-22T11:52:53+01:00"/>
+            <availability>
+               <licence target="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 for the text</licence>
+               <p>Please note that linked images may be published under more restricted licenses.</p>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title>Die Deutschen Inschriften</title>
+               <biblScope unit="platform">Epigraf</biblScope>
+               <biblScope unit="server">https://epigraf.inschriften.net/</biblScope>
+               <biblScope unit="database">stage</biblScope>
+               <biblScope unit="volume" sameAs="projects/epi/nsn~bss">Braunschweig (BSS)</biblScope>
+               <biblScope unit="issue" sameAs="articles/epi-article/nsn~3212">001</biblScope>
+            </bibl>
+            <msDesc>
+               <msIdentifier>
+                  <idno type="iri">articles/epi-article/nsn~3212</idno>
+                  <idno type="urn">urn:nbn:de:0238-dio007g003k0000104</idno>
+               </msIdentifier>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>
+                           <p>Inschriftenstein am nördlichen Portal der Klostermauer. Die heute nicht mehr erhaltene Inschrift war bereits 1759 stark verwittert und nur noch unvollständig lesbar.<note type="numeric">Vgl. <ref target="properties/literature/nsn~15182">Beck, Nachricht</ref>, Sp. 1005.</note>
+                           </p>
+                           <objectType>Portal</objectType>
+                           <material>Stein</material>
+                           <dimensions/>
+                        </support>
+                        <condition>† Objekt und Inschrift im Original verloren</condition>
+                     </supportDesc>
+                  </objectDesc>
+                  <scriptDesc>
+                     <p n="A">Ausführung: vertieft</p>
+                  </scriptDesc>
+               </physDesc>
+               <history>
+                  <origin>
+                     <origPlace>Kloster, Riddagshausen, Braunschweig</origPlace>
+                     <origDate>1145</origDate>
+                  </origin>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p>Encoded by transforming Epigraf data, following EpiDoc guidelines 9.6 where possible. Version 1.0-beta of the Epigraf transformation workflow.</p>
+      </encodingDesc>
+      <profileDesc>
+         <creation>
+            <date when="2020-09-15T10:36:31+02:00">2020-09-15</date>
+         </creation>
+         <textClass>
+            <keywords>
+               <term n="A">historische Nachricht / Historische Nachricht</term>
+            </keywords>
+         </textClass>
+         <langUsage>
+            <language n="A" ident="">lateinisch </language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+         <change when="2024-11-22T11:52:53+01:00">2024-11-22</change>
+      </revisionDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <div type="edition">
+            <div n="A1" type="textpart">
+               <head>Inschrift A1</head>
+               <ab type="block">M CXLV<hi rend="superscript">o</hi>
+                  <g rend="Hochpunkt">·</g> FV<supplied reason="omitted">N</supplied>DAT<supplied reason="omitted">A</supplied> ABB<supplied reason="omitted">AT</supplied>IA <g rend="Kreuz">·</g> R<supplied reason="omitted">IDDAGSHVSANA</supplied>
+               </ab>
+            </div>
+         </div>
+         <div type="translation">
+            <div n="A1" type="textpart">
+               <head>Inschrift A1</head>
+               <ab>1145 wurde die Abtei Riddagshausen gegründet.</ab>
+            </div>
+         </div>
+         <div type="commentary">
+            <p>Das in der Inschrift angegebene Datum wird allgemein als Gründungsjahr des Klosters angesehen.<note type="numeric">Siehe hierzu auch den Hexameter bei <ref target="properties/literature/nsn~15183">Meibom, Chronicon Riddagshusense (1605)</ref>, S. 4: <q>Anni nongenti, duo C, deca bis duo, pente, / Transierant, Christe, dum fundatur locus iste</q>.</note> Urkundlich belegt ist das ursprünglich als „Marienzelle“ bezeichnete Kloster erstmals 1146 in einer Urkunde Heinrichs des Löwen († 1195), welche die Schenkung des Dorfes <q>Ritdageshvsen</q> an das Kloster vorsieht.<note type="numeric">
+                  <ref target="properties/literature/nsn~22990">UB Riddagshausen</ref>, S. 40–42, Nr. 2 u. 3.</note> Noch 1147 wird das Kloster mitunter als <q>Cella sancte Marie</q> bezeichnet, findet jedoch gleichzeitig bereits die Erwähnung als <q>Riddageshusen</q>.<note type="numeric">
+                  <ref target="properties/literature/nsn~22990">UB Riddagshausen</ref>, S. 42f., Nr. 4 u. 5.</note>
+            </p>
+         </div>
+         <div type="bibliography">
+            <listBibl>
+               <bibl sameAs="properties/literature/nsn~15182">Beck, Nachricht = [Anton August] Beck, Nachricht von verschiedenen alten Aufschriften die das Kloster Riddagshausen noch aufweiset, in: Braunschweigische Anzeigen 15 (1759), Sp. 1003–1009</bibl>
+               <bibl sameAs="properties/literature/nsn~15164">Schiller, Architectur = Carl Georg Wilhelm Schiller, Die mittelalterliche Architectur Braunschweigs und seiner nächsten Umgebung, Braunschweig 1852</bibl>
+               <bibl sameAs="properties/literature/nsn~15181">Pfeifer, Kloster Riddagshausen = Hans Pfeifer, Das Kloster Riddagshausen bei Braunschweig, Wolfenbüttel 1896</bibl>
+               <bibl sameAs="properties/literature/nsn~11140">Kdm. Kreis Braunschweig = Paul Jonas Meier, Die Kunstdenkmale des Kreises Braunschweig mit Ausschluss der Stadt Braunschweig (Kunstdenkmälerinventare Niedersachsens 7), Neudruck der Ausgabe Wolfenbüttel 1900, Osnabrück 1978</bibl>
+            </listBibl>
+         </div>
+      </body>
+   </text>
+</TEI>

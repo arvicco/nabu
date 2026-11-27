@@ -1,0 +1,30 @@
+@base <http://epigraf.inschriften.net/iri/> .
+@prefix epi: <http://epigraf.inschriften.net/iri/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix schema: <http://schema.org/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+
+<articles/epi-article/nsn~3212>
+  a schema:ScholarlyArticle ;
+  schema:title "nördliches Portal der Klostermauer" ;
+  schema:about <articles/epi-article/nsn~3212#inscriptions> ;
+  schema:about <articles/epi-article/nsn~3212#object> .
+
+<articles/epi-article/nsn~3212#inscriptions>
+  a schema:Collection ;
+  schema:dateCreated "1145" ;
+  schema:hasPart <sections/inscription/nsn~115693#> ;
+  schema:description "Das in der Inschrift angegebene Datum wird allgemein als Gründungsjahr des Klosters angesehen. Urkundlich belegt ist das ursprünglich als „Marienzelle“ bezeichnete Kloster erstmals 1146 in einer Urkunde Heinrichs des Löwen († 1195), welche die Schenkung des Dorfes Ritdageshvsen an das Kloster vorsieht. Noch 1147 wird das Kloster mitunter als Cella sancte Marie bezeichnet, findet jedoch gleichzeitig bereits die Erwähnung als Riddageshusen." .
+
+<articles/epi-article/nsn~3212#object>
+  a crm:E19_Physical_Object ;
+  schema:additionalType "Bauglied › Portal" ;
+  schema:location "Braunschweig › Riddagshausen › Kloster" ;
+  schema:description "Inschriftenstein am nördlichen Portal der Klostermauer. Die heute nicht mehr erhaltene Inschrift war bereits 1759 stark verwittert und nur noch unvollständig lesbar." ;
+  crm:P128_carries <sections/inscription/nsn~115693#> .
+
+<sections/inscription/nsn~115693#>
+  a crm:E34_Inscription ;
+  schema:inLanguage "lateinisch" ;
+  schema:text "M CXLVo • FV(N)DAT(A) ABB(AT)IA • R(IDDAGSHVSANA)" .
+
