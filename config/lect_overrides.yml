@@ -333,6 +333,18 @@ sources:
     # band [1600, 1800] is the guaraní jesuítico convention); revisit if
     # a modern gn-coded treebank ever registers.
     gn: { lect: "gn:old", tier: certain }
+    # Three historical treebanks of release 2.19, each the ONLY ud
+    # document claiming its bare code (census 2026-11-27), so a per-code
+    # override is exact; the registry nodes were minted for them:
+    # prakrit-dipi is the Ashokan edicts (the treebank's own README dates
+    # them to the reign), swedish-modern is the 1526 New Testament — the
+    # opening text of äldre nysvenska — and ukrainian-zhelekhivka is
+    # printed in the Zhelekhivka spelling its own name declares (an
+    # orthography claim, not a stage). Revisit if a modern pra/sv/uk
+    # treebank ever registers.
+    pra: { lect: "pra:aso", tier: certain }
+    sv: { lect: "sv:early", tier: certain }
+    uk: { lect: "uk@zhelekh", tier: certain }
   jv-wikisource:
     # The jv~java repair (2026-11-16, the nabu-lects PR #49 merge tail):
     # the post-rebuild surface byte guard measured the jav-Java-tagged
