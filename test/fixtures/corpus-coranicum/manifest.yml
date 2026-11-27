@@ -46,3 +46,39 @@ files:
     url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_variants/sources.xml
     whole: true
     trim: none
+  # The sibling sources' fixtures (corpus-coranicum-manuscripts,
+  # corpus-coranicum-variants) — the same tree, as the one clone on the box.
+  - path: data/quran_manuscripts/manuscript-00017.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_manuscripts/manuscript-00017.xml
+    whole: true
+    trim: none
+  - path: data/quran_manuscripts/manuscript-00504.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_manuscripts/manuscript-00504.xml
+    whole: true
+    trim: none
+  - path: data/quran_manuscripts/manuscript-01362.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_manuscripts/manuscript-01362.xml
+    whole: true
+    trim: none
+  - path: data/quran_manuscripts/places.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_manuscripts/places.xml
+    whole: false
+    trim: >-
+      Whole lines only, in file order: every line outside the <item> blocks,
+      and the item blocks of repository_3, repository_5, repository_84 and
+      repository_113 (of 110). 380 of 1,339 lines.
+  - path: data/quran_variants/allvariants.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_variants/allvariants.xml
+    whole: false
+    trim: >-
+      Whole lines only, in file order: every line outside the <item> blocks;
+      the item blocks whose first word key is in sura 111 or 112, plus
+      variant_2330, variant_12427 and variant_12428. 103 of 18,000 items,
+      1,362 of 222,719 lines.
+  - path: data/quran_variants/reader.xml
+    url: https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/data/quran_variants/reader.xml
+    whole: false
+    trim: >-
+      Whole lines only, in file order: every line outside the <person>
+      blocks, and the person blocks of the 73 readers the trimmed
+      allvariants.xml items cite. 794 of 8,259 lines.

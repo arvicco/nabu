@@ -821,6 +821,21 @@ sources:
   extrabiblical:             # census 2026-10-22: 13 books, one document each; the
     fields:                   # BOOKS-table name verbatim (Arad, Mesa, Pirqe, …) — the
       book: book              # same key work_eras.yml and kind_map.yml fold over
+  corpus-coranicum-manuscripts:  # dry census of the pinned clone 2026-11-27 (193 transcribed records)
+    fields:
+      script: script          # 193 docs, 37 hand-style labels verbatim (maġribī 20 · ḥiǧāzī I 20 · kūfī B.Ib
+      #                         19 · kūfī B.Ia 14 · other (non classified) 12 · kūfī D 9 … — Déroche's typology)
+      material: material      # parchment 177 · paper 9 · papyrus 7
+      repository: repository  # 36 holding libraries (Qatar National Library 80 · BnF 30 · Staatsbibliothek
+      #                         zu Berlin 15 · National Library of Russia 8 …) — a present location
+      provenance: provenance  # 98 docs, 6 values (al-Fusṭāṭ 51 · North Africa (Maghreb), al-Andalus 20 ·
+      #                         Egypt 16 · Damascus 5 · Sanaa 4 · Iraq, North Africa …, al-Andalus 2)
+  corpus-coranicum-variants:  # dry census of the pinned clone 2026-11-27 (753 documents)
+    fields:
+      author: author          # 752 docs — the reader's display name (ʿĀṣim, Ibn Kaṯīr, Ibn Masʿūd …,
+      #                         upstream's "unbenannt (ohne nähere Angaben)" pseudo-reader verbatim)
+      residence: region       # 71 docs, 25 values (Kufa 14 · Basra 13 · Medina 11 · Mekka 9 …; "unbekannt"
+      #                         a claim, kept here though it places nothing)
   quranic-corpus:             # fixture census 2026-11-27 (the whole Tanzil table: 114 suras,
     fields:                   # 86 Meccan · 28 Medinan) — the traditional classification of the
       revelation_type: revelation  # sura, verbatim from the Tanzil sura metadata

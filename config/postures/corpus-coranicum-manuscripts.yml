@@ -1,0 +1,25 @@
+sources:
+  corpus-coranicum-manuscripts:
+    # kind: machine-postured — kind_map.yml source_kind scripture (every
+    # document is a manuscript of the Qurʾān, every passage one of its verses).
+    # lect: machine-postured — the ara → ara:cla row in
+    # config/lect_overrides.yml (the corpus-coranicum claim: the Qurʾān text,
+    # whatever its witness).
+    dating: {posture: partial, note: "each manuscript's origDate, the project's copying estimate
+        in CE years ('640-680'; '-750' = before 750, an open start) → the structured date,
+        no class (an artifact date, the dbbe stance): 172 of the 193 transcribed manuscripts;
+        21 carry no estimate (one writes '0') and stay undated — never borrowed from the
+        work's 610–632 era"}
+    places: {posture: named, note: "upstream's provenance verbatim (al-Fusṭāṭ 51 · North Africa
+        (Maghreb), al-Andalus 20 · Egypt 16 · Damascus 5 · Sanaa 4 · Iraq, North Africa
+        (Maghreb), al-Andalus 2 — 98 of 193): the place the fragment is recorded as coming
+        from (the Fusṭāṭ and Damascus mosque hoards, the Sanaa find), named, no gazetteer
+        refs; the holding library (places.xml: name, city, country, GeoNames id) is a
+        present location and rides as repository, never as the place claim"}
+    script: {posture: qualified, note: "Arabic script as the project transcribes the rasm: the
+        undotted letter skeleton with the archaic dotless forms (ٮ U+066E, ٯ U+066F, ڡ U+06A1,
+        ں U+06BA, ے U+06D2), U+200D/U+200C joiners and a few presentation forms (ﻩ U+FEE9),
+        verbatim; supplied letters (from the Cairo rasm) and unclear ones read through, deleted
+        letters in ⟦…⟧, the extant reading in annotations. The hand's style (ḥiǧāzī, kūfī A–F,
+        maġribī, new style — Déroche's typology) rides metadata script, verbatim: the
+        registry's scripts table is ISO-15924-grained (arab), with no style nodes"}

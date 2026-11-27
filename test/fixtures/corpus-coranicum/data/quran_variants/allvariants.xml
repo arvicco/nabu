@@ -1,0 +1,1362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Authority file for readings</title>
+        <respStmt>
+          <persName key="person_39907760" ref="http://viaf.org/viaf/39907760" role="edt">Michael Marx</persName>
+          <persName role="ctb">Tobias J. Jocham</persName>
+          <persName role="ctb">Yasmin Faghihi</persName>
+          <persName role="ctb">Huw Jones</persName>
+          <resp>Edited by Michael Marx in collaboration with Tobias J. Jocham
+        et. al. TEI version created by Yasmin Faghihi
+        and Huw Jones
+    </resp>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Corpus Coranicum</publisher>
+        <date calendar="#Gregorian">19-12-2024</date>
+        <pubPlace>
+          <address>
+            <orgName>Berlin-Brandenburgische Akademie der Wissenschaften</orgName>
+            <street>Jägerstraße 22/23</street>
+            <postCode>10117</postCode>
+            <addrLine>
+              <ref target="https://corpuscoranicum.de/">Corpus Coranicum</ref>
+            </addrLine>
+            <addrLine>
+              <email>corpuscoranicum@bbaw.de</email>
+            </addrLine>
+            <settlement type="city">Berlin</settlement>
+            <country key="de">Germany</country>
+          </address>
+        </pubPlace>
+        <idno type="tuk_DOI">askxxx</idno>
+        <!--the DOI could be repeated here-->
+        <idno type="instID">askxxx</idno>
+        <!--CCint.institutional ID-->
+        <idno type="CCTUKID"/>
+        <!--CCint.msID-->
+      </publicationStmt>
+      <sourceDesc>
+        <p>data prepared by Corpus Coranicum
+                    <ref>https://corpuscoranicum.de/api/xmltei/variants</ref>
+                </p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Created as part of
+            <name type="project">Corpus Coranicum Project</name>
+        </p>
+      </projectDesc>
+      <classDecl>
+        <taxonomy xml:id="variantsreader">
+          <bibl>Variants Readers</bibl>
+        </taxonomy>
+        <taxonomy xml:id="variantssource">
+          <bibl>Variants Sources</bibl>
+        </taxonomy>
+        <taxonomy xml:id="tuk.cat">
+          <bibl>TUK Categories</bibl>
+        </taxonomy>
+        <taxonomy xml:id="geoname">
+          <bibl>
+            <ref target="https://www.geonames.org/">Geonames</ref>
+          </bibl>
+        </taxonomy>
+        <taxonomy xml:id="local">
+          <bibl>'Sigle' is a unique id assigned by Michael Marx to a specific reader in the reading
+                variants.
+            </bibl>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change type="TEI_record_creater">
+        <persName role="dtc">Yasmin Faghihi</persName>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <list>
+        <item xml:id="variant_804">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:001">wa-muraiʾatuhū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:002">ḥammālatun
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">li-l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1093">
+          <persName key="variantreader_3">Abū Ǧaʿfar</persName>
+          <persName key="variantreader_4">Ḫalaf</persName>
+          <persName key="variantreader_43">Yaʿqūb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:003">ʾabī
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:001:004">lahabin
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1094">
+          <persName key="variantreader_3">Abū Ǧaʿfar</persName>
+          <persName key="variantreader_4">Ḫalaf</persName>
+          <persName key="variantreader_43">Yaʿqūb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1096">
+          <persName key="variantreader_4">Ḫalaf</persName>
+          <persName key="variantreader_43">Yaʿqūb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1097">
+          <persName key="variantreader_3">Abū Ǧaʿfar</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1339">
+          <persName key="variantreader_887">Lesart erwähnt von: Abū Muʿāḏ</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:003">ʾabū
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1340">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:003:006">ktasaba
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1341">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:002:006">ktasaba
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:002:005">wa-mā
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1342">
+          <persName key="variantreader_20">ʿAbdallāh b. Abī Isḥāq al-Ḥaḍramī</persName>
+          <persName key="variantreader_46">al-Ḥasan al-Baṣrī</persName>
+          <persName key="variantreader_224">Ibrāhīm b. Abī ʿUbla</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:003:001">sa-yuṣlā
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1343">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:003:001">sa-yuṣallā
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1344">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:001">wa-murayyatuhū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:002">ḥammālata
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1345">
+          <persName key="variantreader_337">Abū Qilāba</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥāmilatu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1347">
+          <persName key="variantreader_19">Muǧāhid b. Ǧabr</persName>
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <persName key="variantreader_44">Ibn Muḥaiṣin</persName>
+          <persName key="variantreader_228">Ḥumaid al-Aʿraǧ</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:004">lahbin
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1348">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_257">Naṣr b. ʿĀṣim</persName>
+          <persName key="variantreader_338">ʿUmar b. al-Ḫaṭṭāb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1349">
+          <persName key="variantreader_283">der Prophet</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:001">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1350">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <persName key="variantreader_240">Ubayy b. Kaʿb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:001">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">huwa
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1351">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <persName key="variantreader_47">al-Aʿmaš</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">l-wāḥidu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1352">
+          <persName key="variantreader_262">Ruʾba b. al-ʿAǧǧāǧ</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:003:001">lam
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:003:002">yūlad
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:003:003">wa-lam
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:003:004">yalid
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1353">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:001">wa-lam
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:002">yakun
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:003">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:004">lahū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:005">ʾaḥadun
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1355">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <persName key="variantreader_202">ar-Rabīʿ b. Ḫuṯaim</persName>
+          <persName key="variantreader_338">ʿUmar b. al-Ḫaṭṭāb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:001">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">huwa
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:004">al-wāḥidu ṣ-ṣamadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1358">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:005">wa-qad tabba
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1359">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <persName key="variantreader_240">Ubayy b. Kaʿb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:001">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">huwa
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1360">
+          <persName key="variantreader_283">der Prophet</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:001">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1361">
+          <persName key="variantreader_1">ʿĀṣim</persName>
+          <persName key="variantreader_5">Ḥamza</persName>
+          <persName key="variantreader_39">Ibn ʿĀmir</persName>
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_42">al-Kisāʾī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1362">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_104">al-ʿAbbās b. Faḍl</persName>
+          <persName key="variantreader_105">al-Ǧahḍamī</persName>
+          <persName key="variantreader_108">Hārūn al-ʿAtakī</persName>
+          <persName key="variantreader_109">Abū Zaid al-Anṣārī</persName>
+          <persName key="variantreader_122">Aḥmad b. Mūsā al-Luʾluʾī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥad
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1363">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_104">al-ʿAbbās b. Faḍl</persName>
+          <persName key="variantreader_105">al-Ǧahḍamī</persName>
+          <persName key="variantreader_108">Hārūn al-ʿAtakī</persName>
+          <persName key="variantreader_109">Abū Zaid al-Anṣārī</persName>
+          <persName key="variantreader_122">Aḥmad b. Mūsā al-Luʾluʾī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:002:001">ʾallāhu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1364">
+          <persName key="variantreader_129">Ḥafṣ</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuwan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1365">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_5">Ḥamza</persName>
+          <persName key="variantreader_39">Ibn ʿĀmir</persName>
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_42">al-Kisāʾī</persName>
+          <persName key="variantreader_54">Warš</persName>
+          <persName key="variantreader_55">al-Musayyabī</persName>
+          <persName key="variantreader_56">Ismāʿīl b. Ǧaʿfar</persName>
+          <persName key="variantreader_57">Yaʿqūb b. Ǧaʿfar</persName>
+          <persName key="variantreader_58">Sulaimān b. Muslim b. Ǧammāz az-Zuhrī</persName>
+          <persName key="variantreader_63">Ḫāriǧa b. Muṣʿab</persName>
+          <persName key="variantreader_103">Yaḥyā al-Yazīdī</persName>
+          <persName key="variantreader_107">ʿAbdalwāriṯ b. Saʿīd</persName>
+          <persName key="variantreader_128">Šuʿba</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1366">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <persName key="variantreader_338">ʿUmar b. al-Ḫaṭṭāb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:002:001">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:002:002">…
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1367">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:001">wa-mā
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:002">huwa
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:003">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:004">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:005">bašarun
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1368">
+          <persName key="variantreader_47">al-Aʿmaš</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:001">qul
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">huwa
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:004">l-wāḥidu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1369">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1370">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kifʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1371">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1693">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <persName key="variantreader_201">ʿUmar b. al-Ḫaṭṭāb</persName>
+          <persName key="variantreader_202">ar-Rabīʿ b. Ḫuṯaim</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:001">qul
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">huwa
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:004">l-wāḥidu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1694">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <persName key="variantreader_201">ʿUmar b. al-Ḫaṭṭāb</persName>
+          <persName key="variantreader_202">ar-Rabīʿ b. Ḫuṯaim</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:002:001">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:002:002">ṣ-ṣamadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1699">
+          <persName key="variantreader_5">Ḥamza</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufwan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1700">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_5">Ḥamza</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_53">Qālūn</persName>
+          <persName key="variantreader_55">al-Musayyabī</persName>
+          <persName key="variantreader_56">Ismāʿīl b. Ǧaʿfar</persName>
+          <persName key="variantreader_60">Abū Bakr b. Abī ʾUwais</persName>
+          <persName key="variantreader_104">al-ʿAbbās b. Faḍl</persName>
+          <persName key="variantreader_701">al-Quṭaʿī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1701">
+          <persName key="variantreader_292">Sulaimān b. ʿAlī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kifāʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1702">
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:002">yadā
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:001:003">ʾabī
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:001:004">lahbin
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1703">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:005">wa-qad tabba
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1704">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_5">Ḥamza</persName>
+          <persName key="variantreader_39">Ibn ʿĀmir</persName>
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_42">al-Kisāʾī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1977">
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:002">yadā
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:001:003">ʾabī
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:001:004">lahbin
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1978">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_5">Ḥamza</persName>
+          <persName key="variantreader_39">Ibn ʿĀmir</persName>
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_42">al-Kisāʾī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1979">
+          <persName key="variantreader_5">Ḥamza</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_1980">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_39">Ibn ʿĀmir</persName>
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_42">al-Kisāʾī</persName>
+          <persName key="variantreader_128">Šuʿba</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_2330">
+          <title key="variantsource_"/>
+          <ab>
+            <w n="003:081:025">ʾuṣrī
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_3585">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:001">wa-mraʾatuhu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_3643">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:001">wa-mraʾatuhū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:002">ḥammālatu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_3644">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:001">wa-lam
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:002">yakun
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:003">lahū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:005">ʾaḥadun
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_3645">
+          <persName key="variantreader_723">baʿḍ al-ʿarab </persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_3965">
+          <persName key="variantreader_1">ʿĀṣim</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālata
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_3966">
+          <persName key="variantreader_1">ʿĀṣim</persName>
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_5">Ḥamza</persName>
+          <persName key="variantreader_39">Ibn ʿĀmir</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_42">al-Kisāʾī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:004">lahabin
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_4296">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_4297">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufūʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_4298">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kafīʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_4299">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kifāʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7486">
+          <persName key="variantreader_222">Abān b. ʿUṯmān</persName>
+          <persName key="variantreader_257">Naṣr b. ʿĀṣim</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7487">
+          <persName key="variantreader_5">Ḥamza</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufwan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7488">
+          <persName key="variantreader_292">Sulaimān b. ʿAlī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:001">wa-lam
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:002">yakun
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:003">lahū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:004">kifāʾan
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:005">ʾaḥadun
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7489">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7490">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7491">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuwan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7492">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufwan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7493">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kifwan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_7494">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kifāʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8102">
+          <persName key="variantreader_20">ʿAbdallāh b. Abī Isḥāq al-Ḥaḍramī</persName>
+          <persName key="variantreader_29">Abū as-Sammāl</persName>
+          <persName key="variantreader_46">al-Ḥasan al-Baṣrī</persName>
+          <persName key="variantreader_108">Hārūn al-ʿAtakī</persName>
+          <persName key="variantreader_110">Yūnus b. Ḥabīb</persName>
+          <persName key="variantreader_111">ʿUbaid b. ʿUqail</persName>
+          <persName key="variantreader_112">ʿAbdalmalik b. Quraib</persName>
+          <persName key="variantreader_119">Maḥbūb b. al-Ḥasan</persName>
+          <persName key="variantreader_122">Aḥmad b. Mūsā al-Luʾluʾī</persName>
+          <persName key="variantreader_222">Abān b. ʿUṯmān</persName>
+          <persName key="variantreader_226">Ibn Sīrīn</persName>
+          <persName key="variantreader_236">Zaid b. ʿAlī</persName>
+          <persName key="variantreader_257">Naṣr b. ʿĀṣim</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8103">
+          <persName key="variantreader_129">Ḥafṣ</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufwan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8104">
+          <persName key="variantreader_5">Ḥamza</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8105">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_39">Ibn ʿĀmir</persName>
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_42">al-Kisāʾī</persName>
+          <persName key="variantreader_128">Šuʿba</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8106">
+          <persName key="variantreader_3">Abū Ǧaʿfar</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_211">al-Aʿraǧ</persName>
+          <persName key="variantreader_235">Šaiba</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8107">
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8108">
+          <persName key="variantreader_292">Sulaimān b. ʿAlī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kifāʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8186">
+          <persName key="variantreader_411">Lesart der Beduinen</persName>
+          <persName key="variantreader_425">grammatisch korrekte Lesart</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:003">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:004">lahū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:001">wa-lam
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:002">yakun
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:005">ʾaḥadun
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8209">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālata
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:001">wa-mraʾatuhū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_8239">
+          <persName key="variantreader_750">Referenztext</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:002:001">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_9801">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:001">…
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">huwa
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:004">ʾaḥadun
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_10966">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:005">wa-qad tabba
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_10967">
+          <persName key="variantreader_458">allgemein übliche Lesart</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_10968">
+          <persName key="variantreader_372">grammatisch möglich</persName>
+          <persName key="variantreader_411">Lesart der Beduinen</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālata
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_10969">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:001">wa-mraʾatuhū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:002">ḥammālatun
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">li-l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_10970">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_10971">
+          <persName key="variantreader_193">unbenannt (ohne nähere Angaben)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_11102">
+          <persName key="variantreader_6">Ibn Masʿūd</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:005">wa-qad tabba
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_11103">
+          <persName key="variantreader_1">ʿĀṣim</persName>
+          <persName key="variantreader_391">Koranleser in Kufa</persName>
+          <persName key="variantreader_392">Koranleser in Medina</persName>
+          <persName key="variantreader_393">Koranleser in Basra</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_11104">
+          <persName key="variantreader_20">ʿAbdallāh b. Abī Isḥāq al-Ḥaḍramī</persName>
+          <persName key="variantreader_257">Naṣr b. ʿĀṣim</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_11105">
+          <persName key="variantreader_408">Lesart aus Kufa</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_12096">
+          <persName key="variantreader_1">ʿĀṣim</persName>
+          <persName key="variantreader_20">ʿAbdallāh b. Abī Isḥāq al-Ḥaḍramī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālata
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_12264">
+          <persName key="variantreader_458">allgemein übliche Lesart</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:001:005">wa-tabba
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_12271">
+          <persName key="variantreader_750">Referenztext</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:003">lahū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:001">wa-lam
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:002">yakun
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:004:005">ʾaḥadun
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_12284">
+          <persName key="variantreader_750">Referenztext</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatu
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:001">wa-mraʾatuhū
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="111:004:003">l-ḥaṭabi
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_12339">
+          <persName key="variantreader_750">Referenztext</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:001">qul
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:002">huwa
+                            <w xml:lang="ara"/>
+                        </w>
+            <w n="112:001:003">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_12427">
+          <title key="variantsource_"/>
+          <ab>
+                                             </ab>
+        </item>
+        <item xml:id="variant_12428">
+          <persName key="variantreader_444">keine Angabe</persName>
+          <title key="variantsource_"/>
+          <ab>
+                                             </ab>
+        </item>
+        <item xml:id="variant_12921">
+          <persName key="variantreader_754">ʿāmmatu qaraʾati l-ʾamṣāri</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_12922">
+          <persName key="variantreader_393">Koranleser in Basra</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:004:004">kufuʾan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_13534">
+          <persName key="variantreader_750">Referenztext</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_13535">
+          <persName key="variantreader_761">einige (Grammatiker?, Koranleser?)</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālata
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_13536">
+          <persName key="variantreader_648">akzeptable Lesart</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_14178">
+          <persName key="variantreader_750">Referenztext</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:001:004">ʾaḥadun-i
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_16601">
+          <persName key="variantreader_502">Abū ʿUbaid</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="111:004:002">ḥammālatan
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_17305">
+          <persName key="variantreader_2">Abū ʿAmr</persName>
+          <persName key="variantreader_257">Naṣr b. ʿĀṣim</persName>
+          <persName key="variantreader_757">ʿUmar b. al-Ḫaṭṭāb</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:002:001">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+        <item xml:id="variant_17677">
+          <persName key="variantreader_1">ʿĀṣim</persName>
+          <persName key="variantreader_5">Ḥamza</persName>
+          <persName key="variantreader_39">Ibn ʿĀmir</persName>
+          <persName key="variantreader_40">Ibn Kaṯīr</persName>
+          <persName key="variantreader_41">Nāfiʿ</persName>
+          <persName key="variantreader_42">al-Kisāʾī</persName>
+          <title key="variantsource_"/>
+          <ab>
+            <w n="112:002:001">llāhu
+                            <w xml:lang="ara"/>
+                        </w>
+          </ab>
+        </item>
+      </list>
+    </body>
+  </text>
+</TEI>

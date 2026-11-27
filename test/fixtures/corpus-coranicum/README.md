@@ -30,12 +30,26 @@ Laid out as the adapter's fetch lays out `canonical/corpus-coranicum/`
 | `data/quran_concordance/sura112.xml` | whole | sura 112: 15 words, one analysis each |
 | `data/quran_commentary/sura-00103.xml` | whole | the REJECTED commentary grain's specimen |
 | `data/quran_intertexts/intertext-01010.xml` | whole | the REJECTED intertexts grain's specimen |
-| `data/quran_manuscripts/manuscript-02504.xml` | whole | the REJECTED manuscripts grain's specimen |
-| `data/quran_variants/sources.xml` | whole | the REJECTED variants grain's specimen (the source authority file — `allvariants.xml` is 8 MB) |
+| `data/quran_manuscripts/manuscript-02504.xml` | whole | this source's REJECTED manuscripts specimen; for `corpus-coranicum-manuscripts` the REJECTED metadata-only record (Rotterdam 96D17, empty body) |
+| `data/quran_manuscripts/manuscript-00017.xml` | whole (25 KB) | `corpus-coranicum-manuscripts`: Chicago A 6990 — kūfī B.Ia, 650–750, provenance al-Fusṭāṭ; supplied and unclear letters, a line-split word, line notes, two heading bands keyed verse 0 |
+| `data/quran_manuscripts/manuscript-00504.xml` | whole (37 KB) | `corpus-coranicum-manuscripts`: BnF Arabe 7201 — ḥiǧāzī, "-750" (before 750), no provenance (the library is not the place); the 49:0 basmala band |
+| `data/quran_manuscripts/manuscript-01362.xml` | whole (29 KB) | `corpus-coranicum-manuscripts`: Doha HC.MS.03151 — kūfī D.IV, 750–900; `<del>`, `<add>`, `<mod>`, words flagged unclear |
+| `data/quran_manuscripts/places.xml` | TRIM | the repository authority: the whole header, and of its 110 `<item>` blocks only `repository_3` (BnF), `_5` (Chicago), `_84` (Qatar National Library, blank GeoNames key) and `_113` (Rotterdam) — whole lines, none edited; 380 of 1,339 lines |
+| `data/quran_variants/sources.xml` | whole | this source's REJECTED variants specimen; for `corpus-coranicum-variants` the REJECTED source authority (cited by no reading) |
+| `data/quran_variants/allvariants.xml` | TRIM | `corpus-coranicum-variants`: the header and `<list>` lines, every `<item>` block whose first word is in sura 111 or 112 (100 items), plus `variant_2330` (no reader), `variant_12427` (no reader, no words) and `variant_12428` (reader 444, no words) — whole lines, none edited; 1,362 of 222,719 lines, 103 items |
+| `data/quran_variants/reader.xml` | TRIM | `corpus-coranicum-variants`: the header, and the `<person>` blocks of the 73 readers the trimmed items cite (reader 444 among them) — whole lines, none edited; 794 of 8,259 lines |
 
-The concordance and specimen files are byte-identical copies of the
-files at the commit (raw URL:
+The concordance, specimen and whole manuscript files are byte-identical
+copies of the files at the commit (raw URL:
 `https://raw.githubusercontent.com/telota/corpus-coranicum-tei/57cb2b7be321ecfba100cb5f7988974f47864a14/<path>`).
+
+This one tree backs THREE adapters, as the clone does on the box
+(`canonical/corpus-coranicum/` is cloned once): `corpus-coranicum`
+(`test/adapters/corpus_coranicum_test.rb`), `corpus-coranicum-manuscripts`
+and `corpus-coranicum-variants` (their tests construct the adapter with
+`clone_dir:` this directory). For `corpus-coranicum` every file under
+`quran_manuscripts/` and `quran_variants/` is skipped by rule (5 + 3 in
+this tree).
 
 ### The cairoquran.xml trim recipe
 
@@ -82,11 +96,18 @@ file's 265,701 lines (24,837 bytes; the whole file's sha256 is
   — the intertexts database (late-antique and earlier texts). **REJECTED**:
   skipped by rule.
 - **`quran_manuscripts/`** (2,323: 2,322 `manuscript-NNNNN.xml` +
-  `places.xml`) — the manuscript descriptions. **REJECTED**: skipped by
-  rule.
+  `places.xml`) — the manuscript descriptions. **REJECTED** for
+  `corpus-coranicum`: skipped by rule. Taken by
+  **`corpus-coranicum-manuscripts`**: the 193 records with a transcription
+  (a `<w>` in the body) are its documents, one passage per verse; the 2,129
+  metadata-only records are skipped by rule; `places.xml` is its repository
+  authority. Images are links (`<graphic url>`), never fetched.
 - **`quran_variants/`** (3: `allvariants.xml`, `reader.xml`,
   `sources.xml`) — the variant readings and their authority files.
-  **REJECTED**: skipped by rule.
+  **REJECTED** for `corpus-coranicum`: skipped by rule. Taken by
+  **`corpus-coranicum-variants`**: `allvariants.xml` (18,000 readings) →
+  one document per reader, one passage per verse; `reader.xml` its
+  authority; `sources.xml` skipped by rule (no reading cites a source).
 
 ## Census of the pinned clone (2026-11-27, every file read)
 
@@ -112,3 +133,38 @@ file's 265,701 lines (24,837 bytes; the whole file's sha256 is
   NFC composes it to U+0622.
 - Expected first sync: 114 documents / 6,236 passages / 77,432 tokens,
   3,125 files skipped by rule (85 + 714 + 2,323 + 3), 0 unrecognized.
+
+### The manuscripts (`corpus-coranicum-manuscripts`, census 2026-11-27)
+
+- 2,322 records: 193 with a transcription (462,012 `<w>` elements), 2,129
+  without (2,111 empty bodies, 18 "(No content available)").
+- Parsed: 193 documents, 32,182 passages (31,730 verses + 452 sura heading
+  bands keyed verse 0), 411,803 words (17,668 joined from line-split
+  fragments), 32,533 verse-division markers (`000-000-000`), 4 unkeyed and
+  3 empty `<w>`; 962 verses resume after an interruption (merged in file
+  order).
+- Letters: 115,725 supplied (from the Cairo rasm: `omitted-in-original`
+  and `illigible`), 23,384 unclear, 8,148 added, 15,058 modified; 887
+  words carry a `<del>`.
+- Axes: 172 dated (origDate CE years; `-750` = before 750), 98 with a
+  provenance, script style on 186, material parchment 177 · paper 9 ·
+  papyrus 7.
+- NFC changes none of the 411,803 words; the archaic dotless letters
+  (U+066E 145,265, U+066F 26,255, U+06A1 33,200, U+06BA 62,649, U+06D2
+  20,708 occurrences) and the U+FEE9 presentation form are untouched.
+- Cairo join: 31,676 verse passages cite a Cairo verse, 54 do not;
+  393,965 words carry a Cairo word key, 13,876 a key beyond the Cairo
+  verse's words; 76,999 of the 77,432 Cairo words are witnessed.
+
+### The variants (`corpus-coranicum-variants`, census 2026-11-27)
+
+- 18,000 items (ids 28–18306), 30,112 reader ascriptions, 753 distinct
+  readers of the authority's 870 (all present in `reader.xml`), 34,172
+  words over 12,943 distinct keys in 3,495 verses of all 114 suras; the
+  Arabic field and the source key are empty on every item.
+- Join to the Cairo words: 12,937 keys name a Cairo word, 5 a verse the
+  Cairo text lacks, 1 (111:3:6) a word past the verse's end.
+- Parsed: 753 documents (752 readers + the unattributed readings — 13
+  items naming no reader and `variant_1841`, ascribed only to upstream's
+  `test` record, reader 328), 22,658 passages; 2 empty items dropped; 194
+  readers dated by their death, 68 placed by their residence.

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../schema/corpus_coranicum.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Authority file for Manuscript places</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Corpus Coranicum</publisher>
+        <availability xml:id="imageRights_1">
+          <licence>CC-BY-SA by Salem.</licence>
+        </availability>
+        <availability xml:id="imageRights_2">
+          <licence>CC-BY-SA by Da flow.</licence>
+        </availability>
+        <availability xml:id="imageRights_3">
+          <licence>CC-BY by Vincent Desjardins.</licence>
+        </availability>
+        <availability xml:id="imageRights_4">
+          <licence>CC BY 2.0 by Elliott Brown .</licence>
+        </availability>
+        <availability xml:id="imageRights_5">
+          <licence>CC-BY-SA 2.5 by Salsb.</licence>
+        </availability>
+        <availability xml:id="imageRights_6">
+          <licence>CC-BY-SA by Aligatorek.</licence>
+        </availability>
+        <availability xml:id="imageRights_8">
+          <licence>CC-BY-SA by Andrew Shiva.</licence>
+        </availability>
+        <availability xml:id="imageRights_9">
+          <licence>CC-BY-SA by Ashashyou.</licence>
+        </availability>
+        <availability xml:id="imageRights_12">
+          <licence>Davids Samling, Copenhagen.</licence>
+        </availability>
+        <availability xml:id="imageRights_13">
+          <licence>CC-BY-SA by Arne List.</licence>
+        </availability>
+        <availability xml:id="imageRights_16">
+          <licence>CC BY-SA 4.0 by Mike Peel.</licence>
+        </availability>
+        <availability xml:id="imageRights_18">
+          <licence>CC0 by Mefman00.</licence>
+        </availability>
+        <availability xml:id="imageRights_19">
+          <licence>CC-BY by Bosc d'Anjou.</licence>
+        </availability>
+        <availability xml:id="imageRights_21">
+          <licence>CC-BY-SA by Maus-Trauden.</licence>
+        </availability>
+        <availability xml:id="imageRights_22">
+          <licence>CC BY-SA 2.0 by Dan.</licence>
+        </availability>
+        <availability xml:id="imageRights_23">
+          <licence>CC-BY-SA by Peterburg23.</licence>
+        </availability>
+        <availability xml:id="imageRights_24">
+          <licence>CC-BY-SA by Lite.</licence>
+        </availability>
+        <availability xml:id="imageRights_25">
+          <licence>CC BY-SA 2.5 by Der gestiefelte Kater.</licence>
+        </availability>
+        <availability xml:id="imageRights_26">
+          <licence>CC-BY-SA by Gryffindor.</licence>
+        </availability>
+        <availability xml:id="imageRights_28">
+          <licence>Public Domain by Chapultepec.</licence>
+        </availability>
+        <availability xml:id="imageRights_30">
+          <licence>CC BY-SA 3.0 by Dylan k.</licence>
+        </availability>
+        <availability xml:id="imageRights_31">
+          <licence>CC BY-SA 3.0 by Losch.</licence>
+        </availability>
+        <availability xml:id="imageRights_32">
+          <licence>CC BY-SA 3.0 by Phyzome.</licence>
+        </availability>
+        <availability xml:id="imageRights_33">
+          <licence>Public Domain by K.H. Vickers.</licence>
+        </availability>
+        <availability xml:id="imageRights_35">
+          <licence>CC-BY-SA 3.0 by Guido Radig.</licence>
+        </availability>
+        <availability xml:id="imageRights_36">
+          <licence>Public Domain by Thom Harrison.</licence>
+        </availability>
+        <availability xml:id="imageRights_43">
+          <licence>CC BY-SA 3.0 by Abdullais4u.</licence>
+        </availability>
+        <availability xml:id="imageRights_44">
+          <licence>CC BY-SA 2.0 by Adam Jones.</licence>
+        </availability>
+        <availability xml:id="imageRights_45">
+          <licence>CC BY 3.0 by IlshatS.</licence>
+        </availability>
+        <availability xml:id="imageRights_46">
+          <licence>Public domain by Ariannarama.</licence>
+        </availability>
+        <availability xml:id="imageRights_47">
+          <licence>CC BY-SA 3.0, Michael Sander - Eigenes Werk.</licence>
+        </availability>
+        <availability xml:id="imageRights_48">
+          <licence>CC BY-SA 4.0 by Khalili Foundation.</licence>
+        </availability>
+        <availability xml:id="imageRights_49">
+          <licence>CC BY-SA 4.0 by Raimond Spekking.</licence>
+        </availability>
+        <availability xml:id="imageRights_51">
+          <licence>CC BY 2.0 by RubenCoralyn.</licence>
+        </availability>
+        <availability xml:id="imageRights_52">
+          <licence>CC BY-SA 4.0 by Shahin Olakara.</licence>
+        </availability>
+        <availability xml:id="imageRights_53">
+          <licence>CC BY-SA 3.0 by Paralacre.</licence>
+        </availability>
+        <availability xml:id="imageRights_54">
+          <licence>CC BY-SA 3.0 by Sracer357.</licence>
+        </availability>
+        <availability xml:id="imageRights_55">
+          <licence>CC BY-SA 3.0 by Ondřej Žváček.</licence>
+        </availability>
+        <availability xml:id="imageRights_56">
+          <licence>CC BY-SA 4.0 by Peymanyeganeh.</licence>
+        </availability>
+        <availability xml:id="imageRights_57">
+          <licence>CC BY-SA 4.0 by Azadi68.</licence>
+        </availability>
+        <availability xml:id="imageRights_58">
+          <licence>CC BY 3.0 by Andreas Praefcke.</licence>
+        </availability>
+        <availability xml:id="imageRights_61">
+          <licence>Public Domain by Amitay Katz.</licence>
+        </availability>
+        <availability xml:id="imageRights_63">
+          <licence>CC BY-SA 4.0 by Merriweather.</licence>
+        </availability>
+        <availability xml:id="imageRights_64">
+          <licence>Public Domain by Carol M. Highsmith.</licence>
+        </availability>
+        <availability xml:id="imageRights_65">
+          <licence>Public Domain by Jim.henderson.</licence>
+        </availability>
+        <availability xml:id="imageRights_66">
+          <licence>CC BY-SA 4.0 by Mike Peel.</licence>
+        </availability>
+        <availability xml:id="imageRights_67">
+          <licence>CC BY-SA 4.0 by Kenneth C. Zirkel.</licence>
+        </availability>
+        <availability xml:id="imageRights_68">
+          <licence>Public Domain by Phantomkid.</licence>
+        </availability>
+        <availability xml:id="imageRights_69">
+          <licence>CC BY-SA 4.0 by JohnOyston.</licence>
+        </availability>
+        <availability xml:id="imageRights_70">
+          <licence>Public Domain by Daderot.</licence>
+        </availability>
+        <availability xml:id="imageRights_71">
+          <licence>CC BY-SA 4.0 by Gunnar Klack.</licence>
+        </availability>
+        <availability xml:id="imageRights_72">
+          <licence>CC BY-SA 2.0 by Judson Dunn.</licence>
+        </availability>
+        <availability xml:id="imageRights_73">
+          <licence>CC BY-SA 3.0 by KeithJonsn.</licence>
+        </availability>
+        <availability xml:id="imageRights_74">
+          <licence>CC BY 3.0 by Morgan Riley.</licence>
+        </availability>
+        <availability xml:id="imageRights_75">
+          <licence>CC BY-SA 3.0 by J. Ash Bowie.</licence>
+        </availability>
+        <availability xml:id="imageRights_76">
+          <licence>CC BY-SA 4.0 by Chongkian.</licence>
+        </availability>
+        <availability xml:id="imageRights_77">
+          <licence>CC BY 3.0 by Wolfgang Holzem.</licence>
+        </availability>
+        <availability xml:id="imageRights_78">
+          <licence>Public Domain by Bluedog423~commonswiki.</licence>
+        </availability>
+        <availability xml:id="imageRights_79">
+          <licence>CC BY-SA 2.0 by EurekaLott.</licence>
+        </availability>
+        <availability xml:id="imageRights_80">
+          <licence>Public Domain by Janericloebe.</licence>
+        </availability>
+        <availability xml:id="imageRights_81">
+          <licence>CC BY-SA 4.0 by Marcin Konsek.</licence>
+        </availability>
+        <availability xml:id="imageRights_82">
+          <licence>CC BY-SA 2.0 by Julien Pauthier.</licence>
+        </availability>
+        <availability xml:id="imageRights_83">
+          <licence>CC BY-SA 3.0 by Kzollman (Kevin J.S. Zollman).</licence>
+        </availability>
+        <availability xml:id="imageRights_84">
+          <licence>CC BY-SA 2.0 by Jeremy Wood.</licence>
+        </availability>
+        <availability xml:id="imageRights_85">
+          <licence>CC BY-SA 4.0.</licence>
+        </availability>
+        <availability xml:id="imageRights_86">
+          <licence>https://www.nabecor.fr/.</licence>
+        </availability>
+        <availability xml:id="imageRights_87">
+          <licence>CC BY-SA 3.0 by Staats- und Universitätsbibliothek Hamburg.</licence>
+        </availability>
+        <availability xml:id="imageRights_88">
+          <licence>Public Domain by Thomas Rowlandson (1756–1827).</licence>
+        </availability>
+        <availability xml:id="imageRights_89">
+          <licence>CC BY-SA 3.0 by Dimboukas.</licence>
+        </availability>
+        <availability xml:id="imageRights_90">
+          <licence>CC BY-SA 2.5 by Daniel Schwen.</licence>
+        </availability>
+        <availability xml:id="imageRights_91">
+          <licence>CC 表示-継承 3.0 by Greg Hume.</licence>
+        </availability>
+        <availability xml:id="imageRights_92">
+          <licence>CC BY-SA 2.0 by Lewis Clarke.</licence>
+        </availability>
+        <availability xml:id="imageRights_93">
+          <licence>Public domain by Aziz1005.</licence>
+        </availability>
+        <availability xml:id="imageRights_94">
+          <licence>Public Domain by Carol M. Highsmith.</licence>
+        </availability>
+        <availability xml:id="imageRights_96">
+          <licence>CC-BY-SA-3.0-migrated.</licence>
+        </availability>
+        <availability xml:id="imageRights_97">
+          <licence>CC BY-SA 3.0 by Elekhh.</licence>
+        </availability>
+        <availability xml:id="imageRights_98">
+          <licence>CC BY 2.0 by Fred Romero.</licence>
+        </availability>
+        <availability xml:id="imageRights_99">
+          <licence>CC-BY-SA-2.5 by Danbury.</licence>
+        </availability>
+        <availability xml:id="imageRights_100">
+          <licence>CC BY-SA 3.0 by Deror avi.</licence>
+        </availability>
+        <availability xml:id="imageRights_101">
+          <licence>CC BY-SA 3.0 DE by Thomas Wolf (www.foto-tw.de).</licence>
+        </availability>
+        <availability xml:id="imageRights_102">
+          <licence>Own work by MILLON &amp; Associés.</licence>
+        </availability>
+        <availability xml:id="imageRights_103">
+          <licence>CC BY-SA 3.0 by Diliff.</licence>
+        </availability>
+        <availability xml:id="imageRights_104">
+          <licence>CC BY-SA 3.0 by Claus Hoppe.</licence>
+        </availability>
+        <availability xml:id="imageRights_105">
+          <licence>CC BY-SA 4.0 by Daniel Mayer.</licence>
+        </availability>
+        <availability xml:id="imageRights_106">
+          <licence>Public domain by Arlo K. Abrahamson.</licence>
+        </availability>
+        <availability xml:id="imageRights_107">
+          <licence>Public domain by Kamran.</licence>
+        </availability>
+        <availability xml:id="imageRights_108">
+          <licence>Bonhams (https://www.bonhams.com/location/).</licence>
+        </availability>
+        <availability xml:id="imageRights_109">
+          <licence>https://www.schoyencollection.com/.</licence>
+        </availability>
+        <availability xml:id="imageRights_110">
+          <licence>Printed edition of the Qurʾān, Cairo 1924 (First edition).</licence>
+        </availability>
+        <availability xml:id="imageRights_111">
+          <licence>Own work by Nico-dk (assumed).</licence>
+        </availability>
+        <availability xml:id="imageRights_112">
+          <licence>CC BY 2.0 by xiquinhosilva.</licence>
+        </availability>
+        <availability xml:id="imageRights_113">
+          <licence>CC BY-SA 4.0 by Richard Broekhuijzen.</licence>
+        </availability>
+        <availability xml:id="imageRights_114">
+          <licence>CC BY-SA 3.0 by Sandro Senn.</licence>
+        </availability>
+        <availability xml:id="imageRights_115">
+          <licence>https://rotterdam.wereldmuseum.nl/en.</licence>
+        </availability>
+        <availability xml:id="imageRights_116">
+          <licence>CC BY-SA 3.0 by İhsan Deniz Kılıçoğlu.</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Information about places where manuscripts are held. Derived from CCdbSQL data dump</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Created as part of
+            <name type="project">Corpus Coranicum Project</name>
+        </p>
+      </projectDesc>
+      <classDecl>
+        <taxonomy xml:id="variantsreader">
+          <bibl>Variants Readers</bibl>
+        </taxonomy>
+        <taxonomy xml:id="variantssource">
+          <bibl>Variants Sources</bibl>
+        </taxonomy>
+        <taxonomy xml:id="tuk.cat">
+          <bibl>TUK Categories</bibl>
+        </taxonomy>
+        <taxonomy xml:id="geoname">
+          <bibl>
+            <ref target="https://www.geonames.org/">Geonames</ref>
+          </bibl>
+        </taxonomy>
+        <taxonomy xml:id="local">
+          <bibl>'Sigle' is a unique id assigned by Michael Marx to a specific reader in the reading
+                variants.
+            </bibl>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change type="TEI_record_creater">
+        <persName role="dtc">Yasmin Faghihi</persName>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <list>
+        <item xml:id="repository_3">
+          <title key="geoname_6452876">Bibliothèque nationale de France</title>
+          <address>
+            <settlement>Paris</settlement>
+            <country>FR</country>
+          </address>
+          <note>{"id":870,"key":"bnf-paris_text","de":"Die Biblioth\u00e8que nationale de France (BnF) in Paris ist eine der \r\n\u00e4ltesten und bedeutendsten Bibliotheken der Welt. Sie wurde im 14. \r\nJahrhundert unter Karl V. als k\u00f6nigliche Bibliothek gegr\u00fcndet und \r\nentwickelte sich im Laufe der Jahrhunderte zu einer nationalen \r\nInstitution. Heute bewahrt die BnF mehr als 40 Millionen Dokumente, \r\ndarunter B\u00fccher, Manuskripte, Karten, Drucke, Fotografien, M\u00fcnzen und \r\nMedaillen. Die Sammlung orientalischer Handschriften - eine der gr\u00f6\u00dften \r\nweltweit - umfasst mehr als 11.000 Manuskripte aus verschiedenen \r\nRegionen der islamischen Welt, darunter Werke in Arabisch, Persisch, \r\nT\u00fcrkisch und anderen Sprachen. Neben historischen, literarischen, \r\nphilosophischen und naturwissenschaftlichen Werken in den islamischen \r\nSprachen, verf\u00fcgt die Biblioth\u00e8que nationale \u00fcber zahlreiche \r\nfr\u00fchislamische Koranhandschriften (vor allem aus al-Fus\u1e6d\u0101\u1e6d, Alt-Kairo). \r\nFran\u00e7ois D\u00e9roche hat anhand dieser Handschriften dieser Sammlung seine \r\nTypologie der verschiedenen fr\u00fchen Schriftstile entworfen (D\u00e9roche 1983).","en":"The Biblioth\u00e8que nationale de France (BnF) in Paris is one of the oldest and most important libraries in the world. It was founded in the 14th century by Charles V as the royal library and over the centuries it has become a national institution. Today, the BnF preserves more than 40 million documents, including books, manuscripts, maps, prints, photographs, coins and medals. The collection of oriental manuscripts - one of the largest in the world - includes more than 11,000 manuscripts from various regions of the Islamic world, including works in Arabic, Persian, Turkish and other languages. In addition to historical, literary, philosophical and scientific works in the Islamic languages, the Biblioth\u00e8que nationale also has numerous early Islamic Qur'anic manuscripts (mainly from al-Fus\u1e6d\u0101\u1e6d, Old Cairo). Fran\u00e7ois D\u00e9roche developed his typology of the various early writing styles on the basis of the manuscripts in this collection (D\u00e9roche 1983).","fr":"La Biblioth\u00e8que nationale de France (BnF) \u00e0 Paris est l'une des plus anciennes et des plus importantes biblioth\u00e8ques du monde. Fond\u00e9e au 14e si\u00e8cle sous Charles V en tant que biblioth\u00e8que royale, elle s'est d\u00e9velopp\u00e9e au fil des si\u00e8cles pour devenir une institution nationale. Aujourd'hui, la BnF conserve plus de 40 millions de documents, dont des livres, des manuscrits, des cartes, des estampes, des photographies, des pi\u00e8ces de monnaie et des m\u00e9dailles. La collection de manuscrits orientaux - l'une des plus importantes au monde - comprend plus de 11 000 manuscrits provenant de diff\u00e9rentes r\u00e9gions du monde islamique, dont des ouvrages en arabe, en persan, en turc et dans d'autres langues. Outre les ouvrages historiques, litt\u00e9raires, philosophiques et scientifiques en langues islamiques, la Biblioth\u00e8que nationale poss\u00e8de de nombreux manuscrits coraniques des d\u00e9buts de l'Islam (provenant notamment d'al-Fus\u1e6d\u0101\u1e6d, le vieux Caire). C'est \u00e0 partir des manuscrits de cette collection que Fran\u00e7ois D\u00e9roche a \u00e9tabli sa typologie des diff\u00e9rents styles d'\u00e9criture primitifs (D\u00e9roche 1983).","ar":"","fa":"","ru":"","tr":"https:\/\/www.bnf.fr\/fr\/les-manuscrits-orientaux","ur":"","ind":"","user_id":42,"updated_at":"2024-12-18 10:51:16","created_at":"2023-07-26 07:33:31"}</note>
+          <geo>2.3757500 48.8336400</geo>
+          <graphic url="https://corpuscoranicum.de/img/orte/ManuskripteParisNationalbibliothek.jpg" decls="#imageRights_3"/>
+        </item>
+        <item xml:id="repository_5">
+          <title key="geoname_4914512">Institute for the Study of Ancient Cultures</title>
+          <address>
+            <settlement>Chicago</settlement>
+            <country>US</country>
+          </address>
+          <note>{"id":607,"key":"oriental_institute_chicago","de":"Das \"Institute for the Study of Ancient Cultures\" der Universit\u00e4t Chicago (ehemals \"Oriental Institute\") erwarb 1929 die Sammlung von Bernhard Moritz (1859-1939), der von 1896-1911 Direktor der Bibliothek des Khediven, der heutigen \u00c4gyptischen Nationalbibliothek war. Mit Ausnahme der Signaturen 31 und 32 stammen alle \u00e4lteren Koranhandschriften des Instituts aus der von Moritz erworbenen Handschriftensammlung und sind in Nabia Abbotts Studie zur Fr\u00fchgeschichte der arabischen Schrift beschrieben (Abbott 1939). Siehe auch Abbott 1957, 1967 und 1972. ","en":"In 1929, the Institute for the Study of Ancient Cultures (formerly \"Oriental Institute\") acquired the collection of Bernhard Moritz (1859-1939), who was director of the Library of the Khedive, today's Egyptian National Library, from 1896-1911. With the exception of signatures 31 and 32, all the older Koran manuscripts in the Institute come from the manuscript collection acquired by Moritz and are described in Nabia Abbott's study on the early history of Arabic script (Abbott 1939). See also Abbott 1957, 1967 and 1972.","fr":"Le \"Institute for the Study of Ancient Cultures\" de l\u2019universit\u00e9 de Chicago (anciennement \"Oriental Institute\") acquit en 1929 la collection priv\u00e9e de Bernhard Moritz (1859-1939), qui fut de 1896 \u00e0 1911 directeur de la Biblioth\u00e8que du Kh\u00e9dive (ajd. Biblioth\u00e8que Nationale d\u2019\u00c9gypte). Tous les manuscrits coraniques anciens de l\u2019Institut sont \u2013 \u00e0 l\u2019exception des cotes 31 et 32 -  issus de cette collection et font l\u2019objet d\u2019une description compl\u00e8te dans l\u2019\u00e9tude de Nadia Abbott sur l\u2019histoire des d\u00e9buts de l\u2019\u00e9criture arabe (Abbott 1939). Voir aussi Abbott 1957, 1967 et 1972.","ar":"","fa":"","ru":"","tr":"1929 y\u0131l\u0131nda Chicago \u00dcniversitesi \u015earkiyat Enstit\u00fcs\u00fc, 1896-1911 y\u0131llar\u0131 aras\u0131nda bug\u00fcnk\u00fc M\u0131s\u0131r Milli K\u00fct\u00fcphanesi olan Hidiv K\u00fct\u00fcphanesinin m\u00fcd\u00fcrl\u00fc\u011f\u00fcn\u00fc yapm\u0131\u015f Bernhard Moritz'in (1859-1939) koleksiyonunu sat\u0131n alm\u0131\u015ft\u0131r. 31 ve 32 numaral\u0131 belgeler hari\u00e7, Enstit\u00fc'deki t\u00fcm eski Kuran el yazmalar\u0131 Moritz taraf\u0131ndan sat\u0131n al\u0131nan el yazmas\u0131 koleksiyonundan gelmektedir ve Nabia Abbott'un Arap yaz\u0131s\u0131n\u0131n erken d\u00f6nem tarihi \u00fczerine yapt\u0131\u011f\u0131 \u00e7al\u0131\u015fmada anlat\u0131lmaktad\u0131r. Bkz. Nabia Abbott, The Rise of the North Arabic Script and Its Kur'anic Development, with a Full Description of the Kur'an Manuscripts in the Oriental Institute, Chicago 1939. Nabia Abbott, Studies in Arabic literary papyri 1, Chicago 1957. Nabia Abbott, Studies in Arabic literary papyri 2, Chicago 1967. Nabia Abbott, Studies in Arabic literary papyri 3, Language and Literature, Chicago 1972.","ur":"","ind":"","user_id":79,"updated_at":"2024-11-23 09:38:04","created_at":"2018-03-12 08:21:48"}</note>
+          <geo>-87.5997700 41.7897600</geo>
+          <graphic url="https://corpuscoranicum.de/img/orte/ManuskripteChicago.jpg" decls="#imageRights_5"/>
+        </item>
+        <item xml:id="repository_84">
+          <title key="geoname_">Qatar National Library  (مكتبة قطرالوطنية)</title>
+          <address>
+            <settlement>Doha</settlement>
+            <country>QA</country>
+          </address>
+          <note>{"id":862,"key":"qatar_national_library","de":"Die Katalogeintr\u00e4ge von 84 Qur\u02be\u0101n-Fragmenten der Nationalbibliothek von Katar wurden von Marcus Fraser und Michael Marx in den Jahren 2020 und 2021 erstellt. Die meisten Katalogeintr\u00e4ge enthalten Transliterationen. Der Schriftstil der Fragmente wird gem\u00e4\u00df der pal\u00e4ographischen Typologie von Fran\u00e7ois D\u00e9roche angegeben (D\u00e9roche 1983: 35-47 und D\u00e9roche 1992). Zwei Fragmente sind in der \u1e25i\u01e7\u0101z\u012b-Schreibweise geschrieben, eine gro\u00dfe Anzahl (44) im kufischen Stil, neun weitere Fragmente zeigen \"New Style\", 23 Fragmente das nordafrikanische maghrib\u012b und ein Fragment ist im Schriftstil raih\u0101n\u012b verfasst. Der Stil der letzten f\u00fcnf Fragmente ist nicht klassifiziert.","en":"Catalogue entries of 84 Qur\u02be\u0101nic fragments of Qatar National Library have been prepared by Marcus Fraser and Michael Marx in 2020 and 2021. Most catalogue entries contain transliterations. The script style for each fragment is given according to the paleographical typology of Fran\u00e7ois D\u00e9roche (D\u00e9roche 1983: 35-47 and D\u00e9roche 1992). Two fragments are written in the \u1e25i\u01e7\u0101z\u012b style, a large number (44) in the kufic style, nine other fragments show \u2018New Style\u2019, 23 fragments show the North African maghrib\u012b style and one fragment is written in the raih\u0101n\u012b style. The style of the last five fragments is unclassified.","fr":"Les notices de catalogue de 84 fragments de Qur\u02be\u0101n de la Biblioth\u00e8que nationale du Qatar ont \u00e9t\u00e9 \u00e9tablies par Marcus Fraser et Michael Marx en 2020 et 2021. La plupart des entr\u00e9es du catalogue contiennent des translitt\u00e9rations. Le style d'\u00e9criture de chaque fragment est indiqu\u00e9 selon la typologie pal\u00e9ographique de Fran\u00e7ois D\u00e9roche (D\u00e9roche 1983: 35-47 et D\u00e9roche 1992). Deux fragments sont \u00e9crits dans la graphie \u1e25i\u01e7\u0101z\u012b, un grand nombre (44) dans le style coufique, neuf autres fragments pr\u00e9sentent le \u00ab nouveau style \u00bb, 23 fragments le style nord-africain dit maghrib\u012b, et un fragment est r\u00e9dig\u00e9 dans le style d'\u00e9criture raih\u0101n\u012b. Le style des cinq derniers fragments n'est pas cat\u00e9goris\u00e9.","ar":"","fa":"","ru":"","tr":" Qatar National Library'deki 84 Kur\u2019an par\u00e7as\u0131n\u0131n katalog maddeleri Marcus Fraser ve Michael Marx taraf\u0131ndan 2020 ve 2021 y\u0131llar\u0131nda haz\u0131rland\u0131. Bu katalog maddeleri transliterasyon ihtiva etmektedir. Her bir par\u00e7an\u0131n yaz\u0131 stili Fran\u00e7ois D\u00e9roche'un paleografik tipolojisine g\u00f6re verilmi\u015ftir  (D\u00e9roche 1983: 35-47 ve D\u00e9roche 1992). \u0130ki par\u00e7a \u1e25i\u01e7\u0101z\u012b tarz\u0131nda, b\u00fcy\u00fck bir k\u0131sm\u0131 (44) Kufi tarz\u0131nda, di\u011fer dokuz par\u00e7a \u201cYeni Tarz \u201dda, 23 par\u00e7a Kuzey Afrika Ma\u011frib\u00ee tarz\u0131nda ve bir par\u00e7a da raih\u0101n\u012b tarz\u0131nda yaz\u0131lm\u0131\u015ft\u0131r. Son be\u015f par\u00e7an\u0131n \u00fcslubu s\u0131n\u0131fland\u0131r\u0131lmam\u0131\u015ft\u0131r.","ur":"","ind":"","user_id":79,"updated_at":"2024-11-06 09:57:32","created_at":"2023-06-09 09:02:40"}</note>
+          <graphic url="https://corpuscoranicum.de/img/orte/Qatar_National_Library.jpg" decls="#imageRights_84"/>
+        </item>
+        <item xml:id="repository_113">
+          <title key="geoname_">Bibliotheek Rotterdam</title>
+          <address>
+            <settlement>Rotterdam</settlement>
+            <country>NL</country>
+          </address>
+          <note>{"id":906,"key":"bibliotheek_rotterdam","de":"Die Bibliothek Rotterdam ist die \u00f6ffentliche Bibliothekseinrichtung der niederl\u00e4ndischen Stadt Rotterdam. Ihre Best\u00e4nde lassen sich bis ins Jahr 1604 zur\u00fcckverfolgen, als zum ersten Mal in der Stadt eine \u00f6ffentliche Buchhandlung in der St. Laurentiuskirche gegr\u00fcndet wurde (zur Geschichte der \u00f6ffentlichen Bibliothek und ihrer Rolle in der Stadt Rotterdam siehe Maandag 2023 und Meeldijk 1977. Diese Bibliotheca Laurentiana, die gr\u00f6\u00dftenteils aus verketteten B\u00fcchern besteht, ist noch immer Teil der Rotterdamer Bibliothekssammlung (vgl. van der Laan 2016 und Mijnster 2024). Im 19. Jahrhundert wurden verschiedene B\u00fcchersammlungen, darunter auch die Laurentiana, im Stadtarchiv gesammelt, das sich im Schielandshuis, einem Geb\u00e4ude aus dem 17. Als die Lagerung problematisch wurde, beschloss man 1906, eine unabh\u00e4ngige \u00f6ffentliche Bibliothek zu gr\u00fcnden. Ein altes Schulgeb\u00e4ude wurde in einen Ort umgewandelt, an dem die Sammlungen aufbewahrt werden konnten und die Besucher B\u00fccher, Zeitschriften und Zeitungen lesen und ausleihen konnten. Das rasche Anwachsen der Best\u00e4nde zeigte fast sofort, dass dieses Geb\u00e4ude nicht ausreichte, um die Organisation der Stadtbibliothek zu erleichtern. Von 1923 bis 1983 befand sich die Rotterdamer Bibliothek in einem neu gebauten, modernen Geb\u00e4ude am Nieuwe Markt (vgl. Tholen 2024). Bei der Bombardierung Rotterdams im Jahr 1940 wurde das Geb\u00e4ude nur leicht besch\u00e4digt, w\u00e4hrend die meisten Geb\u00e4ude in der Umgebung zerst\u00f6rt oder niedergebrannt wurden. Dadurch konnten auch die historischen Sammlungen im Inneren gerettet werden.Neben der Bibliotheca Laurentiana geh\u00f6ren zu den denkmalgesch\u00fctzten Sammlungen der Rotterdamer Bibliothek die weltber\u00fchmte Rotterdamer Erasmus-Sammlung, die 2023 in das UNESCO-Register f\u00fcr das Weltdokumentenerbe aufgenommen wurde. Diese Sammlung von mehr als 6.000 Objekten ist die weltweit gr\u00f6\u00dfte Sammlung von Werken von und \u00fcber Desiderius Erasmus von Rotterdam (1466-1536) und spielte eine wichtige Rolle bei der Erforschung der Werke von Erasmus im 20. Jahrhundert (zur Geschichte der Rotterdamer Erasmus-Sammlung im Kontext einer sich entwickelnden \u00f6ffentlichen Bibliothek siehe Steen\/Tholen 2024). Die Sammlung der Rotterdamer Drucke der Bibliothek umfasst verschiedene Unikate. Neben den fr\u00fchneuzeitlichen Handschriften bewahrt die Bibliothek eine Sammlung von einigen Dutzend Handschriften aus dem Mittelalter, die gr\u00f6\u00dftenteils vom Bibliotheksdirektor und Spezialisten f\u00fcr mittelalterliche niederl\u00e4ndische Sprache Willem de Vreese in den 1920er und 1930er Jahren erworben wurden (vgl. Biemans 1991 und Bouwman 2021). Dabei handelt es sich beispielsweise um Stunden- und Gebetb\u00fccher, die von international bekannten K\u00fcnstlern illuminiert wurden, um Fragmente eines mittelalterlichen Prosaromans \u00fcber Lancelot und um Fragmente eines mittelalterlichen Manuskripts von Reynard dem Fuchs.Unter diesen Manuskriptsammlungen befinden sich auch zwei Koranhandschriften. Die erste Handschrift (Sign. 96 D 16) wurde der Bibliotheca Laurentiana 1608 von Cornelis Matelieff de Jonghe, einem VOC-Admiral, geschenkt, der das Buch am 20. Juli 1606 als Geschenk eines religi\u00f6sen F\u00fchrers von Johor (heute in Malaysia) erhielt, wie das zeitgen\u00f6ssische handschriftliche Kolophon in niederl\u00e4ndischen Dokumenten belegt (vgl. Riddell 2002, Frederiks 1880, Akveld 2023, S. 105, n. 182 und Borschberg 2015, S. 66f). Die zweite (Sign. 96 D 17), ein andalusisches\/marokkanisches Manuskript, wurde von der Stiftung der Freunde der Bibliothek im Januar 1940 gestiftet, kurz bevor das Stadtzentrum durch die Bombardierung von 1940 zerst\u00f6rt wurde. (John Tholen)","en":"Rotterdam Library\r\nis the public library organization for the Dutch municipality of Rotterdam. Its\r\ncollections can be traced back to 1604, when for the first time in the city a\r\npublic bookery was founded within the S. Laurence Church (on the history of the\r\npublic library and its role in the city of Rotterdam, see Maandag 2023 and Meeldijk 1977.\r\nThis Bibliotheca Laurentiana, which consists for the most part of chained\r\nbooks, is still part of the Rotterdam Library collection (cf. van der Laan 2016 and Mijnster 2024). During the 19th century, various book collections including\r\nthe Laurentiana collection had been gathered in the City Archive, located in\r\nthe seventeenth-century building called Schielandshuis. When storing become\r\nproblematic, it was decided to found an independent public library in 1906. An\r\nold school building was transformed into a place where collections could be\r\nstored and visitors could read and borrow books, magazines, and newspapers.\r\nRapid growth of collections there showed almost immediately that this building\r\nwas not sufficient to facilitate the municipal library organisation. From 1923\r\nto 1983 the Rotterdam Library was located in a newly build, modern location at\r\nNieuwe Markt (cf. Tholen 2024). During the bombing of Rotterdam in 1940 the building\r\nwas only slightly damaged, while most buildings in the area were destroyed or burned\r\ndown. This also saved the historical collections within. \r\n\r\nApart from\r\nthe Bibliotheca Laurentiana, the heritage collections of Rotterdam Library\r\ninclude the world famous Rotterdam Erasmus Collection, which has been added to\r\nthe UNESCO Memory of the World Register in 2023. This collection of more than\r\n6,000 items is the world\u2019s largest collection of works from and about\r\nDesiderius Erasmus of Rotterdam (1466-1536), and played an important role in studying\r\nErasmus\u2019 works in the 20th century (On the history of the Rotterdam\r\nErasmus Collection within the context of a developing public library, see\r\nSteen\/Tholen 2024). The library\u2019s collection of Rotterdam imprints includes\r\nvarious unica. Apart from early modern manuscript materials, the library\r\npreserves a collection of a few dozen manuscripts from the Middle Ages, for the\r\nmost part acquired by library director and specialist in medieval Dutch\r\nlanguage Willem de Vreese in the 1920\u2019s and 1930\u2019s (cf. Biemans 1991 and\r\nBouwman 2021). These concern, for example, books of hours and prayers\r\nilluminated by international renowned artists, fragments of a medieval prose\r\nnovel about Lancelot and fragments of a medieval manuscript of Reynard the Fox.\r\n\r\n\r\nAmong this\r\nmanuscript collections, there are two Qur\u02be\u0101n manuscripts. The first one (sign. 96 D 16) was\r\ndonated to the Bibliotheca Laurentiana in 1608 by Cornelis Matelieff de Jonghe,\r\na VOC admiral who begot the book on July 20, 1606 as a gift from a religious\r\nleader of Johor (today in Malaysia), as the contemporary handwritten colophon in Dutch documents\r\n(cf. Riddell 2002, Frederiks 1880, Akveld 2023, p. 105, n.\r\n182 and Borschberg 2015, p. 66f). The second\r\none (sign. 96 D 17), an Andalusian\/Moroccan manuscript, was donated by the Friends\r\nof the Library Foundation in January 1940, just before the city centre was was\r\n            destroyed by the bombardment of 1940. (John Tholen)","fr":"La biblioth\u00e8que de Rotterdam est la biblioth\u00e8que publique de la municipalit\u00e9 n\u00e9erlandaise de Rotterdam. Ses collections remontent \u00e0 1604, date \u00e0 laquelle, pour la premi\u00e8re fois dans la ville, une librairie publique a \u00e9t\u00e9 fond\u00e9e dans l'\u00e9glise S. Laurent (sur l'histoire de la biblioth\u00e8que publique et son r\u00f4le dans la ville de Rotterdam, voir Maandag 2023 et Meeldijk 1977). Cette Bibliotheca Laurentiana, compos\u00e9e en grande partie de livres encha\u00een\u00e9s, fait toujours partie de la collection de la biblioth\u00e8que de Rotterdam (cf. van der Laan 2016 et Mijnster 2024). Au cours du 19e si\u00e8cle, plusieurs collections de livres, dont la Laurentiana, ont \u00e9t\u00e9 rassembl\u00e9es dans les archives municipales, situ\u00e9es dans le b\u00e2timent du 17e si\u00e8cle appel\u00e9 Schielandshuis. Quand le stockage a commenc\u00e9 \u00e0 poser des probl\u00e8mes, il a \u00e9t\u00e9 d\u00e9cid\u00e9 de fonder une biblioth\u00e8que publique ind\u00e9pendante en 1906. Un ancien b\u00e2timent scolaire fut transform\u00e9 en un lieu o\u00f9 les collections pouvaient \u00eatre stock\u00e9es et o\u00f9 les visiteurs pouvaient lire et emprunter des livres, des magazines et des journaux. La croissance rapide des collections montra presque aussit\u00f4t que ce b\u00e2timent n'\u00e9tait pas suffisant pour faciliter l'organisation de la biblioth\u00e8que municipale. De 1923 \u00e0 1983, la biblioth\u00e8que de Rotterdam s'est install\u00e9e dans un nouveau b\u00e2timent moderne sur le Nieuwe Markt (cf. Tholen 2024). Lors du bombardement de Rotterdam en 1940, le b\u00e2timent n'a \u00e9t\u00e9 que l\u00e9g\u00e8rement endommag\u00e9, alors que la plupart des b\u00e2timents aux alentours ont \u00e9t\u00e9 d\u00e9truits ou incendi\u00e9s. Les collections historiques qui s'y trouvaient ont donc \u00e9t\u00e9 \u00e9pargn\u00e9es.Outre la Bibliotheca Laurentiana, les collections patrimoniales de la biblioth\u00e8que de Rotterdam comprennent la c\u00e9l\u00e8bre collection Erasmus de Rotterdam, qui a \u00e9t\u00e9 inscrite au Registre de la m\u00e9moire du monde de l'UNESCO en 2023. Cette collection de plus de 6 000 pi\u00e8ces est la plus grande collection au monde d'\u0153uvres de et sur Desiderius Erasmus de Rotterdam (1466-1536), et a jou\u00e9 un r\u00f4le important dans l'\u00e9tude des \u0153uvres d'\u00c9rasme au 20e si\u00e8cle (sur l'histoire de la collection Erasmus de Rotterdam dans le contexte d'une biblioth\u00e8que publique en d\u00e9veloppement, voir Steen\/Tholen 2024). La collection d'imprim\u00e9s de Rotterdam de la biblioth\u00e8que comprend plusieurs exemplaires uniques. Outre les manuscrits du d\u00e9but de l'\u00e9poque moderne, la biblioth\u00e8que conserve une collection de quelques dizaines de manuscrits du Moyen \u00c2ge, acquis pour la plupart par le directeur de la biblioth\u00e8que et sp\u00e9cialiste de la langue n\u00e9erlandaise m\u00e9di\u00e9vale Willem de Vreese dans les ann\u00e9es 1920 et 1930 (cf. Biemans 1991 et Bouwman 2021). Il s'agit, par exemple, de livres d'heures et de pri\u00e8res enlumin\u00e9s par des artistes de renomm\u00e9e internationale, de fragments d'un roman m\u00e9di\u00e9val en prose sur Lancelot et de fragments d'un manuscrit m\u00e9di\u00e9val de Reynard le Renard.Parmi ces collections de manuscrits, on trouve deux manuscrits du Qur\u02be\u0101n. Le premier (sign. 96 D 16) a \u00e9t\u00e9 donn\u00e9 \u00e0 la Bibliotheca Laurentiana en 1608 par Cornelis Matelieff de Jonghe, un amiral de la VOC qui a re\u00e7u le livre le 20 juillet 1606 en cadeau de la part d'un chef religieux de Johor (aujourd'hui en Malaisie), comme l'indique le colophon manuscrit, contemporain de l'\u00e9v\u00e8nement (cf. Riddell 2002, Frederiks 1880, Akveld 2023, p. 105, n. 182 et Borschberg 2015, p. 66f). Le second (sign. 96 D 17), un manuscrit andalou \/ marocain, a \u00e9t\u00e9 donn\u00e9 par la Fondation des Amis de la Biblioth\u00e8que en janvier 1940, juste avant que le centre ville ne soit d\u00e9truit par les bombardements de 1940. (John Tholen)","ar":"","fa":"","ru":"","tr":"","ur":"","ind":"","user_id":79,"updated_at":"2024-11-22 13:10:58","created_at":"2024-11-01 09:52:11"}</note>
+          <graphic url="https://corpuscoranicum.de/img/orte/rotterdam.jpg" decls="#imageRights_113"/>
+        </item>
+      </list>
+    </body>
+  </text>
+</TEI>

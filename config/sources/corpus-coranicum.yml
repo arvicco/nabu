@@ -13,8 +13,12 @@ corpus-coranicum:   # 02-sources row 444
   # edited it — transliteration, base, root (rḥm), part of speech, pattern
   # and the morphological features, further analyses as alternatives. New
   # family corpus-coranicum-tei. The commentary, intertext, manuscript and
-  # variant grains of the same repository are skipped by rule (later
-  # packets); the translations inside the Cairo file are not carried.
+  # variant grains of the same repository are skipped by rule here (3,125
+  # files): the manuscripts and the variants are the sibling sources
+  # corpus-coranicum-manuscripts and corpus-coranicum-variants, which read
+  # this clone in place (requires: [corpus-coranicum]); the commentary and
+  # the intertexts are later packets. The translations inside the Cairo
+  # file are not carried.
   # LICENSE: README verbatim "© Berlin-Brandenburgische Akademie der
   # Wissenschaften 2024 / Creative Commons CC BY-SA 4.0
   # https://creativecommons.org/licenses/by-sa/4.0/" (read 2026-11-27) →
