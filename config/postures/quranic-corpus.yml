@@ -1,0 +1,21 @@
+sources:
+  quranic-corpus:
+    # kind: machine-postured — kind_map.yml declares source_kind scripture.
+    # lect: machine-postured — the config/lect_overrides.yml row (ara-Latn →
+    # ara:cla~latn).
+    dating: {posture: dated, note: "the file carries no date field; every sura document carries
+        metadata work = Quran, banded through its attributed era in config/work_eras.yml
+        (c. 610–632 CE, the period of the revelation — MetadataDates :work_era, composition
+        class, precision era). Per-sura grain is declared coarseness: the Meccan / Medinan
+        periods and the sura chronologies (Nöldeke, Neuwirth) are a separate, contested call"}
+    places: {posture: pending, note: "candidate: the traditional Meccan / Medinan label each
+        sura carries in metadata revelation_type (from the Tanzil sura metadata) as a ruled
+        place mapping onto Mecca and Medina — a classification of the revelation period, not
+        a findspot or writing place, so the mapping is its own call; the morphology file has
+        no place field"}
+    script: {posture: qualified, note: "the text is the Tanzil Uthmani text in extended
+        Buckwalter transliteration — ASCII letters and symbols standing one-for-one for Arabic
+        letters, diacritics and Quranic marks (`{` alef wasla, `~` shadda, `` ` `` dagger alef,
+        `,` and `[` Quranic marks), stored verbatim, never rendered into Arabic script; the
+        search fold downcases, which merges case-distinct Buckwalter letters (H/h, S/s, T/t,
+        D/d, Z/z) on the search side only"}

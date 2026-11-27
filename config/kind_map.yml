@@ -1806,6 +1806,8 @@ sources:
     source_kind: scripture   # P153: the Pentateuch targums — every text is a Bible translation
   dtucph-sp:
     source_kind: scripture   # the Samaritan Pentateuch — every document is a book of the Torah
+  quranic-corpus:
+    source_kind: scripture   # the Quran annotated whole — every document a sura, every passage a verse
   typikon-bible:
     source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible; since 2026-11-03
     #                          also the Elizabeth Bible and the Old Georgian Bible — every document a Bible book)

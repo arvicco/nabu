@@ -818,6 +818,9 @@ sources:
   extrabiblical:             # census 2026-10-22: 13 books, one document each; the
     fields:                   # BOOKS-table name verbatim (Arad, Mesa, Pirqe, …) — the
       book: book              # same key work_eras.yml and kind_map.yml fold over
+  quranic-corpus:             # fixture census 2026-11-27 (the whole Tanzil table: 114 suras,
+    fields:                   # 86 Meccan · 28 Medinan) — the traditional classification of the
+      revelation_type: revelation  # sura, verbatim from the Tanzil sura metadata
   ppchy:                      # census 2026-11-02: 63 texts, the sources page's record on ALL —
     fields: #                   dialect = the classification head (East Yiddish 49 · West
       dialect: dialect        # Yiddish 12 · East and West Yiddish 1 (the court testimony) ·

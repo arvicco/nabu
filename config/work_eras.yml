@@ -274,3 +274,18 @@ sources:
       "Shirata": {band: [250, 400], label: "late 3rd – 4th c. CE", note: "Mekhilta de-Rabbi
         Ishmael, the tannaitic midrash on Exodus — redacted after the mid-3rd c. (Strack &
         Stemberger 1996); Wacholder's 8th-c. dating is declared, not followed"}
+  quranic-corpus:
+    # The Quranic Arabic Corpus morphology (v0.4): 114 sura documents, every
+    # one carrying metadata "work" = "Quran". The file carries no date field;
+    # the work is the one text, so one row bands it to its attributed
+    # composition era — the period of the revelation by the tradition's own
+    # chronology, the handbook consensus. Per-sura dating (the Meccan /
+    # Medinan periods, Nöldeke's chronology) is a separate, contested call,
+    # declared coarse here: every sura carries the whole envelope.
+    key: work
+    works:
+      "Quran": {band: [610, 632], label: "c. 610–632 CE", note: "the revelation to Muhammad from
+        c. 610 to his death in 632 (Nöldeke–Schwally, Geschichte des Qorāns; Neuwirth, Der Koran
+        als Text der Spätantike, 2010); the ʿUthmānic codification (c. 650) is the recension, not a
+        later composition — declared, not dated separately; the radiocarbon dates of the earliest
+        leaves (Birmingham, Mingana Islamic Arabic 1572a: 568–645 CE) agree"}

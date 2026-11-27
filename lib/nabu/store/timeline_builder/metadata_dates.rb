@@ -361,6 +361,9 @@ module Nabu
           #                       catalog's unfilled 0030–0800 default mints none; place =
           #                       the work's dct:spatial Pleiades id. A work without a span
           #                       falls back to its edition's year (EDITION_FALLBACK)
+          "quranic-corpus" => :work_era, # the Quran's attributed composition era
+          #                                (config/work_eras.yml, keyed on metadata "work");
+          #                                the morphology file carries no date field
           "ref" => :structured,
           "rem" => :structured,
           "ren" => :structured,
