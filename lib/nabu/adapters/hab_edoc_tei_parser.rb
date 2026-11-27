@@ -70,9 +70,13 @@ module Nabu
       # header's textLang/langUsage readings ride metadata only). The
       # document metadata is the mined header merged with +metadata+ —
       # or, given a block, whatever the block shapes from the header.
-      def parse(source, urn:, language:, title: nil, metadata: {}, canonical_path: nil, license_override: nil)
+      # +dropped+ names further elements an edition's editors interleave
+      # with the text (Christian II's <index> regests, Bahnsen's <head>
+      # labels) — dropped like <fw>, never read as text.
+      def parse(source, urn:, language:, title: nil, metadata: {}, canonical_path: nil, license_override: nil,
+                dropped: [])
         path = resolve_canonical_path(source, canonical_path)
-        result = extract(source, path: path)
+        result = extract(source, path: path, dropped: dropped)
         units = disambiguate_collisions(result.units)
         shaped = block_given? ? yield(result.header) : result.header.merge(metadata)
         build_document(units, urn: urn, language: language,
@@ -89,6 +93,25 @@ module Nabu
         return {} unless start && finish
 
         HeaderMiner.mine(text[start...(finish + "</teiHeader>".length)])
+      end
+
+      # A letter's DESCRIPTION file (the FMG letters' <stem>_tei-msDesc_fmg.xml
+      # beside <stem>_tei-transcript.xml, a whole small TEI read as one DOM):
+      # its teiHeader mined as a transcript's (correspDesc sender/addressee/
+      # place/date, keywords), plus the msDesc its <text><body> carries —
+      # msContents textLang @mainLang (the per-letter language upstream
+      # states nowhere else), msIdentifier idno, the description's head
+      # title.
+      def description(path)
+        doc = Nokogiri::XML(SourceRead.utf8_file(path, label: "hab-edoc letter description"))
+        doc.remove_namespaces!
+        header = doc.at_xpath("/*/teiHeader")
+        facts = header ? HeaderMiner.mine(header.to_xml) : {}
+        ms = doc.at_xpath("/*/text/body/msDesc") or return facts
+
+        facts.merge({ "text_lang" => ms.at_xpath("./msContents/textLang/@mainLang")&.value&.strip,
+                      "shelfmark" => HeaderMiner.text(ms.at_xpath("./msIdentifier/idno")),
+                      "letter_title" => HeaderMiner.text(ms.at_xpath("./head/title")) }.compact)
       end
 
       private
@@ -218,8 +241,9 @@ module Nabu
                             div table row cell sp speaker stage entry form sense].freeze
         private_constant :DROPPED_ELEMENTS, :CHOICE_DROPPED, :BLOCK_ELEMENTS
 
-        def initialize(reader:, path:)
-          super
+        def initialize(reader:, path:, dropped: [])
+          super(reader: reader, path: path)
+          @dropped = DROPPED_ELEMENTS + dropped
           @header = {}
           @in_text = false
           @text_depth = nil
@@ -281,7 +305,7 @@ module Nabu
         end
 
         def text_element(node, name)
-          return drop(node) if DROPPED_ELEMENTS.include?(name)
+          return drop(node) if @dropped.include?(name)
           return drop(node) if @choice_depth && CHOICE_DROPPED.include?(name) && node.depth == @choice_depth + 1
 
           case name

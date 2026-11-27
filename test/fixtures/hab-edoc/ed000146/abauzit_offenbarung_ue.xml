@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="edoc_ed000146_fg_abauzit_offenbarung_ue">
+    <teiHeader>
+         <fileDesc>
+            <titleStmt>
+                <title>Historische Einleitung in die Offenbarung Johanis</title>
+                <author>Abauzit</author>
+                <respStmt>
+                    <resp>Übersetzung </resp>
+                    <name>Lessing </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Digitale Edition </resp>
+                    <name>Christian Werner </name>
+                    <name>Marcus Baumgarten </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Projektleitung </resp>
+                    <name>Dr. Helmut Berthold </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Herausgegeben von </resp>
+                    <name type="org">Lessing Akademie </name>
+                </respStmt>
+                <funder>Deutsche Forschungsgemeinschaft </funder>
+            </titleStmt>
+            <editionStmt>
+                <edition>Digitale Edition der Übersetzungen Lessings</edition>
+            </editionStmt>
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel </name>
+                    <address>
+                        <street>Lessingplatz 1 </street>
+                        <name type="city">Wolfenbüttel </name>
+                        <postCode>D-38299 </postCode>
+                        <name type="country">Germany </name>
+                    </address>
+                </publisher>
+                <date when="2007-03-22" type="issued">2007 </date>
+                <date type="digitised"/>
+                <distributor>Herzog August Bibliothek Wolfenbüttel </distributor>
+                <availability status="restricted">
+                    <p>Herzog August Bibliothek Wolfenbüttel ( <ref
+                            target="http://diglib.hab.de/?link=012">copyright information </ref>)
+                    </p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <biblStruct>
+                    <analytic xml:lang="de" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+                        <author>Lessing, Gotthold Ephraim</author>
+                        <title level="a">Historische Einleitung in die Offenbarung Johannis</title>
+                    </analytic>
+                    <monogr>
+                        <title level="m">Gotthold Ephraim Leßings theologischer Nachlaß</title>
+                        <author>Lessing, Gotthold Ephraim</author>
+                        <editor>Lessing, Karl Gotthelf</editor>
+                        <imprint>
+                            <biblScope type="pp">S. 107-112</biblScope>
+                            <publisher>Voss</publisher>
+                            <pubPlace>Berlin</pubPlace>
+                            <date>1784</date>
+                        </imprint>
+                    </monogr>
+                </biblStruct>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p xml:id="lport">
+                    <ref target="http://diglib.hab.de/?link=XXX">Digitale Edition der Übersetzungen
+                        Lessings </ref>
+                </p>
+            </projectDesc>
+        </encodingDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <pb n="105"/>
+            <div>
+                <div>
+                    <head type="subtitle">6.</head>
+                    <head xml:id="ue001" type="maintitle">Historische Einleitung in die <term target="#offe">Offenbarung</term> Johannis.</head>
+                </div>
+                <pb n="106"/>
+                <pb n="107"/>
+                <div>
+                    <head xml:id="ue002" type="abstract">Der Kanon sämmtlicher Schriften des <rs type="bibl"
+                            ref="#nov_test">
+                            <term target="'bibe">neuen<lb/> Testaments</term>
+                        </rs> kömmt, wie auf Gerathewohl,<lb/> ohne allen Plan, durch den Eifer
+                            <w>einzel<lb rend="bindestrich"/>ner</w> Glieder zu Stande. Ueble Folge dieser<lb/>
+                        <term target="'freih">Freyheit</term>. Getheilte Meynungen über<lb/>
+                        verschiedne Briefe. Die <rs type="bibl" ref="#Apc">Offenbarung</rs><lb/>
+                        <rs type="person" ref="#johan">Johannis</rs>, ein Beweis, wie planlos<lb/>
+                        sich der Kanon des <rs type="bibl" ref="#nov_test">neuen Testaments</rs>
+                        <w>ge<lb rend="bindestrich"/>bildet</w>.</head>
+                    <head type="chapter">§. 1.</head>
+                    <p xml:id="ue003"><hi rend="initial">M</hi>an muß sich nicht einbilden, daß der Kanon der<lb/>
+                        <term target="#bibe">heiligen Schriften</term>, so wie wir ihn jezt haben,
+                        gleich<lb/> nach den Zeiten der Apostel auf einmal zu Stande<lb/> gekommen
+                        sey. Die ersten Bücher, welche den <term target="#chri">Christen</term><lb/>
+                        bekannt wurden, waren ohne Zweifel die Evangelien, <w>wor<lb rend="bindestrich"/>auf</w> die
+                        Briefe, einige früher, einige später, folgten. Die<lb/>
+                        <term target="#kirc">Kirchen</term>, an die sie waren geschrieben worden,
+                        theilten sie<lb/> einander mit; die Römer den Korinthern, die Korinther<lb/>
+                        den Römern; und das mit allen Briefen, so wie sich<lb/> die Bekanntschaft
+                        der christlichen Gemeinden erweiterte.<lb/> Da war weder Concilium, noch
+                        Pabst, noch höchste <w>Ge<lb rend="bindestrich"/>walt</w>, die den Kanon der <term
+                            target="#bibe">heiligen Schriften</term> fest stellte. Es<lb/> war das
+                        bloße Werk der Zeit. Heute kam das eine, <w>mor<lb rend="bindestrich"/>gen</w> ein andres Buch
+                        hinzu; und das lediglich, sagt Herr<pb n="108"/><lb/>
+                        <hi rend="font-size: large"><rs type="person" ref="#basn">Basnage</rs>,<note
+                                type="footnote" n="(*)">
+                                <rs type="bibl" ref="#basnage_histoire" rend="font-family: antiqua"
+                                    >Histoire de l'Eglise.</rs> B. 8. </note> durch Veranstaltung
+                            einzelner <w>Glie<lb rend="bindestrich"/>der</w>, welche die Schriften, die sie ihrer
+                            Erbauung <w>zu<lb rend="bindestrich"/>träglich</w> befunden hatten, in ihren <term
+                                target="#kirc">Kirchen</term> gangbar zu<lb/> machen wünschten. Sie
+                            nahmen sich so gar, </hi>sezt er<lb/> hinzu, <hi rend="font-size: large"
+                            >dabey so viel <term target="#freih">Freyheit</term>, daß sie offenbar
+                                <w>unter<lb rend="bindestrich"/>geschobene</w> Schriften zu den kanonischen
+                            Büchern<lb/> zählten.</hi> Ganze <term target="#kirc">Kirchen</term>
+                        waren darüber eben so <w>verschie<lb rend="bindestrich"/>dener</w> Meynung, als einzelne
+                        Glieder. Das nemliche<lb/> Buch, das die einen verwarfen, nahmen die andern
+                        an.<lb/> Man untersuchte, man stritt, ehe man annahm. Der<lb/>
+                        <rs type="bibl" ref="#II_Pt">zweyte Brief</rs> des h. <rs type="person"
+                            ref="#petr">Petrus</rs> war anfangs nicht in dem <w>Ka<lb rend="bindestrich"/>non</w>;
+                        aber einige, sagt <rs type="person" ref="#euse">Eusebius</rs>, fiengen an,
+                        ihn für <w>nütz<lb/>lich</w> zu halten, und so fieng man an, ihn
+                        sorgfältiger zu<lb/> lesen. Das nemliche meldet er von den <rs type="bibl"
+                            ref="#juja">Briefen</rs> des h. <rs type="person" ref="#jaco">
+                            <w>Ja<lb rend="bindestrich"/>cobus</w>
+                        </rs> und des h. <rs type="person" ref="juda">Judas</rs>. Nur sehr wenige
+                        von den Alten<lb/> hatten ihrer als göttlicher Schriften gedacht. Doch
+                            <w>ent<lb rend="bindestrich"/>schlossen</w> sich einige <term target="#kirc"
+                        >Kirchen</term>, sie zu lesen. Der Zweifel<lb/> dauerte lange und endlich
+                        fiel er ganz weg. <rs type="person" ref="#hier">Hieronymus</rs><lb/> sagt
+                        ebenfalls von dem <rs type="bibl" ref="#Iac">Briefe</rs> des h. <rs
+                            type="person" ref="#jaco">Jacobus</rs>, daß er sein<lb/> Ansehen nach
+                        und nach mit Hülfe der Zeit erhalten habe.<lb/> Auf die nemliche Weise sind
+                        die <rs type="bibl" ref="#Hbr">Briefe an die Hebräer</rs> und<lb/> der <rs
+                            type="bibl" ref="#II_Io">zweyte</rs> und <rs type="bibl" ref="#III_Io"
+                            >dritte</rs> Brief des h. <rs type="person" ref="#johan">Johannes</rs>
+                        kanonisch <w>ge<lb rend="bindestrich"/>worden</w>. Kurz, so und nicht anders kam der Kanon
+                        der<lb/> heiligen Schriften allmälig zu seiner <term target="#voll"
+                            >Vollkommenheit</term>; <w>wel<lb rend="bindestrich"/>ches</w> besonders sehr deutlich an
+                        der <rs type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs> erhellet, <w>de<lb rend="bindestrich"/>ren</w> Geschichte, und wie viel Widersprüche sie
+                        erdulden<lb/> müssen, wir jezt erzählen wollen.</p>
+                </div>
+                <div>
+                    <head type="chapter">§. 2.</head>
+                    <p xml:id="ue004">Von allen Schriften, die unmittelbar auf die <w>Schrif<lb rend="bindestrich"/>ten</w> der
+                        Apostel gefolgt sind, ist uns nichts übrig als der<lb/>
+                        <rs type="bibl" ref="#clemens_brief1">erste Brief</rs> des h. <rs
+                            type="person" ref="#clem">Clemens</rs>, nebst einem Fragmente des<lb/>
+                        <rs type="bibl" ref="#clemens_brief2">zweyten</rs>. Der vorgebliche <rs
+                            type="bibl" ref="#barnabas_brief">Brief</rs> des h. <rs type="person"
+                            ref="#barn">Barnabas</rs>, der<lb/> gewiß von einem sehr alten
+                        Schriftsteller ist; das <rs type="bibl" ref="#hermas_hirte">Buch</rs> des<pb
+                            n="109"/><lb/>
+                        <rs type="person" ref="#herm">Hermas</rs>; die <rs type="bibl"
+                            ref="ignatius_briefe">Briefe</rs>, welche den Namen des <rs
+                            type="person" ref="#igna">Ignatius</rs><lb/> führen; und der <rs
+                            type="bibl" ref="#polycarpus_brief">Brief</rs> des <rs type="person"
+                            ref="#poly">Polycarpus</rs>.</p>
+                </div>
+                <div>
+                    <head type="abstract">Stillschweigen der <choice>
+                            <sic>Schrifsteller</sic>
+                            <corr resp="werner">Schriftsteller</corr>
+                        </choice></head>
+                    <head type="chapter">§. 3.</head>
+                    <p xml:id="ue005">In allen diesen Schriften findet sich nicht die <w>gering<lb rend="bindestrich"/>ste</w> Spur
+                        von der <rs type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs>
+                        <rs type="person" ref="#johan">Johannis</rs>. Freylich aber<lb/> kann man
+                        aus diesem Stillschweigen nichts gegen dieses<lb/> Buch insbesondre
+                        schließen, indem sie eben so wenig der<lb/> vier Evangelisten und fast aller
+                        übrigen Bücher des <rs type="bibl" ref="#nov_test">
+                            <term target="#bibe">neuen<lb/> Testaments</term>
+                        </rs> gedenken.</p>
+                </div>
+                <div>
+                    <head type="abstract">Vorgeben des <rs type="person" ref="#proc">Prochorus</rs>.
+                        Dessen Charakter.</head>
+                    <head type="chapter">§. 4.</head>
+                    <p xml:id="ue006">Der falsche <rs type="person" ref="#proc">Prochorus</rs>, welcher sich einen
+                        Jünger der<lb/> Apostel nennt, wußte weit mehr davon, und folgendes
+                            <w>er<lb rend="bindestrich"/>zählt</w> er von dem Leben des h. <rs type="person"
+                            ref="#johan">Johannes</rs>. Es habe <w>nem<lb rend="bindestrich"/>lich</w> dieser <rs
+                            type="person" ref="#johan">Apostel</rs> den Christen von Ephesus
+                        angezeigt, daß<lb/> er eine <term target="#offe">Offenbarung</term> von <rs
+                            type="person" ref="#jesus">Jesu Christo</rs> gehabt. Diese
+                            <w>hät<lb rend="bindestrich"/>ten</w> ihn ersucht, sie schriftlich aufzusetzen, worauf der<lb/>
+                        <rs type="person" ref="#johan">Apostel</rs> sein <rs type="bibl" ref="#Io"
+                            >Evangelium</rs> dem <rs type="person" ref="#proc">Prochorus</rs> mitten
+                        unter <w>Don<lb rend="bindestrich"/>ner</w> und Blitz und Erdbeben in die Feder gesagt
+                        habe.<lb/> Nachher aber habe der <rs type="person" ref="#johan">Apostel</rs>
+                        seine <rs type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs> mit <w>eig<lb rend="bindestrich"/>ner</w> Hand aufgeschrieben, als ob er gleichsam aus
+                        ihr mehr<lb/> gemacht hätte, als aus seinem <rs type="bibl" ref="#Io"
+                            >Evangelio</rs>. Aber der <w>vor<lb rend="bindestrich"/>gegebene</w>
+                        <rs type="person" ref="#proc">Prochorus</rs>, der sich selbst hier unter die
+                            <w>handeln<lb rend="bindestrich"/>den</w> Personen sezt, war von der Zahl der ehrlichen
+                            <w>Chri<lb rend="bindestrich"/>sten</w>, die der Leichtgläubigkeit des <term
+                            target="#publ">Publikums</term> spotteten,<lb/> und, indem sie einen
+                        großen Eifer für die <term target="#reli">Religion</term>
+                        <w>vorga<lb rend="bindestrich"/>ben</w>, ihr Spiel nicht einmal unter der Maske einer
+                            <w>heidni<lb rend="bindestrich"/>schen</w> Aufrichtigkeit verbargen. Sein <rs type="bibl"
+                            ref="#unbekannt">Buch</rs> ist voller <term target="#fabe">
+                            <w>Fa<lb rend="bindestrich"/>beln</w>
+                        </term> und Ungereimtheiten. Die Worte <hi rend="font-size: large"
+                            >Hypostasis</hi> und<lb/>
+                        <hi rend="font-size: large">Consubstantia</hi> verrathen die Zeit genugsam,
+                        in welcher<lb/> es geschmiedet worden.</p>
+                </div>
+                <pb n="110"/>
+                <div>
+                    <head type="abstract"><rs type="person" ref="#ceri">Cerinthus</rs> kommt in den
+                        Verdacht die <rs type="bibl" ref="Apc">
+                            <term target="#offe">
+                                <w>Offenba<lb rend="bindestrich"/>rung</w>
+                            </term>
+                        </rs> geschrieben zu haben.</head>
+                    <head type="chapter">§. 5.</head>
+                    <p xml:id="ue007">Nach dem Tode der Apostel <note type="footnote" n="(*)"><rs type="person"
+                                ref="#euse">Eusebius</rs> K. G. <rs type="bibl"
+                                ref="eusebius_kirchengeschichte">B. 3. Hauptst. 28.</rs> und <rs
+                                type="bibl" ref="#eusebius_kirchengeschichte">B. 7. Hauptst.
+                            25.</rs></note> erschien <rs type="person" ref="#ceri"
+                        >Cerinthus</rs>,<lb/> der für das weltliche tausendjährige Reich sehr
+                            <w>eingenom<lb rend="bindestrich"/>men</w> war. Diese Meynung schrieb sich ursprünglich
+                        von<lb/> den <term target="#jude">Juden</term> her, und er war es, der sie
+                        unter den Christen<lb/> ausbreitete. Er gründete sich desfalls auf die <rs
+                            type="bibl" ref="Apc">
+                            <term target="#offe">
+                                <w>Offenba<lb rend="bindestrich"/>rung</w>
+                            </term>
+                        </rs>, von der er behauptete, daß sie ein Werk des h. <rs type="person"
+                            ref="#johan">
+                            <w>Jo<lb rend="bindestrich"/>hannis</w>
+                        </rs> wäre. Er mochte nun aber hiezu viel oder wenig<lb/> Grund haben:
+                        genung, verschiedene <term target="#orth">Orthodoxen</term> hatten<lb/> im
+                        Verdacht, daß er selbst der Vater dazu sey, weil ihnen<lb/> schien, daß
+                        dieses <rs type="bibl" ref="Apc">Werk</rs> das tausendjährige Reich zu
+                        viel<lb/> begünstige, wie wir in der Folge mit mehrerem sehen<lb/>
+                    werden.</p>
+                </div>
+                <div>
+                    <head type="abstract">Andere <term target="#ketz">Ketzer</term>, die gegen die
+                            <rs type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs>
+                        <choice>
+                            <sic>wa<lb rend="bindestrich"/> waren</sic>
+                            <corr resp="werner"><lb/> waren</corr>
+                        </choice>. Sonderbare Antwort des <rs type="person" ref="#epip">
+                            <w>Epi<lb rend="bindestrich"/>phanius</w>
+                        </rs>.</head>
+                    <head type="chapter">§. 6.</head>
+                    <p>Indeß erhuben sich andre <term target="#ketz">Ketzer</term>, als nemlich <rs
+                            type="person" ref="#cerd">Cerdo</rs><lb/> und <rs type="person"
+                            ref="#marci">Marcion</rs>, nach dem <rs type="person" ref="#tert"
+                            >Tertullianus</rs><note type="annotation" resp="werner">Hier wird auf die Schrift <rs type="bibl" ref="#tertullian_marcion">Gegen Marcion</rs> des Tertullian verwiesen. Abauzit verweist explizit in einer Fußnote (S. 252) darauf.</note>
+                        und selbst die <w>Alo<lb rend="bindestrich"/>gi</w>, nach dem <rs type="person" ref="#epip"
+                            >Epiphanius</rs>
+                        gegen die <rs type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs>, welche<lb/> sie dem h. <rs type="person" ref="#johan">Johannes</rs>
+                        absprachen, weil, wie sie unter <w>an<lb rend="bindestrich"/>dern</w> Gründen sagten, zu den
+                        Zeiten dieses <rs type="person" ref="#johan">Apostels</rs> noch<lb/> keine
+                        christliche <term target="#kirc">Kirche</term> zu Thyatira gewesen sey.
+                        Dieses<lb/> ihnen einzuräumen, fürchtet sich der h. <rs type="person"
+                            ref="#epip">Epiphanius</rs> auch<lb/> im geringsten nicht; er nimmt
+                        vielmehr an, daß <rs type="person" ref="#johan">
+                            <w>Johan<lb rend="bindestrich"/>nes</w>
+                        </rs>, wenn er an eine Kirche zu Thyatira schreibe, ganz<lb/> und gar nicht
+                        von einer damals schon vorhandenen <term target="#kirch">Kirche</term>,<lb/>
+                        sondern im prophetischen <term target="#geis">Geiste</term> rede.</p>
+                    <pb n="111"/>
+                </div>
+                <div>
+                    <head type="chapter">§. 7.</head>
+                    <p xml:id="ue008">So stritten also über die <rs type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs>
+                        <term target="#ketz">Ketzer</term> gegen<lb/> Ketzer, indem sich die <term
+                            target="#orth">Orthodoxen</term> noch ganz von ferne
+                        <w>hiel<lb rend="bindestrich"/>ten</w>. Wenigstens sind wir in der vollkommensten
+                            <w>Unge<lb rend="bindestrich"/>wisheit</w>, aus welchem Gesichtspunkte sie diesen Streit
+                            <w>be<lb rend="bindestrich"/>trachteten</w>.</p>
+                </div>
+                <div>
+                    <head type="abstract"><rs type="person" ref="#just">Justinus</rs> erklärt sich
+                        für die <rs type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs><lb/> zuerst.</head>
+                    <head type="chapter">§. 8.</head>
+                    <p xml:id="ue009">Der Märtyrer <rs type="person" ref="#just">Justinus</rs>, der um 170. nach
+                            <rs type="person" ref="#jesus">Christi</rs><lb/> Geburt schrieb, ist der
+                        erste von allen <term target="#kirc">Kirchenlehrern</term>,
+                        <w>wel<lb rend="bindestrich"/>cher</w> der <rs type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs> gedenket; und das merkwürdigste <w>da<lb rend="bindestrich"/>bey</w> ist, daß er sie dem
+                        Apostel <rs type="person" ref="#johan">Johannes</rs> beylegt. In<lb/> dem
+                            <rs type="bibl" ref="#justinus_tryphon">Gespräche mit Tryphon</rs>
+                        fragte ihn dieser <term target="#jude">Jude</term>, ob er<lb/> nicht glaube,
+                        daß Jerusalem noch einmal wieder hergestellt<lb/> werden würde. Hierauf
+                        antwortet <rs type="person" ref="#just">Justinus</rs>, daß er
+                            <w>sei<lb rend="bindestrich"/>nes</w> Theils, so wie jeder rechtgläubige Christ, es
+                            <w>aller<lb rend="bindestrich"/>dings</w> glaube, und sagt:<hi rend="font-size: large">Es
+                            hat unter uns einen <w>ge<lb rend="bindestrich"/>wissen</w> Mann, Nahmens <rs
+                                type="person" ref="#johan">Johannes</rs>, gegeben,
+                            <w>wel<lb rend="bindestrich"/>cher</w> einer von den zwölf Aposteln <rs type="person"
+                                ref="#jesu">Jesu Christi</rs>
+                            <w>gewe<lb rend="bindestrich"/>sen</w>. Dieser hat in seiner <rs type="bibl" ref="#Apc">
+                                <term target="#offe">Offenbarung</term>
+                            </rs> geweissaget,<lb/> daß die Gläubigen tausend Jahre in Jerusalem
+                                <w>zu<lb rend="bindestrich"/>bringen</w> würden</hi>. Das ist das einzigemal, daß <rs
+                            type="person" ref="#just">Justinus</rs><lb/> in seinen Werken die <rs
+                            type="bibl" ref="#Apc">
+                            <term target="#offe">Offenbarung</term>
+                        </rs> anführt; und warum<lb/> führt er sie an? Das tausendjährige Reich
+                        damit zu <w>be<lb rend="bindestrich"/>weisen</w>.</p>
+                </div>
+                <div>
+                    <head type="chapter">§. 9.</head>
+                    <p xml:id="ue010">Aus den Worten <rs type="person" ref="#just">dieses <term target="#kirc"
+                                >Kirchenlehrers</term></rs> läßt sich nicht<lb/> schliessen, daß sie
+                        damals von allen und jeden Kirchen <w>an<lb rend="bindestrich"/>genommen</w> gewesen. <rs type="person" ref="#just">Justinus</rs> scheint blos
+                        anzuzeigen, <w>wel<lb rend="bindestrich"/>cher</w> Meynung er für sich
+                        sey: oder höchstens, welcher <w>Mey<lb rend="bindestrich"/>nung</w>
+                        diejenigen <term target="#chri">Christen</term> wären, die in diesem Punkt
+                            <w>recht<lb rend="bindestrich"/>gläubig</w> dächten, das ist: das
+                        tausendjährige Reich <w>glaub-<pb n="112"/><lb/>ten</w>. Aber das ist wohl ausser Streit, daß <rs type="person" ref="#just"
+                            >Justinus</rs> für<lb/> seinen Kopf ein falsches <rs type="bibl"
+                            ref="#unbekannt">Evangelium</rs> anführt, wenn er in dem<lb/> nemlichen
+                            <rs type="bibl" ref="#justinus_tryphon">Gespräche</rs> sagt, daß, als
+                            <rs type="person" ref="#jesus">Jesus Christus</rs> in den<lb/> Jordan
+                        getreten, <hi rend="font-size: large">sich ein Feuer darinn entzündet</hi>,
+                        und<lb/> man vom Himmel die Stimme gehört habe: <hi rend="font-size: large"
+                            >du bist mein<lb/> Sohn, heute habe ich dich gezeuget</hi>. Er
+                        versichert,<lb/> daß die Apostel <hi rend="font-size: large">dergleichen
+                            Dinge geschrieben hätten</hi>,<lb/> die gleichwohl nur in dem <rs
+                            type="bibl" ref="#ebionitenevangelium">Evangelio der Ebioniten</rs><lb/>
+                        standen.</p>
+                </div>
+                <div>
+                    <head type="abstract">Sein Charakter.</head>
+                    <head type="chapter">§. 10.</head>
+                    <p>Allerdings gab sich <rs type="person" ref="#just">Justinus</rs> Mühe, sich
+                        von der<lb/>
+                        <term target="#wahr">Wahrheit</term> geschehener Dinge wohl zu unterrichten.
+                        Er<lb/> war viel gereiset, und zwar nicht als ein gemeiner Mann<lb/>
+                        gereiset, sondern als ein sehr aufmerksamer Antiquar.</p>
+                </div>
+            </div>
+        </body>
+    </text>
+</TEI>

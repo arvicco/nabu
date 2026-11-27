@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI version="5.1" 
+	xmlns="http://www.tei-c.org/ns/1.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://diglib.hab.de/rules/schema/mss/v1.0/cataloguing.xsd" 
+	xml:lang="de"
+	xml:id="HAB_mss_h-fmg-rara-fmg-artot-de-padilla-d-001_tei-msDesc_fmg">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Beschreibung von Hannover, Forschungszentrum Musik und Gender, Rara/FMG Artôt de Padilla,D.1</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>Elektronische Ausgabe nach TEI P5</edition>
+				<respStmt>
+					<resp>TEI-P5 konforme Kodierung durch</resp>
+					<name type="person">Anne Fiebig</name>
+					<name type="org">Forschungszentrum Musik und Gender</name>
+				</respStmt>
+			</editionStmt>
+			<publicationStmt>
+				<publisher>
+					<name type="org">Forschungszentrum Musik und Gender</name>
+					<ptr target="http://www.fmg.hmtm-hannover.de"/>
+				</publisher>
+				<date type="issued" when="2019-09-30">30. September 2019</date>
+				<date type="digitised" when="2018-03-01">1. März 2018</date>
+				<distributor>Forschungszentrum Musik und Gender</distributor>
+				<availability status="free">
+					<licence target="https://creativecommons.org/publicdomain/zero/1.0/deed.de">   
+					<p>Diese Beschreibung steht unter der Creative Commons Lizenz Public Domain Dedication (CC0 1.0).</p>   
+					<p>Für die Nutzung weiterer Daten wie Digitalisaten gelten gegebenenfalls andere Lizenzen. Vgl. die <ref target="http://diglib.hab.de/?link=012">Copyright Information</ref> der Herzog August Bibliothek Wolfenbüttel.</p>
+					</licence> 
+				</availability>
+				<pubPlace>
+					<ptr type="purl" target="http://diglib.hab.de/edoc/ed000249/start.htm"/>
+				</pubPlace>
+			</publicationStmt>
+			<sourceDesc>
+				<p>Beschreibung erstellt von <name type="person">Anne Fiebig</name>, 2. Lesung von <name type="person">Felisa Mesuere</name>.</p>	
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<projectDesc>
+				<p>Beschreibung erstellt im Rahmen des Projektes <name type="project">Erschließen, Forschen, Vermitteln. Identität und Netzwerke / Mobilität und Kulturtransfer im musikbezogenen Handeln von Frauen zwischen 1800 und 2000</name>. Projektleitung: <name type="person">Dr. Nicole K. Strohmann.</name>
+				</p>
+			</projectDesc>
+		</encodingDesc>
+		<profileDesc>
+			<correspDesc>
+				<!-- Adressangabe nur in der Transkription kodieren, nicht in der Beschreibung, ggf. nur Adresse transkibieren! -->
+				<correspAction type="sent">
+					<persName ref="#Artot_de_Padilla_Desiree">Désirée Artôt de Padilla</persName>
+				</correspAction>
+				<correspAction type="received">
+					<persName ref="#Pietsch_Ludwig">Ludwig Pietsch</persName>
+				</correspAction>
+			</correspDesc>
+			<textClass>
+				<keywords scheme="#gnd">
+				    <term xml:lang="de"
+                     ref="http://d-nb.info/gnd/4008240-4"
+                     type="docType"
+                     subtype="corresp_letter">Brief</term>
+					<term xml:lang="de" ref="http://d-nb.info/gnd/4171529-9">Netzwerke</term>
+				</keywords>
+			</textClass>
+		</profileDesc>
+	</teiHeader>
+	<text>
+		<body>
+			<msDesc xml:id="mss_h-fmg-rara-fmg-artot-de-padilla-d-001_tei-msDesc_fmg" xml:lang="de">
+				<msIdentifier>
+					<settlement>Hannover</settlement>
+					<repository rend="fmg" ref="ISIL:DE-2184">Forschungszentrum Musik und Gender</repository>
+					<idno sortKey="h-fmg-rara-artot-de-padilla-d-001">Rara/FMG Artôt de Padilla,D.1</idno>
+					<altIdentifier type="catalog">
+						<repository>Kalliope</repository>
+						<idno>http://kalliope-verbund.info/DE-611-HS-3094946</idno>
+					</altIdentifier>
+				</msIdentifier>
+				<head>
+					<title>Brief von Désirée Artôt de Padilla an Ludwig Pietsch (ohne Ort, ohne Datum)</title>
+				</head>
+				<msContents>
+					<summary>
+						Désirée Artôt de Padilla schreibt über ein Treffen am nächsten Tag, zu dem ihr Onkel <rs type="person" ref="#Baugniet_Charles" cert="medium" resp="#VH" role="mentioned">Charles Baugniet</rs> neben dem Adressaten noch drei weitere Personen eingeladen hat: 
+						<rs type="person" ref="#Preuss" role="mentioned">M. Preuss</rs>, <rs type="person" ref="#Menzel_Emilie" cert="medium" role="mentioned">Emilie Menzel</rs> und einen <rs type="person" ref="#Unbekannt_0056" role="mentioned">Maler</rs>.</summary>
+					<textLang mainLang="fr">Französisch</textLang>
+				</msContents>
+				<physDesc>
+					<objectDesc form="letter"> 
+						<supportDesc material="paper">
+							<support>
+								<p>Handschriftlicher Brief mit eigenhändiger Unterschrift.</p>
+							</support>
+							<extent>
+								<measure type="leavesCount">1 Doppelblatt (3 beschriftete Seiten)</measure>
+							</extent>
+						</supportDesc>
+						</objectDesc>
+					<handDesc hands="1">
+						<handNote medium="black ink">
+							<p>In schwarzer Tinte geschrieben.</p>
+						</handNote>
+					</handDesc>
+				</physDesc>
+				<history>					
+					<origin>
+						<!--<p>Vorbesitzer</p>-->
+					</origin>
+					<acquisition>
+						<p><rs type="org" role="seller" ref="#Axel_Schmolt_Autographen-Auktionen">Axel Schmolt Autographen-Auktionen, Krefeld</rs></p>
+						<p><date type="receipt">18.10.2016</date></p>
+						<p><measure type="currency">110 EUR</measure></p>
+						<p>Erworben aus Mitteln der <rs type="org" role="donor">Mariann-Steegmann-Stiftung</rs>.</p>
+						<p>Im Konvolut mit anderen Materialien verschiedener Sängerinnen erworben.</p>
+					</acquisition>
+				</history>
+				<additional>
+					<adminInfo>
+						<availability status="free">
+							<licence target="https://creativecommons.org/publicdomain/zero/1.0/deed.de">   
+							<p>Diese Beschreibung steht unter der Creative Commons Lizenz Public Domain Dedication (CC0 1.0).</p>   
+							<p>Für die Nutzung weiterer Daten wie Digitalisaten gelten gegebenenfalls andere Lizenzen. Vgl. die <ref target="http://diglib.hab.de/?link=012">Copyright Information</ref> der Herzog August Bibliothek Wolfenbüttel.</p>
+							</licence> 
+						</availability>
+					</adminInfo>
+				</additional>
+			</msDesc>
+		</body>
+	</text>
+</TEI>

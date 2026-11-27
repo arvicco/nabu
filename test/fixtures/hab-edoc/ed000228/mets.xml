@@ -1,0 +1,1324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets OBJID="edoc/ed000228" TYPE="rare book" xmlns:mets="http://www.loc.gov/METS/"
+    xmlns:wdb="http://diglib.hab.de/wdb/" xmlns:rmd="http://diglib.hab.de/rights"
+    xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://www.loc.gov/METS/ http://diglib.hab.de/rules/schema/mets/v1.9/wdb-mets-2.xsd">
+    <mets:metsHdr CREATEDATE="2013-09-03T10:30:00">
+        <mets:agent ROLE="ARCHIVIST" TYPE="ORGANIZATION">
+            <mets:name>Herzog August Bibliothek Wolfenbüttel</mets:name>
+        </mets:agent>
+    </mets:metsHdr>
+
+    <!-- Katalogeintrag, verwendet wird in der Regel die PPN der elektronischen Ressource oder der Ressource, die den Link enthält -->
+    <!--<mets:dmdSec ID="dmd_opac">
+        <mets:mdRef LOCTYPE="PURL" MDTYPE="OTHER" OTHERMDTYPE="PICA" MIMETYPE="text/xml"  xlink:href="http://diglib.hab.de/?format=mods&amp;opac=1906359903"/>
+    </mets:dmdSec>-->
+    
+    <mets:dmdSec ID="dmd_local">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods>
+                    <mods:identifier type="purl">http://diglib.hab.de/edoc/ed000228/start.htm</mods:identifier>
+                    <mods:titleInfo>
+                        <mods:title>Digitale Edition und Kommentierung der Tagebücher des Fürsten Christian II. von Anhalt-Bernburg (1599-1656)</mods:title>
+                    </mods:titleInfo>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Anhalt-Bernburg</mods:namePart>
+                        <mods:namePart type="given">Christian II. von</mods:namePart>
+                        <mods:displayForm>Christian II. von Anhalt-Bernburg</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Asch</mods:namePart>
+                        <mods:namePart type="given">Ronald G.</mods:namePart>
+                        <mods:displayForm>Ronald G. Asch</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Burschel</mods:namePart>
+                        <mods:namePart type="given">Peter</mods:namePart>
+                        <mods:displayForm>Peter Burschel</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Schreiber</mods:namePart>
+                        <mods:namePart type="given">Arndt</mods:namePart>
+                        <mods:displayForm>Arndt Schreiber</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Zirr</mods:namePart>
+                        <mods:namePart type="given">Alexander</mods:namePart>
+                        <mods:displayForm>Alexander Zirr</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Herz</mods:namePart>
+                        <mods:namePart type="given">Andreas</mods:namePart>
+                        <mods:displayForm>Andreas Herz</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Odier</mods:namePart>
+                        <mods:namePart type="given">Antoine</mods:namePart>
+                        <mods:displayForm>Antoine Odier</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">org</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Görmar</mods:namePart>
+                        <mods:namePart type="given">Maximilian</mods:namePart>
+                        <mods:displayForm>Maximilian Görmar</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">ctb</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Blank</mods:namePart>
+                        <mods:namePart type="given">Anna-Maria</mods:namePart>
+                        <mods:displayForm>Anna-Maria Blank</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">ctb</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Sonnenberg</mods:namePart>
+                        <mods:namePart type="given">Anna Lisa</mods:namePart>
+                        <mods:displayForm>Anna Lisa Sonnenberg</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">ctb</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Blatt</mods:namePart>
+                        <mods:namePart type="given">Maximilian</mods:namePart>
+                        <mods:displayForm>Maximilian Blatt</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">ctb</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Görmar</mods:namePart>
+                        <mods:namePart type="given">Maximilian</mods:namePart>
+                        <mods:displayForm>Maximilian Görmar</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">prg</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Baumgarten</mods:namePart>
+                        <mods:namePart type="given">Marcus</mods:namePart>
+                        <mods:displayForm>Marcus Baumgarten</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">prg</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:name type="personal">
+                        <mods:namePart type="family">Niehoff</mods:namePart>
+                        <mods:namePart type="given">Jorma</mods:namePart>
+                        <mods:displayForm>Jorma Niehoff</mods:displayForm>
+                        <mods:role>
+                            <mods:roleTerm type="code" authority="marcrelator">prg</mods:roleTerm>
+                        </mods:role>
+                    </mods:name>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Wolfenbüttel</mods:placeTerm>
+                        </mods:place>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                        <mods:dateIssued encoding="w3cdtf">2013-2026</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title>Wolfenbütteler Digitale Editionen</mods:title>
+                        </mods:titleInfo>
+                        <part>
+                            <detail>
+                                <number>, 7</number>
+                            </detail>
+                        </part>
+                        <mods:identifier type="purl">http://opac.lbs-braunschweig.gbv.de/DB=2/XMLPRS=N/PPN?PPN=1000751309</mods:identifier>                        
+                    </mods:relatedItem>
+                    <mods:recordInfo>
+                        <mods:recordContentSource authority="gbv" authorityURI="http://uri.gbv.de/organization/isil/DE-23">OPAC</mods:recordContentSource>
+                        <mods:recordIdentifier source="opac">http://opac.lbs-braunschweig.gbv.de/DB=2/XMLPRS=N/PPN?PPN=1906359903</mods:recordIdentifier>
+                    </mods:recordInfo>
+                    <mods:note type="projectDescription">
+                        Die digitale Edition der Tagebücher des reformierten Fürsten Christian II. von Anhalt-Bernburg (1599-1656) aus dem Zeitraum von 1621 bis 1656 erschließt einen quantitativ wie qualitativ ganz einzigartigen Brennspiegel der deutschen und europäischen Geschichte sowie der unterschiedlichen Diskurse während der ersten Hälfte des 17. Jahrhunderts. Darüber hinaus weist die Quelle einen außergewöhnlich hohen Anteil an verbalisierter zeitgenössischer Subjektivität auf, der dem Text stellenweise sogar eine gewisse literarische Qualität verleiht. Die transdisziplinäre Bedeutung des Werkes bettet sich in vielfältige Interessen und Kontexte der aktuellen Forschung ein. Dazu gehören nicht nur die jüngsten Untersuchungen zur klassischen Politik- und Militärgeschichte, zu frühneuzeitlichen Selbstzeugnissen, zur Sozial-, Alltags- und Geschlechtergeschichte, zur Konfessionalisierung, zu verschiedenen Aspekten des Dreißigjährigen Krieges, zur Hof- und Adelsforschung oder zur Sprach-, Literatur- und allgemeinen Kulturgeschichte, sondern auch zu Themen wie der Geschichte der Emotionen und des Traumes in jener Epoche. Als eine den gegenwärtigen wissenschaftlichen Standards entsprechende digitale Edition wird sie einem großen Spektrum an Forschungsperspektiven zahlreiche Anknüpfungspunkte bieten können.
+                    </mods:note>
+                </mods:mods>
+                <mods:subject displayLabel="Tagebuch">
+                    <mods:topic valueURI="https://d-nb.info/gnd/4058900-6">Tagebuch</mods:topic>
+                </mods:subject>
+                <mods:subject displayLabel="Frühe Neuzeit">
+                    <mods:temporal valueURI="https://d-nb.info/gnd/7503866-3">Frühe Neuzeit</mods:temporal>
+                </mods:subject>
+                <mods:subject displayLabel="Digitale Edition - Handschrift">
+                    <mods:genre valueURI="https://d-nb.info/gnd/1212244893">Digitale Edition</mods:genre>
+                    <mods:topic valueURI="https://d-nb.info/gnd/4148186-0">Handschrift</mods:topic>
+                </mods:subject>
+                <mods:subject displayLabel="Dreißigjähriger Krieg">
+                    <mods:topic valueURI="https://d-nb.info/gnd/4012985-8">Dreißigjähriger Krieg</mods:topic>
+                </mods:subject>
+                <mods:subject displayLabel="Hof- und Adelskultur">
+                    <mods:topic valueURI="https://d-nb.info/gnd/4122200-3">Höfische Kultur</mods:topic>
+                </mods:subject>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+
+    <!-- Rechtesegment -->
+    <mets:amdSec ID="amd_edoc_ed000228">
+        
+        <!-- Rechtesegment   -->
+        <!-- **** Rechtesegment ****************************************************************************   -->
+        <!-- Bibliotheks Standardlizenz für Retrodigitalisate lt. Benutzungsordnung; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000228_retrodig">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="Benutzungsordnung"/>
+        </mets:rightsMD>
+        <!-- CC Standardlizenz, wenn der Autor zugestimmmt hat; vgl. AMDID in den Strukturdaten-->
+        <mets:rightsMD ID="rmd_edoc_ed000228_CC">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/rights/cc_by-sa.html" LABEL="CC BY-SA 3.0"/>
+        </mets:rightsMD>
+        <!-- Lizenz, wenn der Autor/Institution der weiteren Nutzung zustimmmen muss -->
+        <mets:rightsMD ID="rmd_edoc_ed000228_restricted">
+            <mets:mdRef LOCTYPE="URL" MDTYPE="OTHER" OTHERMDTYPE="publisher_rights" xlink:href="http://diglib.hab.de/?link=012" LABEL="rights restricted"/>
+        </mets:rightsMD>
+    </mets:amdSec>
+    
+    
+    <mets:fileSec>
+        <!--      ****Filesection ************************************************************************************** -->
+          <!-- Konfigurationsparameter -->
+            <mets:fileGrp USE="config">
+                <mets:file  ID="wdb_parameter">
+                    <mets:FContent>
+                        <mets:xmlData>
+                            <wdb:parameter>
+                                <!-- Titelbaltt oder Einstiegsseite fuer "Werke"; muss gesetzt sein -->
+                                <wdb:param distype="start" firstpage_xml="start.xml" firstpage_xsl="start.xsl"/>
+                                
+                                <!-- Sprache -->
+                                <wdb:param lang="de"/>
+                                
+                                <!-- owner logo -->
+                                <wdb:logo owner="Universität Freiburg" ownerLogo="http://diglib.hab.de/images/logo-freiburg.png" ownerSiteURL="http://www.uni-freiburg.de" ownerContact=""/>
+                                
+                                <!-- Volltextsuche mit Paralleler Volltextsicht; @url fuer Aufgerufenes Skript, nur fuer Menusuche; Extrasuchen unter Behavior -->
+                                <!-- welche XQL Scripte sollen fuer die Suche verwendet werden; wdb ist Standard 
+                                    Pfad: exist.hab.de/rest/db/apps/[wdb:param]/search.xql
+                                -->
+                              
+                              <!-- Volltextsuche -->
+<!--                                <wdb:param distype="results-transcript" url="projekte/tb_christian_ii/search/search-ocr.xql"/> -->
+                                <wdb:param distype="results-transcript" url="wdb/search/search.xql"/>
+                                
+                                
+                              
+                                
+                                <!-- Anzeige Parallelsichten  -->
+                                <!-- 
+                                    wdb:parallelView:
+                                    -  @SMLINKID: Link auf die mets:smLink in mets:structLink ID="parallel_views" (hier die Dateien, die verbunden werden)
+                                    -  @f1 Prozent der Groesse des linken Fensters
+                                    -  @f2 Prozent der Groesse des rechten Fensters
+                                    -  @synctype  moegliche Werte: "pb" (Linking ueber pageID), "div", (Anzahl divisions),"sync" (explizite angabe), "none" (unverbunden)
+                                -->
+                                <!--<wdb:parallelView pvID="pv_transcript-facs1602" f1="30" f2="70" synctype="pb"/>-->
+                                <wdb:parallelView pvID="pv_transcript-facs" f1="50" f2="50" synctype="pb"/>
+                                
+                                <!-- im Kopf des Menue zu zeigende Logos -->
+                                <!--<wdb:logo owner="Uni xy" ownerLogo="xy.png" ownerSiteURL="http://xy" ownerContact="xy@xy.de"/>;  Mehrfachlogos sind zulaessig -->
+                               </wdb:parameter>
+                        </mets:xmlData>
+                    </mets:FContent>
+                </mets:file>
+            </mets:fileGrp>
+        
+        <!-- Facsimiles-->
+        
+        <mets:fileGrp USE="facsimile_URL">
+            
+            <!-- 1621 -->
+            <mets:file ID="mss_ed000193_fg_facs_1621_11" MIMETYPE="text/html"><mets:FLocat LOCTYPE="URL" xlink:href="https://diglib.hab.de/mss/ed000193/start.htm?distype=imgs&amp;image=00006"/></mets:file>
+        </mets:fileGrp>
+        
+        <!--  Transkription  -->
+        <mets:fileGrp USE="transcription">
+            
+            <!-- 1621 -->
+            <mets:file ID="edoc_ed000228_fg_1621_11" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="1621_11.xml"/></mets:file>
+            
+        </mets:fileGrp>
+        
+        <!--  Einleitungstexte  -->
+        <mets:fileGrp USE="introduction">
+            <mets:file ID="edoc_ed000228_fg_introduction_f001" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/001_introduction.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_biography" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_biography.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_dynasty" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_dynasty.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_territory" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_territory.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_confess" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_confess.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_30yearsWar" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_30yearsWar.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_FG" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_FG.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_sourceDesc" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_sourceDesc.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_spelling" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_spelling.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_transcriptionRules" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_transcriptionRules.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_dream" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_dream.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_codingRules" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_codingRules.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_abkuerzungsdokumentation" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="register/listAbbr_dok.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1621" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1621.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1622" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1622.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1623" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1623.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1626" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1626.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1627" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1627.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1628" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1628.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1629" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1629.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1630" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1630.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1631" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1631.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1632" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1632.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1633" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1633.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1634" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1634.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1635" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1635.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1636" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1636.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1637" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1637.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1638" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1638.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1639" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1639.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1640" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1640.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1641" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1641.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1642" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1642.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1643" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1643.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1645" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1645.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_introduction_1646" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="introduction/introduction_1646.xml"/></mets:file>
+        </mets:fileGrp>
+        
+        <!-- Registerdateien -->
+        
+        <mets:fileGrp USE="register">
+            <mets:file ID="edoc_ed000228_fg_register_person" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="register/listPerson.xml"/></mets:file>            
+            <mets:file ID="edoc_ed000228_fg_register_bibl" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="register/listBibl.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_register_place" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="register/listPlace.xml"/></mets:file>
+            <mets:file ID="edoc_ed000228_fg_register_subject" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="register/listSubject.xml"/></mets:file>
+            <!--<mets:file ID="edoc_ed000228_fg_register_itinerar" MIMETYPE="application/xml"><mets:FLocat LOCTYPE="URL" xlink:href="1635_01.xml"/></mets:file>-->
+        </mets:fileGrp>
+        
+        <!-- statische Register -->
+        <mets:fileGrp>
+            <mets:file ID="personenregister" MIMETYPE="text/html" >
+                <!--<mets:FLocat xlink:href="edoc/ed000228/register/listPerson.html" LOCTYPE="URL"/>-->
+                <mets:FLocat xlink:href="edoc/ed000228/register/listPerson_A.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="ortsregister" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/register/listPlace.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="ortsregister_karte" MIMETYPE="text/html">
+                <mets:FLocat xlink:href="edoc/ed000228/register/ortsregister_karte.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="organisationen" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/register/listOrg.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="sachregister_alpha" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/register/sachregister_alphabetisch.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="sachregister_hierarch" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/register/sachregister_hierarchisch.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="listBiblicalRefs" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/register/listBiblicalRefs.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="bibliographie" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/register/listBibl.html" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+        <!--Suche-->
+        <mets:fileGrp>
+            <mets:file ID="erweiterte_suche" MIMETYPE="text/html">
+                <mets:FLocat xlink:href="https://exist.hab.de/rest/db/apps/projekte/tb_christian_ii/search/new_advanced_search.xql" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+        
+        <!--Materialien -->
+        <mets:fileGrp>
+            <mets:file ID="FID1" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="http://www.tagebuch-christian-II-anhalt.de" xlink:show="new" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="beacon" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/materialien/TBChristianII_beacon.txt" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="gitlab_xml" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="https://git.hab.de/digitale-editionen/christian-ii-von-anhalt-bernburg-tagebuecher/tagebuch-christian-ii-xml" xlink:show="new" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="gitlab_txt" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="https://git.hab.de/digitale-editionen/christian-ii-von-anhalt-bernburg-tagebuecher/tagebuch-christian-ii-plain-text" xlink:show="new" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="forschungsdatenrepo" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="https://doi.org/10.60831/hycz-8x57" xlink:show="new" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="stammbaum_anhalt" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/materialien/stammbäume/stammbaum_anhalt.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="stammbaum_sachsen-lauenburg" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/materialien/stammbäume/stammbaum_sachsen-lauenburg.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="verwandtschaftsnetzwerk" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/materialien/netzwerk_verwandtschaften/index.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="itinerar_tabelle" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/itinerar.html" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="itinerar_karte" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/itinerar_karte.html" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+        <!--LOD-->
+        <mets:fileGrp>
+            <mets:file ID="LOD_docu" MIMETYPE="application/xml">
+                <mets:FLocat xlink:href="materialien/RDF/documentation_lod.xml" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="LOD_persons" MIMETYPE="text/html">
+                <mets:FLocat xlink:href="edoc/ed000228/materialien/RDF/christianii_lod_persons.xml" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="LOD_places" MIMETYPE="text/html">
+                <mets:FLocat xlink:href="edoc/ed000228/materialien/RDF/christianii_lod_places.xml" LOCTYPE="URL"/>
+            </mets:file>
+            <mets:file ID="LOD_organizations" MIMETYPE="text/html">
+                <mets:FLocat xlink:href="edoc/ed000228/materialien/RDF/christianii_lod_organizations.xml" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp>
+            <mets:file ID="kontakt" MIMETYPE="text/html" >
+                <mets:FLocat xlink:href="edoc/ed000228/kontakt/kontakt.html" LOCTYPE="URL"/>
+            </mets:file>
+        </mets:fileGrp>
+        
+        
+    </mets:fileSec>
+
+
+    <!--    Inhaltliche Struktur ######################################################################################  -->
+    <mets:structMap>
+        <mets:div>
+
+            <!-- Einleitung, praefationes *************************************************************  -->
+            <mets:div TYPE="submenu" LABEL="Einführung" ID="edoc_ed000228_introduction">
+                <mets:div TYPE="introduction" LABEL="Projektbeschreibung" ID="edoc_ed000228_introduction_projectDescription_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_f001"/></mets:div>
+                <mets:div TYPE="submenu" LABEL="Fürst Christian II. von Anhalt-Bernburg und seine Zeit" ID="edoc_ed000228_introduction_lifeAndTimes">
+                    <mets:div TYPE="introduction" LABEL="Biographie" ID="edoc_ed000228_introduction_biography_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_biography"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Dynastische Geschichte" ID="edoc_ed000228_introduction_dynasty_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_dynasty"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Territorialgeschichte" ID="edoc_ed000228_introduction_territory_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_territory"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Konfessionalisierung" ID="edoc_ed000228_introduction_confess_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_confess"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Dreißigjähriger Krieg" ID="edoc_ed000228_introduction_30yearsWar_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_30yearsWar"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Christian II. und die Fruchtbringende Gesellschaft" ID="edoc_ed000228_introduction_FG_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_FG"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Traum und Traumdiskurs" ID="edoc_ed000228_introduction_dream_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_dream"/></mets:div>
+                </mets:div>
+                <mets:div TYPE="submenu" LABEL="Quelle und Edition" ID="edoc_ed000228_introduction_sourceEdition">
+                    <mets:div TYPE="introduction" LABEL="Beschreibung der Quelle" ID="edoc_ed000228_introduction_sourceDesc_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_sourceDesc"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Schreibweisen" ID="edoc_ed000228_introduction_spelling_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_spelling"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Editionsrichtlinien" ID="edoc_ed000228_introduction_transcriptionRules_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_transcriptionRules"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Kodierrichtlinien" ID="edoc_ed000228_introduction_codingRules_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_codingRules"/></mets:div>
+                    <mets:div TYPE="introduction" LABEL="Abkürzungsverzeichnis" ID="edoc_ed000228_introduction_abkuerzungsdokumentation_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_abkuerzungsdokumentation"/></mets:div>
+                </mets:div>                
+            </mets:div>
+            
+          
+
+            <!-- Faksimiles ************************************************* -->
+            <!--  Einleitungen , Faksimile, Transkriptionen **************************************************** -->
+            
+            
+            <!-- 1621 -->
+            <mets:div TYPE="submenu" LABEL="1621" ID="edoc_ed000228_transcription_1621">
+                <mets:div TYPE="introduction" LABEL="Einleitung" ID="edoc_ed000228_fg_introduction_1621_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_introduction_1621"/></mets:div>
+                <mets:div TYPE="transcript" LABEL="November 1621" ID="edoc_ed000228_fg_1621_11_sm" ADMID="rmd_edoc_ed000228_CC"><mets:fptr FILEID="edoc_ed000228_fg_1621_11"/></mets:div>
+            </mets:div>
+        </mets:div>
+        
+        
+    </mets:structMap>
+
+    <!--    Behavior Section ######################################################################################  -->
+    <!--  Innerhab der Behavior-Sections werden verschiedene technische Anzeigeformate definiert. 
+            Unterschiedliche inhaltliche Sichten auf diesselbe Dateien erhalten eine eigene Behavior Section.-->
+           
+    <mets:behaviorSec ID="edoc_ed000228">
+        
+        <!-- Einleitungen zu den Jahren -->
+        <mets:behavior ID="edoc_ed000228_intro_001" STRUCTID="edoc_ed000228_introduction_projectDescription_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_biography" STRUCTID="edoc_ed000228_introduction_biography_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_dynasty" STRUCTID="edoc_ed000228_introduction_dynasty_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_territory" STRUCTID="edoc_ed000228_introduction_territory_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_confess" STRUCTID="edoc_ed000228_introduction_confess_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_30yearsWar" STRUCTID="edoc_ed000228_introduction_30yearsWar_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_FG" STRUCTID="edoc_ed000228_introduction_FG_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_dream" STRUCTID="edoc_ed000228_introduction_dream_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_sourceDesc" STRUCTID="edoc_ed000228_introduction_sourceDesc_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_spelling" STRUCTID="edoc_ed000228_introduction_spelling_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_transcriptionRules" STRUCTID="edoc_ed000228_introduction_transcriptionRules_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_codingRules" STRUCTID="edoc_ed000228_introduction_codingRules_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_abkuerzungsdokumentation" STRUCTID="edoc_ed000228_introduction_abkuerzungsdokumentation_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1621" STRUCTID="edoc_ed000228_fg_introduction_1621_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1622" STRUCTID="edoc_ed000228_fg_introduction_1622_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1623" STRUCTID="edoc_ed000228_fg_introduction_1623_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1626" STRUCTID="edoc_ed000228_fg_introduction_1626_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1627" STRUCTID="edoc_ed000228_fg_introduction_1627_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1628" STRUCTID="edoc_ed000228_fg_introduction_1628_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1629" STRUCTID="edoc_ed000228_fg_introduction_1629_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1630" STRUCTID="edoc_ed000228_fg_introduction_1630_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1631" STRUCTID="edoc_ed000228_fg_introduction_1631_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1632" STRUCTID="edoc_ed000228_fg_introduction_1632_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1633" STRUCTID="edoc_ed000228_fg_introduction_1633_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1634" STRUCTID="edoc_ed000228_fg_introduction_1634_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1635" STRUCTID="edoc_ed000228_fg_introduction_1635_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1636" STRUCTID="edoc_ed000228_fg_introduction_1636_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1637" STRUCTID="edoc_ed000228_fg_introduction_1637_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1638" STRUCTID="edoc_ed000228_fg_introduction_1638_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1639" STRUCTID="edoc_ed000228_fg_introduction_1639_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1640" STRUCTID="edoc_ed000228_fg_introduction_1640_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1641" STRUCTID="edoc_ed000228_fg_introduction_1641_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1642" STRUCTID="edoc_ed000228_fg_introduction_1642_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1643" STRUCTID="edoc_ed000228_fg_introduction_1643_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1645" STRUCTID="edoc_ed000228_fg_introduction_1645_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_intro_1646" STRUCTID="edoc_ed000228_fg_introduction_1646_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        
+        <!--LOD-Dokumentation-->
+        <mets:behavior ID="edoc_ed000228_LOD_docu" STRUCTID="edoc_ed000228_fg_LOD_docu_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="introduction/introduction.xsl"/></mets:behavior>
+        
+        <!-- 1621 -->        
+        <mets:behavior ID="edoc_ed000228_fg_1621_11_bs" STRUCTID="edoc_ed000228_fg_1621_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1621_12_bs" STRUCTID="edoc_ed000228_fg_1621_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1622 -->
+        <mets:behavior ID="edoc_ed000228_fg_1622_01_bs" STRUCTID="edoc_ed000228_fg_1622_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1622_02_bs" STRUCTID="edoc_ed000228_fg_1622_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1622_10_bs" STRUCTID="edoc_ed000228_fg_1622_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1622_11_bs" STRUCTID="edoc_ed000228_fg_1622_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1622_12_bs" STRUCTID="edoc_ed000228_fg_1622_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1623 -->
+        <mets:behavior ID="edoc_ed000228_fg_1623_01_bs" STRUCTID="edoc_ed000228_fg_1623_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_02_bs" STRUCTID="edoc_ed000228_fg_1623_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_03_bs" STRUCTID="edoc_ed000228_fg_1623_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_04_bs" STRUCTID="edoc_ed000228_fg_1623_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_05_bs" STRUCTID="edoc_ed000228_fg_1623_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior> 
+        <mets:behavior ID="edoc_ed000228_fg_1623_06_bs" STRUCTID="edoc_ed000228_fg_1623_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_07_bs" STRUCTID="edoc_ed000228_fg_1623_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_08_bs" STRUCTID="edoc_ed000228_fg_1623_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_09_bs" STRUCTID="edoc_ed000228_fg_1623_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_10_bs" STRUCTID="edoc_ed000228_fg_1623_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1623_11_bs" STRUCTID="edoc_ed000228_fg_1623_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1626 -->
+        <mets:behavior ID="edoc_ed000228_fg_1626_05_bs" STRUCTID="edoc_ed000228_fg_1626_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior> 
+        <mets:behavior ID="edoc_ed000228_fg_1626_06_bs" STRUCTID="edoc_ed000228_fg_1626_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1626_07_bs" STRUCTID="edoc_ed000228_fg_1626_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1626_08_bs" STRUCTID="edoc_ed000228_fg_1626_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1626_09_bs" STRUCTID="edoc_ed000228_fg_1626_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1626_10_bs" STRUCTID="edoc_ed000228_fg_1626_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1626_11_bs" STRUCTID="edoc_ed000228_fg_1626_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1626_12_bs" STRUCTID="edoc_ed000228_fg_1626_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1627 -->
+        <mets:behavior ID="edoc_ed000228_fg_1627_01_bs" STRUCTID="edoc_ed000228_fg_1627_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1627_02_bs" STRUCTID="edoc_ed000228_fg_1627_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1627_03_bs" STRUCTID="edoc_ed000228_fg_1627_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1627_04_bs" STRUCTID="edoc_ed000228_fg_1627_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1627_05_bs" STRUCTID="edoc_ed000228_fg_1627_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior> 
+        <mets:behavior ID="edoc_ed000228_fg_1627_11_bs" STRUCTID="edoc_ed000228_fg_1627_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior> 
+        <mets:behavior ID="edoc_ed000228_fg_1627_12_bs" STRUCTID="edoc_ed000228_fg_1627_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1628 -->
+        <mets:behavior ID="edoc_ed000228_fg_1628_01_bs" STRUCTID="edoc_ed000228_fg_1628_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_02_bs" STRUCTID="edoc_ed000228_fg_1628_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_03_bs" STRUCTID="edoc_ed000228_fg_1628_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_04_bs" STRUCTID="edoc_ed000228_fg_1628_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_05_bs" STRUCTID="edoc_ed000228_fg_1628_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_06_bs" STRUCTID="edoc_ed000228_fg_1628_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_07_bs" STRUCTID="edoc_ed000228_fg_1628_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_08_bs" STRUCTID="edoc_ed000228_fg_1628_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_09_bs" STRUCTID="edoc_ed000228_fg_1628_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_10_bs" STRUCTID="edoc_ed000228_fg_1628_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_11_bs" STRUCTID="edoc_ed000228_fg_1628_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1628_12_bs" STRUCTID="edoc_ed000228_fg_1628_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1629-->
+        <mets:behavior ID="edoc_ed000228_fg_1629_01_bs" STRUCTID="edoc_ed000228_fg_1629_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_02_bs" STRUCTID="edoc_ed000228_fg_1629_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_03_bs" STRUCTID="edoc_ed000228_fg_1629_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_04_bs" STRUCTID="edoc_ed000228_fg_1629_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_05_bs" STRUCTID="edoc_ed000228_fg_1629_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_06_bs" STRUCTID="edoc_ed000228_fg_1629_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_07_bs" STRUCTID="edoc_ed000228_fg_1629_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_08_bs" STRUCTID="edoc_ed000228_fg_1629_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_09_bs" STRUCTID="edoc_ed000228_fg_1629_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_10_bs" STRUCTID="edoc_ed000228_fg_1629_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_11_bs" STRUCTID="edoc_ed000228_fg_1629_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1629_12_bs" STRUCTID="edoc_ed000228_fg_1629_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1630-->
+        <mets:behavior ID="edoc_ed000228_fg_1630_01_bs" STRUCTID="edoc_ed000228_fg_1630_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_02_bs" STRUCTID="edoc_ed000228_fg_1630_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_03_bs" STRUCTID="edoc_ed000228_fg_1630_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_04_bs" STRUCTID="edoc_ed000228_fg_1630_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_05_bs" STRUCTID="edoc_ed000228_fg_1630_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_06_bs" STRUCTID="edoc_ed000228_fg_1630_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_07_bs" STRUCTID="edoc_ed000228_fg_1630_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_08_bs" STRUCTID="edoc_ed000228_fg_1630_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_09_bs" STRUCTID="edoc_ed000228_fg_1630_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_10_bs" STRUCTID="edoc_ed000228_fg_1630_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_11_bs" STRUCTID="edoc_ed000228_fg_1630_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1630_12_bs" STRUCTID="edoc_ed000228_fg_1630_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1631-->
+        <mets:behavior ID="edoc_ed000228_fg_1631_01_bs" STRUCTID="edoc_ed000228_fg_1631_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_02_bs" STRUCTID="edoc_ed000228_fg_1631_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_03_bs" STRUCTID="edoc_ed000228_fg_1631_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_04_bs" STRUCTID="edoc_ed000228_fg_1631_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_05_bs" STRUCTID="edoc_ed000228_fg_1631_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_06_bs" STRUCTID="edoc_ed000228_fg_1631_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_07_bs" STRUCTID="edoc_ed000228_fg_1631_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_08_bs" STRUCTID="edoc_ed000228_fg_1631_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_09_bs" STRUCTID="edoc_ed000228_fg_1631_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_10_bs" STRUCTID="edoc_ed000228_fg_1631_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_11_bs" STRUCTID="edoc_ed000228_fg_1631_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1631_12_bs" STRUCTID="edoc_ed000228_fg_1631_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1632-->
+        <mets:behavior ID="edoc_ed000228_fg_1632_01_bs" STRUCTID="edoc_ed000228_fg_1632_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_02_bs" STRUCTID="edoc_ed000228_fg_1632_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_03_bs" STRUCTID="edoc_ed000228_fg_1632_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_04_bs" STRUCTID="edoc_ed000228_fg_1632_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_05_bs" STRUCTID="edoc_ed000228_fg_1632_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_06_bs" STRUCTID="edoc_ed000228_fg_1632_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_07_bs" STRUCTID="edoc_ed000228_fg_1632_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_08_bs" STRUCTID="edoc_ed000228_fg_1632_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_09_bs" STRUCTID="edoc_ed000228_fg_1632_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_10_bs" STRUCTID="edoc_ed000228_fg_1632_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_11_bs" STRUCTID="edoc_ed000228_fg_1632_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1632_12_bs" STRUCTID="edoc_ed000228_fg_1632_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1633-->
+        <mets:behavior ID="edoc_ed000228_fg_1633_01_bs" STRUCTID="edoc_ed000228_fg_1633_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_02_bs" STRUCTID="edoc_ed000228_fg_1633_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_03_bs" STRUCTID="edoc_ed000228_fg_1633_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_04_bs" STRUCTID="edoc_ed000228_fg_1633_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_05_bs" STRUCTID="edoc_ed000228_fg_1633_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_06_bs" STRUCTID="edoc_ed000228_fg_1633_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_07_bs" STRUCTID="edoc_ed000228_fg_1633_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_08_bs" STRUCTID="edoc_ed000228_fg_1633_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_09_bs" STRUCTID="edoc_ed000228_fg_1633_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_10_bs" STRUCTID="edoc_ed000228_fg_1633_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_11_bs" STRUCTID="edoc_ed000228_fg_1633_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1633_12_bs" STRUCTID="edoc_ed000228_fg_1633_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1634-->
+        <mets:behavior ID="edoc_ed000228_fg_1634_01_bs" STRUCTID="edoc_ed000228_fg_1634_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_02_bs" STRUCTID="edoc_ed000228_fg_1634_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_03_bs" STRUCTID="edoc_ed000228_fg_1634_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_04_bs" STRUCTID="edoc_ed000228_fg_1634_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_05_bs" STRUCTID="edoc_ed000228_fg_1634_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_06_bs" STRUCTID="edoc_ed000228_fg_1634_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_07_bs" STRUCTID="edoc_ed000228_fg_1634_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_08_bs" STRUCTID="edoc_ed000228_fg_1634_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_09_bs" STRUCTID="edoc_ed000228_fg_1634_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_10_bs" STRUCTID="edoc_ed000228_fg_1634_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_11_bs" STRUCTID="edoc_ed000228_fg_1634_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1634_12_bs" STRUCTID="edoc_ed000228_fg_1634_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1635 -->
+        <mets:behavior ID="edoc_ed000228_fg_1635_01_bs" STRUCTID="edoc_ed000228_fg_1635_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_02_bs" STRUCTID="edoc_ed000228_fg_1635_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_03_bs" STRUCTID="edoc_ed000228_fg_1635_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_04_bs" STRUCTID="edoc_ed000228_fg_1635_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_05_bs" STRUCTID="edoc_ed000228_fg_1635_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_06_bs" STRUCTID="edoc_ed000228_fg_1635_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_07_bs" STRUCTID="edoc_ed000228_fg_1635_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_08_bs" STRUCTID="edoc_ed000228_fg_1635_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_09_bs" STRUCTID="edoc_ed000228_fg_1635_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_10_bs" STRUCTID="edoc_ed000228_fg_1635_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_11_bs" STRUCTID="edoc_ed000228_fg_1635_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1635_12_bs" STRUCTID="edoc_ed000228_fg_1635_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1636 -->
+        <mets:behavior ID="edoc_ed000228_fg_1636_01_bs" STRUCTID="edoc_ed000228_fg_1636_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_02_bs" STRUCTID="edoc_ed000228_fg_1636_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_03_bs" STRUCTID="edoc_ed000228_fg_1636_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_04_bs" STRUCTID="edoc_ed000228_fg_1636_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_05_bs" STRUCTID="edoc_ed000228_fg_1636_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_06_bs" STRUCTID="edoc_ed000228_fg_1636_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_07_bs" STRUCTID="edoc_ed000228_fg_1636_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_08_bs" STRUCTID="edoc_ed000228_fg_1636_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_09_bs" STRUCTID="edoc_ed000228_fg_1636_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_10_bs" STRUCTID="edoc_ed000228_fg_1636_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_11_bs" STRUCTID="edoc_ed000228_fg_1636_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1636_12_bs" STRUCTID="edoc_ed000228_fg_1636_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1637 -->
+        <mets:behavior ID="edoc_ed000228_fg_1637_01_bs" STRUCTID="edoc_ed000228_fg_1637_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_02_bs" STRUCTID="edoc_ed000228_fg_1637_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_03_bs" STRUCTID="edoc_ed000228_fg_1637_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_04_bs" STRUCTID="edoc_ed000228_fg_1637_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_05_bs" STRUCTID="edoc_ed000228_fg_1637_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_06_bs" STRUCTID="edoc_ed000228_fg_1637_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_07_bs" STRUCTID="edoc_ed000228_fg_1637_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_08_bs" STRUCTID="edoc_ed000228_fg_1637_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_09_bs" STRUCTID="edoc_ed000228_fg_1637_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_10_bs" STRUCTID="edoc_ed000228_fg_1637_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_11_bs" STRUCTID="edoc_ed000228_fg_1637_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1637_12_bs" STRUCTID="edoc_ed000228_fg_1637_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1638 -->
+        <mets:behavior ID="edoc_ed000228_fg_1638_01_bs" STRUCTID="edoc_ed000228_fg_1638_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_02_bs" STRUCTID="edoc_ed000228_fg_1638_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_03_bs" STRUCTID="edoc_ed000228_fg_1638_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_04_bs" STRUCTID="edoc_ed000228_fg_1638_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_05_bs" STRUCTID="edoc_ed000228_fg_1638_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_06_bs" STRUCTID="edoc_ed000228_fg_1638_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_07_bs" STRUCTID="edoc_ed000228_fg_1638_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_08_bs" STRUCTID="edoc_ed000228_fg_1638_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_09_bs" STRUCTID="edoc_ed000228_fg_1638_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_10_bs" STRUCTID="edoc_ed000228_fg_1638_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_11_bs" STRUCTID="edoc_ed000228_fg_1638_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1638_12_bs" STRUCTID="edoc_ed000228_fg_1638_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1639 -->
+        <mets:behavior ID="edoc_ed000228_fg_1639_01_bs" STRUCTID="edoc_ed000228_fg_1639_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_02_bs" STRUCTID="edoc_ed000228_fg_1639_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_03_bs" STRUCTID="edoc_ed000228_fg_1639_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_04_bs" STRUCTID="edoc_ed000228_fg_1639_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_05_bs" STRUCTID="edoc_ed000228_fg_1639_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_06_bs" STRUCTID="edoc_ed000228_fg_1639_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_07_bs" STRUCTID="edoc_ed000228_fg_1639_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_08_bs" STRUCTID="edoc_ed000228_fg_1639_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_09_bs" STRUCTID="edoc_ed000228_fg_1639_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_10_bs" STRUCTID="edoc_ed000228_fg_1639_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_11_bs" STRUCTID="edoc_ed000228_fg_1639_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1639_12_bs" STRUCTID="edoc_ed000228_fg_1639_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1640 -->
+        <mets:behavior ID="edoc_ed000228_fg_1640_01_bs" STRUCTID="edoc_ed000228_fg_1640_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_02_bs" STRUCTID="edoc_ed000228_fg_1640_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_03_bs" STRUCTID="edoc_ed000228_fg_1640_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_04_bs" STRUCTID="edoc_ed000228_fg_1640_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_05_bs" STRUCTID="edoc_ed000228_fg_1640_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_06_bs" STRUCTID="edoc_ed000228_fg_1640_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_07_bs" STRUCTID="edoc_ed000228_fg_1640_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_08_bs" STRUCTID="edoc_ed000228_fg_1640_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_09_bs" STRUCTID="edoc_ed000228_fg_1640_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_10_bs" STRUCTID="edoc_ed000228_fg_1640_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_11_bs" STRUCTID="edoc_ed000228_fg_1640_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1640_12_bs" STRUCTID="edoc_ed000228_fg_1640_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1641 -->
+        <mets:behavior ID="edoc_ed000228_fg_1641_01_bs" STRUCTID="edoc_ed000228_fg_1641_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_02_bs" STRUCTID="edoc_ed000228_fg_1641_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_03_bs" STRUCTID="edoc_ed000228_fg_1641_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_04_bs" STRUCTID="edoc_ed000228_fg_1641_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_05_bs" STRUCTID="edoc_ed000228_fg_1641_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_06_bs" STRUCTID="edoc_ed000228_fg_1641_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_07_bs" STRUCTID="edoc_ed000228_fg_1641_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_08_bs" STRUCTID="edoc_ed000228_fg_1641_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_09_bs" STRUCTID="edoc_ed000228_fg_1641_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_10_bs" STRUCTID="edoc_ed000228_fg_1641_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_11_bs" STRUCTID="edoc_ed000228_fg_1641_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1641_12_bs" STRUCTID="edoc_ed000228_fg_1641_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1642 -->
+        <mets:behavior ID="edoc_ed000228_fg_1642_01_bs" STRUCTID="edoc_ed000228_fg_1642_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_02_bs" STRUCTID="edoc_ed000228_fg_1642_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_03_bs" STRUCTID="edoc_ed000228_fg_1642_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_04_bs" STRUCTID="edoc_ed000228_fg_1642_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_05_bs" STRUCTID="edoc_ed000228_fg_1642_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_06_bs" STRUCTID="edoc_ed000228_fg_1642_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_07_bs" STRUCTID="edoc_ed000228_fg_1642_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_08_bs" STRUCTID="edoc_ed000228_fg_1642_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_09_bs" STRUCTID="edoc_ed000228_fg_1642_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_10_bs" STRUCTID="edoc_ed000228_fg_1642_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_11_bs" STRUCTID="edoc_ed000228_fg_1642_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1642_12_bs" STRUCTID="edoc_ed000228_fg_1642_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>        
+        
+        <!-- 1643 -->
+        <mets:behavior ID="edoc_ed000228_fg_1643_01_bs" STRUCTID="edoc_ed000228_fg_1643_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_02_bs" STRUCTID="edoc_ed000228_fg_1643_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_03_bs" STRUCTID="edoc_ed000228_fg_1643_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_04_bs" STRUCTID="edoc_ed000228_fg_1643_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_05_bs" STRUCTID="edoc_ed000228_fg_1643_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_06_bs" STRUCTID="edoc_ed000228_fg_1643_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_07_bs" STRUCTID="edoc_ed000228_fg_1643_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_08_bs" STRUCTID="edoc_ed000228_fg_1643_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_09_bs" STRUCTID="edoc_ed000228_fg_1643_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_10_bs" STRUCTID="edoc_ed000228_fg_1643_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_11_bs" STRUCTID="edoc_ed000228_fg_1643_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1643_12_bs" STRUCTID="edoc_ed000228_fg_1643_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>        
+        
+        <!-- 1645 -->
+        <mets:behavior ID="edoc_ed000228_fg_1645_10_bs" STRUCTID="edoc_ed000228_fg_1645_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1645_11_bs" STRUCTID="edoc_ed000228_fg_1645_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1645_12_bs" STRUCTID="edoc_ed000228_fg_1645_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1646 -->
+        <mets:behavior ID="edoc_ed000228_fg_1646_01_bs" STRUCTID="edoc_ed000228_fg_1646_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_02_bs" STRUCTID="edoc_ed000228_fg_1646_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_03_bs" STRUCTID="edoc_ed000228_fg_1646_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_04_bs" STRUCTID="edoc_ed000228_fg_1646_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_05_bs" STRUCTID="edoc_ed000228_fg_1646_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_06_bs" STRUCTID="edoc_ed000228_fg_1646_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_07_bs" STRUCTID="edoc_ed000228_fg_1646_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_08_bs" STRUCTID="edoc_ed000228_fg_1646_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_09_bs" STRUCTID="edoc_ed000228_fg_1646_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_10_bs" STRUCTID="edoc_ed000228_fg_1646_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_11_bs" STRUCTID="edoc_ed000228_fg_1646_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1646_12_bs" STRUCTID="edoc_ed000228_fg_1646_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1647 -->      
+        <mets:behavior ID="edoc_ed000228_fg_1647_01_bs" STRUCTID="edoc_ed000228_fg_1647_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_02_bs" STRUCTID="edoc_ed000228_fg_1647_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_03_bs" STRUCTID="edoc_ed000228_fg_1647_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_04_bs" STRUCTID="edoc_ed000228_fg_1647_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_05_bs" STRUCTID="edoc_ed000228_fg_1647_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_06_bs" STRUCTID="edoc_ed000228_fg_1647_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_07_bs" STRUCTID="edoc_ed000228_fg_1647_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_08_bs" STRUCTID="edoc_ed000228_fg_1647_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_09_bs" STRUCTID="edoc_ed000228_fg_1647_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_10_bs" STRUCTID="edoc_ed000228_fg_1647_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_11_bs" STRUCTID="edoc_ed000228_fg_1647_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1647_12_bs" STRUCTID="edoc_ed000228_fg_1647_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1648 -->
+        <mets:behavior ID="edoc_ed000228_fg_1648_01_bs" STRUCTID="edoc_ed000228_fg_1648_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_02_bs" STRUCTID="edoc_ed000228_fg_1648_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_03_bs" STRUCTID="edoc_ed000228_fg_1648_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_04_bs" STRUCTID="edoc_ed000228_fg_1648_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_05_bs" STRUCTID="edoc_ed000228_fg_1648_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_06_bs" STRUCTID="edoc_ed000228_fg_1648_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_07_bs" STRUCTID="edoc_ed000228_fg_1648_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_08_bs" STRUCTID="edoc_ed000228_fg_1648_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_09_bs" STRUCTID="edoc_ed000228_fg_1648_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_10_bs" STRUCTID="edoc_ed000228_fg_1648_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_11_bs" STRUCTID="edoc_ed000228_fg_1648_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1648_12_bs" STRUCTID="edoc_ed000228_fg_1648_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1649 -->
+        <mets:behavior ID="edoc_ed000228_fg_1649_01_bs" STRUCTID="edoc_ed000228_fg_1649_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_02_bs" STRUCTID="edoc_ed000228_fg_1649_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_03_bs" STRUCTID="edoc_ed000228_fg_1649_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_04_bs" STRUCTID="edoc_ed000228_fg_1649_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_05_bs" STRUCTID="edoc_ed000228_fg_1649_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_06_bs" STRUCTID="edoc_ed000228_fg_1649_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_07_bs" STRUCTID="edoc_ed000228_fg_1649_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_08_bs" STRUCTID="edoc_ed000228_fg_1649_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_09_bs" STRUCTID="edoc_ed000228_fg_1649_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_10_bs" STRUCTID="edoc_ed000228_fg_1649_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_11_bs" STRUCTID="edoc_ed000228_fg_1649_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1649_12_bs" STRUCTID="edoc_ed000228_fg_1649_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1650 -->
+        <mets:behavior ID="edoc_ed000228_fg_1650_01_bs" STRUCTID="edoc_ed000228_fg_1650_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_02_bs" STRUCTID="edoc_ed000228_fg_1650_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_03_bs" STRUCTID="edoc_ed000228_fg_1650_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_04_bs" STRUCTID="edoc_ed000228_fg_1650_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_05_bs" STRUCTID="edoc_ed000228_fg_1650_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_06_bs" STRUCTID="edoc_ed000228_fg_1650_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_07_bs" STRUCTID="edoc_ed000228_fg_1650_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_08_bs" STRUCTID="edoc_ed000228_fg_1650_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_09_bs" STRUCTID="edoc_ed000228_fg_1650_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_10_bs" STRUCTID="edoc_ed000228_fg_1650_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_11_bs" STRUCTID="edoc_ed000228_fg_1650_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1650_12_bs" STRUCTID="edoc_ed000228_fg_1650_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1651 -->
+        <mets:behavior ID="edoc_ed000228_fg_1651_01_bs" STRUCTID="edoc_ed000228_fg_1651_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_02_bs" STRUCTID="edoc_ed000228_fg_1651_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_03_bs" STRUCTID="edoc_ed000228_fg_1651_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_04_bs" STRUCTID="edoc_ed000228_fg_1651_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_05_bs" STRUCTID="edoc_ed000228_fg_1651_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_06_bs" STRUCTID="edoc_ed000228_fg_1651_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_07_bs" STRUCTID="edoc_ed000228_fg_1651_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_08_bs" STRUCTID="edoc_ed000228_fg_1651_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_09_bs" STRUCTID="edoc_ed000228_fg_1651_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_10_bs" STRUCTID="edoc_ed000228_fg_1651_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_11_bs" STRUCTID="edoc_ed000228_fg_1651_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1651_12_bs" STRUCTID="edoc_ed000228_fg_1651_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1652 -->
+        <mets:behavior ID="edoc_ed000228_fg_1652_01_bs" STRUCTID="edoc_ed000228_fg_1652_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_02_bs" STRUCTID="edoc_ed000228_fg_1652_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_03_bs" STRUCTID="edoc_ed000228_fg_1652_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_04_bs" STRUCTID="edoc_ed000228_fg_1652_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_05_bs" STRUCTID="edoc_ed000228_fg_1652_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_06_bs" STRUCTID="edoc_ed000228_fg_1652_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_07_bs" STRUCTID="edoc_ed000228_fg_1652_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_08_bs" STRUCTID="edoc_ed000228_fg_1652_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_09_bs" STRUCTID="edoc_ed000228_fg_1652_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_10_bs" STRUCTID="edoc_ed000228_fg_1652_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_11_bs" STRUCTID="edoc_ed000228_fg_1652_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1652_12_bs" STRUCTID="edoc_ed000228_fg_1652_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- 1653 -->
+        <mets:behavior ID="edoc_ed000228_fg_1653_01_bs" STRUCTID="edoc_ed000228_fg_1653_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_02_bs" STRUCTID="edoc_ed000228_fg_1653_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_03_bs" STRUCTID="edoc_ed000228_fg_1653_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_04_bs" STRUCTID="edoc_ed000228_fg_1653_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_05_bs" STRUCTID="edoc_ed000228_fg_1653_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_06_bs" STRUCTID="edoc_ed000228_fg_1653_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_07_bs" STRUCTID="edoc_ed000228_fg_1653_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_08_bs" STRUCTID="edoc_ed000228_fg_1653_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_09_bs" STRUCTID="edoc_ed000228_fg_1653_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_10_bs" STRUCTID="edoc_ed000228_fg_1653_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_11_bs" STRUCTID="edoc_ed000228_fg_1653_11_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1653_12_bs" STRUCTID="edoc_ed000228_fg_1653_12_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1654-->
+        <mets:behavior ID="edoc_ed000228_fg_1654_01_bs" STRUCTID="edoc_ed000228_fg_1654_01_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_02_bs" STRUCTID="edoc_ed000228_fg_1654_02_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_03_bs" STRUCTID="edoc_ed000228_fg_1654_03_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_04_bs" STRUCTID="edoc_ed000228_fg_1654_04_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_05_bs" STRUCTID="edoc_ed000228_fg_1654_05_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_06_bs" STRUCTID="edoc_ed000228_fg_1654_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_07_bs" STRUCTID="edoc_ed000228_fg_1654_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_08_bs" STRUCTID="edoc_ed000228_fg_1654_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_09_bs" STRUCTID="edoc_ed000228_fg_1654_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1654_10_bs" STRUCTID="edoc_ed000228_fg_1654_10_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1656-->
+        <mets:behavior ID="edoc_ed000228_fg_1656_06_bs" STRUCTID="edoc_ed000228_fg_1656_06_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1656_07_bs" STRUCTID="edoc_ed000228_fg_1656_07_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1656_08_bs" STRUCTID="edoc_ed000228_fg_1656_08_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_1656_09_bs" STRUCTID="edoc_ed000228_fg_1656_09_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- Itinerar -->
+        <mets:behavior ID="edoc_ed000228_fg_itinerar_tabelle_bs" STRUCTID="edoc_ed000228_fg_itinerar_tabelle_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="itinerar_mg.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_itinerar_karte_bs" STRUCTID="edoc_ed000228_fg_itinerar_karte_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="itinerar_karte.xsl"/></mets:behavior>
+        
+        <!-- Sachregister -->
+        <mets:behavior ID="edoc_ed000228_fg_sachregister_alpha_bs" STRUCTID="edoc_ed000228_fg_sachregister_alpha_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="register/sachregister.xsl&amp;orderBy=alphabetical"/></mets:behavior>
+        <mets:behavior ID="edoc_ed000228_fg_sachregister_hierarch_bs" STRUCTID="edoc_ed000228_fg_sachregister_hierarch_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="register/sachregister.xsl&amp;orderBy=hierarchical"/></mets:behavior>
+        
+        <!-- Bibelstellenregister -->
+        <mets:behavior ID="edoc_ed000228_fg_listBiblicalRefs_bs" STRUCTID="edoc_ed000228_fg_listBiblicalRefs_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="register/listBiblicalRefs.xsl"/></mets:behavior>
+        <!--Bibliographie-->
+        <mets:behavior ID="edoc_ed000228_fg_listBibl_bs" STRUCTID="edoc_ed000228_fg_listBibl_sm" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="register/listBibl.xsl"/></mets:behavior>
+    </mets:behaviorSec>
+
+    <!-- pv-->
+    <mets:behaviorSec ID="edoc_000228_propositiones_pv1">
+        
+        
+        <!-- parallel view: 1621 -->    
+        <mets:behavior ID="edoc_000228_transcript_pv_1621_11" STRUCTID="edoc_ed000228_pv_transcript_1621_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1621_12" STRUCTID="edoc_ed000228_pv_transcript_1621_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1622 --> 
+        <mets:behavior ID="edoc_000228_transcript_pv_1622_01" STRUCTID="edoc_ed000228_pv_transcript_1622_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1622_02" STRUCTID="edoc_ed000228_pv_transcript_1622_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1622_10" STRUCTID="edoc_ed000228_pv_transcript_1622_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1622_11" STRUCTID="edoc_ed000228_pv_transcript_1622_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1622_12" STRUCTID="edoc_ed000228_pv_transcript_1622_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1623 -->    
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_01" STRUCTID="edoc_ed000228_pv_transcript_1623_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_02" STRUCTID="edoc_ed000228_pv_transcript_1623_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_03" STRUCTID="edoc_ed000228_pv_transcript_1623_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_04" STRUCTID="edoc_ed000228_pv_transcript_1623_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_05" STRUCTID="edoc_ed000228_pv_transcript_1623_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_06" STRUCTID="edoc_ed000228_pv_transcript_1623_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_07" STRUCTID="edoc_ed000228_pv_transcript_1623_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_08" STRUCTID="edoc_ed000228_pv_transcript_1623_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_09" STRUCTID="edoc_ed000228_pv_transcript_1623_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_10" STRUCTID="edoc_ed000228_pv_transcript_1623_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1623_11" STRUCTID="edoc_ed000228_pv_transcript_1623_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1626 -->    
+        <mets:behavior ID="edoc_000228_transcript_pv_1626_05" STRUCTID="edoc_ed000228_pv_transcript_1626_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1626_06" STRUCTID="edoc_ed000228_pv_transcript_1626_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1626_07" STRUCTID="edoc_ed000228_pv_transcript_1626_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1626_08" STRUCTID="edoc_ed000228_pv_transcript_1626_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1626_09" STRUCTID="edoc_ed000228_pv_transcript_1626_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1626_10" STRUCTID="edoc_ed000228_pv_transcript_1626_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1626_11" STRUCTID="edoc_ed000228_pv_transcript_1626_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1626_12" STRUCTID="edoc_ed000228_pv_transcript_1626_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1627 -->    
+        <mets:behavior ID="edoc_000228_transcript_pv_1627_01" STRUCTID="edoc_ed000228_pv_transcript_1627_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1627_02" STRUCTID="edoc_ed000228_pv_transcript_1627_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1627_03" STRUCTID="edoc_ed000228_pv_transcript_1627_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1627_04" STRUCTID="edoc_ed000228_pv_transcript_1627_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1627_05" STRUCTID="edoc_ed000228_pv_transcript_1627_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1627_11" STRUCTID="edoc_ed000228_pv_transcript_1627_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1627_12" STRUCTID="edoc_ed000228_pv_transcript_1627_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1628 -->    
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_01" STRUCTID="edoc_ed000228_pv_transcript_1628_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_02" STRUCTID="edoc_ed000228_pv_transcript_1628_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_03" STRUCTID="edoc_ed000228_pv_transcript_1628_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_04" STRUCTID="edoc_ed000228_pv_transcript_1628_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_05" STRUCTID="edoc_ed000228_pv_transcript_1628_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_06" STRUCTID="edoc_ed000228_pv_transcript_1628_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_07" STRUCTID="edoc_ed000228_pv_transcript_1628_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_08" STRUCTID="edoc_ed000228_pv_transcript_1628_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_09" STRUCTID="edoc_ed000228_pv_transcript_1628_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_10" STRUCTID="edoc_ed000228_pv_transcript_1628_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_11" STRUCTID="edoc_ed000228_pv_transcript_1628_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1628_12" STRUCTID="edoc_ed000228_pv_transcript_1628_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1629 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_01" STRUCTID="edoc_ed000228_pv_transcript_1629_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_02" STRUCTID="edoc_ed000228_pv_transcript_1629_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_03" STRUCTID="edoc_ed000228_pv_transcript_1629_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_04" STRUCTID="edoc_ed000228_pv_transcript_1629_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_05" STRUCTID="edoc_ed000228_pv_transcript_1629_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_06" STRUCTID="edoc_ed000228_pv_transcript_1629_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_07" STRUCTID="edoc_ed000228_pv_transcript_1629_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_08" STRUCTID="edoc_ed000228_pv_transcript_1629_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_09" STRUCTID="edoc_ed000228_pv_transcript_1629_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_10" STRUCTID="edoc_ed000228_pv_transcript_1629_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_11" STRUCTID="edoc_ed000228_pv_transcript_1629_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1629_12" STRUCTID="edoc_ed000228_pv_transcript_1629_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1630 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_01" STRUCTID="edoc_ed000228_pv_transcript_1630_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_02" STRUCTID="edoc_ed000228_pv_transcript_1630_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_03" STRUCTID="edoc_ed000228_pv_transcript_1630_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_04" STRUCTID="edoc_ed000228_pv_transcript_1630_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_05" STRUCTID="edoc_ed000228_pv_transcript_1630_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_06" STRUCTID="edoc_ed000228_pv_transcript_1630_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_07" STRUCTID="edoc_ed000228_pv_transcript_1630_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_08" STRUCTID="edoc_ed000228_pv_transcript_1630_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_09" STRUCTID="edoc_ed000228_pv_transcript_1630_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_10" STRUCTID="edoc_ed000228_pv_transcript_1630_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_11" STRUCTID="edoc_ed000228_pv_transcript_1630_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1630_12" STRUCTID="edoc_ed000228_pv_transcript_1630_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1631 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_01" STRUCTID="edoc_ed000228_pv_transcript_1631_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_02" STRUCTID="edoc_ed000228_pv_transcript_1631_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_03" STRUCTID="edoc_ed000228_pv_transcript_1631_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_04" STRUCTID="edoc_ed000228_pv_transcript_1631_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_05" STRUCTID="edoc_ed000228_pv_transcript_1631_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_06" STRUCTID="edoc_ed000228_pv_transcript_1631_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_07" STRUCTID="edoc_ed000228_pv_transcript_1631_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_08" STRUCTID="edoc_ed000228_pv_transcript_1631_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_09" STRUCTID="edoc_ed000228_pv_transcript_1631_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_10" STRUCTID="edoc_ed000228_pv_transcript_1631_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_11" STRUCTID="edoc_ed000228_pv_transcript_1631_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1631_12" STRUCTID="edoc_ed000228_pv_transcript_1631_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1632 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_01" STRUCTID="edoc_ed000228_pv_transcript_1632_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_02" STRUCTID="edoc_ed000228_pv_transcript_1632_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_03" STRUCTID="edoc_ed000228_pv_transcript_1632_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_04" STRUCTID="edoc_ed000228_pv_transcript_1632_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_05" STRUCTID="edoc_ed000228_pv_transcript_1632_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_06" STRUCTID="edoc_ed000228_pv_transcript_1632_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_07" STRUCTID="edoc_ed000228_pv_transcript_1632_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_08" STRUCTID="edoc_ed000228_pv_transcript_1632_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_09" STRUCTID="edoc_ed000228_pv_transcript_1632_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_10" STRUCTID="edoc_ed000228_pv_transcript_1632_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_11" STRUCTID="edoc_ed000228_pv_transcript_1632_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1632_12" STRUCTID="edoc_ed000228_pv_transcript_1632_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1633 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_01" STRUCTID="edoc_ed000228_pv_transcript_1633_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_02" STRUCTID="edoc_ed000228_pv_transcript_1633_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_03" STRUCTID="edoc_ed000228_pv_transcript_1633_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_04" STRUCTID="edoc_ed000228_pv_transcript_1633_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_05" STRUCTID="edoc_ed000228_pv_transcript_1633_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_06" STRUCTID="edoc_ed000228_pv_transcript_1633_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_07" STRUCTID="edoc_ed000228_pv_transcript_1633_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_08" STRUCTID="edoc_ed000228_pv_transcript_1633_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_09" STRUCTID="edoc_ed000228_pv_transcript_1633_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_10" STRUCTID="edoc_ed000228_pv_transcript_1633_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_11" STRUCTID="edoc_ed000228_pv_transcript_1633_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1633_12" STRUCTID="edoc_ed000228_pv_transcript_1633_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>  
+        
+        <!-- parallel view: 1634 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_01" STRUCTID="edoc_ed000228_pv_transcript_1634_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_02" STRUCTID="edoc_ed000228_pv_transcript_1634_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_03" STRUCTID="edoc_ed000228_pv_transcript_1634_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_04" STRUCTID="edoc_ed000228_pv_transcript_1634_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_05" STRUCTID="edoc_ed000228_pv_transcript_1634_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_06" STRUCTID="edoc_ed000228_pv_transcript_1634_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_07" STRUCTID="edoc_ed000228_pv_transcript_1634_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_08" STRUCTID="edoc_ed000228_pv_transcript_1634_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_09" STRUCTID="edoc_ed000228_pv_transcript_1634_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_10" STRUCTID="edoc_ed000228_pv_transcript_1634_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_11" STRUCTID="edoc_ed000228_pv_transcript_1634_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1634_12" STRUCTID="edoc_ed000228_pv_transcript_1634_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior> 
+                
+        <!-- parallel view: 1635 -->    
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_01" STRUCTID="edoc_ed000228_pv_transcript_1635_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>  
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_02" STRUCTID="edoc_ed000228_pv_transcript_1635_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_03" STRUCTID="edoc_ed000228_pv_transcript_1635_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_04" STRUCTID="edoc_ed000228_pv_transcript_1635_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_05" STRUCTID="edoc_ed000228_pv_transcript_1635_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_06" STRUCTID="edoc_ed000228_pv_transcript_1635_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_07" STRUCTID="edoc_ed000228_pv_transcript_1635_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_08" STRUCTID="edoc_ed000228_pv_transcript_1635_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_09" STRUCTID="edoc_ed000228_pv_transcript_1635_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_10" STRUCTID="edoc_ed000228_pv_transcript_1635_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_11" STRUCTID="edoc_ed000228_pv_transcript_1635_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1635_12" STRUCTID="edoc_ed000228_pv_transcript_1635_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+       
+        <!-- parallel view: 1636 -->    
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_01" STRUCTID="edoc_ed000228_pv_transcript_1636_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_02" STRUCTID="edoc_ed000228_pv_transcript_1636_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_03" STRUCTID="edoc_ed000228_pv_transcript_1636_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_04" STRUCTID="edoc_ed000228_pv_transcript_1636_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_05" STRUCTID="edoc_ed000228_pv_transcript_1636_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_06" STRUCTID="edoc_ed000228_pv_transcript_1636_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_07" STRUCTID="edoc_ed000228_pv_transcript_1636_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_08" STRUCTID="edoc_ed000228_pv_transcript_1636_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_09" STRUCTID="edoc_ed000228_pv_transcript_1636_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_10" STRUCTID="edoc_ed000228_pv_transcript_1636_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_11" STRUCTID="edoc_ed000228_pv_transcript_1636_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1636_12" STRUCTID="edoc_ed000228_pv_transcript_1636_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1637 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_01" STRUCTID="edoc_ed000228_pv_transcript_1637_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_02" STRUCTID="edoc_ed000228_pv_transcript_1637_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_03" STRUCTID="edoc_ed000228_pv_transcript_1637_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_04" STRUCTID="edoc_ed000228_pv_transcript_1637_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_05" STRUCTID="edoc_ed000228_pv_transcript_1637_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_06" STRUCTID="edoc_ed000228_pv_transcript_1637_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_07" STRUCTID="edoc_ed000228_pv_transcript_1637_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_08" STRUCTID="edoc_ed000228_pv_transcript_1637_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_09" STRUCTID="edoc_ed000228_pv_transcript_1637_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_10" STRUCTID="edoc_ed000228_pv_transcript_1637_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_11" STRUCTID="edoc_ed000228_pv_transcript_1637_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1637_12" STRUCTID="edoc_ed000228_pv_transcript_1637_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1638 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_01" STRUCTID="edoc_ed000228_pv_transcript_1638_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_02" STRUCTID="edoc_ed000228_pv_transcript_1638_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_03" STRUCTID="edoc_ed000228_pv_transcript_1638_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_04" STRUCTID="edoc_ed000228_pv_transcript_1638_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_05" STRUCTID="edoc_ed000228_pv_transcript_1638_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_06" STRUCTID="edoc_ed000228_pv_transcript_1638_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_07" STRUCTID="edoc_ed000228_pv_transcript_1638_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_08" STRUCTID="edoc_ed000228_pv_transcript_1638_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_09" STRUCTID="edoc_ed000228_pv_transcript_1638_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_10" STRUCTID="edoc_ed000228_pv_transcript_1638_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_11" STRUCTID="edoc_ed000228_pv_transcript_1638_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1638_12" STRUCTID="edoc_ed000228_pv_transcript_1638_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1639 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_01" STRUCTID="edoc_ed000228_pv_transcript_1639_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_02" STRUCTID="edoc_ed000228_pv_transcript_1639_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_03" STRUCTID="edoc_ed000228_pv_transcript_1639_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_04" STRUCTID="edoc_ed000228_pv_transcript_1639_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_05" STRUCTID="edoc_ed000228_pv_transcript_1639_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_06" STRUCTID="edoc_ed000228_pv_transcript_1639_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_07" STRUCTID="edoc_ed000228_pv_transcript_1639_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_08" STRUCTID="edoc_ed000228_pv_transcript_1639_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_09" STRUCTID="edoc_ed000228_pv_transcript_1639_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_10" STRUCTID="edoc_ed000228_pv_transcript_1639_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_11" STRUCTID="edoc_ed000228_pv_transcript_1639_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1639_12" STRUCTID="edoc_ed000228_pv_transcript_1639_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1640 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_01" STRUCTID="edoc_ed000228_pv_transcript_1640_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_02" STRUCTID="edoc_ed000228_pv_transcript_1640_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_03" STRUCTID="edoc_ed000228_pv_transcript_1640_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_04" STRUCTID="edoc_ed000228_pv_transcript_1640_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_05" STRUCTID="edoc_ed000228_pv_transcript_1640_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_06" STRUCTID="edoc_ed000228_pv_transcript_1640_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_07" STRUCTID="edoc_ed000228_pv_transcript_1640_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_08" STRUCTID="edoc_ed000228_pv_transcript_1640_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_09" STRUCTID="edoc_ed000228_pv_transcript_1640_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_10" STRUCTID="edoc_ed000228_pv_transcript_1640_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_11" STRUCTID="edoc_ed000228_pv_transcript_1640_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1640_12" STRUCTID="edoc_ed000228_pv_transcript_1640_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1641 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_01" STRUCTID="edoc_ed000228_pv_transcript_1641_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_02" STRUCTID="edoc_ed000228_pv_transcript_1641_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_03" STRUCTID="edoc_ed000228_pv_transcript_1641_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_04" STRUCTID="edoc_ed000228_pv_transcript_1641_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_05" STRUCTID="edoc_ed000228_pv_transcript_1641_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_06" STRUCTID="edoc_ed000228_pv_transcript_1641_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_07" STRUCTID="edoc_ed000228_pv_transcript_1641_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_08" STRUCTID="edoc_ed000228_pv_transcript_1641_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_09" STRUCTID="edoc_ed000228_pv_transcript_1641_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_10" STRUCTID="edoc_ed000228_pv_transcript_1641_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_11" STRUCTID="edoc_ed000228_pv_transcript_1641_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1641_12" STRUCTID="edoc_ed000228_pv_transcript_1641_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1642 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_01" STRUCTID="edoc_ed000228_pv_transcript_1642_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_02" STRUCTID="edoc_ed000228_pv_transcript_1642_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_03" STRUCTID="edoc_ed000228_pv_transcript_1642_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_04" STRUCTID="edoc_ed000228_pv_transcript_1642_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_05" STRUCTID="edoc_ed000228_pv_transcript_1642_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_06" STRUCTID="edoc_ed000228_pv_transcript_1642_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_07" STRUCTID="edoc_ed000228_pv_transcript_1642_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_08" STRUCTID="edoc_ed000228_pv_transcript_1642_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_09" STRUCTID="edoc_ed000228_pv_transcript_1642_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_10" STRUCTID="edoc_ed000228_pv_transcript_1642_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_11" STRUCTID="edoc_ed000228_pv_transcript_1642_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1642_12" STRUCTID="edoc_ed000228_pv_transcript_1642_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1643 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_01" STRUCTID="edoc_ed000228_pv_transcript_1643_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_02" STRUCTID="edoc_ed000228_pv_transcript_1643_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_03" STRUCTID="edoc_ed000228_pv_transcript_1643_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_04" STRUCTID="edoc_ed000228_pv_transcript_1643_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_05" STRUCTID="edoc_ed000228_pv_transcript_1643_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_06" STRUCTID="edoc_ed000228_pv_transcript_1643_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_07" STRUCTID="edoc_ed000228_pv_transcript_1643_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_08" STRUCTID="edoc_ed000228_pv_transcript_1643_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_09" STRUCTID="edoc_ed000228_pv_transcript_1643_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_10" STRUCTID="edoc_ed000228_pv_transcript_1643_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_11" STRUCTID="edoc_ed000228_pv_transcript_1643_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1643_12" STRUCTID="edoc_ed000228_pv_transcript_1643_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1645 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1645_10" STRUCTID="edoc_ed000228_pv_transcript_1645_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1645_11" STRUCTID="edoc_ed000228_pv_transcript_1645_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1645_12" STRUCTID="edoc_ed000228_pv_transcript_1645_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1646 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_01" STRUCTID="edoc_ed000228_pv_transcript_1646_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_02" STRUCTID="edoc_ed000228_pv_transcript_1646_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_03" STRUCTID="edoc_ed000228_pv_transcript_1646_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_04" STRUCTID="edoc_ed000228_pv_transcript_1646_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_05" STRUCTID="edoc_ed000228_pv_transcript_1646_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_06" STRUCTID="edoc_ed000228_pv_transcript_1646_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_07" STRUCTID="edoc_ed000228_pv_transcript_1646_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_08" STRUCTID="edoc_ed000228_pv_transcript_1646_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_09" STRUCTID="edoc_ed000228_pv_transcript_1646_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_10" STRUCTID="edoc_ed000228_pv_transcript_1646_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_11" STRUCTID="edoc_ed000228_pv_transcript_1646_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1646_12" STRUCTID="edoc_ed000228_pv_transcript_1646_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1647 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_01" STRUCTID="edoc_ed000228_pv_transcript_1647_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_02" STRUCTID="edoc_ed000228_pv_transcript_1647_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_03" STRUCTID="edoc_ed000228_pv_transcript_1647_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_04" STRUCTID="edoc_ed000228_pv_transcript_1647_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_05" STRUCTID="edoc_ed000228_pv_transcript_1647_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_06" STRUCTID="edoc_ed000228_pv_transcript_1647_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_07" STRUCTID="edoc_ed000228_pv_transcript_1647_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_08" STRUCTID="edoc_ed000228_pv_transcript_1647_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_09" STRUCTID="edoc_ed000228_pv_transcript_1647_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_10" STRUCTID="edoc_ed000228_pv_transcript_1647_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_11" STRUCTID="edoc_ed000228_pv_transcript_1647_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1647_12" STRUCTID="edoc_ed000228_pv_transcript_1647_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1648 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_01" STRUCTID="edoc_ed000228_pv_transcript_1648_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_02" STRUCTID="edoc_ed000228_pv_transcript_1648_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_03" STRUCTID="edoc_ed000228_pv_transcript_1648_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_04" STRUCTID="edoc_ed000228_pv_transcript_1648_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_05" STRUCTID="edoc_ed000228_pv_transcript_1648_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_06" STRUCTID="edoc_ed000228_pv_transcript_1648_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_07" STRUCTID="edoc_ed000228_pv_transcript_1648_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_08" STRUCTID="edoc_ed000228_pv_transcript_1648_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_09" STRUCTID="edoc_ed000228_pv_transcript_1648_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_10" STRUCTID="edoc_ed000228_pv_transcript_1648_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_11" STRUCTID="edoc_ed000228_pv_transcript_1648_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1648_12" STRUCTID="edoc_ed000228_pv_transcript_1648_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1649 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_01" STRUCTID="edoc_ed000228_pv_transcript_1649_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_02" STRUCTID="edoc_ed000228_pv_transcript_1649_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_023" STRUCTID="edoc_ed000228_pv_transcript_1649_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_04" STRUCTID="edoc_ed000228_pv_transcript_1649_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_05" STRUCTID="edoc_ed000228_pv_transcript_1649_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_06" STRUCTID="edoc_ed000228_pv_transcript_1649_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_07" STRUCTID="edoc_ed000228_pv_transcript_1649_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_08" STRUCTID="edoc_ed000228_pv_transcript_1649_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_09" STRUCTID="edoc_ed000228_pv_transcript_1649_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_10" STRUCTID="edoc_ed000228_pv_transcript_1649_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_11" STRUCTID="edoc_ed000228_pv_transcript_1649_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1649_12" STRUCTID="edoc_ed000228_pv_transcript_1649_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1650 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_01" STRUCTID="edoc_ed000228_pv_transcript_1650_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_02" STRUCTID="edoc_ed000228_pv_transcript_1650_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_03" STRUCTID="edoc_ed000228_pv_transcript_1650_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_04" STRUCTID="edoc_ed000228_pv_transcript_1650_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_05" STRUCTID="edoc_ed000228_pv_transcript_1650_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_06" STRUCTID="edoc_ed000228_pv_transcript_1650_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_07" STRUCTID="edoc_ed000228_pv_transcript_1650_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_08" STRUCTID="edoc_ed000228_pv_transcript_1650_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_09" STRUCTID="edoc_ed000228_pv_transcript_1650_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_10" STRUCTID="edoc_ed000228_pv_transcript_1650_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1650_11" STRUCTID="edoc_ed000228_pv_transcript_1650_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1651 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_01" STRUCTID="edoc_ed000228_pv_transcript_1651_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_02" STRUCTID="edoc_ed000228_pv_transcript_1651_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_03" STRUCTID="edoc_ed000228_pv_transcript_1651_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_04" STRUCTID="edoc_ed000228_pv_transcript_1651_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_05" STRUCTID="edoc_ed000228_pv_transcript_1651_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_06" STRUCTID="edoc_ed000228_pv_transcript_1651_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_07" STRUCTID="edoc_ed000228_pv_transcript_1651_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_08" STRUCTID="edoc_ed000228_pv_transcript_1651_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_09" STRUCTID="edoc_ed000228_pv_transcript_1651_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_10" STRUCTID="edoc_ed000228_pv_transcript_1651_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_11" STRUCTID="edoc_ed000228_pv_transcript_1651_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1651_12" STRUCTID="edoc_ed000228_pv_transcript_1651_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!-- parallel view: 1652 -->
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_01" STRUCTID="edoc_ed000228_pv_transcript_1652_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_02" STRUCTID="edoc_ed000228_pv_transcript_1652_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_03" STRUCTID="edoc_ed000228_pv_transcript_1652_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_04" STRUCTID="edoc_ed000228_pv_transcript_1652_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_05" STRUCTID="edoc_ed000228_pv_transcript_1652_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_06" STRUCTID="edoc_ed000228_pv_transcript_1652_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_07" STRUCTID="edoc_ed000228_pv_transcript_1652_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_08" STRUCTID="edoc_ed000228_pv_transcript_1652_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_09" STRUCTID="edoc_ed000228_pv_transcript_1652_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_10" STRUCTID="edoc_ed000228_pv_transcript_1652_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_11" STRUCTID="edoc_ed000228_pv_transcript_1652_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1652_12" STRUCTID="edoc_ed000228_pv_transcript_1652_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1653-->
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_01" STRUCTID="edoc_ed000228_pv_transcript_1653_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_02" STRUCTID="edoc_ed000228_pv_transcript_1653_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_03" STRUCTID="edoc_ed000228_pv_transcript_1653_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_04" STRUCTID="edoc_ed000228_pv_transcript_1653_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_05" STRUCTID="edoc_ed000228_pv_transcript_1653_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_06" STRUCTID="edoc_ed000228_pv_transcript_1653_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_07" STRUCTID="edoc_ed000228_pv_transcript_1653_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_08" STRUCTID="edoc_ed000228_pv_transcript_1653_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_09" STRUCTID="edoc_ed000228_pv_transcript_1653_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_10" STRUCTID="edoc_ed000228_pv_transcript_1653_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_11" STRUCTID="edoc_ed000228_pv_transcript_1653_11" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1653_12" STRUCTID="edoc_ed000228_pv_transcript_1653_12" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1654-->
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_01" STRUCTID="edoc_ed000228_pv_transcript_1654_01" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_02" STRUCTID="edoc_ed000228_pv_transcript_1654_02" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_03" STRUCTID="edoc_ed000228_pv_transcript_1654_03" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_04" STRUCTID="edoc_ed000228_pv_transcript_1654_04" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_05" STRUCTID="edoc_ed000228_pv_transcript_1654_05" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_06" STRUCTID="edoc_ed000228_pv_transcript_1654_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_07" STRUCTID="edoc_ed000228_pv_transcript_1654_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_08" STRUCTID="edoc_ed000228_pv_transcript_1654_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_09" STRUCTID="edoc_ed000228_pv_transcript_1654_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1654_10" STRUCTID="edoc_ed000228_pv_transcript_1654_10" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+        <!--1656-->
+        <mets:behavior ID="edoc_000228_transcript_pv_1656_06" STRUCTID="edoc_ed000228_pv_transcript_1656_06" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1656_07" STRUCTID="edoc_ed000228_pv_transcript_1656_07" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1656_08" STRUCTID="edoc_ed000228_pv_transcript_1656_08" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        <mets:behavior ID="edoc_000228_transcript_pv_1656_09" STRUCTID="edoc_ed000228_pv_transcript_1656_09" LABEL="HTML"><mets:mechanism LOCTYPE="URL" xlink:href="tei-transcript.xsl"/></mets:behavior>
+        
+    </mets:behaviorSec>
+</mets:mets>

@@ -12,7 +12,13 @@ module Nabu
     #   basename follows the WDB transcript convention
     #   ("tei-transcript.xml", "tei-transcript-pnr.xml",
     #   "tei-transcript_Augsburg_1530.xml", "Brief001-D_tei-transcript.xml",
-    #   "tei-transcription.xml"), in fileSec order, deduplicated;
+    #   "tei-transcription.xml"), in fileSec order, deduplicated — plus,
+    #   given an edition's own-name RULE ({group:, pattern:}, the adapter's
+    #   per-edition review), every relative .xml file of that fileGrp
+    #   (@USE, the nearest fileGrp that names one) whose href matches the
+    #   pattern: the editions that keep their texts under their own names
+    #   ("1621_11.xml", "briefe/0001.xml", "texts/München 1603.xml") beside
+    #   the introductions and registers;
     # - each transcript's RIGHTS: the structMap divs that point at the
     #   file (mets:fptr or a parallel-view mets:area) carry an ADMID —
     #   inherited from an ancestor div when the pointing div has none —
@@ -52,21 +58,38 @@ module Nabu
       # Every relative .xml file the fileSec lists (the census reads the
       # non-transcript ones for the rejected-grain note).
       def xml_files
-        @xml_files ||= begin
-          hrefs = @doc.xpath("//fileSec//file/FLocat/@href").map { |a| a.value.strip }
-          hrefs.select { |href| href.end_with?(".xml") && !href.match?(%r{\A[a-z]+://}i) }.uniq
-        end
+        @xml_files ||= entries.map(&:first).uniq
       end
 
-      def transcripts
-        @transcripts ||= begin
+      # The transcripts: the WDB-named files, and the files +rule+ selects
+      # ({group: "transcription", pattern: /\A\d{4}_\d{2}\.xml\z/}; either
+      # key may be absent, never both).
+      def transcripts(rule = nil)
+        (@transcripts ||= {})[rule] ||= begin
           ids = file_ids
-          xml_files.select { |href| self.class.transcript_name?(href) }
-                   .map { |href| Transcript.new(href: href, rights: rights_for(ids.fetch(href, []))) }
+          entries.filter_map { |href, use| href if self.class.transcript_name?(href) || own_text?(href, use, rule) }
+                 .uniq.map { |href| Transcript.new(href: href, rights: rights_for(ids.fetch(href, []))) }
         end
       end
 
       private
+
+      # [href, fileGrp USE] for every relative .xml FLocat, in fileSec order.
+      def entries
+        @entries ||= @doc.xpath("//fileSec//file/FLocat").filter_map do |flocat|
+          href = flocat["href"]&.strip
+          next unless href&.end_with?(".xml") && !href.match?(%r{\A[a-z]+://}i)
+
+          [href, flocat.ancestors("fileGrp").filter_map { |grp| grp["USE"] }.first]
+        end
+      end
+
+      def own_text?(href, use, rule)
+        return false if rule.nil? || (rule[:group].nil? && rule[:pattern].nil?)
+        return false if rule[:group] && use != rule[:group]
+
+        rule[:pattern].nil? || rule[:pattern].match?(href)
+      end
 
       # href → the fileSec file IDs that locate it.
       def file_ids

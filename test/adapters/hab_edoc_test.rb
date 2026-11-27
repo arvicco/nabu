@@ -16,6 +16,17 @@ module Adapters
   # letter) — and one specimen per rejected grain: a transcript-less
   # Theatrum record (ed000020), the repertory whose METS lists a file it
   # does not serve (ed000132), the Arndt test conversion (ed000239).
+  #
+  # The editions whose texts keep their own file names (the per-edition
+  # review) pin one file per new shape: a Hainhofer travel report (a
+  # transcription fileGrp, a non-ASCII file name, the title's year),
+  # Christian II's diary (the editors' <index> regests, a register
+  # sourceDesc), a Bahnsen letter (a group-less file-name rule beside the
+  # edition's apparatus — einleitung/editionsrichtlinien.xml, held, never
+  # a document), Lessing's translation (the _ue file admitted, its _org
+  # original held back by rule) and two FMG letters whose language is
+  # read from their own description file (a third listed letter has no
+  # description: skipped by rule).
   class HabEdocTest < Minitest::Test
     include AdapterConformance
 
@@ -55,10 +66,27 @@ module Adapters
 
     # --- discovery ---------------------------------------------------------------
 
+    # The URNs minted before the per-edition review, unchanged by it.
+    STANDARD_URNS = %w[urn:nabu:hab-edoc:ed000226 urn:nabu:hab-edoc:ed000238
+                       urn:nabu:hab-edoc:ed000248:Brief001-D urn:nabu:hab-edoc:ed000278].freeze
+
     def test_discovers_one_document_per_held_transcript
-      assert_equal %w[urn:nabu:hab-edoc:ed000226 urn:nabu:hab-edoc:ed000238
-                      urn:nabu:hab-edoc:ed000248:Brief001-D urn:nabu:hab-edoc:ed000278],
+      assert_equal %w[urn:nabu:hab-edoc:ed000146:abauzit_offenbarung_ue urn:nabu:hab-edoc:ed000226
+                      urn:nabu:hab-edoc:ed000228:1621_11 urn:nabu:hab-edoc:ed000233:0001
+                      urn:nabu:hab-edoc:ed000238 urn:nabu:hab-edoc:ed000248:Brief001-D
+                      urn:nabu:hab-edoc:ed000249:h-fmg-rara-fmg-artot-de-padilla-d-001
+                      urn:nabu:hab-edoc:ed000249:h-fmg-rara-fmg-bahr-mildenburg-a-001
+                      urn:nabu:hab-edoc:ed000251:Munchen-1603 urn:nabu:hab-edoc:ed000278],
                    ADAPTER.new.discover(FIXTURES).map(&:id)
+    end
+
+    def test_the_review_leaves_every_standard_transcript_urn_unchanged
+      ids = ADAPTER.new.discover(FIXTURES).map(&:id)
+      assert_equal STANDARD_URNS, ids & STANDARD_URNS
+      standard = ADAPTER.new.discover(FIXTURES).select { |ref| Nabu::Adapters::HabEdocMets.transcript_name?(ref.metadata["file"]) }
+      assert_equal (STANDARD_URNS + %w[urn:nabu:hab-edoc:ed000249:h-fmg-rara-fmg-artot-de-padilla-d-001
+                                       urn:nabu:hab-edoc:ed000249:h-fmg-rara-fmg-bahr-mildenburg-a-001]).sort,
+                   standard.map(&:id).sort, "the WDB-named transcripts keep the stem-cut token"
     end
 
     def test_urn_tokens_cut_the_transcript_stem
@@ -70,14 +98,93 @@ module Adapters
       assert_equal "urn:nabu:hab-edoc:ed000008:01-contents", ADAPTER.urn("ed000008", "tei-transcript_01-contents.xml")
     end
 
+    def test_own_name_tokens_fold_accents_keep_directories_or_name_the_edition
+      assert_equal "urn:nabu:hab-edoc:ed000251:Munchen-1603", ADAPTER.urn("ed000251", "texts/München 1603.xml")
+      assert_equal "urn:nabu:hab-edoc:ed000251:Eichstatt-1611", ADAPTER.urn("ed000251", "texts/Eichstätt 1611.xml")
+      assert_equal "urn:nabu:hab-edoc:ed000133:simpli_b1", ADAPTER.urn("ed000133", "simpli/transcript_b1.xml")
+      assert_equal "urn:nabu:hab-edoc:ed000133:anhang", ADAPTER.urn("ed000133", "anhang/transcript.xml")
+      assert_equal "urn:nabu:hab-edoc:ed000276", ADAPTER.urn("ed000276", "texts/Johannes Hartlieb.xml")
+      assert_equal "urn:nabu:hab-edoc:ed000228:1621_11", ADAPTER.urn("ed000228", "1621_11.xml")
+    end
+
     def test_rejected_grains_are_skipped_by_rule_with_their_notes
       skips = ADAPTER.new.discovery_skips(FIXTURES)
       assert_equal 0, skips.unrecognized, skips.notes.join("\n")
-      assert_equal 4, skips.skipped_by_rule, "ed000020 (1) + ed000132 (1 listed) + ed000239 (2 listed)"
+      assert_equal 6, skips.skipped_by_rule, "ed000020 (1) + ed000132 (1 listed) + ed000239 (2 listed) + " \
+                                             "ed000146's _org original (1) + ed000249's description-less letter (1)"
       notes = skips.notes.join("\n")
       assert_match(/ed000020: no TEI transcript in the edition's METS/, notes)
       assert_match(/ed000132: held back .*serves no such file \(404\)/, notes)
       assert_match(/ed000239: held back \(2 transcript\(s\)\) .*Arndt-Projekt Test2/, notes)
+      assert_match(/ed000146: 1 file\(s\) held back — the originals Lessing translated/, notes)
+      assert_match(%r{ed000249/texts/h-fmg-rara-fmg-orgeni-a-002-1/.*: no description file listed}, notes)
+    end
+
+    def test_an_edition_held_back_after_review_is_skipped_with_its_reason
+      with_copy("ed000020") do |work|
+        FileUtils.mv(File.join(work, "ed000020"), File.join(work, "ed000257"))
+        skips = ADAPTER.new.discovery_skips(work)
+        assert_equal [0, 1], [skips.unrecognized, skips.skipped_by_rule]
+        assert_match(/\Aed000257: held back — .*Latin pieces/, skips.notes.first)
+      end
+    end
+
+    # --- the per-edition text rules ------------------------------------------------
+
+    def test_an_editions_own_name_rule_selects_its_texts_never_its_apparatus
+      bahnsen = Nabu::Adapters::HabEdocMets.read(File.join(FIXTURES, "ed000233", "mets.xml"))
+      assert_includes bahnsen.xml_files, "einleitung/editionsrichtlinien.xml"
+      assert_equal ["briefe/0001.xml"], bahnsen.transcripts(ADAPTER::EDITIONS.dig("ed000233", :texts)).map(&:href)
+      assert_empty bahnsen.transcripts, "no WDB transcript name in the METS"
+      assert File.file?(File.join(FIXTURES, "ed000233", "einleitung", "editionsrichtlinien.xml")),
+             "the apparatus specimen is held in the tree"
+      refute(ADAPTER.new.discover(FIXTURES).any? { |ref| ref.metadata["file"].start_with?("einleitung/") })
+      lessing = Nabu::Adapters::HabEdocMets.read(File.join(FIXTURES, "ed000146", "mets.xml"))
+      assert_equal ["abauzit_offenbarung_ue.xml"],
+                   lessing.transcripts(ADAPTER::EDITIONS.dig("ed000146", :texts)).map(&:href)
+      refute ADAPTER.wanted?("ed000146", "abauzit_offenbarung_org.xml"), "the original is held back"
+      assert ADAPTER.wanted?("ed000146", "law_ermunterung.xml"), "upstream's METS ID names it the _ue file"
+    end
+
+    def test_holdings_add_each_letters_listed_description
+      mets = Nabu::Adapters::HabEdocMets.read(File.join(FIXTURES, "ed000249", "mets.xml"))
+      letters = %w[artot-de-padilla-d-001 bahr-mildenburg-a-001 orgeni-a-002-1].map do |name|
+        "texts/h-fmg-rara-fmg-#{name}/h-fmg-rara-fmg-#{name}_tei-transcript.xml"
+      end
+      descriptions = letters.first(2).map { |href| href.sub("_tei-transcript.xml", "_tei-msDesc_fmg.xml") }
+      assert_equal letters + descriptions, ADAPTER.holdings("ed000249", mets)
+      hainhofer = Nabu::Adapters::HabEdocMets.read(File.join(FIXTURES, "ed000251", "mets.xml"))
+      assert_equal ["texts/München 1603.xml"], ADAPTER.holdings("ed000251", hainhofer)
+    end
+
+    def test_a_letter_whose_description_is_not_held_is_a_hole_until_the_fetch_records_it
+      description = "texts/h-fmg-rara-fmg-artot-de-padilla-d-001/" \
+                    "h-fmg-rara-fmg-artot-de-padilla-d-001_tei-msDesc_fmg.xml"
+      with_copy("ed000249") do |work|
+        FileUtils.rm(File.join(work, "ed000249", description))
+        skips = ADAPTER.new.discovery_skips(work)
+        assert_equal 1, skips.unrecognized
+        assert_match(/msDesc_fmg\.xml: listed in the METS but not held — a fetch hole/, skips.notes.first)
+        File.write(File.join(work, Nabu::HabEdocFetch::STATE_FILE),
+                   JSON.generate("missing" => { "ed000249" => [description] }))
+        assert_equal 0, ADAPTER.new.discovery_skips(work).unrecognized
+        assert_equal ["urn:nabu:hab-edoc:ed000249:h-fmg-rara-fmg-bahr-mildenburg-a-001"],
+                     ADAPTER.new.discover(work).map(&:id)
+      end
+    end
+
+    def test_a_description_without_a_usable_text_language_never_guesses
+      description = "texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg.xml"
+      with_copy("ed000249") do |work|
+        path = File.join(work, "ed000249", description)
+        File.write(path, File.read(path).sub('<textLang mainLang="de">Deutsch</textLang>', ""))
+        notes = ADAPTER.new.discovery_skips(work).notes.join("\n")
+        assert_match(/bahr-mildenburg-a-001_tei-transcript\.xml: its description states no textLang/, notes)
+        File.write(path, File.read(path).sub("</summary>", '</summary><textLang mainLang="xx">X</textLang>'))
+        skips = ADAPTER.new.discovery_skips(work)
+        assert_equal 1, skips.unrecognized
+        assert_match(/unrecognized textLang "xx"/, skips.notes.join("\n"))
+      end
     end
 
     def test_a_listed_file_upstream_does_not_serve_is_skipped_only_when_the_fetch_recorded_it
@@ -150,7 +257,7 @@ module Adapters
     # --- parse: languages, mined axes -------------------------------------------------
 
     def test_languages_come_from_the_edition_table_and_its_file_rules
-      assert_equal %w[lat de gml de], documents.values.map(&:language)
+      assert_equal %w[de lat de de de gml fr de de de], documents.values.map(&:language)
       assert_equal "lat", ADAPTER.language("ed000248", "texts/Brief002-L_tei-transcript.xml")
       assert_equal "lat", ADAPTER.language("ed000248", "texts/Brief005-LD_tei-transcript.xml")
       assert_equal "gml", ADAPTER.language("ed000248", "texts/Brief010-DL_tei-transcript.xml")
@@ -192,8 +299,74 @@ module Adapters
       assert_equal "tei-transcript-mwb.xml", ADAPTER::EDITIONS.fetch("ed000223")[:whole]
       refute ADAPTER.wanted?("ed000223", "tei-transcript-mwb1.xml"), "a part of the whole transcript"
       assert ADAPTER.wanted?("ed000223", "tei-transcript-mwb.xml")
-      refute ADAPTER.wanted?("ed000249", "texts/x_tei-transcript.xml"), "held back"
+      refute ADAPTER.wanted?("ed000239", "texts/tei-transcript-1605.xml"), "held back"
       refute ADAPTER.wanted?("ed000020", "tei-transcript.xml"), "not censused"
+    end
+
+    # --- parse: the reviewed editions --------------------------------------------------
+
+    def test_the_fmg_letter_reads_language_and_correspondents_from_its_description
+      bahr = documents.fetch("urn:nabu:hab-edoc:ed000249:h-fmg-rara-fmg-bahr-mildenburg-a-001")
+      assert_equal "de", bahr.language
+      assert_equal "open", bahr.license_override, "the transcript's CC0"
+      meta = bahr.metadata
+      assert_equal "Anna v. Mildenburg", meta["sender"]
+      assert_equal "Unbekannter Herr", meta["addressee"]
+      assert_equal "Hamburg", meta["place"]
+      assert_equal({ "not_before" => 1898, "not_after" => 1898, "raw" => "27.02.1898", "basis" => "correspDesc" },
+                   meta["date"])
+      assert_equal "Rara/FMG Bahr-Mildenburg,A.1", meta["shelfmark"]
+      assert_match(/\ABrief von Anna Bahr-Mildenburg an einen unbekannten Herrn/, meta["letter_title"])
+      assert_equal "de", meta["text_lang"]
+      assert_equal "texts/h-fmg-rara-fmg-bahr-mildenburg-a-001/h-fmg-rara-fmg-bahr-mildenburg-a-001_tei-msDesc_fmg.xml",
+                   meta["description"]
+      artot = documents.fetch("urn:nabu:hab-edoc:ed000249:h-fmg-rara-fmg-artot-de-padilla-d-001")
+      assert_equal "fr", artot.language
+      assert artot.first.text.start_with?("Vendredi 6 heures Mon cher Pietsch"), artot.first.text
+    end
+
+    def test_the_diary_drops_the_editors_regests_and_dates_by_its_title
+      diary = documents.fetch("urn:nabu:hab-edoc:ed000228:1621_11")
+      refute_includes diary.first.text, "Verlegung des Arrests", "the <index> regest terms are the editors'"
+      assert_equal(%w[p1r p1v p2r p2v], diary.map { |p| p.urn.split(":").last })
+      meta = diary.metadata
+      assert_equal "Christian II. von Anhalt-Bernburg", meta["author"]
+      assert_equal({ "not_before" => 1621, "not_after" => 1621,
+                     "raw" => "Tagebuch des Fürsten Christian II. von Anhalt-Bernburg: November 1621",
+                     "basis" => "title" }, meta["date"])
+      assert_nil meta["place"], "the register sourceDesc is never the imprint"
+      assert_equal "https://creativecommons.org/licenses/by-sa/4.0/", meta["license"]
+    end
+
+    def test_the_letter_drops_the_editors_heading_and_dates_by_its_title
+      letter = documents.fetch("urn:nabu:hab-edoc:ed000233:0001")
+      assert_equal "urn:nabu:hab-edoc:ed000233:0001:p1r", letter.first.urn
+      assert letter.first.text.start_with?("Amsterdam 1660 April 4."), letter.first.text
+      assert_equal "Bahnsen, Benedikt", letter.metadata["author"]
+      assert_equal 1660, letter.metadata.dig("date", "not_before")
+      assert_equal "site default", letter.metadata["license_basis"]
+    end
+
+    def test_the_travel_report_and_the_translation
+      report = documents.fetch("urn:nabu:hab-edoc:ed000251:Munchen-1603")
+      assert_equal "texts/München 1603.xml", report.metadata["file"]
+      assert_equal "Philipp Hainhofer", report.metadata["author"]
+      assert_equal 1603, report.metadata.dig("date", "not_before")
+      assert_equal "the transcript's TEI licence", report.metadata["license_basis"]
+      assert_equal(%w[pfol127v pfol127ar], report.map { |p| p.urn.split(":").last })
+      lessing = documents.fetch("urn:nabu:hab-edoc:ed000146:abauzit_offenbarung_ue")
+      assert_equal "Lessing, Gotthold Ephraim", lessing.metadata["author"]
+      assert_equal "Abauzit", lessing.metadata["header_author"]
+      assert_equal({ "not_before" => 1784, "not_after" => 1784, "raw" => "1784", "basis" => "imprint",
+                     "class" => "edition" }, lessing.metadata["date"])
+    end
+
+    def test_edition_drop_lists_remove_template_placeholders
+      assert_equal %w[author header_author], ADAPTER::EDITIONS.dig("ed000271", :drop),
+                   "Liber modorum's header author is the template's \"[Name des Autors]\""
+      assert_equal %w[edition_title], ADAPTER::EDITIONS.dig("ed000235", :drop),
+                   "the psalter's METS title is the template's \"Autor und Titel\""
+      assert_equal %w[place], ADAPTER::EDITIONS.dig("ed000276", :drop), "Hartlieb's pubPlace is the holding library"
     end
 
     def test_kind_fold_covers_every_admitted_edition
@@ -226,6 +399,21 @@ module Adapters
                                          last_known: 2, want: ->(id, _href) { id == "ed000001" })
         assert_equal [0, 1], [again.fetched, again.cached], "file-grain resume"
         assert_requested transcript, times: 1
+      end
+    end
+
+    def test_fetch_lands_an_editions_own_name_texts_and_letter_descriptions
+      stub_request(:get, METS).to_return(status: 404)
+      stub_mets("ed000249", "ed000249")
+      stub_request(:get, %r{\Ahttps://diglib\.hab\.de/edoc/ed000249/texts/.+\.xml\z})
+        .to_return(status: 200, body: "<TEI/>")
+      Dir.mktmpdir do |dir|
+        result = Nabu::HabEdocFetch.sync!(dir: dir, attic_dir: File.join(dir, ".attic"), delay: 0, last_known: 249,
+                                          files: ->(id, mets) { ADAPTER.holdings(id, mets) },
+                                          want: ->(id, href) { ADAPTER.wanted?(id, href) })
+        assert_equal 5, result.fetched, "3 listed letters + the 2 descriptions the METS lists"
+        held = Dir.glob("ed000249/texts/**/*.xml", base: dir)
+        assert_equal 2, held.grep(/_tei-msDesc_fmg\.xml\z/).size
       end
     end
 

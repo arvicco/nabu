@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://diglib.hab.de/rules/schema/tei/P5/v2.8.0/tei-p5-transcr.xsd" xml:id="edoc_ed000228_fg_1621_11"><teiHeader type="text"><fileDesc><titleStmt><title>Tagebuch des Fürsten Christian II. von Anhalt-Bernburg: <date when="1621-11">November 1621</date></title><author ref="#anhalt-bernburg_christian_ii"><forename>Christian II.</forename><nameLink>von</nameLink><surname type="toponymic">Anhalt-Bernburg</surname></author><respStmt><resp ref="https://credit.niso.org/contributor-roles/investigation/ https://credit.niso.org/contributor-roles/data-curation/">transkribiert und kommentiert von</resp><persName ref="https://d-nb.info/gnd/1044494867"><forename>Andreas</forename><surname>Herz</surname></persName></respStmt><respStmt><resp ref="https://credit.niso.org/contributor-roles/validation/">vorkorrigiert von</resp><persName ref="https://d-nb.info/gnd/136608272"><forename>Alexander</forename><surname>Zirr</surname></persName></respStmt><respStmt><resp ref="https://credit.niso.org/contributor-roles/validation/">korrigiert von</resp><persName ref="https://d-nb.info/gnd/1030558167"><forename>Arndt</forename><surname>Schreiber</surname></persName></respStmt><respStmt><resp ref="https://credit.niso.org/contributor-roles/data-curation/ https://credit.niso.org/contributor-roles/validation/ https://credit.niso.org/contributor-roles/software/">Umsetzung der Digitalen Edition von</resp><persName ref="https://d-nb.info/gnd/1192832655"><forename>Marcus</forename><surname>Baumgarten</surname></persName><persName ref="https://d-nb.info/gnd/1077317964"><forename>Maximilian</forename><surname>Görmar</surname></persName></respStmt><funder ref="https://d-nb.info/gnd/2007744-0">Deutsche Forschungsgemeinschaft</funder><principal>Lehrstuhl für Geschichte der Frühen Neuzeit an der Albert-Ludwigs-Universität Freiburg i. Br.</principal><principal ref="https://d-nb.info/gnd/8989-8">Herzog August Bibliothek Wolfenbüttel</principal></titleStmt><publicationStmt><publisher>
+               <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+               <ptr target="http://www.hab.de"/>
+            </publisher><date type="digitised" when="2016">2016</date><distributor>Herzog August Bibliothek Wolfenbüttel</distributor><availability status="free"><licence target="https://creativecommons.org/licenses/by-sa/4.0/"><p>Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</p></licence></availability></publicationStmt><sourceDesc><listPerson><person xml:id="anhalt-bernburg_anna">
+               <persName ref="https://d-nb.info/gnd/104173149">
+                  <forename>Anna</forename>
+                  <surname type="toponymic">Anhalt-Bernburg</surname>
+                  <roleName>Fürstin</roleName>
+                  <nameLink>von</nameLink>
+               </persName>
+               <persName type="display">Anhalt-Bernburg, Anna, Fürstin von, geb. Gräfin von
+                  Bentheim, Steinfurt und Tecklenburg</persName>
+               <persName type="birthName">
+                  <forename>Anna</forename>
+                  <surname type="toponymic">Bentheim, Steinfurt und Tecklenburg</surname>
+                  <roleName>Gräfin</roleName>
+                  <nameLink>von</nameLink>
+               </persName>
+               <persName>Bentheim, Steinfurt und Tecklenburg, Anna, Gräfin von</persName>
+               <birth>1579</birth>
+               <death>1624</death>
+               <note>Tochter des Grafen Arnold IV. von Bentheim, Steinfurt und Tecklenburg (1554-1606); 
+                  ab 1595 Ehe mit <rs type="person" ref="#anhalt-bernburg_christian_i">Fürst Christian I. 
+                     von Anhalt-Bernburg</rs> (1568-1630) und Mutter 
+                  <rs type="person" ref="#anhalt-bernburg_christian_ii">Christians II.</rs>; 1617 Gründerin 
+                  und Patronin der <rs type="org" ref="#academie_des_loyales">Noble Académie des Loyales</rs>; 
+                  seit 1620 Mitglied der <rs type="org" ref="#tugendliche_gesellschaft">Tugendlichen Gesellschaft</rs> 
+                  ("Die Enthaltende").</note>
+            </person><person xml:id="anhalt-bernburg_christian_i">
+            </person></listPerson><list xml:id="abbr"><item xml:id="gulden">
+               <term>Gulden (florenus)</term>
+            </item><item xml:id="reichsthaler">
+               <term>Reichsthaler</term>
+            </item></list><list xml:id="symbol"><item xml:id="dienstag">
+               <term>Dienstag</term>
+            </item><item xml:id="freitag">
+               <term>Freitag</term>
+            </item><item xml:id="montag">
+               <term>Montag</term>
+            </item><item xml:id="samstag">
+               <term>Samstag</term>
+            </item><item xml:id="sonntag">
+               <term>Sonntag</term>
+            </item></list><listPlace><place xml:id="baden_bei_wien">
+               <placeName ref="https://www.geonames.org/2782067/baden.html">Baden (bei Wien)</placeName>
+            </place><place xml:id="bruenn">
+               <placeName ref="https://www.geonames.org/3078610/brno.html">Brünn (Brno)</placeName>
+            </place><place xml:id="england_koenigreich">
+               <placeName ref="https://d-nb.info/gnd/4014770-8">England, Königreich</placeName>
+            </place><place xml:id="frankreich_koenigreich">
+               <placeName ref="https://d-nb.info/gnd/4018145-5">Frankreich, Königreich</placeName>
+            </place><place xml:id="heiliges_roemisches_reich">
+               <placeName ref="https://d-nb.info/gnd/2035457-5">Heiliges Römisches Reich (deutscher Nation)</placeName>
+            </place><place xml:id="oesterreich_unter_der_enns_erzherzogtum">
+               <placeName ref="https://d-nb.info/gnd/4075391-8">Österreich unter der Enns (Niederösterreich), Erzherzogtum</placeName>
+            </place><place xml:id="polen_koenigreich">
+               <placeName ref="https://d-nb.info/gnd/36365-0">Polen, Königreich</placeName>
+            </place><place xml:id="riga">
+               <placeName ref="https://www.geonames.org/456172/riga.html">Riga</placeName>
+            </place><place xml:id="schweden_koenigreich">
+               <placeName ref="https://d-nb.info/gnd/4077258-5">Schweden, Königreich</placeName>
+            </place><place xml:id="ungarn_koenigreich">
+               <placeName ref="https://d-nb.info/gnd/4078541-5">Ungarn, Königreich</placeName>
+            </place><place xml:id="wien">
+               <placeName ref="https://www.geonames.org/2761369/vienna.html">Wien</placeName>
+            </place><place xml:id="wiener_neustadt">
+               <placeName ref="https://www.geonames.org/2761353/wiener-neustadt.html">Wiener Neustadt</placeName>
+            </place></listPlace><listOrg><org xml:id="confoederatio_bohemica">
+               <orgName>Confoederatio Bohemica (Böhmische Konföderation)</orgName>
+               <note>1619/20 bestehende Union der protestantischen Stände von Böhmen, Schlesien, Mähren, Ober- und Niederlausitz.</note>
+            </org><org xml:id="niederoesterreich_landstaende">
+               <orgName>Niederösterreich (Österreich unter der Enns), Landstände</orgName>
+            </org></listOrg><list type="gloss" xml:id="glossar"><item xml:id="affection">
+                    <label>Affection</label>
+                    <list>
+                        <item>(positive oder negative) Einstellung jemandem gegenüber (meist Gewogenheit, Zuneigung)</item>
+                    </list>
+                </item><item xml:id="ambassador">
+                    <label>Ambassador</label>
+                    <list>
+                        <item>Gesandter, Botschafter</item>
+                    </list>
+                </item><item xml:id="armada">
+                    <label>Armada</label>
+                    <list>
+                        <item n="1">Armee, Heer</item>
+                        <item n="2">Kriegsflotte</item>
+                    </list>
+                </item><item xml:id="aventurierer">
+                    <label>Aventurierer</label>
+                    <list>
+                        <item>Abenteurer, sich bewährender Held, Herausforderer im Turnier, junger Adliger in fremden Kriegsdiensten</item>
+                    </list>
+                </item><item xml:id="ballhaus">
+                    <label>Ballhaus</label>
+                    <list>
+                        <item>für das Ballspiel errichtetes Gebäude</item>
+                    </list>
+                </item><item xml:id="capitaen">
+                    <label>Capitän</label>
+                    <list>
+                        <item>Hauptmann (Kommandeur einer Kompanie bei Infanterie- und Dragonereinheiten)</item>
+                    </list>
+                </item><item xml:id="condoniren">
+                    <label>condoniren</label>
+                    <list>
+                        <item>erlassen, verzeihen, nachsehen</item>
+                    </list>
+                </item><item xml:id="convoy">
+                    <label>Convoy</label>
+                    <list>
+                        <item>Begleitung, Begleitschutz</item>
+                    </list>
+                </item><item xml:id="deputiren">
+                    <label>deputiren</label>
+                    <list>
+                        <item n="1">zuweisen, bestimmen</item>
+                        <item n="2">absenden</item>
+                    </list>
+                </item><item xml:id="erlassung">
+                    <label>Erlassung</label>
+                    <list>
+                        <item>Freilassung</item>
+                    </list>
+                </item><item xml:id="intent_1">
+                    <label>Intent</label>
+                    <list>
+                        <item>Absicht, Vorhaben</item>
+                    </list>
+                </item><item xml:id="intercession">
+                    <label>Intercession</label>
+                    <list>
+                        <item>Fürsprache, Vermittlung</item>
+                    </list>
+                </item><item xml:id="landhaus">
+                    <label>Landhaus</label>
+                    <list>
+                        <item>Versammlungsort und Verwaltungssitz der Landstände</item>
+                    </list>
+                </item><item xml:id="losament">
+                    <label>Losament</label>
+                    <list>
+                        <item>Unterkunft, Wohnraum</item>
+                    </list>
+                </item><item xml:id="practike">
+                    <label>Practike</label>
+                    <list>
+                        <item>Intrige, List, schädliche Handlung</item>
+                    </list>
+                </item><item xml:id="resolviren">
+                    <label>resolviren</label>
+                    <list>
+                        <item n="1">entschließen, beschließen</item>
+                        <item n="2">auflösen</item>
+                    </list>
+                </item><item xml:id="retirat">
+                    <label>retirat</label>
+                    <list>
+                        <item>zurückgezogen</item>
+                    </list> 
+                </item><item xml:id="sint">
+                    <label>sint(er)</label>
+                    <list>
+                        <item>seit</item>
+                    </list>
+                </item><item xml:id="submission">
+                    <label>Submission</label>
+                    <list>
+                        <item>Unterwerfung, Demütigung</item>
+                    </list>
+                </item><item xml:id="submittiren">
+                    <label>submittiren</label>
+                    <list>
+                        <item>unterwerfen</item>
+                    </list>
+                </item><item xml:id="tractiren">
+                    <label>tractiren</label>
+                    <list>
+                        <item n="1">(ver)handeln</item>
+                        <item n="2">bewirten</item>
+                        <item n="3">misshandeln</item>
+                        <item n="4">behandeln</item>
+                    </list>
+                </item><item xml:id="verehrung">
+                    <label>Verehrung</label>
+                    <list>
+                        <item>Beschenkung, Geschenk</item>
+                    </list>
+                </item></list></sourceDesc></fileDesc><revisionDesc><list><item>work in progress</item></list></revisionDesc></teiHeader><text><body><div type="year" n="1621" xml:id="year1621_11">
+           <div type="volume" n="I">
+              <div type="entry" xml:id="entry1621-11-25">
+                 <pb n="1r" facs="#mss_ed000193_00006"/>
+                 <index indexName="place">
+                    <term ref="#wiener_neustadt">Wiener Neustadt</term>
+                    <term ref="#baden_bei_wien">Baden (bei Wien)</term>
+                    <term ref="#wien">Wien</term>
+                 </index>
+                 <index indexName="regest">
+                    <term>Verlegung des Arrests von Wiener Neustadt nach Wien</term>
+                    <term>Anwesende adlige fürstliche Bedienstete</term>
+                    <term>Reisebegleiter</term>
+                    <term>Besuch durch die kaiserlichen Abgesandten Graf Leonhard Helfried von Meggau und Graf Philipp zu Solms-Lich</term> 
+                    <term>Bewegungsfreiheit innerhalb der Stadt</term>
+                    <term>Begründung der Teilnahme am böhmischen Feldzug und Loyalitätsversprechen für die Zukunft gegenüber Kaiser Ferdinand II.</term> 
+                    <term>Abzug der Wache</term>
+                 </index>
+                 <index indexName="subject">
+                    <term ref="#kriegsgefangener"/>
+                    <term ref="#patronage"/>
+                    <term ref="#etikette"/>
+                    <term ref="#eltern"/>
+                    <term ref="#adlige_exerzitien"/>
+                    <term ref="#ehre"/>
+                    <term ref="#treue"/>
+                    <term ref="#luft"/>
+                    <term ref="#gesundheitsvorsorge"/>
+                 </index>
+                 <head><date calendar="julian" when="1621-11-25">[Donnerstag, 25. November]</date></head>
+                    <p>
+                       <lb/><handShift/><note type="contemporary" place="margin_left"><rs type="place" ref="#oesterreich_unter_der_enns_erzherzogtum">Österreich</rs>,</note> <foreign xml:lang="lat">Anno</foreign><note type="translation" resp="ah">Im Jahr</note> 1621. Donnerstags den 25<hi rend="super">en</hi> <foreign xml:lang="lat">Novembris</foreign><note type="translation" resp="ah">des November</note> bin Jch von
+                       <lb/>der <rs type="place" ref="#wiener_neustadt">Neustadt</rs> aus meinem arrest naher <rs type="place" ref="#wien">Wien</rs> aus befehlch <rs type="person" ref="#kaiser_ferdinand_ii">Jhrer
+                       <lb/>Kay<ex>serlichen</ex> May<ex>es</ex>t<ex>ä</ex>t</rs> durch herrn <foreign xml:lang="lat">Commissarium</foreign><note type="translation" resp="ah">Kommissar</note> <rs type="person" ref="#berchtold_maximilian">Max<ex>imilian</ex> Berchtold</rs> geführt
+                       <lb/>worden, vnd haben 50 Pferdt <term ref="#convoy">Conuoy</term> biß naher <rs type="place" ref="#baden_bei_wien">Baden</rs> zum
+                       <lb/>Mittagsmahl gehabt, von dannen nach Wien, durch Rittmeister
+                       <lb/><rs type="person" ref="#anthoni_anon_1">Anthonj</rs> einem Wallohnen mit andern 50 Pferden begleitet worden.                    
+                    </p>
+                    <p>
+                       <lb/>Von Edelleuthen war bey mir, heuptman <rs type="person" ref="#knoch_kaspar_ernst">Caspar Ernst Knoch</rs>,
+                       <lb/>meiner Frau <rs type="person" ref="#anhalt-bernburg_anna">Mutter</rs>, vnd herrn <rs type="person" ref="#anhalt-bernburg_christian_i">Vattern</rs> Abgesandter, vnd
+                       <lb/><rs type="person" ref="#hallwyl_hartmann">hartman von hallweil</rs>, mein CammerJuncker.
+                    </p>
+                    <p>
+                       <lb/>Der <rs type="person" ref="#krafft_ignatius">Prælat vom NewCloster</rs> zur Neustadt, ist aus guttem willen
+                       <lb/>mitgezogen, benebens dem <rs type="person" ref="#stelzl_melchior">Burggrauen</rs> zur Neustadt. 
+                    </p>
+                    <p>
+                       <lb/>Als Jch zu Wien ankommen, Vnd in ein schön <term ref="#losament">losament</term> in der <w lemma="Cärntner">Cär<damage>nt</damage>
+                       <lb/>ner</w> gaße geführt worden, bin Jch kaum eine halbe stundt da<damage>rin</damage>
+                       <lb/>gewesen, so ist der herr <rs type="person" ref="#meggau_leonhard_helfried">Graff von Meckaw</rs>, vnd <rs type="person" ref="#solms-lich_philipp">Graff von
+                       <lb/>Solms</rs> <add place="margin_left">von Jhr M<ex>ajes</ex>t<ex>ä</ex>t <foreign xml:lang="lat">p<ex>erge</ex></foreign><note type="translation" resp="as">usw.</note></add> zu mir abgeordnet worden, so mir im nahmen Jhrer May<damage><ex>es</ex>t<ex>ä</ex>t</damage>
+                       <lb/>angedeut, wie das Jhr May<ex>es</ex>t<ex>ä</ex>t vf mein offtermahliges beschehenes 
+                       <lb/>vnderthenigstes ansuchen vnd bitten, Auch anderer vornehmen herrn 
+                       <lb/><term ref="#intercession">Jntercession</term> allergnädigst verwilliget, das Jch anhero aus meinem
+                       <lb/>arrest solte gelassen vnd erfordert werden. Vnd ob woln Jhr M<ex>ajes</ex>t<ex>ä</ex>t <foreign xml:lang="lat">p<ex>erge</ex></foreign><note type="translation" resp="as">usw.</note>
+                       <lb/>vrsach gehabt, solches so leichtlich nicht einzugehen, Jedoch in ansehung
+                       <lb/>meines dapfern gemüts, vnd berühmten ansehenlichen qualiteten,
+                       <lb/>hetten Sie aus Kays<ex>erlicher</ex> mild vnd güte, sich <term ref="#resolviren">resolviret</term>, vf mein wort
+                       <lb/>vnd gegebenen handstreich, alle Wachten abzustellen, vnd mir
+                       <lb/>alle Freyheit in der Stadt zuuerwilligen, an end vnd ort, da es
+                       <lb/>mir belieben möchte, mich zubegeben, Doch begehrten Sie <w lemma="hingegen">hin
+                       <lb/>gegen</w> allergnedigst, mich eingezogen zuhalten, allerley <term ref="#practike">Practicken</term>
+                       <lb/>vnd bössen verdacht zuvermeiden, auch nicht Jhderman zu mir
+                       <lb/>zulaßen.
+                    </p>
+                  <pb n="1v" facs="#mss_ed000193_00007"/>
+                    <p>
+                       <lb/>Jch gab daruf zur Antwort, Jch thete mich der hohen Kays<ex>erlichen</ex> gnade, so mir
+                       <lb/><rs type="person" ref="#kaiser_ferdinand_ii">J<ex>hre</ex> K<ex>ayserliche</ex> M<ex>ajes</ex>t<ex>ä</ex>t</rs> vnser allergnädigster herr, in dem Sie mich vf mein gehorsambs<damage>tes</damage>
+                       <lb/>ansuchen vnd bitten, <rs type="place" ref="#wien">anhero</rs> erfordern, vnd anizo durch solche <w lemma="ansehnliche">ans<damage>ehn</damage>
+                       <lb/>liche</w> Abschickung <rs type="person" ref="#meggau_leonhard_helfried #solms-lich_philipp">beider herrn Graffen</rs> empfangen lassen wollen,
+                       <lb/>zum aller Vnderthenigsten vnd gehorsambsten bedancken. Vnd weil
+                       <lb/>meine Jntention furnemlich dahin gegangen, die große gnade vnd
+                       <lb/>ehre zuhaben, J<ex>hre</ex> Kay<ex>serliche</ex> May<ex>es</ex>t<ex>ä</ex>t aller Vnderthenigst vfzuwarten, Als hette
+                       <lb/>Jch billich mich, das Jch nuhnmehr zu solchem meinem <term ref="#intent_1">Intent</term><add place="above">zweck</add> zu gelangen,
+                       <lb/>gewunschte occasion vnd gelegenheit haben mag, zum höchsten <w lemma="zuerfreuen">zuer
+                       <lb/>freuen</w>, wolte auch nichts liebers wünschen, Als solche Kays<ex>erliche</ex> gnade, mit <w lemma="gehorsambsten">ge
+                       <lb/>horsambsten</w> danck zuerkennen vnd zuuerdienen, Bethe Sie wolten <w lemma="meines">mei
+                       <lb/>nes</w> herzlieben herrn <rs type="person" ref="#anhalt-bernburg_christian_i">Vattern</rs>, vnd meine Person hochstgedachter Jhrer
+                       <lb/>May<ex>es</ex>t<ex>ä</ex>t im besten recommendiren, verhoffentlich dieselbe würde S<ex>einer</ex> G<ex>naden</ex>
+                       <lb/>vnderthenigste <term ref="#submission">submission</term> mit Kay<ex>serlichen</ex> gnaden vfgenommen, vnd dero
+                       <lb/>weitberümbsten hochlöblichsten mild vnd gütte nach, S<ex>einer</ex> G<ex>naden</ex> <w lemma="allergehorsambsten">allerge
+                       <lb/>horsambsten</w> Ansuchen stadt geben, Auch allergnädigst <term ref="#condoniren">condoniren</term>. Was
+                       <lb/>meine Person anlanget, hette Jch im <rs type="org" ref="#confoederatio_bohemica">Böhmischen</rs> Feldzuge, meinem Vattern
+                       <lb/>als ein gehorsamer Sohn billich folgen mussen, vnd were meine <w lemma="Jntention">Jn
+                       <lb/>tention</w> gewesen, Als ein <term ref="#aventurierer">Auenturierer</term> vnd junger Soldat etwas <w lemma="Rechtschaffenes">Recht
+                       <lb/>schaffenes</w> zulernen vnd zuuersuchen, damit Jch dem <rs type="place" ref="#heiliges_roemisches_reich">Vatterland</rs>, vnd
+                       <lb/>Jhrer May<ex>es</ex>t<ex>ä</ex>t dermahl eins desto beßere vnd füglichere dienste zu aller
+                       <lb/>vorfallender gelegenheit leisten möchte, Wehre solches also aus keiner
+                       <lb/>bösen Meynung, oder v̈beln <term ref="#affection">affection</term> beschehen, wie Jch dann deßen
+                       <lb/>auch ganz keine vrsach. Bethe nachmahln die herrn Grafen wolten
+                       <lb/>die sachen vfs beste als müglich, offtermelter Jhrer Kay<ex>serlichen</ex> May<ex>es</ex>t<ex>ä</ex>t
+                       <lb/>recommendiren, vnd die erlangung meines gedachten Jntents, dero aller
+                       <pb n="2r" facs="#mss_ed000193_00008"/>
+                       <lb/>gehorsambst vfzuwarten, vnd vnderthenigste reverenz zuthun <w lemma="zubefördern"><restore>zu</restore>b<damage>e</damage>
+                       <lb/>fördern</w> helfen. Jm vbrigen verhoffte Jch mich, als ein Ehrliebender
+                       <lb/>Furst, der massen zuuerhalten, das <rs type="person" ref="#kaiser_ferdinand_ii">Jhre May<ex>es</ex>t<ex>ä</ex>t</rs> ob Gott will, ein
+                       <lb/>Allergnädigst belieben vnd gefallen darob tragen wurden, vnd zu keinem
+                       <lb/>vngleichen verdacht vrsach zu geben. Jn massen Jch dann erbötig, auch
+                       <lb/>mich schuldig erkendte, höchstermelter J<ex>hrer</ex> Kay<ex>serlichen</ex> May<ex>es</ex>t<ex>ä</ex>t befehlch <w lemma="nachzukommen">nach
+                       <lb/>zukommen</w>, Vnd mein wort von mir zugeben, Jhdoch wolte Jch die
+                       <lb/>herrn <rs type="person" ref="#meggau_leonhard_helfried #solms-lich_philipp">Grafen</rs> ganz fr<ex>eundlich</ex> gebethen haben, Sie möchten darob sein, <w lemma="damit">da
+                       <lb/>mit</w> Jch derer Freyheiten, so Jch vor diesem zu <rs type="place" ref="#bruenn">Brunn</rs> beim Obersten
+                       <lb/><rs type="person" ref="#verdugo_guillermo">Verdugo</rs> genossen, auch sonsten einem Jhdern Soldaten vf sein Wort
+                       <lb/>erleübet werden, sowol inn[-], als außerhalb der <rs type="place" ref="#wien">Stadt</rs>, mich <w lemma="zugebrauchen">zuge
+                       <lb/>brauchen</w> haben möchte. Bedanckte mich <del>g</del> auch gegen Jhnen ganz
+                       <lb/>fr<ex>eundlich</ex> der gehabten mühe vnd beförderung (sonderlich gegen dem 
+                       <lb/>h<ex>errn</ex> v<ex>on</ex> Meckaw) meiner <term ref="#erlassung">erlassung</term> halber, vnd bäthe, Sie wolten
+                       <lb/>mich Jhrer Kay<ex>serlichen</ex> May<ex>es</ex>t<ex>ä</ex>t zu höchsten gnaden, vnderthenigst befolhen sein
+                       <lb/>lassen, welcher Jch mehr im werck, als mit worten begehrte meine
+                       <lb/>allergehorsambste devotion zuerweisen.
+                    </p>
+                    <p>
+                       <lb/>Daruf sich die Grauen erbotten, solches zuthun, vnd Jhrer May<ex>es</ex>t<ex>ä</ex>t <w lemma="zureferiren">zure
+                       <lb/>feriren</w>, mir die hand geben, vnd Abschied genommen, mit den worten,
+                       <lb/>Verhoffentlich, Jch würde vf mein wort, vnd handstreich dem obigen 
+                       <lb/>nachzukommen wissen, Woruf Jch dann das obgemelte replicirt, vnd
+                       <lb/>Sie also hinunder begleitet, da noch der Graff von Meckau gesagt,
+                       <lb/>Es würde sich alles nach vnd nach wol schicken, Vnd fragte, wie Jch das
+                       <lb/>vermeinte, Außer der Stadt, Da Jch geantwortet, Meine <foreign xml:lang="lat"><w lemma="exercitia">exerci
+                       <lb/>tia</w></foreign><note type="translation" resp="ah">Übungen [hier Einübung adliger Verhaltensweisen und Fertigkeiten]</note> zuhaben, etwas die luft zuuerändern, vnd wegen der infection <w lemma="bißweilen">biß 
+                       <pb n="2v" facs="#mss_ed000193_00009"/>
+                       <lb/>weilen</w> zu spazieren, <rs type="person" ref="#meggau_leonhard_helfried">Er</rs> aber, <rs type="person" ref="#kaiser_ferdinand_ii">Jhre May<ex>es</ex>t<ex>ä</ex>t</rs> verstündens in der 
+                       <lb/><rs type="place" ref="#wien">Stadt</rs>, doch wolte Ers <foreign xml:lang="lat">fideliter</foreign><note type="translation" resp="ah">getreu</note> referiren, vnd würde sich alles wol
+                       <lb/>schicken. 
+                    </p>
+                    <p>
+                       <lb/>Als Sie weg gangen haben Sie Musquetirer vom <term ref="#losament">losament</term> weggeschafft.
+                    </p>
+                 </div>
+           </div>
+        </div></body></text></TEI>

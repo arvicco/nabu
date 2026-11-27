@@ -17,7 +17,13 @@ module Nabu
     # Latin-German dictionary, the Paesi novamente retrovati and its
     # German Newe unbekanthe landte, Sebald Heyden's school colloquies
     # in fifteen printings, Sibylla Schwarz's poems (1650), a 16th-c.
-    # cookbook, the Lüne convent's letters, Fonteny's sonnet emblems.
+    # cookbook, the Lüne convent's letters, Fonteny's sonnet emblems —
+    # and, by the per-edition review, Grimmelshausen's works, Lessing's
+    # translations, Serranus's dictionary (1538), Christian II of
+    # Anhalt-Bernburg's diaries (1621–1656), Bahnsen's and Duchess
+    # Sibylla's letters, Hainhofer's travel reports, a Middle Low German
+    # psalter, Rist's song books, Hartlieb, Tuberinus, a Latin sermon
+    # manuscript, and the FMG's letters of musicians (1800–2000).
     #
     # == Upstream / grains (census 2026-11-27)
     #
@@ -41,29 +47,59 @@ module Nabu
     #   letters — each its own text (urn:nabu:hab-edoc:ed000267:
     #   Augsburg_1530, …:ed000248:Brief001-D; the token is the file name
     #   with the "tei-transcript" stem cut). Passage = page (the parser).
+    # - ACCEPTED per edition: an OWN-NAME TEXT — a transcription the METS
+    #   keeps under its own name beside the edition's introductions and
+    #   registers, selected by the edition's reviewed rule (EDITIONS
+    #   :texts — its fileGrp, a file-name pattern, or both: Christian II's
+    #   1621_11.xml, Bahnsen's briefe/0001.xml, Lessing's *_ue.xml, the
+    #   Hainhofer reports "texts/München 1603.xml" → urn:nabu:hab-edoc:
+    #   ed000251:Munchen-1603). Same document and passage grain.
+    # - HELD, never a document: an FMG letter's DESCRIPTION file
+    #   (ed000249, <stem>_tei-msDesc_fmg.xml) — the letter's language and
+    #   correspondents are read from it (the transcript states neither).
     # - REJECTED, skipped by rule: an edition whose METS lists no
-    #   transcript (230 of the walk's 255 — 184 records with a
-    #   tei-introduction only, most of them the Theatrum repertory's
-    #   facsimile records, and the editions whose transcription fileGrp
-    #   uses its own file names: Rubens, Lessing's translations, the
-    #   Magdeburg Centuries, Karlstadt, Christian II's diaries, Opitz,
-    #   Serranus, Hartlieb … — those groups mix introductions into the
-    #   texts, so each is a per-edition review left for its own packet); a listed
+    #   transcript and that the review admitted no rule for (200 of the
+    #   walk's 255 — 184 records with a tei-introduction only, most of
+    #   them the Theatrum repertory's facsimile records, and the
+    #   introduction/bibliography-only project records); an edition held
+    #   back by EDITIONS with its reason (the review's 18: Rubens, the
+    #   Magdeburg Centuries, Karlstadt, Opitz, the Fruchtbringende
+    #   Gesellschaft letters, Controversia et Confessio … — mostly texts
+    #   whose language no file states); listed files an edition holds
+    #   back by rule (EDITIONS :held — Lessing's _org originals); a listed
     #   transcript upstream does not serve (404 at fetch, recorded in the
     #   fetch state); a part file superseded by the edition's whole
-    #   transcript (ed000223); an edition held back by EDITIONS (below);
-    #   a transcript under an unusable rights statement (the licence law).
+    #   transcript (ed000223); a letter without a listed description, or
+    #   whose description states no textLang; a transcript under an
+    #   unusable rights statement (the licence law).
     # - UNRECOGNIZED: an edition with transcripts that EDITIONS does not
     #   know (new upstream — census it, then add the row), a listed
-    #   transcript neither held nor recorded missing (a fetch hole), an
-    #   unknown licence target or rights label.
+    #   transcript or description neither held nor recorded missing (a
+    #   fetch hole), an unknown licence target, rights label or
+    #   description textLang.
     #
-    # Reconciliation (2026-11-27): 25 editions list 550 transcripts; 3
-    # editions are held back (70 files: ed000132 1, ed000239 2, ed000249
-    # 67), ed000008's whole-dictionary tei-transcript.xml 404s (its five
-    # alphabet parts are served), ed000223's 7 parts are superseded by
-    # its whole — 472 documents expected at the first sync if every other
-    # listed file is served (the census fetched one file per edition).
+    # Reconciliation (2026-11-27, the first sync): 25 editions list 550
+    # transcripts; 3 editions held back (70 files: ed000132 1, ed000239 2,
+    # ed000249 67), ed000008's whole-dictionary tei-transcript.xml 404s
+    # (its five alphabet parts are served), ed000223's 7 parts superseded
+    # by its whole — 472 documents, 308 skipped by rule (230
+    # transcript-less editions + 70 + 1 + 7), as synced.
+    #
+    # The per-edition review (2026-11-27, every own-name edition censused
+    # from the held METS and sampled, 65 requests): 12 editions admitted
+    # by a rule, 517 own-name texts listed — ed000133 Grimmelshausen 32
+    # (2 under the METS label "Benutzungsordnung" → skipped by the
+    # licence law: 30), ed000146 Lessing 71 _ue (83 _org held back by
+    # rule), ed000215 Serranus 24, ed000228 Christian II 338, ed000233
+    # Bahnsen 21, ed000235 the psalter 1, ed000244 Rist 14, ed000251
+    # Hainhofer 7, ed000269 Duchess Sibylla 6, ed000271, 275, 276 one
+    # each; and ed000249's 67 FMG letters admitted through their
+    # descriptions (65 listed; 2 — orgeni-a-002-1/-2 — without one,
+    # skipped by rule). Expected after the next sync: 472 + 580 = 1,052
+    # documents if every listed file is served and every description
+    # states a mapped textLang; 316 skipped by rule (200 transcript-less
+    # editions + 18 reviewed held-back editions + ed000132 1 + ed000239 2
+    # + ed000146 83 + ed000133 2 + ed000249 2 + ed000008 1 + ed000223 7).
     #
     # == The licence law (per transcript)
     #
@@ -84,7 +120,13 @@ module Nabu
     #    template's "(c) Herzog August Bibliothek Wolfenbüttel" line or
     #    nothing (ed000081, 226, 236, 241, 243, 247 by the census); each
     #    one's metadata says "license_basis" => "site default".
-    # Census: no admitted transcript carries a restrictive statement.
+    # Census: no WDB-named transcript carries a restrictive statement; two
+    # Grimmelshausen texts carry the METS label "Benutzungsordnung"
+    # (simpli/transcript_b1.xml, calender/transcript_vor.xml) → skipped.
+    # The availability line status="restricted" + "copyright information"
+    # (?link=012) is the WDB template's boilerplate on transcripts of every
+    # basis (Hans Sachs's beside his CC BY licence) — never read as a
+    # statement; the licence law reads <licence> and the METS label only.
     #
     # == Language (the EDITIONS table — declared, never guessed)
     #
@@ -95,7 +137,11 @@ module Nabu
     # per-file rules where an edition mixes (the Paesi's -nul German
     # print; the Lüne letters' own file-name language letter, D/DL →
     # Middle Low German, L/LD → Latin; Gabrias's Greek half). Upstream's
-    # textLang/langUsage ride metadata.
+    # textLang/langUsage ride metadata. One exception, read never guessed:
+    # the FMG letters (ed000249) are each in their own language, which
+    # only the letter's description file states (msContents textLang
+    # @mainLang — the census read fr, en, de against the letters
+    # themselves); no description or no textLang → skipped by rule.
     #
     # == Mined metadata (the aggressive-mining rule)
     #
@@ -104,15 +150,25 @@ module Nabu
     # date as an EDITION-class date (the imprint year; a manuscript's
     # origDate or a letter's dated correspDesc rides class-less), the
     # imprint place and printer, shelfmark, sender/addressee, keywords,
-    # the edition's METS title, the licence statement and its basis.
+    # the edition's METS title, the licence statement and its basis. The
+    # review's editions add: the date their file's own title names where
+    # nothing else dates them (EDITIONS date: :title — Christian II's
+    # months, Bahnsen's letters, Hainhofer's journeys; class-less, basis
+    # "title"); an FMG letter's description facts (sender, addressee,
+    # sending place and date, shelfmark, the description's letter title);
+    # and EDITIONS :drop removes mined fields that are a template
+    # placeholder or the wrong thing (a register sourceDesc's stray
+    # imprint, a holding library as pubPlace).
     #
     # == fetch
     #
-    # HabEdocFetch: the METS id walk + every admitted transcript, 1 request
-    # per second, ~300 METS + ~480 transcripts at the first sync (≈ 15–20
-    # minutes with the server's latency); later syncs re-walk the METS and fetch only new
-    # transcripts. The mirror is upstream's own tree — nothing
-    # materialized beside it but the fetch state file.
+    # HabEdocFetch: the METS id walk + every admitted file (HabEdoc.holdings:
+    # transcripts, own-name texts, letter descriptions), 1 request per
+    # second, ~300 METS + ~480 transcripts at the first sync (≈ 15–20
+    # minutes with the server's latency); later syncs re-walk the METS and
+    # fetch only new files (the review's admission: 649 — 517 own-name
+    # texts, 67 FMG letters, 65 descriptions). The mirror is upstream's
+    # own tree — nothing materialized beside it but the fetch state file.
     class HabEdoc < Nabu::Adapter
       SLUG = "hab-edoc"
       URN_PREFIX = "urn:nabu:hab-edoc:"
@@ -148,20 +204,83 @@ module Nabu
       # The census, per edition: :language (the text's), :files (basename
       # pattern → language), :author (where the header's is the
       # encoder's or garbled), :whole (the one transcript that supersedes
-      # the edition's part files), :skip (held back — why).
+      # the edition's part files), :skip (held back — why). The per-edition
+      # review of the own-name editions adds: :texts (the METS rule for
+      # texts kept under their own names — {group:, pattern:}, see
+      # HabEdocMets#transcripts), :held (href pattern → why: listed texts
+      # held back by rule, counted), :companion ([transcript suffix,
+      # description suffix] — the letter's language is read from its
+      # description file), :token (:dir — the directory names the text;
+      # :none — the edition's one text is the edition URN), :dropped
+      # (editors' elements dropped from the text), :drop (mined metadata
+      # keys that are template placeholders or the wrong thing), :date
+      # (:title — the date the file's own title names).
       EDITIONS = {
         "ed000001" => { language: "lat" }, # Lipsius, De bibliothecis syntagma (Greek quotations inside)
         "ed000008" => { language: "lat" }, # Dasypodius, Dictionarium Latinogermanicum (Latin lemmata)
         "ed000081" => { language: "lat" }, # Kaempfer, Amoenitatum exoticarum fasciculi V (Lemgo 1712)
         "ed000082" => { language: "de" }, # the 1539 book inventory of Elisabeth von Calenberg
+        "ed000083" => { skip: "the Rubens sources (362 files): each body div states its xml:lang, but the " \
+                              "bodies set the editors' German translation beside the source text " \
+                              "(archivalien/epitaph_jan_rubens: a lat div, then a deu div) and the Codex " \
+                              "diplomaticus Rubenianus volumes (cdr/) switch language chapter by chapter " \
+                              "— needs a div-level language and translation rule" },
+        "ed000086" => { skip: "the Magdeburg Centuries' correspondence (154 letters): Latin and German " \
+                              "letters, and no file states its language (TEI/@xml:lang is the header's; " \
+                              "no textLang, no langUsage)" },
         "ed000132" => { skip: "the Theatrum repertory's METS lists tei-transcript-pnr.xml — ed000145's " \
                               "file name, copied into its template — and serves no such file (404)" },
+        "ed000133" => { language: "de", texts: { group: "transcription" }, token: :dir, # Grimmelshausen's
+                        author: "Hans Jakob Christoffel von Grimmelshausen" }, # works (*/transcript*.xml)
         "ed000145" => { language: "it", files: { /-nul\.xml\z/ => "de" } }, # Paesi (Vicenza 1507) / Newe
         #                                    unbekanthe landte (Nürnberg 1508)
+        "ed000146" => { language: "de", # Lessing's translations: the *_ue.xml files are his German text
+                        texts: { group: "transcription", pattern: /(?:_ue|\Alaw_ermunterung)\.xml\z/ },
+                        #                    law_ermunterung.xml is the _ue half by its METS file ID
+                        #                    (edoc_ed000146_fg_law_ermunterung_ue)
+                        held: { /_org\.xml\z/ => "the originals Lessing translated (*_org.xml: French, " \
+                                                 "English, Italian, Spanish …), no file stating its language" } },
         "ed000166" => { language: "fr" }, # Fonteny, Livre d'enigmes (ed. Strasser)
+        "ed000211" => { skip: "Controversia et Confessio 8: the source texts (*/edition*.xml) are separable " \
+                              "from the editors' einleitung.xml by name, but Latin and German texts mix " \
+                              "and no file states its language" },
+        "ed000212" => { skip: "a modern catalogue of the Breslau funeral sermons (katalogeintrag divs) — " \
+                              "not a source text" },
+        "ed000213" => { skip: "the Fruchtbringende Gesellschaft letters 1617–1626: each letter file " \
+                              "wraps the letter in the editors' summary, source description and " \
+                              "commentary divs, and no file states its language" },
+        "ed000214" => { skip: "the Fruchtbringende Gesellschaft letters 1637–1638: each letter file wraps " \
+                              "the letter in the editors' summary, source description and commentary " \
+                              "divs, and no file states its language" },
+        "ed000215" => { language: "lat", texts: { group: "transcription" } }, # Serranus, Dictionarium
+        #                                    Latinogermanicum (Nürnberg 1538): Latin lemmata, part_*.xml
+        "ed000216" => { skip: "the Karlstadt critical edition (75 texts, 1507–1518): Latin and German " \
+                              "works, and no file states its language" },
+        "ed000217" => { skip: "the Fruchtbringende Gesellschaft letters 1630–1636: each letter file wraps " \
+                              "the letter in the editors' summary, source description and commentary " \
+                              "divs, and no file states its language" },
+        "ed000218" => { skip: "the Fruchtbringende Gesellschaft letters 1639–1640: each letter file wraps " \
+                              "the letter in the editors' summary, source description and commentary " \
+                              "divs, and no file states its language" },
         "ed000223" => { language: "de", whole: "tei-transcript-mwb.xml" }, # Millinger's Weltbeschreibung
         "ed000226" => { language: "lat" }, # Conring, Musae errantes (Helmstedt 1708)
+        "ed000227" => { skip: "the religious peace treaties: originals in Czech, Latin, German, French, " \
+                              "Polish … beside the editors' German translations (*_dt.xml), and no file " \
+                              "states its language" },
+        "ed000228" => { language: "de", texts: { group: "transcription" }, # Christian II of Anhalt-Bernburg's
+                        author: "Christian II. von Anhalt-Bernburg", # diaries, one file per month
+                        dropped: %w[index], #                 the editors' place/regest/subject index
+                        drop: %w[date place printer source_title shelfmark source_bibl], # the sourceDesc is
+                        date: :title }, #                     the edition's person/place register, not a print
         "ed000232" => { language: "de" }, # Millinger's sermon notes
+        "ed000233" => { language: "de", texts: { pattern: %r{\Abriefe/\d{4}\.xml\z} }, # Bahnsen's letters to
+                        dropped: %w[head], date: :title }, #  Duke August (1660s); <head> is the editors' label
+        "ed000234" => { skip: "Controversia et Confessio, the Augsburg Interim reactions: the texts " \
+                              "(*/text.xml) are separable from einleitung.xml and titel.xml by name, but " \
+                              "German, Latin and an English text mix and no file states its language" },
+        "ed000235" => { language: "gml", texts: { group: "transcription" }, token: :none, # the Middle Low
+                        drop: %w[edition_title] }, #          German psalter, Cod. Guelf. 81.10 Aug. 2°
+        #                                    (the METS title is the template's "Autor und Titel")
         "ed000236" => { language: "gml", author: "Andreas de Escobar" }, # Modus confitendi, Middle
         #                                    Low German ("mndt" — the edition's own title)
         "ed000238" => { language: "de" }, # Hans Sachs, Die Wittenbergisch Nachtigall (1523)
@@ -169,19 +288,56 @@ module Nabu
                               "a test conversion of Book 1's opening, not the edition text" },
         "ed000241" => { language: "de" }, # Balthasar Staindl, Kochbuch
         "ed000243" => { language: "de", author: "Benigna von Solms-Laubach" }, # mütterliche Vermahnungen
+        "ed000244" => { language: "de", texts: { group: "transcription" }, author: "Johann Rist" }, # the
+        #                                    Katechismus-Andachten and the Seelenparadies, the print's parts
         "ed000245" => { language: "de" }, # Joseph Furttenbach, kupffer radier kunst
+        "ed000246" => { skip: "Controversia et Confessio, the adiaphora controversy: the texts " \
+                              "(*/text.xml) are separable from einleitung.xml by name, but German and " \
+                              "Latin texts mix and no file states its language" },
         "ed000247" => { language: "lat", author: "Fulvio Orsini" }, # De bibliothecis commentarium
         "ed000248" => { language: "gml", files: { /-L[A-Z]*_tei-transcript\.xml\z/ => "lat" } }, # Lüne
-        "ed000249" => { skip: "the FMG letters (1800–2000) carry no per-letter language and are " \
-                              "multilingual (German, French, English) — held back until a per-letter " \
-                              "language reading exists (CC0, admissible then)" },
+        "ed000249" => { companion: %w[_tei-transcript.xml _tei-msDesc_fmg.xml] }, # the FMG letters
+        #                                    (1800–2000): German, French, English — each letter's
+        #                                    language from its description's textLang
+        "ed000251" => { language: "de", texts: { group: "transcription" }, date: :title }, # Hainhofer's
+        #                                    travel reports ("München 1603")
         "ed000253" => { language: "lat", author: "Johann Schwartzkopf" }, # Bibliotheca Augusta
+        "ed000257" => { skip: "the Opitz works: Latin pieces inside the German-works edition " \
+                              "(Band_II/Band_II_1/II_1_50.xml, a Latin funeral oration), the editors' " \
+                              "print descriptions open each file, the Band V files are page-less HTML " \
+                              "conversions, and the volume front matter (I_00, V_titelei, V_einleitung) " \
+                              "is the modern edition's" },
         "ed000258" => { language: "fr" }, # Fonteny, Livre d'enigmes (ed. Fragonard)
         "ed000266" => { language: "lat", files: { /_grc\.xml\z/ => "grc" } }, # Gabrias, Tetrasticha (1524)
         "ed000267" => { language: "lat", author: "Sebald Heyden" }, # Formulae puerilium colloquiorum
+        "ed000269" => { language: "de", texts: { group: "transcription" } }, # Duchess Sibylla's letters
+        #                                    to Johann Valentin Andreae (1643)
+        "ed000271" => { language: "lat", texts: { group: "transcription" }, token: :none, # Liber modorum,
+                        drop: %w[author header_author] }, #   Cod. Guelf. 957 Helmst. (the header author is
+        #                                    the template's "[Name des Autors]")
+        "ed000275" => { language: "de", texts: { group: "transcription" }, token: :none }, # Tuberinus,
+        #                                    Historie von Simon zu Trient (Trient 1475)
+        "ed000276" => { language: "de", texts: { group: "transcription" }, token: :none, # Hartlieb, Buch
+                        drop: %w[place] }, #                  aller verbotenen Kunst (the pubPlace is the
+        #                                    holding library; upstream's langUsage says gmh)
+        "ed000277" => { skip: "the file is a modern German translation of Burckhard's Latin Historia " \
+                              "Bibliothecae Augustae (\"Vorrede an den wohlwollenden Leser\"), not the " \
+                              "source text" },
         "ed000278" => { language: "de" }, # Sibylla Schwarz, Deutsche Poëtische Gedichte (Danzig 1650)
-        "ed000279" => { language: "lat", author: "Daniel Klesch" } # letters to David Hanisius
+        "ed000279" => { language: "lat", author: "Daniel Klesch" }, # letters to David Hanisius
+        "ed000280" => { skip: "Hainhofer's Großes Stammbuch: the METS lists texts/xxx.xml, a template " \
+                              "placeholder upstream does not serve (404)" },
+        "ed000282" => { skip: "a placeholder copy of ed000280 (texts/xxx.xml, not served)" },
+        "ed000283" => { skip: "a placeholder copy of ed000280 (texts/xxx.xml, not served)" },
+        "ed000284" => { skip: "a placeholder copy of ed000280 (texts/xxx.xml, not served)" }
       }.freeze
+
+      # The FMG descriptions' textLang @mainLang → the bare code (the
+      # census read de, fr, en); anything else is unrecognized until mapped.
+      DESCRIPTION_LANGUAGES = { "de" => "de", "fr" => "fr", "en" => "en", "it" => "it" }.freeze
+
+      STEM = /[-_]?tei-transcri(?:ption|pt)[-_]?/
+      YEAR = /(?<!\d)(1\d{3})(?!\d)/
 
       def self.manifest = MANIFEST
 
@@ -199,14 +355,50 @@ module Nabu
       def self.wanted?(id, href)
         entry = EDITIONS[id] or return false
         return false if entry[:skip]
+        return false if entry.fetch(:held, {}).any? { |pattern, _| pattern.match?(href) }
         return File.basename(href) == entry[:whole] if entry[:whole]
 
         true
       end
 
+      # Every file of edition +id+ the shelf holds, by its METS: the
+      # transcripts (WDB-named, plus the edition's own-name texts) and, for
+      # an edition read through letter descriptions, each transcript's
+      # description the METS lists. (The fetch crawls these, +wanted?+
+      # filtering.)
+      def self.holdings(id, mets)
+        texts = mets.transcripts(EDITIONS.dig(id, :texts)).map(&:href)
+        descriptions = texts.filter_map { |href| companion_href(id, href) }.select { |c| mets.xml_files.include?(c) }
+        texts + descriptions
+      end
+
+      # The description file a letter transcript's name implies (nil when
+      # the edition reads none).
+      def self.companion_href(id, href)
+        from, to = EDITIONS.dig(id, :companion)
+        return nil unless from && href.end_with?(from)
+
+        "#{href.delete_suffix(from)}#{to}"
+      end
+
+      # Token = the file name, its WDB stem cut ("tei-transcript_Augsburg_1530"
+      # → "Augsburg_1530"); :dir editions prefix the directory
+      # ("simpli/transcript_b1" → "simpli_b1"); :none editions' one text IS
+      # the edition. Accents fold ("München 1603" → "Munchen-1603"; every
+      # name the WDB-named editions use is ASCII, so their URNs stand).
       def self.urn(id, href)
-        token = File.basename(href, ".xml").sub(/[-_]?tei-transcri(?:ption|pt)[-_]?/, "")
+        token = case EDITIONS.dig(id, :token)
+                when :none then ""
+                when :dir then dir_token(href)
+                else File.basename(href, ".xml").sub(STEM, "")
+                end
+        token = token.unicode_normalize(:nfd).gsub(/\p{Mn}/, "")
         token.empty? ? "#{URN_PREFIX}#{id}" : "#{URN_PREFIX}#{id}:#{token.gsub(/[^0-9A-Za-z_.-]/, '-')}"
+      end
+
+      def self.dir_token(href)
+        parts = [File.dirname(href), File.basename(href, ".xml").sub(/\Atranscript_?/, "")]
+        parts.reject { |part| part.empty? || part == "." }.join("_")
       end
 
       def self.language(id, href)
@@ -231,15 +423,20 @@ module Nabu
       def parse(document_ref)
         meta = document_ref.metadata
         id = meta.fetch("edition")
+        description = meta["description"] && parser.description(
+          File.join(document_ref.path.delete_suffix(meta.fetch("file")), meta["description"])
+        )
         parser.parse(document_ref.path, urn: document_ref.id, language: meta.fetch("language"),
-                                        license_override: meta["license_override"]) do |header|
-          document_metadata(header, meta, id)
+                                        license_override: meta["license_override"],
+                                        dropped: EDITIONS.fetch(id).fetch(:dropped, [])) do |header|
+          document_metadata(description ? description.merge(header) : header, meta, id)
         end
       end
 
       def fetch(workdir, progress: nil, force: false)
         result = HabEdocFetch.sync!(
           dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress,
+          files: ->(id, mets) { self.class.holdings(id, mets) },
           want: ->(id, href) { self.class.wanted?(id, href) },
           guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
         )
@@ -273,24 +470,37 @@ module Nabu
         dir = File.join(workdir, id)
         mets_path = File.join(dir, HabEdocFetch::METS_FILENAME)
         mets = File.file?(mets_path) ? HabEdocMets.read(mets_path) : nil
-        transcripts = mets ? mets.transcripts : held_transcripts(dir)
-        if transcripts.empty?
+        entry = EDITIONS[id]
+        transcripts = mets ? mets.transcripts(entry&.dig(:texts)) : held_transcripts(dir, entry)
+        if transcripts.empty? && !entry&.dig(:skip)
           others = mets ? mets.xml_files.size : 0
           return skip(result, "#{id}: no TEI transcript in the edition's METS (#{others} other XML " \
                               "file(s): introduction, registers, a project tree) — not this shelf's grain")
         end
 
-        entry = EDITIONS[id]
         unless entry
           return result[:holes] << "#{id}: #{transcripts.size} transcript(s) listed, but the edition " \
                                    "is not in HabEdoc::EDITIONS — census it (language, licence) and add the row"
         end
-        if entry[:skip]
-          return skip(result, "#{id}: held back (#{transcripts.size} transcript(s)) — #{entry[:skip]}",
-                      count: transcripts.size)
-        end
+        return skip_edition(result, id, transcripts.size, entry[:skip]) if entry[:skip]
 
+        skip_held_files(result, id, mets, entry)
         transcripts.each { |transcript| classify_file(workdir, id, transcript, mets, missing, result) }
+      end
+
+      # A held-back edition counts its listed transcripts, or 1 when the
+      # review held back an edition the transcript name never reached.
+      def skip_edition(result, id, listed, reason)
+        return skip(result, "#{id}: held back — #{reason}") if listed.zero?
+
+        skip(result, "#{id}: held back (#{listed} transcript(s)) — #{reason}", count: listed)
+      end
+
+      def skip_held_files(result, id, mets, entry)
+        entry.fetch(:held, {}).each do |pattern, reason|
+          count = mets ? mets.xml_files.count { |href| pattern.match?(href) } : 0
+          skip(result, "#{id}: #{count} file(s) held back — #{reason}", count: count) if count.positive?
+        end
       end
 
       def classify_file(workdir, id, transcript, mets, missing, result)
@@ -299,27 +509,69 @@ module Nabu
           return skip(result, "#{id}/#{href}: a part of the edition's whole transcript " \
                               "(#{EDITIONS[id][:whole]}) — held whole")
         end
-        path = File.join(workdir, id, href)
-        unless File.file?(path)
-          return skip(result, "#{id}/#{href}: listed in the METS, not served upstream (404)") if missing.include?(href)
+        description = description_for(workdir, id, href, mets, missing) if EDITIONS[id][:companion]
+        return result[:holes] << description[:hole] if description&.dig(:hole)
+        return skip(result, description[:skip]) if description&.dig(:skip)
 
-          return result[:holes] << "#{id}/#{href}: listed in the METS but not held — a fetch hole"
-        end
+        path = File.join(workdir, id, href)
+        return unless held?(path, "#{id}/#{href}", missing.include?(href), result)
 
         licence = licence_for(path, transcript)
         return result[:holes] << "#{id}/#{href}: #{licence[:unknown]}" if licence[:unknown]
         return skip(result, "#{id}/#{href}: #{licence[:skip]}") if licence[:skip]
 
-        result[:accepted] << ref_for(id, href, path, licence, mets)
+        result[:accepted] << ref_for(id, href, path, licence, mets, description)
+      end
+
+      # A listed file on disk → true; else a 404 the fetch recorded (skip)
+      # or a fetch hole.
+      def held?(path, label, recorded_missing, result)
+        return true if File.file?(path)
+
+        if recorded_missing
+          skip(result, "#{label}: listed in the METS, not served upstream (404)")
+        else
+          result[:holes] << "#{label}: listed in the METS but not held — a fetch hole"
+        end
+        false
+      end
+
+      # The letter's language from its own description file:
+      # {href:, language:} | {skip:} | {hole:}.
+      def description_for(workdir, id, href, mets, missing)
+        companion = self.class.companion_href(id, href)
+        unless companion && mets&.xml_files&.include?(companion)
+          return { skip: "#{id}/#{href}: no description file listed in the METS — no per-letter language reading" }
+        end
+
+        path = File.join(workdir, id, companion)
+        unless File.file?(path)
+          return { skip: "#{id}/#{companion}: listed in the METS, not served upstream (404)" } \
+            if missing.include?(companion)
+
+          return { hole: "#{id}/#{companion}: listed in the METS but not held — a fetch hole" }
+        end
+        code = parser.description(path)["text_lang"]
+        return { skip: "#{id}/#{href}: its description states no textLang — no per-letter language reading" } \
+          unless code
+
+        language = DESCRIPTION_LANGUAGES[code] or
+          return { hole: "#{id}/#{companion}: unrecognized textLang #{code.inspect} — map it in " \
+                         "HabEdoc::DESCRIPTION_LANGUAGES" }
+        { href: companion, language: language }
       end
 
       def skip(result, note, count: 1)
         result[:skipped] << { count: count, note: note }
       end
 
-      # An attic edition dir carries no METS: its transcript-named files.
-      def held_transcripts(dir)
-        held = Dir.glob("**/*.xml", base: dir).sort.select { |rel| HabEdocMets.transcript_name?(rel) }
+      # An attic edition dir carries no METS: its transcript-named files
+      # (and the files its own-name pattern names).
+      def held_transcripts(dir, entry)
+        pattern = entry&.dig(:texts, :pattern)
+        held = Dir.glob("**/*.xml", base: dir).sort.select do |rel|
+          HabEdocMets.transcript_name?(rel) || pattern&.match?(rel)
+        end
         held.map { |rel| HabEdocMets::Transcript.new(href: rel, rights: []) }
       end
 
@@ -349,10 +601,12 @@ module Nabu
         { klass: klass, basis: "the edition's METS rights statement", statement: label }
       end
 
-      def ref_for(id, href, path, licence, mets)
+      def ref_for(id, href, path, licence, mets, description)
+        language = description ? description[:language] : self.class.language(id, href)
         Nabu::DocumentRef.new(
           source_id: SLUG, id: self.class.urn(id, href), path: File.expand_path(path),
-          metadata: { "edition" => id, "file" => href, "language" => self.class.language(id, href),
+          metadata: { "edition" => id, "file" => href, "language" => language,
+                      "description" => description&.dig(:href),
                       "edition_title" => mets&.title, "license" => licence[:statement],
                       "license_basis" => licence[:basis],
                       "license_override" => licence[:klass] == MANIFEST.license_class ? nil : licence[:klass] }.compact
@@ -360,10 +614,26 @@ module Nabu
       end
 
       def document_metadata(header, meta, id)
-        entry = EDITIONS.fetch(id)
+        out = mined_metadata(header, meta, EDITIONS.fetch(id), id)
+        EDITIONS.fetch(id).fetch(:drop, []).each { |key| out.delete(key) }
+        out["date"] ||= title_date(header["title"]) if EDITIONS.fetch(id)[:date] == :title
+        out.reject { |_k, v| v.nil? || (v.respond_to?(:empty?) && v.empty?) }
+      end
+
+      # The date the file's own title names ("Brief Nr. 1, vom 4. April
+      # 1660", "München 1603") → class-less, basis "title".
+      def title_date(title)
+        years = title.to_s.scan(YEAR).flatten.map(&:to_i)
+        return nil if years.empty?
+
+        { "not_before" => years.min, "not_after" => years.max, "raw" => title, "basis" => "title" }
+      end
+
+      def mined_metadata(header, meta, entry, id)
         out = header.except("source_date", "letter_date", "header_author", "source_author", "licence_target")
         out["edition"] = id
         out["file"] = meta["file"]
+        out["description"] = meta["description"]
         out["edition_title"] = meta["edition_title"]
         out["start_url"] = "https://diglib.hab.de/edoc/#{id}/start.htm"
         out["author"] = entry[:author] || header["source_author"] || header["header_author"]

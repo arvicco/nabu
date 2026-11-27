@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE TEI  [ 
+<!ENTITY register-person SYSTEM "http://diglib.hab.de/edoc/ed000233/register/register-person.xml">
+<!ENTITY register-place SYSTEM "http://diglib.hab.de/edoc/ed000233/register/register-place.xml">
+<!ENTITY register-bibl SYSTEM "http://diglib.hab.de/edoc/ed000233/register/register-bibl.xml">
+]>
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://www.tei-c.org/release/xml/tei/custom/schema/xsd/tei_all.xsd"
+    xml:lang="deu" xml:id="edoc_ed000233_001">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Editionsbericht</title>
+                <author>
+                    <name type="person">
+                        <surname>Münkner</surname>
+                        <forename>Jörn</forename>
+                    </name>
+                </author>
+                <respStmt>
+                    <resp>TEI-P5 konforme Kodierung durch</resp>
+                    <name type="person">
+                        <surname>Münkner</surname>
+                        <forename>Jörn</forename>
+                    </name>
+                    <name type="person">
+                        <surname>Schmidt</surname>
+                        <forename>Katrin</forename>
+                    </name>
+                    <name type="person">
+                        <surname>Krone</surname>
+                        <forename>Jaqueline</forename>
+                    </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Transskription des Briefes durch</resp>
+                    <name type="person">
+                        <surname>Hakelberg</surname>
+                        <forename>Dietrich</forename>
+                    </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Technische Unterstützung durch</resp>
+                    <name type="person">
+                        <surname>Steyer</surname>
+                        <forename>Timo</forename>
+                    </name>
+                    <orgName>Bahnsen-Herzog August Briefwechsel</orgName>
+                </respStmt>
+                <funder>BMBF</funder>
+            </titleStmt>
+            <editionStmt>
+                <edition>Elektronische Ausgabe nach TEI P5</edition>
+            </editionStmt>
+            <extent/>
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                    <ptr type="crossRef" target="http://www.hab.de"/>
+                </publisher>
+                <date>2016</date>
+                <availability status="restricted">
+                    <p> Available at <ref target="workID"
+                            >http://diglib.hab.de/edoc/ed000XXX/start.htm"> (c) Herzog August
+                            Bibliothek Wolfenbüttel</ref>
+                    </p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc> &register-person; &register-place; &register-bibl; </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <geoDecl datum="WGS84"/>
+            <projectDesc>
+                <p>Erstellt im Projekt "Frühneuzeitliche Gelehrtenbibliotheken
+                    (Autorenbibliotheken)"</p>
+            </projectDesc>
+        </encodingDesc>
+    </teiHeader>
+    <text type="letter">
+        <body>
+            <head>Editionsbericht, mit den Editions- und Kodierungsrichtlinien für die digitale
+                Edition der Korrespondenz zwischen Benedikt Bahnsen (Amsterdam) und Herzog August
+                d.J. (Wolfenbüttel)</head>
+            <div>
+                <p>Die Edition erfolgte im Rahmen des Forschungsprojektes „Frühneuzeitliche
+                    Gelehrtenbibliotheken“ an der Herzog August Bibliothek in Wolfenbüttel. Das Projekt ist Teil von „Autorenbibliotheken:
+                    Materialität – Wissensordnung – Performanz“ im Forschungsverbund MWW (Marbach
+                    Weimar Wolfenbüttel), es wurde vom BMBF gefördert.</p>
+                <p><hi rend="italics">HAB, Bibliotheksarchiv, BA II, 1, Nr. 16 - 36:<lb/> Bahnsen,
+                        Benedikt (19 Briefe an Hzg. August, 3 Briefe bzw. Briefentwürfe und Notate von Hzg.
+                        August)</hi>
+                </p>
+            </div>
+            <div>
+                <head>1. Quellen und Sekundärliteratur</head>
+                <head>1.1 Die Briefe</head>
+                <p>Benedikt Bahnsen (1669 in Amsterdam gestorben) hat eine größere Anzahl an Briefen
+                    an Herzog August d. J. von Braunschweig-Wolfenbüttel (1579–1666) adressiert. Wie
+                    viele genau, wissen wir nicht, denn es dürften sich mehrere Schreiben nicht
+                    erhalten haben. Es liegen 19 Briefe von Bahnsen an den Herzog vor und drei
+                    Antwortschreiben bzw. kurze Notate von Herzog August an Bahnsen. Von den
+                    Schreiben Bahnsens enthalten fünf zum Teil umfangreiche Titellisten als
+                    Beilagen.</p>
+                <p>Herzog August Bibliothek, Signatur: Bibliotheksarchiv, BA II, 1, Nr. 16 – 36:
+                    Bahnsen, Benedikt. Digitalisate in der WDB: <ref
+                        target="http://diglib.hab.de/mss/ba-2-1-16/start.htm"
+                        >http://diglib.hab.de/mss/ba-2-1-16/start.htm</ref> bis <ref
+                        target="http://diglib.hab.de/mss/ba-2-1-36/start.htm"
+                        >http://diglib.hab.de/mss/ba-2-1-36/start.htm</ref> (von ba-2-1-16 bis
+                    ba-2-1-36: kursiv gestellte Zahl hier fortlaufend ). </p>
+            </div>
+            <div>
+                <head>1.2 Der Bücherradkatalog von Herzog August d.J.</head>
+                <p>Herzog August begann am 25. Februar 1625 seine Büchersammlung neu zu verzeichnen.
+                    Dazu entwickelte er ein Gestell für ein mehrbändiges Bücherverzeichnis. Sechs
+                    rotierende Ablagen boten bis zu zwölf Folianten Platz. Zwischen 1625 und 1719
+                    wurden insgesamt sechs Folianten mit Titeleintragungen gefüllt, wobei der Herzog
+                    bis in das Jahr 1648 die Bände selbst verzeichnete, das heißt, bis zum vierten
+                    Folianten (bis pagina 3692 von insg. 7200 paginae; vgl. Maria von Katte 1972,
+                    S.174ff.). Der erste Band, an dem August zweieinhalb Jahre arbeitete,
+                    unterscheidet sich von den fünf Folgebänden dadurch, dass er ein Standortkatalog
+                    ist, die Titel sind hier nach zwanzig Wissensgruppen und diese wiederum nach
+                    Formaten geordnet. Die anderen Bände sind nur noch Zugangsverzeichnis,
+                    allerdings nicht im Sinne eines datumsgenauen Akzessionsjournals. Der
+                    Bücherradkatalog verschaffte August den Überblick über sein progressives
+                    Katalogwerk, von dem aus er Verweise herstellen und damit Zusammenhang stiften
+                    konnte (vgl. Wolfgang Milde 2006, S. 74-76; Alexander Nebrig 2018, S.
+                    171-176).</p>
+            </div>
+            <div>
+                <head>1.3 Das alphabetische Register von Gottfried Wilhelm Leibniz
+                    (1646–1716)</head>
+                <p>Nachdem Leibniz 1691 sein Bibliothekariat in Wolfenbüttel angetreten hatte, ließ
+                    er ein alphabetisches Namensregister als Pendant zum Bücherradkatalog von Herzog
+                    August anfertigen. Ihm war schnell klar, dass man den als Signaturenkatalog
+                    konzipierten Bücherradkatalog nur eingeschränkt benutzen konnte. Herzog August
+                    hatte die Bücher und Handschriften, die er ab 1625 erwarb, beinahe ohne
+                    Systematik verzeichnet, und zwar so, wie sie als ‚libri varii‘ in Kisten und
+                    Fässern ins Haus geliefert wurden – um dann meist mit zeitlicher Verzögerung in
+                    die Sammlung eingearbeitet zu werden (vgl. von Katte; Milde). Im
+                    Bücherradkatalog gezielt oder auf die Schnelle einen Titel finden zu wollen, ist
+                    schwierig, wenn nicht unmöglich. Leibniz ließ deshalb die Werke der Autoren
+                    Seite für Seite aus dem Bücherradkatalog ziehen und mit Angabe der pagina unter
+                    dem Namen des Autors registrieren. So war eine Rückkoppelung mit dem
+                    Bücherradkatalog möglich, in dem die Titel ausführlicher erfasst waren. Der
+                    Autorenkatalog bzw. das alphabetische Register, das auf Leibniz‘ Initiative
+                    entstand, bildet zu Herzog Augusts Bücherradkatalog gleichsam den Schlüssel für
+                    eine pragmatische Benutzbarkeit.</p>
+            </div>
+            <div>
+                <head>1.4 Konkordanz von A-Signaturen, Bücherradkatalog und Eintragungsdatum</head>
+                <p>Da der Bücherradkatalog im Wesentlichen keine Datierungen der Bücherzugänge
+                    vornimmt, kann nur mit Hilfe einer Konkordanz festgestellt werden, in welchem
+                    Zeitraum Bücher- und Handschriftenexemplare in den Bücherradkatalog eingetragen
+                    wurden. Maria von Katte hat 1972 eine solche Konkordanz erarbeitet. Sie
+                    rekonstruiert für alle sechs Bände des Bücherradkatalogs die Zeiträume, in denen
+                    sie beschrieben wurden. So lassen sich gesuchte Titel, für die man zuvor dank
+                    Leibniz-Register die pagina herausgefunden hat, auf denen sie im
+                    Bücherradkatalog verzeichnet sind, zurückverfolgen, d.h. es lässt sich ein
+                    terminus post quem feststellen, der Rückschlüsse auf das Jahr der Eintragung des
+                    Titel erlaubt (von Katte, S. 177ff.).</p>
+            </div>
+            <div>
+                <head>1.5 Sekundärliteratur zur inhaltlichen Erschließung der
+                    Briefkorrespondenz</head>
+                <listBibl>
+                    <bibl>Arnold, Werner: Philipp Hainhofer als Bücheragent Herzog Augusts d.J. von
+                        Braunschweig-Wolfenbüttel, in: Wolfenbütteler Barock-Nachrichten, 41, 1/2,
+                        Wiesbaden 2014, S. 81–94.</bibl>
+                    <bibl>Arnold, Werner: Briefe aus Paris. Jean Beeck als Agent Herzog Augusts d.J.
+                        von Braunschweig-Wolfenbüttel, in: Buch – Bibliothek – Region. Wolfgang
+                        Schmitz zum 65. Geburtstag, hg. von Christine Haug und Rolf Thiele,
+                        Wiesbaden 2014, S. 15–26.</bibl>
+                    <bibl>Ball, Gabriele: Briefliteratur in der Frühen Neuzeit. Der
+                        Gesellschaftsbrief der Fruchtbringenden Gesellschaft, in: Germanistik
+                        zwischen Tradition und Innovation. Akten des XIII. Internationalen
+                        Germanistenkongresses Shanghai 2015, Bd. 8, hg. von Jianhua Zhu, Jin Zhao
+                        und Michael Szurawitzki, Frankfurt am Main u.a. 2017, S. 105–111.</bibl>
+                    <bibl>Bruckner, J[ános]: A Bibliographical Catalogue of Seventeenth-Century
+                        German Books Published in Holland, The Hague (Mouton) 1971.</bibl>
+                    <bibl>Hakelberg, Dietrich: Die fanatischen Bücher des Benedikt Bahnsen. Leben
+                        und Bibliothek eines religiösen Dissidenten, in: Autorenbibliotheken.
+                        Erschließung, Rekonstruktion, Wissensordnung, hg. von Michael Knoche.
+                        Wiesbaden 2015, S. 113–146.</bibl>
+                    <bibl>Milde, Wolfgang: Die Erwerbungsjahre der Augusteischen Handschriften der
+                        Herzog August Bibliothek. Supplement zum Katalog von Otto von Heinemann „Die
+                        Augusteischen Handschriften“, Bd. 1–5, Wolfenbüttel 1890–1903, in:
+                        Wolfenbütteler Beiträge 14, 2006, S.73–144.</bibl>
+                    <bibl>Nebrig, Alexander: Der Katalog als literaturkritisches Werk. Die "libri
+                        ethici" im Bücherradkatalog Augusts des Jüngeren, in: Autorschaft und
+                        Bibliothek. Sammlungsstrategien und Schreibverfahren, hg. von Stefan
+                        Höppner, Caroline Jessen, Jörn Münkner und Ulrike Trenkmann. Göttingen 2018,
+                        S. 171-184.</bibl>
+                    <bibl>Raabe, Mechthild: Leser und Lektüre im 17. Jahrhundert. Die Ausleihbücher
+                        der Herzog August Bibliothek Wolfenbüttel 1664–1713, Teil A, Bd. 1: Leser
+                        und Lektüre, Lesergruppen und Lektüre, München 1998.</bibl>
+                    <bibl>Raabe, Paul: Die Herzog August Bibliothek Wolfenbüttel. Bestände,
+                        Kataloge, Erschließung. Wolfenbüttel 1971.</bibl>
+                    <bibl>von Katte, Maria: Herzog August und die Kataloge seiner Bibliothek, in:
+                        Wolfenbütteler Beiträge 1, 1972, S. 168–199.</bibl>
+                    <bibl>Walsby, Malcolm und Natasha Constantinidou, Hgg.: Documenting the early
+                        modern book world. Inventories and catalogues in manuscript and print,
+                        Leiden and Boston 2013.</bibl>
+                    <bibl>Bestandsgeschichte der Herzog August Bibliothek,
+                        http://www.hab.de/de/home/bibliothek/bestaende/bestandsgeschichte/bibliotheca-augusta.html</bibl>
+                    <bibl>BVB, Lexika, GND, ADB</bibl>
+
+                </listBibl>
+            </div>
+            <div>
+                <head>2. Editions- und Kodierungsrichtlinien</head>
+                <p>Die editorische Auszeichnung der Briefe erfolgt in XML/TEI-P5. Indiziert und mit
+                    Registereinträgen verknüpft sind die briefrelevanten Angaben »Adressat,
+                    Grußformel, Datum, Absender«, zudem »Personen/Körperschaften« und »Orte«. Die
+                    hauptsächlich von Bahnsen, aber auch von Herzog August gelisteten »Titel von
+                    Büchern, Schriften, Katalogen« werden - soweit identifizierbar - über die
+                    erschlossenen Normdaten (bibliographische Angaben) in einem Titel-Register
+                    verfügbar gemacht. Dazu ist jeder Titel mit einem Datensatz, der mehrteilig sein
+                    kann, in einem elektronischen Katalogsystem verlinkt (HAB OPAC, GBV, VD17, VD16,
+                    STCN, BVB). </p>
+
+                <p>Priorisiert sind Titelnachweise in der „Augusteer“-Aufstellung der Herzog August
+                    Bibliothek. Damit sind die Bestände aufgerufen, die im Wesentlichen auf die
+                    persönliche Sammlungsaktivität Herzog Augusts bis zu seinem Tod 1666 zurückgehen
+                    (vgl. Bestandsgeschichte der HAB). Die Signaturen der Augusteer-Abteilung
+                    beginnen mit dem Großbuchstaben »A« (Kennbuchstabe der Bestandsgruppe). Bei
+                    diesen Exemplaren besteht die Wahrscheinlichkeit, dass sie (sofern ihr
+                    Erscheinungsjahr vor oder zeitnah zum Datum des Briefes steht, in dem sie
+                    genannt sind) tatsächlich über Bahnsen in die Sammlung des Herzogs gelangt sind. </p>
+
+                <p>Wir haben uns bei den »A«-Signaturen bemüht, das tatsächliche Eingangsdatum der
+                    Titel in die Wolfenbütteler Sammlung festzustellen. Leider hat August kein
+                    Akzessionsjournal mit genauen Erwerbungsdaten und Herkunftsangaben geführt
+                    (s.o.). Wir mussten deshalb in einem Mehrschrittverfahren die Konsultation des
+                    Bücherradkatalogs, des Leibniz-Registers (Autorenregister) sowie der Konkordanz
+                    von Maria von Katte kombinieren. Diese Kombinationsrecherche ist die
+                    Voraussetzung für Aussagen darüber, welche von Bahnsen vorgeschlagenen oder
+                    angekündigten Titel der Herzog gekauft hat und welche auch tatsächlich Eingang
+                    in die herzogliche Bibliothek gefunden haben. Die Ergebnisse haben wir zudem mit
+                    der rekonstruierten privaten Bibliothek des nicht nur als Bücheragent, sondern
+                    auch als Verleger und Buchhändler tätigen Benedikt Bahnsen abgeglichen. Wir
+                    haben den Auktionskatalog der Bibliothek Bahnsen konsultiert und überprüft, ob
+                    die Titel mit A-Signaturen im Buchbestand und Sortiment Bahnsens nachweisbar
+                    sind. Die Ergebnisse dieses mehrstufigen Erschließungsvorgangs – nämlich
+                    Titelangaben in den Bahnsens Briefen, A-Signaturnachweise in der Bibliotheca
+                    Augusta und Nachweise der entsprechenden Titel im Auktionskatalog der
+                    Bahnsenschen Bibliothek – sind dokumentiert.</p>
+
+                <p>Finden sich keine Nachweise in der Augusteer-Abteilung (A-Signaturen), dafür aber
+                    in anderen Bestandsgruppen der Wolfenbütteler Bibliothek, führen wir diese an
+                    und verlinken sie mit den dazugehörigen bibliographischen Datensätzen. Lassen
+                    sich keine Titel in den Beständen der HAB nachweisen, dafür aber in anderen
+                    Verbundkatalogen, führen wir maximal drei Treffer an. Es steht jeweils der
+                    Treffer zuoberst, dessen Erscheinungsjahr dem Datum des Briefes am nächsten
+                    kommt. Neben deutschen sind internationale Nachweissysteme wie der STCN (Short
+                    Title Catalogue Netherlands) berücksichtigt.</p>
+            </div>
+            <div>
+                <head>3. Einleitung und Briefabstracts</head>
+                <p>Parallel zu den TEI-P5-Kodierungen und Referenzialisierungen bietet die
+                    Einleitung Kurzbiographien von Benedikt Bahnsen und Herzog August d. J. und
+                    skizziert den historischen Zusammenhang der Korrespondenz. Die Inhalte der
+                    Briefe sind kurz zusammengefasst. </p>
+            </div>
+            <div>
+                <head>4. Textgestalt</head>
+                <p>Die Transkriptionen der Briefe – bis auf Brief Nr. 36 – hat Dietrich Hakelberg
+                    (2015) anhand der Digitalisate und durch autoptischen Vergleich mit den
+                    Originalen besorgt. Brief Nr. 36 haben Katrin Schmidt, Jörn Münkner und
+                    Jaqueline Krone mit Unterstützung von Nikola Roßbach transkribiert. Die Briefe
+                    werden als Editionspaket in der Wolfenbütteler Digitalen Bibliothek (WDB)
+                    publiziert und können im Volltext durchsucht werden.</p>
+
+                <p>Bei der Textkonstitution kommt es auf die Reproduktion autographer, visueller und
+                    materieller Merkmale der epistolaren Originale an. Sie werden innerhalb von
+                    TEI-P5 durch Kodierungen bzw. Auszeichnungen umgesetzt. Die Briefe und die
+                    Handschrift gelten als historische Artefakte, damit als Informations- und
+                    Bedeutungsträger, weshalb auf Besonderheiten des Layouts, der
+                    Materialbeschaffenheit (Papierqualität) und Anmutungsqualität (Handschrift)
+                    eingegangen wird (Briefabstracts, s.o.). Herausgeberzusätze werden durch eckige
+                    Klammern [ ] markiert, unsichere Lesungen durch ein mit eckigen Klammern
+                    versehenes Fragezeichen [?], unlesbare oder verlorene Textteile (Papierschwund,
+                    Tintenschwund) durch Auslassungspunkte […] kenntlich gemacht. Schreibversehen
+                    und -fehler (z. B. versehentliche Wortwiederholungen) werden nicht korrigiert.
+                    Die Datierung folgt der Vorlage, d.h. entsprechend Gregorianischem Kalender. Die
+                    Datumsangaben werden wie folgt getaggt: </p>
+
+                <p>&lt;date calendar="#gregor" when="1732-02-22"&gt;Feb. 22, 1732&lt;/date&gt;. Die
+                    Seitenumbrüche sowie die originale Foliierung werden kodiert, sodass eine
+                    originalgetreue Wiedergabe der Briefeinheiten in der digitalen Edition erfolgen
+                    kann. Bestimmte textuelle Auszeichnungen (Einzüge, Abstände u. dgl., s. u.)
+                    werden vereinheitlicht. Sprachliche oder dialektale Eigenheiten werden nach
+                    Vorlage übernommen: z.B. `schlecht´ statt `schlägt´, `fleuch´ statt `flieh´
+                    usw..</p>
+                <p>Bahnsen schreibt in der Kurrentschrift. Zur Hervorhebung von Buchtiteln, von
+                    Fremdwörtern und teilweise Namen/Körperschaften benutzte er die in lateinischen
+                    und romanischen Texten übliche Antiqua. Hinzu kommt Zierschrift für Anreden und
+                    Absenderinformationen, ferner finden sich prononcierte Initialen. Ein
+                    Schriftwechsel ist auch zwischen dem epistolaren Fließtext und den
+                    Büchertitellisten erkennbar. Die drei Schreibweisen bzw. Schriftarten, also die
+                    Kurrent, Antiqua und Zierschrift, inkl. der Initialen und anderer markanter
+                    Buchstabenvergrößerungen und Verkleinerungen, werden in der Edition entsprechend
+                    kodiert. Die Kurrent wird &lt;hi rend=“kurrent“&gt;Text&lt;/hi&gt; kodiert; die
+                    Antiqua &lt;hi rend=“antiqua“&gt;Text&lt;/hi&gt; und die Zierschrift als &lt;hi
+                    rend=“zierschrift“&gt;Text&lt;/hi&gt;.</p>
+                <p>Die Kodierung strebt, wie erwähnt, eine Textwiedergabe entsprechend originaler
+                    Vorlage und Spezifik des verwendeten Code-Systems an. Der Nutzer bekommt die
+                    Möglichkeit, frei zwischen den Darstellungen zu wählen. Der Zeilenfall bzw.
+                    Zeilenumbruch des Originals kann entweder wiedergegeben oder entsprechend
+                    Ausgabegerät aufgelöst werden. Grundsätzlich lassen sich die transkribierten
+                    Texte in Parallelansicht an den Digitalisaten überprüfen. </p>
+            </div>
+            <div>
+                <head>4.1 Groß- und Klein-, Getrennt- und Zusammenschreibung</head>
+                <div>
+                    <head>4.2 Grapheme und Diakritika</head>
+                    <p>I, i, J, j, U, u, ů, ü, V, v, W, w, Y, y, ÿ werden nach Vorlage
+                        wiedergegeben.</p>
+                    <p>Die Verwendung heute nicht mehr geläufiger Grapheme wie z.B. &lt;B, b&gt; für
+                        &lt;W, w&gt; wird stillschweigend aufgelöst. </p>
+                    <p>Konsonantenhäufungen werden nach Vorlage übernommen, z.B. „unnd“ . Ligaturen
+                        wie ß, Æ, &amp; werden nach Vorlage wiedergegeben. </p>
+                    <p>Diakritika gemäß Vorlage, fehlende i- und j- Punkte werden stillschweigend
+                        ergänzt.</p>
+                </div>
+                <div>
+                    <head>4.3 Trennungs- bzw. Bindestriche</head>
+                    <p>gemäß Vorlage, z.B `=`.</p>
+                </div>
+                <div>
+                    <head>4.4 Klammerformen</head>
+                    <p>gemäß Vorlage, z.B. „/:“ bzw. „:/“.</p>
+                </div>
+                <div>
+                    <head>4.5 Abbreviaturen, Sonderzeichen, Doppelungen</head>
+                    <p>Abbreviaturen werden kodiert, sodass eine Darstellung wahlweise in originaler
+                        oder kursivierter und aufgelöster Form erfolgen kann. Diese Regel gilt im
+                        Einzelnen für sämtliche mit waagerechten Strichen oder einem der Tilde
+                        ähnlichen Zeichen angezeigten Kurzformen, für Kürzungen von „das“, bzw.
+                        „daß“ in Form eines „dz“ sowie von „was“ in Form eines „wz“, für
+                        Aufwärtsschleifen statt der Endung „-er“, für Abwärtsschleifen statt der
+                        Endungen „-em“ und „-en“, für Nasalstriche über Vokalen, für
+                        Verdopplungsstriche über den Nasalen „m“ und „n“ sowie für alle
+                        zeitgenössisch gebräuchlichen Kürzel der Silben „am“, „em“, „en“, „om“,
+                        „ous“, „per“, „prae“, „pro“, „qu“, „que“, „qui“, „um“, „us“, „v“ = „ver“,
+                        „sh“ = „sch“. Die Abkürzungszeichen der Vorlage entfallen.</p>
+                    <p>Alle übrigen Abkürzungen, sämtliche Sonderzeichen (z.B. für alte Maßeinheiten
+                        und Aufzählungssymbole „o“ und „+“, verkürzte Schreibweise für Monatsnamen
+                        wie „Xbr:“ = „Dezember“), abgekürzte Personennamen (vgl. „E. Fürstl:
+                        durchl:“) und geographische Bezeichnungen (Berge, Gebirge, Gewässer,
+                        Landschaften, Orte, Territorien usw.) werden kodiert, sodass eine Ausgabe in
+                        der digitalen Edition in originaler oder kursivierter und aufgelöster Form
+                        erfolgen kann. </p>
+                </div>
+            </div>
+        </body>
+    </text>
+</TEI>

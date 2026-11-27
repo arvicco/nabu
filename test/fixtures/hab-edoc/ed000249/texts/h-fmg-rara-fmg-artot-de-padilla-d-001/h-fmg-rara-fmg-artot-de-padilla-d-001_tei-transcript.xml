@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="HAB_mss_h-fmg-rara-fmg-artot-de-padilla-d-001_tei-transcript">
+  <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Transkription von Hannover, Forschungszentrum Musik und Gender, Rara/FMG Artôt de Padilla,D.1</title>
+         </titleStmt>
+         <editionStmt>
+            <edition>Elektronische Ausgabe nach TEI P5.</edition>
+            <respStmt>
+               <resp>TEI-P5 konforme Kodierung durch</resp>
+					<name type="person">Anne Fiebig</name>
+					<name type="person">Viola Herbst</name>               
+            </respStmt>
+            <editor>Herausgegeben vom <name type="org">Forschungszentrum Musik und Gender.</name></editor>            
+         </editionStmt>
+         <publicationStmt>
+            <publisher>
+               <name type="org">Forschungszentrum Musik und Gender</name>
+               <ptr target="http://www.fmg.hmtm-hannover.de"/>
+            </publisher>
+            <date type="issued" when="2019-09-30">30. September 2019</date>
+            <date type="digitised" when="2018-03-01">1. März 2018</date>
+            <distributor>Forschungszentrum Musik und Gender</distributor>
+            <availability status="free">
+               <licence target="https://creativecommons.org/publicdomain/zero/1.0/deed.de"></licence>
+               <p>Diese Transkription steht unter der Creative Commons Lizenz Public Domain Dedication (CC0 1.0).</p>
+            </availability>
+            <pubPlace>
+               <ptr type="purl" target="http://diglib.hab.de/edoc/ed000249/start.htm"/>
+            </pubPlace>
+         </publicationStmt>
+         <sourceDesc><p>Transkribiert von 
+				<name type="person">Anne Fiebig</name> und
+				<name type="person">Viola Herbst</name>.</p>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+			<projectDesc>
+				<p>Transkription erstellt im Rahmen des Projektes 
+					<name type="project">Erschließen, Forschen, Vermitteln. Identität und Netzwerke / Mobilität und Kulturtransfer
+					   im musikbezogenen Handeln von Frauen zwischen 1800 und 2000</name>.
+				   Projektleitung: <name type="person">Dr. Nicole K. Strohmann.</name>
+				</p>
+			</projectDesc>
+			<editorialDecl><p>Die Übertragung folgt den Editionsrichtlinien des Projektes.</p></editorialDecl>
+		</encodingDesc>
+  </teiHeader>
+      <facsimile> 
+         <graphic url="http://diglib.hab.de/varia/fmg/rara-fmg-artot-de-padilla-d-001/0001.jpg" xml:id="rara-fmg-artot-de-padilla-d-001_0001"/>
+         <graphic url="http://diglib.hab.de/varia/fmg/rara-fmg-artot-de-padilla-d-001/0002.jpg" xml:id="rara-fmg-artot-de-padilla-d-001_0002"/>
+         <graphic url="http://diglib.hab.de/varia/fmg/rara-fmg-artot-de-padilla-d-001/0003.jpg" xml:id="rara-fmg-artot-de-padilla-d-001_0003"/>
+         <graphic url="http://diglib.hab.de/varia/fmg/rara-fmg-artot-de-padilla-d-001/0004.jpg" xml:id="rara-fmg-artot-de-padilla-d-001_0004"/>
+      </facsimile>
+  <text>
+     <body>
+        <pb n="1" facs="#rara-fmg-artot-de-padilla-d-001_0001"/>
+        <div type="letter">
+           <opener>
+               <dateline> 
+                  <date>Vendredi 6 heures</date>
+               </dateline>
+               <lb/>
+              <lb/>Mon cher <rs type="person" ref="#Pietsch_Ludwig">Pietsch</rs>,
+           </opener>
+            <p>
+               <lb/>je rentre et trouve 
+               <lb/>du changement - figurez
+               <lb/>vous que <rs type="person" ref="#Baugniet_Charles" cert="medium" resp="#VH">mon oncle</rs>
+               <lb/>n'ayant pas vue votre
+               <lb/>lettre ainsi qu'il en
+               <lb/>était convenu, ne comptait
+               <lb/>plus sur le plaisir de
+               <lb/>vous voir demain avec
+               <lb/>vos chers amis – il a donc
+               <lb/>pendant mon absence              
+            </p>
+           <pb n="2" facs="#rara-fmg-artot-de-padilla-d-001_0002"/>
+           <p>
+              <lb/><add resp="#Unbekannt_0057"><rs type="person" ref="#Kalbeck_Max">Max Kalbeck</rs></add>
+           </p>
+           <pb n="3" facs="#rara-fmg-artot-de-padilla-d-001_0003"/>
+           <p>
+              <lb/>invité quatre personnes
+              <lb/>ce qui fait que nous
+              <lb/>n’avions plus place à
+              <lb/>table – priez donc M<hi rend="underline" n="2"><hi rend="sup">r</hi></hi> <rs type="person" ref="#Preuss">
+              <lb/>Preuss</rs>, M<hi rend="underline" n="2"><hi rend="sup">me</hi></hi><rs type="person" ref="#Menzel_Emilie" cert="low" resp="#VH">Menzell</rs>
+              <lb/>et peut être le cher
+              <lb/><rs type="person" ref="#Unbekannt_0056">peintre</rs> de vous
+              <lb/>accompagner et faites
+              <lb/>nous l’amitié de venir
+              <lb/>diner avec nous Dimanche
+              <lb/>en petit et bon comité.
+           </p>
+           <pb n="4" facs="#rara-fmg-artot-de-padilla-d-001_0004"/>
+           <p>
+              <lb/>Je vous <gap reason="illegible" unit="word" quantity="1" resp="#VH"></gap>
+              <lb/>ceci en toute hâte  
+              <lb/>donc á Dimanche.
+           </p>
+           <closer>
+               <salute>Mille amitiés</salute>
+               <lb/><signed><hi rend="underline"><rs type="person" ref="#Artot_de_Padilla_Desiree">D. Artot</rs></hi></signed>
+               <lb/>
+            </closer> 
+        </div>
+      </body>
+  </text>
+</TEI>
