@@ -806,9 +806,12 @@ sources:
       #                         heb · per · syr · akk · pal · eng · fre · spa · san (2,995 named etymons)
   lane-lexicon:               # census 2026-11-26 at the pinned 7dd04e1 (48,795 entries)
     entry_fields:
-      root: root              # the div2 root heading's radicals verbatim — Lane's article grain, the
-      #                         root → entries grouping: 5,087 roots over 48,752 entries (the 43
-      #                         letter-article entries sit outside any root)
+      root: { facet: root, keys: arabic-root }  # the div2 root heading's radicals verbatim — Lane's
+      #                         article grain, the root → entries grouping: 5,087 roots over 48,752
+      #                         entries (the 43 letter-article entries sit outside any root). keys:
+      #                         the heading also mints root_key / root_loose_key (Nabu::ArabicRoots'
+      #                         folded comparison keys) — the seam a Quranic token's Buckwalter or
+      #                         DMG root steps to Lane through (show --roots, define --root)
   wilkens-oui:                # the book's own tradition/script marks (Abkürzungen, PDF pp. 13–14),
     entry_fields:             # mapped by WilkensOui::MARK_FACETS; Buddhist terms go unmarked upstream
       tradition: tradition    # (m) manichäisch → Manichaean 611 · (c) christlich → Christian 119

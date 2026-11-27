@@ -32,11 +32,16 @@ module Nabu
         "separate entries). The owner's own notes on an entry ride along in `notes` — " \
         "useful curatorial context.".freeze
 
+      ROOT_SCHEMES = %w[buckwalter dmg arabic].freeze
+      ROOT_KEYS_UNBUILT_NOTE = "the root keys are not built in this catalog yet — the next nabu rebuild " \
+                               "or `bundle exec rake builders:refresh` projects them"
+
       DEFINE_SCHEMA = {
         type: "object",
         properties: {
           lemma: { type: "string",
-                   description: "Dictionary form to look up (e.g. λόγος, virtus)." },
+                   description: "Dictionary form to look up (e.g. λόγος, virtus). Required unless " \
+                                "root is given." },
           lang: { type: "string",
                   description: "Dictionary language. The enum (when present) is the LIVE set " \
                                "of shelves this catalog holds — e.g. grc → LSJ, lat → Lewis & " \
@@ -60,19 +65,33 @@ module Nabu
                                  "senses. The pattern matches the value or its ref " \
                                  "case-insensitively; LIKE % patterns pass through. At most " \
                                  "#{MAX_FACET_FILTERS} pairs; untagged entries fall out." },
+          root: { type: "string",
+                  description: "INSTEAD of lemma: a consonantal Arabic root — Arabic script (رحم), " \
+                               "Buckwalter as the Quranic Arabic Corpus writes it (rHm, Amn) or DMG " \
+                               "as Corpus Coranicum writes it (rḥm, ʾmn) — returning the entries " \
+                               "Lane's Lexicon files under it, with the root's Arabic form, the " \
+                               "heading(s) hit, the total, and the tier that answered (strict; " \
+                               "loose = weak radicals/reduplication folded, may over-merge; null = " \
+                               "miss). The CLI twin is `nabu define --root`." },
+          scheme: { type: "string", enum: ROOT_SCHEMES,
+                    description: "With root: its notation (default: detected from its characters)." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
-        required: ["lemma"],
         additionalProperties: false
       }.freeze
 
       private
 
       def define(args)
-        lemma = string_arg(args, "lemma") or raise InvalidArguments, "nabu_define needs a lemma"
+        lemma = string_arg(args, "lemma")
+        root = string_arg(args, "root")
+        raise InvalidArguments, "nabu_define takes a lemma or a root, not both" if lemma && root
+        raise InvalidArguments, "nabu_define needs a lemma (or a root)" unless lemma || root
+
         lang = string_arg(args, "lang")
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         return note(NO_SHELF_NOTE) unless catalog.table_exists?(:dictionary_entries)
+        return define_root(catalog, root, args) if root
 
         if lang && (langs = define_langs).any? && !langs.include?(lang)
           raise InvalidArguments, "lang must be one of #{langs.join(', ')} " \
@@ -94,6 +113,35 @@ module Nabu
                                .run(lemma, lang: lang, limit: limit + 1, lect: lect, facets: facets_arg(args))
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_define(results, lemma: lemma, limit: limit, catalog: catalog)
+      end
+
+      # The root lookup (Query::Define#by_root): the link's facts, then the
+      # reached entries bounded like any define answer.
+      def define_root(catalog, root, args)
+        scheme = string_arg(args, "scheme")
+        if scheme && !ROOT_SCHEMES.include?(scheme)
+          raise InvalidArguments, "scheme must be one of #{ROOT_SCHEMES.join(', ')}"
+        end
+        return note(ROOT_KEYS_UNBUILT_NOTE) unless Query::RootLink.new(catalog: catalog).built?
+
+        limit = clamp(args["limit"], default: DEFINE_DEFAULT_LIMIT, max: DEFINE_MAX_LIMIT)
+        link, results = Query::Define.new(catalog: catalog, lila: nil, scan_anchors: @scan_anchors)
+                                     .by_root(root, scheme: scheme&.to_sym, limit: limit)
+        unless args["include_restricted"] == true
+          results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) }
+        end
+        json(root: link.root, scheme: link.scheme.to_s, arabic: link.arabic, tier: link.tier&.to_s,
+             headings: link.headings, total: link.total,
+             entries: results.map { |result| attach_notes(catalog, result, define_payload(result)) },
+             note: root_note(link, results.size))
+      end
+
+      def root_note(link, shown)
+        return "not a consonantal root in the #{link.scheme} notation — no lookup" if link.arabic.nil?
+        return "no dictionary heading carries this root" unless link.hit?
+        return "#{shown} of #{link.total} entries — raise limit (max #{DEFINE_MAX_LIMIT})" if shown < link.total
+
+        "#{shown} #{shown == 1 ? 'entry' : 'entries'}"
       end
 
       # -- define internals ---------------------------------------------------------

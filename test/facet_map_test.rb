@@ -90,6 +90,37 @@ class FacetMapTest < Minitest::Test
     assert_raises(Nabu::FacetMap::ConfigError) { build("sources" => { "edrdg" => { "entry_fields" => {} } }) }
   end
 
+  # A keyed entry rule: the field projects verbatim under its facet AND
+  # names a comparison-key scheme whose derived key facets the builder
+  # mints beside it (Lane's root heading → root_key / root_loose_key).
+  def test_keyed_entry_rule_names_a_key_scheme
+    map = build("sources" => { "lane-lexicon" => { "entry_fields" => {
+                  "root" => { "facet" => "root", "keys" => "arabic-root" }, "section" => "section"
+                } } })
+    assert_equal({ "root" => "root", "section" => "section" }, map.entry_fields_for("lane-lexicon"))
+    assert_equal({ "root" => "arabic-root" }, map.entry_keys_for("lane-lexicon"))
+    assert_nil map.entry_keys_for("edrdg")
+    assert_equal %w[root_key root_loose_key], Nabu::FacetMap.key_facets("root")
+    assert Nabu::FacetMap.key_facet?("root_key")
+    assert Nabu::FacetMap.key_facet?("root_loose_key")
+    refute Nabu::FacetMap.key_facet?("root")
+  end
+
+  def test_keyed_entry_rule_with_an_unknown_scheme_or_no_facet_is_a_config_error
+    assert_raises(Nabu::FacetMap::ConfigError) do
+      build("sources" => { "lane-lexicon" => { "entry_fields" => { "root" => { "facet" => "root", "keys" => "x" } } } })
+    end
+    assert_raises(Nabu::FacetMap::ConfigError) do
+      build("sources" => { "lane-lexicon" => { "entry_fields" => { "root" => { "keys" => "arabic-root" } } } })
+    end
+  end
+
+  def test_shipped_config_keys_lanes_roots
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "root" => "root" }, map.entry_fields_for("lane-lexicon"))
+    assert_equal({ "root" => "arabic-root" }, map.entry_keys_for("lane-lexicon"))
+  end
+
   def test_shipped_config_rules_the_dictionary_entry_labels
     map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
     assert_equal({ "field" => "domain", "misc" => "usage", "dial" => "dialect",

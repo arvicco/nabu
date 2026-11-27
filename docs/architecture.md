@@ -413,6 +413,11 @@ entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, en
    -- `show` on an entry urn) prints the entry's own "facets: name=value
    -- · …" line; a catalog without the index never scans the pairs — an
    -- annotated entry's card says the facets are not indexed yet.
+   -- A KEYED rule (entry_fields {facet, keys: SCHEME}) also mints
+   -- derived comparison keys beside the verbatim value, under
+   -- <facet>_key (strict) and <facet>_loose_key (fallback tier) — today
+   -- Lane's root heading under Nabu::ArabicRoots (§11, the root link).
+   -- A fold, not an upstream claim: the card hides them.
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source
@@ -1223,6 +1228,36 @@ leaves most of them verbatim. TLS concept pointer lists (hypernymy,
 taxonymy, see, antonymy, mereonymy) are id-keyed by concept uuid; the
 tree's many other `ref target="#uuid…"` elements name bibliography
 records, not entries, and are not mined.
+
+**The Quranic root link (token root → Lane).** The Quranic Arabic Corpus
+stores each stem token's ROOT in Buckwalter ASCII (`rHm`), Corpus
+Coranicum each word's root in DMG Latin (`rḥm`), and Lane's Lexicon files
+its entries under Arabic-script root headings (`رحم`, some vocalized,
+geminates as `ربّ` or `رب`). The seam is the dictionary-entry facet
+surface, no new store: Lane's `root` heading is an entry facet, and its
+facet_map rule is KEYED (`{facet: root, keys: arabic-root}`), so
+`Store::EntryFacetBuilder` mints `Nabu::ArabicRoots`' comparison keys
+beside it as the `root_key` / `root_loose_key` facets — derived in every
+builder pass, rebuild-safe. `ArabicRoots` holds the one-to-one Buckwalter
+and DMG letter tables (an unmapped character is a clean miss, never a
+guessed letter) and the key's named rules, applied identically to both
+sides: (1) vowel signs stripped, hamza seats and alif folded to one
+hamza, alif maqsura to ya; (2) shadda expanded and a doubled final radical
+collapsed — together the STRICT key; (3) weak radicals w/y/hamza
+interchanged and (4) a reduplicated C1C2C1C2 collapsed to C1C2 (Lane files
+زلزل under زل) — the LOOSE key, a fallback tier tried only on a strict
+miss, because it over-merges (قول/قيل). A Lane heading listing several
+unvocalized roots keys each. `Query::RootLink` folds a token's root the
+same way and probes the key rows by their (facet, value) index and the
+pairs by value_id (the desk law: precompiled rows only), naming the tier
+that answered; per-source token schemes are its `TOKEN_SCHEMES` registry.
+Surfaces: `nabu define --root ROOT [--scheme]` (and `nabu_define` `root`),
+`nabu show URN --roots` (each stored token's root → Lane heading, count,
+first entry urn). Live census at build time (2026-11-27): QAC 1,621 of
+1,642 distinct roots join (1,579 strict + 42 loose), 99.69% of 49,968
+root-bearing tokens; Corpus Coranicum 1,636 of 1,697 (1,580 + 56), 99.03%
+of 46,079 — its residue is mostly upstream non-root analyses (pronoun
+"roots", vowel-bearing forms) and roots the digitized Lane lacks.
 
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 

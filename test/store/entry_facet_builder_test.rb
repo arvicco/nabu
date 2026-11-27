@@ -146,6 +146,34 @@ module Store
       assert_equal 1, @db[:entry_facets].count
     end
 
+    # A keyed rule (Lane's root): the heading projects verbatim under
+    # root AND its ArabicRoots keys under root_key / root_loose_key —
+    # one strict and one loose key per head, a multi-root heading keyed
+    # per root.
+    LANE_MAP = Nabu::FacetMap.new("sources" => {
+                                    "lane-lexicon" => { "entry_fields" => {
+                                      "root" => { "facet" => "root", "keys" => "arabic-root" }
+                                    } }
+                                  })
+
+    def test_keyed_rule_mints_the_derived_key_facets
+      lane = make_source("lane-lexicon")
+      rabb = make_entry(lane, "root" => "ربّ")
+      qawl = make_entry(lane, "root" => "قول")
+      run = make_entry(lane, "root" => "كتع كتف")
+      Nabu::Store::EntryFacetBuilder.rebuild!(catalog: @db, facet_map: LANE_MAP)
+
+      assert_equal([["root", "ربّ", nil], ["root_key", "رب", nil], ["root_loose_key", "رب", nil]], pairs_for(rabb.id))
+      assert_equal([["root", "قول", nil], ["root_key", "قول", nil], ["root_loose_key", "قءل", nil]],
+                   pairs_for(qawl.id))
+      assert_equal([["root", "كتع كتف", nil], ["root_key", "كتع", nil], ["root_key", "كتف", nil],
+                    ["root_loose_key", "كتع", nil], ["root_loose_key", "كتف", nil]], pairs_for(run.id))
+    end
+
+    def test_every_facet_map_key_scheme_is_implemented
+      assert_equal Nabu::FacetMap::KEY_SCHEMES.sort, Nabu::Store::EntryFacetBuilder::KEY_SCHEMES.keys.sort
+    end
+
     def test_refresh_of_an_unknown_source_is_a_no_op
       assert_equal 0, Nabu::Store::EntryFacetBuilder.refresh_source!(catalog: @db, slug: "nope", facet_map: MAP)
     end

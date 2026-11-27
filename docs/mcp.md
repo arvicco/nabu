@@ -416,6 +416,19 @@ surface tags — an object of facet name → pattern (`{"domain":
 "Buddhism"}`), every pair required, value or ref matched; the entry
 payload shape is unchanged.
 
+`root` (contract bump 2026-11-27, the CLI's `define --root`) replaces
+`lemma` with a consonantal Arabic root — Arabic script, Buckwalter as the
+Quranic Arabic Corpus writes it (`rHm`), or DMG as Corpus Coranicum writes
+it (`rḥm`); `scheme` (buckwalter|dmg|arabic) overrides the detected
+notation. The answer is its own shape: `root`, `scheme`, `arabic` (null
+when a character is outside the notation), `tier` (`strict`, `loose` — the
+weak-radical/reduplication fallback key, which may over-merge — or null on
+a miss), `headings` (Lane's root headings hit), `total`, `entries` (the
+ordinary define entry payloads, bounded by `limit`) and a `note`. Read
+through the derived root-key entry facets (architecture §11, the root
+link); an unbuilt catalog answers a note. Giving both `lemma` and `root`,
+or neither, is an argument error.
+
 ### `nabu_etym`
 
 The reconstruction walk (P14-1, architecture §12): give an attested lemma
@@ -889,8 +902,11 @@ bump added nabu_search's `source`/`axis` scoping keys (additive — the CLI's
 `--source`/`--axis`, resolved through the same `Query::SourceScope`) and
 made every tool refuse an argument its schema does not declare (an
 `isError` result naming the unknown argument and the valid ones, where it
-used to be silently ignored). Live MCP servers serve the old schema until
-restarted.
+used to be silently ignored); the 2026-11-27 bump added nabu_define's
+`root`/`scheme` keys (additive — `lemma` stops being schema-required, one of
+the two is required at call time; the root answer is its own payload
+shape, the lemma answer unchanged; pinned in `test/mcp/tools_root_test.rb`).
+Live MCP servers serve the old schema until restarted.
 
 | Capability | CLI surface | MCP tool | Status |
 | --- | --- | --- | --- |
@@ -913,6 +929,8 @@ restarted.
 | Beta Code input | `search --betacode` (query, `--lemma`, `--near` decoded; each decode echoed) | `nabu_search` `betacode: true` — the same `Betacode.decode_query`, decode echoed in a present-only `betacode` key | **added 2026-10-22** (pinned both sides) |
 | The sense desk | `nabu sense TERM [--gloss]` | `nabu_search` `sense` (+ `sense_gloss`) — `Query::Senses`, the desk's senses + citing passages with their tokens | **added 2026-10-22** (pinned; `source` since 2026-11-10; the no-term census stays CLI-only) |
 | Token senses on a shown passage | `nabu show URN --senses` | `nabu_show` `senses: true` — present-only `senses` per passage record + `sense_entries` | **added 2026-10-22** (pinned, incl. the flag-off byte-identical case) |
+| Arabic root lookup | `nabu define --root ROOT [--scheme]` | `nabu_define` `root` (+ `scheme`) — `Query::Define#by_root` over `Query::RootLink` | **added 2026-11-27** (pinned) |
+| Token roots on a shown Quranic passage | `nabu show URN --roots` | — (a `nabu_show` flag would be a further schema bump; the stored tokens already carry `root`, and `nabu_define` `root` answers each) | **documented gap** — MCP exposure pending |
 | Meter line | `nabu show` meter (P44-6/7 enrichments) | `nabu_show` — additive `meter` key on scanned passages | **added P44-3** (pinned) |
 | Sign-coverage graded search (`search --signset "ŠEŠ, AK" --max-foreign N`, P77-r16) | CLI only | no `nabu_search` parameter yet | **documented gap** — MCP exposure pending |
 | The Han character card (`nabu char 棄 --json`, contract frozen P72-2; reading lane P77-r15) | CLI only | `nabu_char` answers the state note; `nabu_define` covers dictionary entries | **documented gap** — MCP exposure pending |

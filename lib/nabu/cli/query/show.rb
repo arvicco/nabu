@@ -83,6 +83,7 @@ module Nabu
         nabu show urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.6 --entities
                                                   # + the persons/places marked in it
         nabu show urn:nabu:dcs:5:3363:2612 --senses  # + each token's word senses
+        nabu show urn:nabu:quranic-corpus:1:1 --roots  # + each token's root → Lane
 
       TOKENS (--tokens): appends the passage's stored token annotations as
       one line per token — `form` first, then every key the store holds for
@@ -103,6 +104,14 @@ module Nabu
       each sense id with its dcs-senses name and gloss; an id the shelf
       does not hold says so. A document or range urn groups them under each
       passage's :suffix. Search by sense with `nabu sense TERM`.
+
+      ROOTS (--roots): appends the consonantal root each stored token of a
+      Quranic passage carries (the Quranic Arabic Corpus's Buckwalter ROOT,
+      Corpus Coranicum's DMG root) stepped to the dictionary headings that
+      file it — Lane's article, its entry count and first entry urn, and
+      whether the strict or the looser (weak-radical/reduplication) key
+      answered; a root no heading carries says so. `nabu define --root
+      ROOT` prints the entries. A document or range urn groups by passage.
 
       SEGMENTED (--segmented): renders Tibetan-language rows (xct/bod/otb)
       with word boundaries — the stored text with a space inserted at each
@@ -135,6 +144,9 @@ module Nabu
                       desc: "Append the names the edition marks inside the text (persons, places …), verbatim"
     option :senses, type: :boolean, default: false,
                     desc: "Append the word senses the gold tokens cite (DCS WordSem), resolved against dcs-senses"
+    option :roots, type: :boolean, default: false,
+                   desc: "Append each Quranic token's root stepped to Lane's Lexicon (QAC Buckwalter, " \
+                         "Corpus Coranicum DMG)"
     option :segmented, type: :boolean, default: false,
                        desc: "Render Tibetan (xct/bod/otb) passages with word boundaries " \
                              "(needs the synced nabu-data module)"
@@ -153,6 +165,9 @@ module Nabu
       end
       if options[:senses] && (options[:random] || options[:parallel])
         raise Thor::Error, "show: --senses does not compose with --random/--parallel"
+      end
+      if options[:roots] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --roots does not compose with --random/--parallel"
       end
 
       config = Nabu::Config.load
@@ -195,6 +210,7 @@ module Nabu
       print_show_tokens(result) if options[:tokens]
       print_show_entities(result) if options[:entities]
       print_show_senses(result, catalog: catalog, config: config) if options[:senses]
+      print_show_roots(result, catalog: catalog) if options[:roots]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer
