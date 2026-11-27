@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: etym
   origin: hand-tuned
-  sources: "acd calfa-lexicon cldf-spine clics csd derom dyenindoeuropean edl etruscan-loans iecor kitchensemitic liv mcd meloniromance nabu-lects peirosst sabellic-loans saenkoromance sagartst starling tlopo uralex westoldturkic wiktionary-recon wold zhangrgyalrong"
+  sources: "acd calfa-lexicon cldf-spine clics csd derom dyenindoeuropean edl etruscan-loans iecor kitchensemitic liv mcd meloniromance nabu-lects peirosst robbeetstriangulation sabellic-loans saenkoromance sagartst savelyevturkic starling tlopo uralex westoldturkic wiktionary-recon wold zhangrgyalrong"
 ---
 
 # The Comparative Indo-Europeanist — the `etym` desk
@@ -39,9 +39,11 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
 | `nabu-lects` | nabu-lects — the lect registry (anchor x stage x variety x orthography resolver) | attribution |
 | `peirosst` | Peiros 2004 Comparative Sino-Tibetan Wordlists (lexibank/peirosst CLDF) | nc |
+| `robbeetstriangulation` | Robbeets et al. 2021 Transeurasian basic-vocabulary cognate sets (lexibank/robbeetstriangulation CLDF v0.3) | attribution |
 | `sabellic-loans` | Sabellic → Latin loans — en.wiktionary curation (Oscan/Umbrian/Sabine) | attribution |
 | `saenkoromance` | Saenko 2015 annotated Swadesh wordlists for the Romance group (lexibank/saenkoromance CLDF v1.1) | attribution |
 | `sagartst` | Sagart et al. 2019 Sino-Tibetan Database of Lexical Cognates (lexibank/sagartst CLDF v2.1) | attribution |
+| `savelyevturkic` | Savelyev & Robbeets 2020 Turkic basic-vocabulary cognate sets (lexibank/savelyevturkic CLDF v2.1) | attribution |
 | `starling` | StarLing / Tower of Babel — etymological databases (Pokorny IEW + PIET + Vasmer + Germanic + Baltic + Kartvelian + Altaic + North Caucasian + Sino-Tibetan + Dravidian + Chukchee-Kamchatkan + Yenisseian + IE lexicostatistical wordlists + the Altaic/Caucasian/Dravidian/Kiranti branch bases) | attribution |
 | `tlopo` | The lexicon of Proto Oceanic (Ross, Pawley & Osmond; lexibank/tlopo CLDF v0.1.1) | attribution |
 | `uralex` | UraLex — Uralic basic vocabulary with cognate and loanword information (lexibank/uralex CLDF v2.0) | attribution |

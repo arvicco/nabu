@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: korean
   origin: generated
-  sources: "bibyeonsa goryeosa goryeosa-jeoryo itkc itkc-catalog ko-wikisource-mk okhc sillok sjw wiktionary-ko wiktionary-okm"
+  sources: "bibyeonsa goryeosa goryeosa-jeoryo itkc itkc-catalog ko-wikisource-mk okhc robbeetstriangulation sillok sjw wiktionary-ko wiktionary-okm"
 ---
 
 # The Koreanist — the `korean` desk
@@ -30,6 +30,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `itkc-catalog` | ITKC 한국고전종합DB 서지 catalog — author-era instrument (OpenAPI MO/GO/KP 서지) | nc |
 | `ko-wikisource-mk` | 용비어천가 — Middle Korean vernacular shelf (Korean Wikisource) | attribution |
 | `okhc` | Open Korean Historical Corpus (historical slice) | nc |
+| `robbeetstriangulation` | Robbeets et al. 2021 Transeurasian basic-vocabulary cognate sets (lexibank/robbeetstriangulation CLDF v0.3) | attribution |
 | `sillok` | 조선왕조실록 원문 — Veritable Records of the Joseon Dynasty (NIKH) | attribution |
 | `sjw` | 승정원일기 — Daily Records of the Royal Secretariat (NIKH) | attribution |
 | `wiktionary-ko` | Wiktionary Korean — kaikki.org machine-readable extract | attribution |

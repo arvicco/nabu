@@ -19,7 +19,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
 |---|---|---|---|---|
@@ -30,12 +30,13 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `itkc-catalog` | feature module | nc | wired · manual | nothing held yet |
 | `ko-wikisource-mk` | texts | attribution | wired · manual | 1 docs / 159 passages |
 | `okhc` | texts | nc | wired · manual | 1,198,779 docs / 3,542,662 passages |
+| `robbeetstriangulation` | dictionary | attribution | wired · manual | 3,173 entries |
 | `sillok` | texts | attribution | wired · manual | 743 docs / 414,321 passages |
 | `sjw` | texts | attribution | wired · manual | 297 docs / 1,896,858 passages |
 | `wiktionary-ko` | dictionary | attribution | wired · manual | 64,457 entries |
 | `wiktionary-okm` | dictionary | attribution | wired · manual | 1,033 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `lzh` 1,121,896 · `ko` 122,823 · `jpn` 17,997 · `en` 2,735 · `okm` 1,039 · `fra` 25.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `lzh` 1,121,896 · `ko` 122,823 · `jpn` 17,997 · `tut` 3,173 · `en` 2,735 · `okm` 1,039 · `fra` 25.
 
 ## The desk's instruments
 

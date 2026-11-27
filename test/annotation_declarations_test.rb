@@ -51,7 +51,8 @@ class AnnotationDeclarationsTest < Minitest::Test
     "aozora" => { "ruby" => [:passage, "reading", "いままで"] },
     "ko-wikisource-mk" => { "reading" => ["kor", nil, "해동육룡비"] },
     "stgall-priscian" => { "priscian" => ["lat", nil, "cum omnis eloquentiae doctrinam"] },
-    "lotsawa-house" => { "phonetics" => [:generic, nil, "tongpé ngang lé pé nyi dü zhi teng"] }
+    "lotsawa-house" => { "phonetics" => [:generic, nil, "tongpé ngang lé pé nyi dü zhi teng"] },
+    "tr-wikisource" => { "transcription" => [:passage, nil, "TeŊRİ: TeG: TeŊRİDE: BOLMuŞ: TÜRK: BİLGE: KaGaN"] }
   }.freeze
 
   # slug => [the adapter as sources.yml configures it, the fixture workdir]
@@ -86,7 +87,8 @@ class AnnotationDeclarationsTest < Minitest::Test
     "aozora" => rig(Nabu::Adapters::Aozora, "aozora"),
     "ko-wikisource-mk" => rig(Nabu::Adapters::KoWikisourceMk, "ko-wikisource-mk"),
     "stgall-priscian" => rig(Nabu::Adapters::StgallPriscian, "stgall-priscian"),
-    "lotsawa-house" => rig(Nabu::Adapters::LotsawaHouse, "lotsawa-house", translations: true)
+    "lotsawa-house" => rig(Nabu::Adapters::LotsawaHouse, "lotsawa-house", translations: true),
+    "tr-wikisource" => rig(Nabu::Adapters::TrWikisource, "tr-wikisource")
   }.freeze
 
   # Declared keys no fixture document carries (their trimmed editions keep
