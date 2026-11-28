@@ -48,7 +48,7 @@ latin-romance:
   - socinian-letters
   - wellcome
 papyri: [papyri-ddbdp]
-latin-inscriptions: [edh]
+latin-inscriptions: [edh, edcs]
 greek-inscriptions: [aio]
 armenian-inscriptions: [armepic]
 inscriptions-of-italy: [edr]

@@ -1134,6 +1134,13 @@ Turkic languages (905 sets) and `robbeetstriangulation` — the
 Transeurasian comparison across Turkic, Mongolic, Tungusic, Koreanic
 and Japonic (3,173 sets).
 
+`edcs` — the Epigraphik-Datenbank Clauss-Slaby in the SDAM project's
+cleaned snapshot of 2022: the Latin inscriptions of Italy and every
+province of the Roman empire, each with its CIL/AE concordance,
+findspot, dating and material, the EDCS text beside two cleaned
+readings (513,781 / 513,781; about 18,500 in Greek script). Many of
+the stones are also in `edh` and `edr`, in other editions.
+
 **Arabic.** `diccas` — the Disaster Corpus in Classical Arabic Sources
 (10 / 879; nc); instruments `kitab-reuse` (the KITAB text-reuse
 statistics; nc) and `althurayya` (the al-Ṯurayyā gazetteer — places.md).

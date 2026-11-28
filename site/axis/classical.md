@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 34 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 November 2026)</span> |
 |---|---|---|---|---|
 | `aio` | inscriptions | attribution | wired · manual | 4,002 docs / 67,429 passages |
 | `analecta-hymnica` | texts | open | wired · manual | 55 docs / 17,211 passages |
@@ -52,9 +52,9 @@ A source wears every desk it serves — these 34 answer this desk. Holdings are 
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 | `wellcome` | texts | open | wired · manual | 4,772 docs / 1,130,632 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `grc` 147,204 · `lat` 70,110 · `gmy` 5,890 · `eng` 5,227 · `deu` 867 · `lab` 787 · `grc-Latn` 510 · `fra` 366 · `ita` 190 · `nld` 80 … and 12 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 November 2026)</span>: `grc` 147,204 · `lat` 70,110 · `gmy` 5,890 · `eng` 5,227 · `deu` 867 · `lab` 787 · `grc-Latn` 510 · `fra` 366 · `ita` 190 · `nld` 80 … and 12 more (`nabu axis classical` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 27 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `egy` 3 … and 23 more (`nabu axis classical` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 28 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `egy` 3 … and 23 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 

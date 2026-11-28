@@ -78,11 +78,11 @@ class EdcsTest < Minitest::Test
     assert_nil targets.first.metadata_url
   end
 
-  def test_registry_row_is_registered_unwired_and_frozen
+  def test_registry_row_is_registered_wired_and_frozen
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["edcs"]
     refute_nil entry
-    refute entry.wired, "wired only after the verified first sync"
+    assert entry.wired, "wired after the verified first sync of 2026-11-28"
     assert_equal "frozen", entry.sync_policy
     assert_equal ["epigraphy"], entry.axes
   end

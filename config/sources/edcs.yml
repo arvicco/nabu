@@ -8,7 +8,7 @@ edcs:   # 02-sources row 458
   # are the epigraphic error class).
   fuzzy_index: true
   lemma_dictionary_filter: true
-  wired: false   # EXPECTED FIRST SYNC (whole-file dry parse through the adapter, 2026-11-28):
+  wired: true    # FIRST SYNC LANDED 2026-11-28 exactly as expected (513,781 / 513,781; 23,481 skipped by rule). EXPECTED FIRST SYNC (whole-file dry parse through the adapter, 2026-11-28):
                  # bin/nabu sync edcs — ONE streamed Zenodo GET, 465,523,658 B
                  # (sha256 + md5 pinned in the adapter), the same size canonical.
                  # EXPECT 513,781 docs / 513,781 passages, 0 errored; skipped by

@@ -19,12 +19,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 November 2026)</span> |
 |---|---|---|---|---|
 | `atmo` | texts | attribution | wired · manual | 15 docs / 4,934 passages |
 | `makhzan` | texts | nc | wired · manual | 30 docs / 3,762 passages |
+| `ottoman-ocr` | texts | nc | wired · manual | 59 docs / 7,470 passages |
 | `robbeetstriangulation` | dictionary | attribution | wired · manual | 3,173 entries |
 | `savelyevturkic` | dictionary | attribution | wired · manual | 905 entries |
 | `tr-wikisource` | texts | attribution | wired · manual | 3 docs / 214 passages |
@@ -36,9 +37,9 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `wiktionary-trk-oat` | dictionary | attribution | wired · manual | 607 entries |
 | `wilkens-oui` | dictionary | attribution | wired · manual | 49,619 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `oui` 50,065 · `ota` 10,051 · `tut` 3,173 · `trk` 1,385 · `chg` 614 · `trk-oat` 607 · `otk` 474 · `lat` 12 · `deu` 2 · `fra` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 November 2026)</span>: `oui` 50,065 · `ota` 10,110 · `tut` 3,173 · `trk` 1,385 · `chg` 614 · `trk-oat` 607 · `otk` 474 · `lat` 12 · `deu` 2 · `fra` 1.
 
-**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 27 November 2026): `zho` 327,296 · `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 42 more (`nabu axis turkic` lists all).
+**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 28 November 2026): `zho` 327,296 · `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 42 more (`nabu axis turkic` lists all).
 
 ## The desk's instruments
 
