@@ -2,7 +2,7 @@ ottoman-ocr:   # 02-sources row 459
   adapter: Nabu::Adapters::OttomanOcr
   adopted: "2026-11-28"
   axes: [turkic, arabic]
-  wired: false   # EXPECTED FIRST SYNC (dry parse of the pinned clone, 2026-11-28):
+  wired: true    # FIRST SYNC LANDED 2026-11-28 exactly as expected (59 / 7,470). EXPECTED FIRST SYNC (dry parse of the pinned clone, 2026-11-28):
                  # bin/nabu sync ottoman-ocr — a sparse clone of data/*.js, the
                  # root transcriptions_ziyapasa.json and the licence files at
                  # bac65b6 (~219 MB; the YOLO model and the viewer stay out).

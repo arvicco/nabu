@@ -1124,7 +1124,9 @@ Tonyukuk in runiform with transliteration, transcription and Turkish
 translation (3 / 214), `turkic-pd` — Kuun's Codex Cumanicus, Thomsen's
 and Radloff's Orkhon editions and Vámbéry's Kudatku Bilik as
 public-domain scans (4 / 2,069), `makhzan` — thirty Ottoman Turkish
-manuscripts of 1438–1869 transcribed line by line (30 / 3,762; nc);
+manuscripts of 1438–1869 transcribed line by line (30 / 3,762; nc),
+`ottoman-ocr` — fifty-nine printed Ottoman books from Evliyâ Çelebi to
+the Tanzimat as uncorrected machine OCR (59 / 7,470 pages; nc);
 the dictionaries `wiktionary-ota` —
 Ottoman Turkish (10,016 entries) and `wiktionary-trk-oat` — Old
 Anatolian Turkish (607); and the cognate sets `savelyevturkic` — 32

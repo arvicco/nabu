@@ -47,11 +47,11 @@ class OttomanOcrTest < Minitest::Test
     assert_equal "https://github.com/koras0ff/OttomanOCR-search", manifest.upstream_url
   end
 
-  def test_registry_row_is_unwired_manual_on_the_turkic_and_arabic_desks
+  def test_registry_row_is_wired_manual_on_the_turkic_and_arabic_desks
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["ottoman-ocr"]
     refute_nil entry, "config/sources/ must register ottoman-ocr"
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired after the verified first sync of 2026-11-28"
     assert_equal "manual", entry.sync_policy
     assert_equal %w[turkic arabic], entry.axes
     assert_equal "ottoman-ocr", entry.adapter_class.manifest.id
