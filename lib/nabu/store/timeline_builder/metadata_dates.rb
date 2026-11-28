@@ -204,6 +204,9 @@ module Nabu
           #                                  it (1868 / 1908 / 1922, class edition) — no place claim
           "ebl" => :period_label,
           "ecco-tcp" => :structured, # the BIBLFULL imprint envelope (the eebo-tcp lane)
+          "edcs" => :structured, # SDAM's date_not_before/after envelope over EDCS's dating parts
+          #                        (raw_dating verbatim); place = the findspot name + its WGS84
+          #                        pair (EDCS "?" = unknown names nothing, the pair still places)
           "edr" => :structured,
           "eebo-tcp" => :structured,
           "elektire" => :structured, # P117-2: the portal's century of origin as an
@@ -634,8 +637,11 @@ module Nabu
         # fornsvenska/glaux/disco joined P104-1: signs are upstream-explicit
         # (all-CE compact dates, signed year strings, CE centuries), so the
         # defensive swap stays safe.
+        # edcs joined with its first adapter: signs are upstream-explicit
+        # (negative = BCE throughout the dump), so the swap of its 12
+        # reversed pairs ("171 to 138") is safe.
         REORDER = %w[edr bfm itant croala corpus-corporum corpus-gysseling
-                     corpus-oudnederlands fornsvenska glaux disco].freeze
+                     corpus-oudnederlands fornsvenska glaux disco edcs].freeze
 
         BATCH = 2_000
 
