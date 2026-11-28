@@ -2184,6 +2184,17 @@ sources:
     entries_display: '64,218'
     holdings: 64,218 entries
     canonical_display: 38 MB
+  makhzan:
+    name: OpenITI MAKHZAN — Ottoman Turkish manuscript transcriptions
+    license_class: nc
+    documents: 30
+    documents_display: '30'
+    passages: 3762
+    passages_display: '3,762'
+    entries: 0
+    entries_display: '0'
+    holdings: 30 documents / 3,762 passages
+    canonical_display: 5 MB
   mazarinades:
     name: Mazarinades — the Antonomaz corpus of Fronde pamphlets (1648–1653)
     license_class: attribution
@@ -2920,6 +2931,18 @@ sources:
     entries_display: '0'
     holdings: 495 documents / 1,357 passages
     canonical_display: 13 MB
+  robbeetstriangulation:
+    name: Robbeets et al. 2021 Transeurasian basic-vocabulary cognate sets (lexibank/robbeetstriangulation
+      CLDF v0.3)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 3173
+    entries_display: '3,173'
+    holdings: 3,173 entries
+    canonical_display: 40 MB
   rsti:
     name: RSTI — Ras Shamra Tablet Inventory (U. Chicago CORPUS/OCHRE; the inscribed
       objects of Ugarit and Ras Ibn Hani)
@@ -3022,6 +3045,18 @@ sources:
     entries_display: '0'
     holdings: 83 documents / 346,313 passages
     canonical_display: 204 MB
+  savelyevturkic:
+    name: Savelyev & Robbeets 2020 Turkic basic-vocabulary cognate sets (lexibank/savelyevturkic
+      CLDF v2.1)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 905
+    entries_display: '905'
+    holdings: 905 entries
+    canonical_display: 2 MB
   sblgnt:
     name: SBL Greek New Testament (SBLGNT)
     license_class: attribution
@@ -3585,6 +3620,17 @@ sources:
     entries_display: '0'
     holdings: 40 documents / 33,085 passages
     canonical_display: 270 MB
+  tr-wikisource:
+    name: Turkish Wikisource — the Orkhon inscriptions (Kül Tigin, Bilge Kağan, Tonyukuk)
+    license_class: attribution
+    documents: 3
+    documents_display: '3'
+    passages: 214
+    passages_display: '214'
+    entries: 0
+    entries_display: '0'
+    holdings: 3 documents / 214 passages
+    canonical_display: "<1 MB"
   traces:
     name: TraCES — TEI-Ling analyzed Gǝʿǝz corpus (ERC 338756, Hamburg)
     license_class: nc
@@ -3607,6 +3653,18 @@ sources:
     entries_display: '42,563'
     holdings: 42,563 entries
     canonical_display: 21 MB
+  turkic-pd:
+    name: PD Turkic reference shelf — Kuun's Codex Cumanicus, Thomsen, Radloff, Vámbéry's
+      Kudatku Bilik (archive.org scans, uncorrected OCR)
+    license_class: open
+    documents: 4
+    documents_display: '4'
+    passages: 2069
+    passages_display: '2,069'
+    entries: 0
+    entries_display: '0'
+    holdings: 4 documents / 2,069 passages
+    canonical_display: 2 MB
   typikon-bible:
     name: typikon.info Bible layer — the 1688 Bucharest Bible, the Elizabeth Bible
       in Church Cyrillic and the Old Georgian Bible (dump 2026-09-21)
@@ -3744,7 +3802,7 @@ sources:
     entries: 0
     entries_display: '0'
     holdings: 4,772 documents / 1,130,632 passages
-    canonical_display: 3.1 GB
+    canonical_display: 3.3 GB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -4055,6 +4113,17 @@ sources:
     entries_display: '1,501'
     holdings: 1,501 entries
     canonical_display: 3 MB
+  wiktionary-ota:
+    name: Wiktionary Ottoman Turkish — kaikki.org machine-readable extract
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 10016
+    entries_display: '10,016'
+    holdings: 10,016 entries
+    canonical_display: 33 MB
   wiktionary-pa:
     name: Wiktionary Punjabi — kaikki.org machine-readable extract
     license_class: attribution
@@ -4179,6 +4248,17 @@ sources:
     entries_display: '23,325'
     holdings: 23,325 entries
     canonical_display: 31 MB
+  wiktionary-trk-oat:
+    name: Wiktionary Old Anatolian Turkish — kaikki.org machine-readable extract
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 607
+    entries_display: '607'
+    holdings: 607 entries
+    canonical_display: 2 MB
   wiktionary-tyz:
     name: Wiktionary Tày — kaikki.org machine-readable extract
     license_class: attribution
@@ -4580,11 +4660,14 @@ shelves:
     - mnc-wikisource
     - shiratori-shm
     - mongolic-pd
-    documents: 53
-    documents_display: '53'
-    passages: 17806
-    passages_display: '17,806'
-    size_display: 53 / 17,806
+    - tr-wikisource
+    - turkic-pd
+    - makhzan
+    documents: 90
+    documents_display: '90'
+    passages: 23851
+    passages_display: '23,851'
+    size_display: 90 / 23,851
   egyptian:
     sources:
     - aes

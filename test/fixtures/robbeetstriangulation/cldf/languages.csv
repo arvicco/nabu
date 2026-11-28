@@ -1,0 +1,10 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family
+Baoan,Baoan,baoa1237,Baoanic,,,35.7,103,Mongolic
+CodexCumanicus,CodexCumanicus,,,qwm,,51.1,71.26,Turkic
+Karaim,Karaim,kara1464,Karaim,kdr,Eurasia,43.56,42.26,Turkic
+LateMiddleKorean,(Late) Middle Korean,late1258,Late Middle Korean,kor,Eurasia,37.5,128,Koreanic
+MiddleMongolianMuqaddimataladab,Middle Mongolian (Muqaddimat al-adab),,,,,47.12,102.5,Mongolic
+MiddleMongolianSecretHistory,Middle Mongolian (Secret History),,,,,47.12,102.5,Mongolic
+Oirat,Oirat,,,,,49.3,92.3,Mongolic
+OldJapanese,Old Japanese,oldj1239,Old Japanese,ojp,Eurasia,47.33,102.49,Japonic
+OldTurkic,OldTurkic,oldu1238,Old Turkic,oui,Eurasia,50.32,137.85,Turkic

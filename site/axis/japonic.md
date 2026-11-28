@@ -20,7 +20,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
 |---|---|---|---|---|
@@ -38,10 +38,11 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `nrct` | feature module | attribution | wired · manual | nothing held yet |
 | `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
+| `robbeetstriangulation` | dictionary | attribution | wired · manual | 3,173 entries |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `jpn` 454,974 · `zho` 430,294 · `lzh` 63,807 · `ojp` 11,413.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `jpn` 454,974 · `zho` 430,294 · `lzh` 63,807 · `ojp` 11,413 · `tut` 3,173.
 
 **Carried in by multilingual packs** (`wiktionary-recon` — whole-source members whose other languages ride along, as of 27 November 2026): `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 18 more (`nabu axis japonic` lists all).
 

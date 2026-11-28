@@ -1,0 +1,26 @@
+tr-wikisource:   # 02-sources row 453
+  adapter: Nabu::Adapters::TrWikisource
+  adopted: "2026-11-27"
+  axes: [turkic]
+  wired: true    # first sync verified 2026-11-27, exact: 3 docs / 214 passages, 1 skipped by rule, 0 errored
+  sync_policy: manual
+  # The Orkhon inscriptions on Turkish Wikisource (tr.wikisource.org,
+  # Kategori:Orhun Abideleri): Kül Tigin (732), Bilge Kağan (735) and
+  # Tonyukuk (c. 716–726, attributed), line by line — the runiform original
+  # (Old Turkic script, U+10C00 block) as the passage text, language otk;
+  # the transliteration, transcription and modern Turkish translation as
+  # annotation layers. The census 2026-11-27 (paced api.php): the category's
+  # 3 members, all ADMITTED; the landing page "Orhun Yazıtları" (a
+  # disambiguation list) SKIPPED BY RULE; the "Orhun Abideleri (…)" titles
+  # are redirects, never fetched. Every face's rows match its caption's
+  # declared line count (dizi). Texts PD (8th century); the wiki layer
+  # CC BY-SA (footer) → attribution. Provenance caveat: the pages name no
+  # source edition — the Kül Tigin page cites turkbitig.com and
+  # orhunyazitlari.appspot.com transcriptions and a bibliography (Tekin,
+  # Orhon Yazıtları 1995; Ata, Orhun Türkçesi 2011; six articles); Bilge
+  # Kağan and Tonyukuk link only a turkbitig.com archive copy.
+  # EXPECTED FIRST SYNC (parsed through the adapter over the three live
+  # pages, revids 174981 / 174979 / 175665, 2026-11-27): 3 docs / 214
+  # passages (Kül Tigin 70 · Bilge Kağan 82 · Tonyukuk 62; 212 runiform,
+  # 2 lacuna-only rows, Bilge Kağan B8–B9); 1 skipped by rule (the landing
+  # page), 0 unrecognized; 4 api.php page envelopes.

@@ -158,6 +158,19 @@ class LexibankCldfParserTest < Minitest::Test
     assert_includes concepticon.body, "concepticon: BOVINE", "a plain cell rides verbatim"
   end
 
+  # --- judgment notes -------------------------------------------------------------------
+
+  def test_declared_judgment_columns_ride_the_body_once_per_distinct_value
+    notes = { "Root" => "root" }
+    set = entry(read("robbeetstriangulation", language: "tut", word_from: :value, judgment_notes: notes), "60")
+    assert_includes set.body, "root: *ne", "the CognateTable's Root, verbatim, once for the set"
+    assert_equal 1, set.body.scan(/^root: /).size
+    split = entry(read("savelyevturkic", language: "trk", word_from: :value, judgment_notes: notes), "656")
+    assert_includes split.body, "root: jip; čijrat", "distinct values in judgment order"
+    bare = entry(read("savelyevturkic", language: "trk", word_from: :value), "656")
+    refute_match(/^root: /, bare.body, "undeclared, the column rides nowhere")
+  end
+
   def test_unknown_strategy_is_refused
     assert_raises(ArgumentError) { read("acd", language: "map", word_from: :segments) }
   end

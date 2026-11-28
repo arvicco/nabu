@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
 |---|---|---|---|---|
@@ -21,10 +21,11 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `mnc-wikisource` | texts | attribution | wired · manual | 21 docs / 1,359 passages |
 | `mongolic-pd` | texts | open | wired · manual | 15 docs / 7,358 passages |
 | `ptg` | dictionary | attribution | wired · manual | 4,276 entries |
+| `robbeetstriangulation` | dictionary | attribution | wired · manual | 3,173 entries |
 | `shiratori-shm` | texts | open | wired · manual | 1 docs / 632 passages |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `mnc` 3,666 · `san` 1,070 · `cmg` 1,069 · `lzh` 1,069 · `rus` 7 · `eng` 3 · `fra` 3 · `deu` 2 · `xng` 2.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `mnc` 3,666 · `tut` 3,173 · `san` 1,070 · `cmg` 1,069 · `lzh` 1,069 · `rus` 7 · `eng` 3 · `fra` 3 · `deu` 2 · `xng` 2.
 
 **Carried in by multilingual packs** (`wiktionary-recon` — whole-source members whose other languages ride along, as of 27 November 2026): `zho` 327,296 · `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 19 more (`nabu axis mongolic` lists all).
 

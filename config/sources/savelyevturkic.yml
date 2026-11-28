@@ -1,0 +1,20 @@
+savelyevturkic:
+  adapter: Nabu::Adapters::Savelyevturkic
+  adopted: "2026-11-27"
+  axes: [etym, turkic]
+  wired: true    # first sync verified 2026-11-27, exact: 905 cognate sets, 2 skipped by rule
+                 # EXPECTED FIRST SYNC (full-scale dry parse 2026-11-27 of
+                 # the pinned v2.1 zip): 1 document → 905 entries / 8,360
+                 # reflex rows (0 loan-flagged, 0 doubtful, 1,282
+                 # display-only); 0 forms outside the CognateTable; raw/ and
+                 # turkic.nex skipped by rule (2). Old Turkic 262, Cuman 229.
+  sync_policy: manual
+  # Savelyev & Robbeets 2020, Bayesian phylolinguistics infers the internal
+  # structure and the time-depth of the Turkic language family (Journal of
+  # Language Evolution 5.1), lexibank CLDF edition v2.1 (Zenodo
+  # 10.5281/zenodo.13163242, CC BY 4.0): 32 Turkic varieties — Old Turkic
+  # (Clauson 1972) and Codex Cumanicus Cuman beside the modern languages,
+  # Chuvash included — × 254 concepts, 905 expert cognate sets headed by
+  # their concept, each set's root label on its body. The source Value
+  # (the Turkological transcription) is the reflex word. Dictionary
+  # language `trk`.

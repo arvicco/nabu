@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three items are documented prefix trims (whole: false), so
+# adapter_test stays null.
+source: turkic-pd
+adapter_test: null
+retrieved: "2026-11-27"
+files:
+  - path: codexcumanicusbi00kuunuoft/codexcumanicusbi00kuunuoft_hocr_searchtext.txt.gz
+    url: https://archive.org/download/codexcumanicusbi00kuunuoft/codexcumanicusbi00kuunuoft_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 14 hOCR pages (5,361 of 1,047,110 characters), re-gzipped — README recipe
+  - path: codexcumanicusbi00kuunuoft/codexcumanicusbi00kuunuoft_hocr_pageindex.json.gz
+    url: https://archive.org/download/codexcumanicusbi00kuunuoft/codexcumanicusbi00kuunuoft_hocr_pageindex.json.gz
+    whole: false
+    trim: first 14 of 558 rows, re-gzipped — README recipe
+  - path: inscriptionsdel00thomgoog/inscriptionsdel00thomgoog_hocr_searchtext.txt.gz
+    url: https://archive.org/download/inscriptionsdel00thomgoog/inscriptionsdel00thomgoog_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 11 hOCR pages (18,480 of 635,374 characters), re-gzipped — README recipe
+  - path: inscriptionsdel00thomgoog/inscriptionsdel00thomgoog_hocr_pageindex.json.gz
+    url: https://archive.org/download/inscriptionsdel00thomgoog/inscriptionsdel00thomgoog_hocr_pageindex.json.gz
+    whole: false
+    trim: first 11 of 230 rows, re-gzipped — README recipe
+  - path: uigurischesprach00vmuoft/uigurischesprach00vmuoft_hocr_searchtext.txt.gz
+    url: https://archive.org/download/uigurischesprach00vmuoft/uigurischesprach00vmuoft_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 12 hOCR pages (6,685 of 680,352 characters), re-gzipped — README recipe
+  - path: uigurischesprach00vmuoft/uigurischesprach00vmuoft_hocr_pageindex.json.gz
+    url: https://archive.org/download/uigurischesprach00vmuoft/uigurischesprach00vmuoft_hocr_pageindex.json.gz
+    whole: false
+    trim: first 12 of 288 rows, re-gzipped — README recipe

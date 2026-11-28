@@ -193,6 +193,12 @@ class DerivabilityWritersTest < Minitest::Test
   # its .wiki-fetch.json pin) and shiratori_shm writes ONE NDL book
   # (books/1184344.json, .part + rename) inside Adapter#fetch — the
   # ja/zh-wikisource and ndl-kotenseki canonical-gateway law kinds.
+  # The tr_wikisource adapter writes canonical/tr-wikisource/ the same
+  # way (one api.php page envelope per admitted page under
+  # pages/<pageid>.json and its fetch-state pin) inside Adapter#fetch.
+  # The makhzan fetch writes canonical/makhzan/ (the metadata TSV, the
+  # ALTO/METS members under Doc<id>/, its .makhzan-fetch.json state and
+  # the .attic/ of upstream deletions) through the fetch gateway.
   # The P165 wellcome adapter writes canonical/wellcome/ inside
   # Adapter#fetch: the catalogue snapshot (works.json.gz, streamed to
   # .part + rename) and its .wellcome-census.json pin, the derived
@@ -406,6 +412,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/adapters/mnc_wikisource.rb nabu/adapters/shiratori_shm.rb nabu/adapters/nb_no.rb
+    nabu/adapters/tr_wikisource.rb nabu/fetch/makhzan_fetch.rb
     nabu/adapters/wellcome.rb nabu/paced_crawl.rb nabu/adapters/niupepa.rb nabu/adapters/ntvmr.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb

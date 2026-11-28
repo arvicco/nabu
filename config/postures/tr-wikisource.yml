@@ -1,0 +1,16 @@
+sources:
+  tr-wikisource:
+    # kind: machine-postured — kind_map.yml genre facet fold.
+    lect: {posture: identity, note: "bare otk (the nabu-lects Old Turkic anchor, band 700–840 —
+        its note names exactly these inscriptions) for every line; the Turkish translation is an
+        annotation layer, not a passage language"}
+    dating: {posture: dated, note: "3/3: Kül Tigin 732 and Bilge Kağan 735 from the texts' own
+        animal-cycle date lines (KT KD1, BK G10; the CE year the standard conversion, raw says so —
+        the stones' own dates, no class); Tonyukuk c. 716–726 attributed (no date line), class
+        composition — :structured lane"}
+    places: {posture: named, note: "the census's findspots (the pages state none; the stones stand
+        in situ): Khöshöö Tsaidam, Orkhon valley (Kül Tigin, Bilge Kağan); Bain Tsokto, Tuul valley
+        (Tonyukuk) — named, no gazetteer ref"}
+    script: {posture: implied, note: "otk ⇒ Orkh: the passage text is the runiform original; the
+        Latin transliteration/transcription ride annotations; 2 lacuna-only rows (Bilge Kağan
+        B8–B9) carry upstream's '[...]:' marker, annotation script none"}

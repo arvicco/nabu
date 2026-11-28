@@ -3,17 +3,17 @@
 as_of: 27 November 2026
 classes:
 - head: literary
-  documents: 832519
-  documents_display: '832,519'
-  sources: 65
+  documents: 832528
+  documents_display: '832,528'
+  sources: 67
 - head: administrative
   documents: 501271
   documents_display: '501,271'
   sources: 28
 - head: historiography
-  documents: 359308
-  documents_display: '359,308'
-  sources: 39
+  documents: 359311
+  documents_display: '359,311'
+  sources: 40
 - head: ritual
   documents: 194704
   documents_display: '194,704'
@@ -23,17 +23,17 @@ classes:
   documents_display: '115,430'
   sources: 14
 - head: legal
-  documents: 54975
-  documents_display: '54,975'
-  sources: 42
+  documents: 54976
+  documents_display: '54,976'
+  sources: 43
 - head: letter
   documents: 42288
   documents_display: '42,288'
   sources: 33
 - head: royal
-  documents: 30136
-  documents_display: '30,136'
-  sources: 6
+  documents: 30139
+  documents_display: '30,139'
+  sources: 7
 - head: scripture
   documents: 29626
   documents_display: '29,626'
@@ -47,17 +47,17 @@ classes:
   documents_display: '21,236'
   sources: 31
 - head: divination
-  documents: 21140
-  documents_display: '21,140'
-  sources: 17
+  documents: 21142
+  documents_display: '21,142'
+  sources: 18
 - head: lexical
-  documents: 18882
-  documents_display: '18,882'
-  sources: 29
+  documents: 18886
+  documents_display: '18,886'
+  sources: 31
 - head: scholarly
-  documents: 18611
-  documents_display: '18,611'
-  sources: 33
+  documents: 18619
+  documents_display: '18,619'
+  sources: 35
 - head: paratext
   documents: 18031
   documents_display: '18,031'
@@ -83,9 +83,9 @@ classes:
   documents_display: '8,094'
   sources: 9
 - head: theology
-  documents: 6786
-  documents_display: '6,786'
-  sources: 12
+  documents: 6788
+  documents_display: '6,788'
+  sources: 13
 - head: school
   documents: 5307
   documents_display: '5,307'
@@ -95,17 +95,17 @@ classes:
   documents_display: '3,411'
   sources: 10
 - head: exegesis
-  documents: 3368
-  documents_display: '3,368'
-  sources: 17
+  documents: 3370
+  documents_display: '3,370'
+  sources: 18
 - head: boundary
   documents: 3009
   documents_display: '3,009'
   sources: 4
 - head: hagiography
-  documents: 2037
-  documents_display: '2,037'
-  sources: 7
+  documents: 2041
+  documents_display: '2,041'
+  sources: 8
 - head: oratory
   documents: 1674
   documents_display: '1,674'
@@ -123,5 +123,5 @@ unknown_documents: 47162
 unknown_documents_display: '47,162'
 unmapped_documents: 14247
 unmapped_documents_display: '14,247'
-unclassified_documents: 566897
-unclassified_documents_display: '566,897'
+unclassified_documents: 566898
+unclassified_documents_display: '566,898'

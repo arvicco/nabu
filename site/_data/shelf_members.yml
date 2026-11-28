@@ -94,7 +94,7 @@ hebrew-aramaic: [oshb, bhsa, dss, extrabiblical, etcbc-targum, sefaria, iip, dtu
 elephantine: [elephantine]
 arabic-persian: [openiti, ganjoor, diccas, corpus-coranicum, quranic-corpus, corpus-coranicum-manuscripts, corpus-coranicum-variants]
 iranian-silk-road: [iedc, skjaervo-khotanese, shkz, perseus-farsilit]
-turkic-mongolic: [atmo, altaica-shm, mnc-wikisource, shiratori-shm, mongolic-pd]
+turkic-mongolic: [atmo, altaica-shm, mnc-wikisource, shiratori-shm, mongolic-pd, tr-wikisource, turkic-pd, makhzan]
 egyptian: [aes, tla-hf]
 ethiopic: [betamasaheft-works, traces]
 pre-roman-italy: [ceipom, itant, open-etruscan, tir, lexlep, isicily]

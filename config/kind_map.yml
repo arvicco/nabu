@@ -1756,6 +1756,15 @@ sources:
       "classic": scripture                       # 3 — Yijing, Lunyu: the kanripo KR1 經部 → scripture fold
       "primer": school                           # 2 — 清語老乞大, 三字經: the schoolroom's own texts
       "scripture": scripture                     # 1 — the Acts, Manchu New Testament
+  tr-wikisource:      # the census's own per-inscription genre label (TrWikisource::WORKS), one per
+    #                   document; counts = admitted pages 2026-11-27 (3)
+    facet: genre
+    map:
+      "royal memorial inscription": royal        # 2 — Kül Tigin, Bilge Kağan: the khagan speaking as
+      #                                            khagan on his memorial stele (the mnc stele fold)
+      "monumental inscription": royal            # 1 — Tonyukuk: the statesman's monumental narrative
+      #                                            of the khaganate — the head's "royal and monumental
+      #                                            inscriptions", not a funerary text
   shiratori-shm:
     source_kind: historiography/chronicle   # P164: the Secret History of the Mongols — the
     #                                         Chinggisid house's chronicle, Shiratori's edition
@@ -1770,6 +1779,21 @@ sources:
       #                                            for the language's learner (texts + vocabulary/apparatus)
       #                                            — the schoolroom's own product, the nearest head
       "tales": literary/narrative/tale           # 1 — Jülg's Siddhi-Kür: the tale cycle edited and translated
+  turkic-pd:          # the census's own per-work genre label (TurkicPd::ITEMS), one per document;
+    #                   counts = census items 2026-11-27 (4)
+    facet: genre
+    map:
+      "glossary edition": lexical/glossary       # 1 — Kuun's Codex Cumanicus: the codex IS a Latin–Persian–
+      #                                            Cuman glossary (its Cuman texts a minority), edited with
+      #                                            Kuun's own glossaries
+      "inscription study": scholarly             # 2 — Thomsen, Radloff: decipherment, transcription,
+      #                                            translation, grammar and historical commentary in the
+      #                                            scholar's prose; the runiform texts themselves (royal
+      #                                            steles) are garbled in the OCR, so the document is the
+      #                                            study, not the stele
+      "text edition": literary/wisdom            # 1 — Vámbéry's Kudatku Bilik: the edition's bulk is the
+      #                                            Qutadgu Bilig itself (transcription + translation), the
+      #                                            mirror for princes — instruction literature
   vedaweb:
     source_kind: hymn-prayer/hymn   # the Rigveda: 1,028 hymns, each addressed to its deity
     #                                 (upstream's own addressee per hymn) — hymns by form;
@@ -3737,3 +3761,38 @@ sources:
       #                                            forbidden arts catalogued and condemned
       "ed000278": literary/poetry                # 1 — Sibylla Schwarz, Deutsche Poëtische Gedichte
       "ed000279": letter                         # 17 — Klesch's letters to David Hanisius
+  makhzan:            # the TSV's Genre column, verbatim per manuscript (constant across its
+    #                   pages). Counts = documents, the census of the record's TSV 2026-11-27
+    #                   (30 Ottoman manuscripts; 19 distinct values, matched case-folded).
+    metadata: genre
+    map:
+      "popular story": literary/narrative/tale   # 5 — the Dāsitān-i Kesik Baş copies: the folk
+      #                                            tale of the headless hero, told in verse
+      "Literature": literary                     # 1 — the Iskendernāme (upstream says no more)
+      "History": historiography                  # 2 — Nabi's Tārīh-i Kaminçe, the history of Baghdad
+      "Biography, Poetry": [historiography, literary/poetry]  # 1 — Abdüllaṭīf's Teẕkiret eš-šuʿarā:
+      #                                            lives of the poets with their verse quoted
+      "hagiography/biography": hagiography       # 2 — the menāqib of Emīr Sulṭān and of Yaḥyā
+      #                                            al-Mawṣulī: lives of holy men
+      "Hagiography": hagiography                 # 2 — the Vilāyetnāme of Ḥācı Bektaş, the Nüsḫatü'l-kübrā
+      "Sufism": theology                         # 1 — Vâhidi's Ṭavāʾif-i ʿaşere: the dervish orders in
+      #                                            verse — mystical-doctrinal, declared coarse (no
+      #                                            mysticism head exists)
+      "cosmology": theology                      # 1 — Aḥmed Bīcān's Envārü'l-ʿĀşıḳīn: creation and the
+      #                                            last things expounded for the faithful
+      "commentary": exegesis                     # 1 — Ḳonevī's commentary on Birgivî's Vaṣiyyetnāme
+      #                                            (commentary on a classic, the exegesis head)
+      "Commentary, Poetry": [exegesis, literary/poetry]  # 1 — Surūrī's commentary on Ḥāfiẓ, the
+      #                                            verse it explains quoted line by line
+      "Legal works": legal                       # 1 — the Behcet el-fetāvā: a collection of fatwas
+      "medicine": scholarly/medicine             # 3 — Manāfiʿ al-nās ×2, ʿAlī b. ʿUthmān's Muʿālecāt
+      #                                            (upstream writes "medicine" and "Medicine")
+      "Astrology": divination/astrology          # 2 — the Şemsiyye copies (Yazıcı Ṣāliḥ)
+      "Encyclopedias": scholarly                 # 1 — Manyasoğlu's ʿAjab al-ʿujāb: wonders of creation
+      "agriculture": scholarly                   # 2 — the Revnaḳ-ı Būstān copies: gardening and
+      #                                            husbandry (no agronomy sub — the bare head)
+      "Grammar": lexical/grammar                 # 2 — Ibrāhīm Efendi's Ṣarf-ı türkī, the Kitāb sih zabān
+      "Grammar, Dictionaries, Linguistics": [lexical/grammar, lexical/glossary]  # 1 — Gülşenī's
+      #                                            Baleybelen: grammar and lexicon of his constructed language
+    deliberate:
+      "Miscellany": "a mecmūʿa — the codex's form (a compilation of pieces), not a genre (1)"

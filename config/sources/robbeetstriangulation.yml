@@ -1,0 +1,23 @@
+robbeetstriangulation:
+  adapter: Nabu::Adapters::Robbeetstriangulation
+  adopted: "2026-11-27"
+  axes: [etym, turkic, mongolic, japonic, korean]
+  wired: true    # first sync verified 2026-11-27, exact: 3,173 cognate sets, 2 skipped by rule
+                 # EXPECTED FIRST SYNC (full-scale dry parse 2026-11-27 of
+                 # the pinned v0.3 zip): 1 document → 3,173 entries / 26,220
+                 # reflex rows (0 loan-flagged, 0 doubtful, 5,451
+                 # display-only); 0 forms outside the CognateTable; 4 judged
+                 # "?" cells mint no reflex; raw/ and plots/ skipped by rule
+                 # (2). Old Turkic 261, Codex Cumanicus 228.
+  sync_policy: manual
+  # Robbeets et al. 2021, Triangulation supports agricultural spread of the
+  # Transeurasian languages (Nature 599), lexibank CLDF edition v0.3
+  # (Zenodo 10.5281/zenodo.14614177, CC BY 4.0; the repository formerly
+  # lexibank/robbeetsaltaic): 101 Turkic, Mongolic, Tungusic, Koreanic and
+  # Japonic varieties — Old Turkic, Codex Cumanicus, the Secret History and
+  # Muqaddimat al-adab Middle Mongolian, Jurchen, Manchu, Late Middle
+  # Korean, Old Japanese beside the modern points — × 253 concepts, 3,173
+  # expert cognate sets headed by their concept, each set's root on its
+  # body. The source Value is the reflex word. Dictionary language `tut`
+  # (the registry's Altaic filing node; the grouping is the paper's
+  # hypothesis, not a registry claim).

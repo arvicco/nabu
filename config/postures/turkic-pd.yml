@@ -1,0 +1,16 @@
+sources:
+  turkic-pd:
+    # kind: machine-postured — kind_map.yml genre facet fold.
+    lect: {posture: identity, note: "the reference-shelf posture (africa-pd, mongolic-pd): each
+        work claims its PROSE language — lat 1 (Kuun), fra 1 (Thomsen), deu 2 (Radloff,
+        Vámbéry), all real anchors; the language presented rides metadata object_language,
+        never a claim — otk (Thomsen, Radloff) and xqa (Vámbéry's Qutadgu Bilig) are real
+        registry nodes; qwm (Cuman, Kuun) has no node yet and rides metadata only, so no
+        claim waits on it"}
+    dating: {posture: dated, note: "every work carries its print year (Radloff's bound series
+        1895–1899 as a span) — :structured lane"}
+    places: {posture: unplaced, note: "imprint places (Budapest, Helsingfors, St Petersburg,
+        Innsbruck) ride metadata 'imprint' — the printing place, not a text place"}
+    script: {posture: mixed, note: "Latin-script prose; Cuman, Persian and romanized Turkic
+        forms in Latin script; the runiform script, Radloff's Cyrillic-based transcriptions
+        and the Uyghur script are uncorrected OCR, garbled (declared per document)"}

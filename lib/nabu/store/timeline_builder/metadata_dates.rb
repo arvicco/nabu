@@ -295,6 +295,9 @@ module Nabu
           #                         original's artifact year (no class), a copy's act year
           #                         (class composition); place = the place of issue verbatim
           "local-library" => :year_key,
+          "makhzan" => :structured, # each Ottoman manuscript's Volume Date (the copy: a year,
+          #                           "c. 1500" circa, "17th c." a century), no class; place =
+          #                           upstream's Place of Origin when named (polity grain)
           "mazarinades" => :structured, # the bibliographic entry's typed dates (Moreau,
           #                               Mazarine, Carrier …: the narrowest year envelope);
           #                               place = the imprint pubPlace + its GeoNames ref
@@ -312,6 +315,9 @@ module Nabu
           #                               imprint rides "imprint" — no place claim
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
+          "tr-wikisource" => :structured, # each inscription's date: KT 732 / BK 735 from the texts' own
+          #                                 animal-cycle date lines (no class), Tonyukuk c. 716–726
+          #                                 attributed (class composition); place = the findspot
           "nb-no" => :structured, # P165: the item record's issued year (+ the untouched
           #                         imprint date where it differs), class edition; place =
           #                         the imprint place in the print's own form (Christianiae)
@@ -453,6 +459,8 @@ module Nabu
           "titus-sogdian" => :place_only, # the page findspot (one site every line resolves to)
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
+          "turkic-pd" => :structured, # each work's print year (the mongolic-pd mold; Radloff's
+          #                             bound series spans 1895–1899); imprint rides "imprint"
           "typikon-bible" => :structured, # P153: the edition year the dump records (1688, class
           #                                 edition) — no place claim
           "uk-wikisource" => :era_band_key,

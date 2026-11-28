@@ -1,0 +1,27 @@
+makhzan:   # 02-sources row 457
+  adapter: Nabu::Adapters::Makhzan
+  adopted: "2026-11-27"
+  axes: [turkic, arabic]
+  wired: true    # first sync verified 2026-11-27, exact: 30 docs / 3,762 passages, 178 skipped by rule. EXPECTED FIRST SYNC (dry parse of the real text members, 2026-11-27):
+                 # bin/nabu sync makhzan — the record API, the metadata TSV
+                 # (568 KB) and, by HTTP Range into the 6.1 GB zip64 deposit,
+                 # the outer directory + 30 nested document zips' ALTO/METS
+                 # members (measured 2,152,395 bytes in 372 requests, TSV
+                 # included; the page images never transferred; ≈ 4 min,
+                 # Zenodo answers a range in ~0.7 s).
+                 # EXPECT 30 docs / 3,762 passages (248 pages; 106 empty lines
+                 # mint nothing), 0 errored, 178 other-language documents
+                 # skipped by rule, 0 unrecognized. Eyeball nabu show
+                 # urn:nabu:makhzan:102:14122.1 (Vâhidi's Ṭavāʾif-i ʿaşere,
+                 # Leiden Or. 1076, 1569) and 5 random, probe nabu search
+                 # with وكيمني اهل كشف ايلدي, then flip.
+  # OpenITI MAKHZAN (Open Islamicate Texts Initiative, Zenodo record
+  # 19861912, version 2026.1.2, DOI 10.5281/zenodo.19861912): Arabic-script
+  # HTR/OCR ground truth transcribed line by line in eScriptorium, ALTO v4.
+  # This source takes the Ottoman Turkish manuscripts — 30 documents copied
+  # 1438–1869; document = manuscript, passage = transcribed line (page part +
+  # line ordinal). The other 178 documents (Arabic, Persian, Urdu, Malay,
+  # Javanese) are skipped by rule and never fetched. Record license field
+  # cc-by-nc-sa-4.0 (verified 2026-11-27) → nc. Zenodo versions are
+  # immutable; a new version is a new record → manual.
+  sync_policy: manual

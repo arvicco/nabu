@@ -1119,6 +1119,18 @@ gated (408 / 14,953; `research_private`), and two Wiktionary extracts,
 Jarring collection (15 / 4,934), `westoldturkic` — the West Old Turkic
 loanwords in Hungarian (480 entries), `altaica-shm` — Street's text of
 the Secret History of the Mongols (1 / 3,523).
+`tr-wikisource` — the Orkhon inscriptions of Kül Tigin, Bilge Kağan and
+Tonyukuk in runiform with transliteration, transcription and Turkish
+translation (3 / 214), `turkic-pd` — Kuun's Codex Cumanicus, Thomsen's
+and Radloff's Orkhon editions and Vámbéry's Kudatku Bilik as
+public-domain scans (4 / 2,069), `makhzan` — thirty Ottoman Turkish
+manuscripts of 1438–1869 transcribed line by line (30 / 3,762; nc);
+the dictionaries `wiktionary-ota` —
+Ottoman Turkish (10,016 entries) and `wiktionary-trk-oat` — Old
+Anatolian Turkish (607); and the cognate sets `savelyevturkic` — 32
+Turkic languages (905 sets) and `robbeetstriangulation` — the
+Transeurasian comparison across Turkic, Mongolic, Tungusic, Koreanic
+and Japonic (3,173 sets).
 
 **Arabic.** `diccas` — the Disaster Corpus in Classical Arabic Sources
 (10 / 879; nc); instruments `kitab-reuse` (the KITAB text-reuse

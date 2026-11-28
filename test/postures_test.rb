@@ -219,7 +219,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 219, lect.size,
+    assert_equal 225, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -526,7 +526,19 @@ class PosturesTest < Minitest::Test
                  "dio-epidoc ADDED — dates (the DI inscriptions' lat/deu stage by their own origDate " \
                  "band, the memis shape; gml bare, no stages): 217→218; " \
                  "hab-edoc ADDED — identity, the per-edition codes of HabEdoc::EDITIONS (lat/de/gml/it/" \
-                 "fr/grc; edition-class print years never stage): 218→219"
+                 "fr/grc; edition-class print years never stage): 218→219; " \
+                 "wiktionary-trk-oat ADDED — PENDING bare trk-oat (Wiktionary's Old Anatolian " \
+                 "Turkish code; the candidate is a codemap row onto ota's early edge or an " \
+                 "early-Ottoman stage): 219→220; " \
+                 "turkic-pd ADDED — identity, the reference-shelf posture (lat/fra/deu prose; " \
+                 "qwm/otk/xqa ride object_language): 220→221; " \
+                 "savelyevturkic and robbeetstriangulation ADDED — pending on the qwm (Cuman) " \
+                 "nabu-lects mint, both shelves' Codex Cumanicus rows; trk / tut identity " \
+                 "otherwise: 221→223; " \
+                 "tr-wikisource ADDED — identity otk (the Orkhon inscriptions' runiform lines, the " \
+                 "Old Turkic anchor; the Turkish translation an annotation layer): 223→224; " \
+                 "makhzan ADDED — identity ota (the OpenITI MAKHZAN Ottoman manuscripts, copied " \
+                 "1438–1869 inside the stageless ota band): 224→225"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -655,6 +667,14 @@ class PosturesTest < Minitest::Test
     # dbbe joins dates (the occurrences band into grc:byz by copying date): 33→34.
     # dio-epidoc joins dates (lat/deu staged by origDate band): 34→35.
     # hab-edoc joins identity (the per-edition EDITIONS codes): 160→161.
-    assert_equal({ "dates" => 35, "codemap" => 22, "identity" => 161, "pending" => 1 }, by_posture)
+    # wiktionary-trk-oat joins pending on a trk-oat registry row (ota's early
+    # edge, or an early-Ottoman stage): pending 1→2.
+    # turkic-pd joins identity (the reference-shelf posture: lat/fra/deu prose,
+    # qwm/otk/xqa in metadata object_language): 161→162.
+    # savelyevturkic and robbeetstriangulation join pending on the qwm
+    # (Cuman) anchor mint: pending 2→4.
+    # tr-wikisource joins identity (bare otk, the Orkhon runiform lines): 162→163.
+    # makhzan joins identity (ota; the registry's ota carries no stages): 163→164.
+    assert_equal({ "dates" => 35, "codemap" => 22, "identity" => 164, "pending" => 4 }, by_posture)
   end
 end

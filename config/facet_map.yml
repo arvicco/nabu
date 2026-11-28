@@ -351,6 +351,10 @@ sources:
     fields:
       author: author          # the census's attribution ("the Qianlong Emperor", "Nurhaci")
       work: work              # the work key (manju-i-yargiyan-kooli …) — joins a work's pages
+  tr-wikisource:              # 3 inscriptions
+    fields:
+      author: author          # the census's attribution ("Yollığ Tigin (the text's own signature …)")
+      work: work              # the work key (kul-tigin, bilge-kagan, tonyukuk)
   shiratori-shm:              # 1 edition
     fields:
       series: series          # "東洋文庫叢刊 第8 (The Tōyō Bunko Publications, Series C, Volume VIII)"
@@ -358,6 +362,10 @@ sources:
     fields:
       author: author          # "J.-M. Amiot; L. Langlès (ed.)" — the census's responsibility
       #                         line verbatim (Cyrillic names with their romanization)
+  turkic-pd:                  # 4 scanned volumes
+    fields:
+      author: author          # "W. Radloff; W. Barthold; F. Hirth" — the census's responsibility
+      #                         line verbatim (a bound series names every part's author)
   eebo-tcp:                   # 45,048 of 60,325 docs, 13,589 authors
     fields:
       author: author          # ESTC-style headings with life dates INSIDE the string

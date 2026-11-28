@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: turkic
   origin: generated
-  sources: "atmo ud westoldturkic wiktionary-recon wilkens-oui"
+  sources: "atmo makhzan robbeetstriangulation savelyevturkic tr-wikisource turkic-pd ud westoldturkic wiktionary-ota wiktionary-recon wiktionary-trk-oat wilkens-oui"
 ---
 
 # The Turkologist — the `turkic` desk
@@ -24,9 +24,16 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `atmo` | ATMO — Annotated Turki Manuscripts from the Jarring Collection Online | attribution |
+| `makhzan` | OpenITI MAKHZAN — Ottoman Turkish manuscript transcriptions | nc |
+| `robbeetstriangulation` | Robbeets et al. 2021 Transeurasian basic-vocabulary cognate sets (lexibank/robbeetstriangulation CLDF v0.3) | attribution |
+| `savelyevturkic` | Savelyev & Robbeets 2020 Turkic basic-vocabulary cognate sets (lexibank/savelyevturkic CLDF v2.1) | attribution |
+| `tr-wikisource` | Turkish Wikisource — the Orkhon inscriptions (Kül Tigin, Bilge Kağan, Tonyukuk) | attribution |
+| `turkic-pd` | PD Turkic reference shelf — Kuun's Codex Cumanicus, Thomsen, Radloff, Vámbéry's Kudatku Bilik (archive.org scans, uncorrected OCR) | open |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `westoldturkic` | West Old Turkic — Turkic loanwords in Hungarian (Róna-Tas & Berta 2011, CLDF) | attribution |
+| `wiktionary-ota` | Wiktionary Ottoman Turkish — kaikki.org machine-readable extract | attribution |
 | `wiktionary-recon` | Wiktionary reconstructions + attested Celtic, Italic, Etruscan, Old Japanese and Chinese — kaikki.org machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan, Chinese) | attribution |
+| `wiktionary-trk-oat` | Wiktionary Old Anatolian Turkish — kaikki.org machine-readable extract | attribution |
 | `wilkens-oui` | Wilkens — Handwörterbuch des Altuigurischen (Old Uyghur–German–Turkish, 2021) | attribution |
 <!-- nabu:skill-sources:end -->
 

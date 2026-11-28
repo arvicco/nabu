@@ -1,0 +1,19 @@
+wiktionary-ota:   # 02-sources row 448
+  adapter: Nabu::Adapters::WiktionaryOta
+  adopted: "2026-11-27"
+  axes: [turkic]
+  wired: true    # first sync verified 2026-11-27, exact: 10,016 entries
+                 # (one ~34 MB JSONL GET). EXPECTED FIRST SYNC: 1 dictionary doc →
+                 # 10,016 entries / 25,882 reflex rows (3,594 etymon + 22,288
+                 # descendant), 0 headwordless skips, 0 non-NFC (the 2026-10-30
+                 # extract's census, 2026-11-27); eyeball nabu define جهاد
+                 # ("jihad, holy war, crusade"), then flip.
+  # The kaikki Ottoman Turkish extraction (10,016 records / "8848 distinct
+  # words" / 15,251 senses, census 2026-11-27): the library's first Ottoman
+  # Turkish dictionary — Perso-Arabic headwords with Proto-Turkic, Arabic,
+  # Old Anatolian Turkish and Persian etymons, and descendant trees into
+  # Turkish, Armenian and the Balkan languages. Language ota. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (labelled DEPRECATED upstream — fallback = filter the full
+  # extract by lang_code ota), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

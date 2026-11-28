@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-ota
+adapter_test: test/adapters/wiktionary_ota_test.rb
+retrieved: 2026-11-27
+files:
+  - path: kaikki.org-dictionary-OttomanTurkish.jsonl
+    url: https://kaikki.org/dictionary/Ottoman%20Turkish/kaikki.org-dictionary-OttomanTurkish.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {آیا, جهاد},
+      byte-verbatim in upstream order, of 10,016 lines

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: arabic
   origin: generated
-  sources: "althurayya corpus-coranicum corpus-coranicum-manuscripts corpus-coranicum-variants diccas kitab kitab-reuse lane-lexicon ociana openiti pgp-geniza quranic-corpus wiktionary-ar"
+  sources: "althurayya corpus-coranicum corpus-coranicum-manuscripts corpus-coranicum-variants diccas kitab kitab-reuse lane-lexicon makhzan ociana openiti pgp-geniza quranic-corpus wiktionary-ar"
 ---
 
 # The Arabist — the `arabic` desk
@@ -31,6 +31,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `kitab` | KITAB Text Reuse Data — passim pairwise alignments over OpenITI (links instrument, pilot) | nc |
 | `kitab-reuse` | KITAB Text Reuse Data — pairwise statistics (intertext instrument) | nc |
 | `lane-lexicon` | Lane's Arabic-English Lexicon (Perseus digitization, Alpheios edition) | attribution |
+| `makhzan` | OpenITI MAKHZAN — Ottoman Turkish manuscript transcriptions | nc |
 | `ociana` | OCIANA — Online Corpus of the Inscriptions of Ancient North Arabia | research_private |
 | `openiti` | OpenITI — Open Islamicate Texts Initiative (premodern Arabic + Persian), release 2025.1.9 | nc |
 | `pgp-geniza` | Princeton Geniza Project — documentary Geniza editions and translations (pgp-metadata) | nc |

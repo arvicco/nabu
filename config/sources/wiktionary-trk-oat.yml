@@ -1,0 +1,22 @@
+wiktionary-trk-oat:   # 02-sources row 449
+  adapter: Nabu::Adapters::WiktionaryTrkOat
+  adopted: "2026-11-27"
+  axes: [turkic]
+  wired: true    # first sync verified 2026-11-27, exact: 607 entries
+                 # wiktionary-trk-oat (one ~1.7 MB JSONL GET). EXPECTED FIRST SYNC:
+                 # 1 dictionary doc → 607 entries / 3,816 reflex rows (438 etymon
+                 # + 3,378 descendant, 622 of them ota), 0 headwordless skips,
+                 # 0 non-NFC (the 2026-10-30 extract's census, 2026-11-27);
+                 # eyeball nabu define میوه ("fruit"), then flip.
+  # The kaikki Old Anatolian Turkish extraction (607 records / "426
+  # distinct words" / 1,013 senses, census 2026-11-27): the Oghuz literary
+  # stage before Ottoman — Proto-Turkic and Persian/Arabic etymons, and
+  # descendant trees into Ottoman Turkish, Turkish, Azerbaijani and Gagauz.
+  # Language trk-oat — Wiktionary's own code, verbatim (no ISO code; the
+  # wiktionary-recon proto-shelf stance); the lect registry has no trk-oat
+  # row yet, so the lect posture is pending (config/postures/). The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (labelled DEPRECATED upstream — fallback = filter the full
+  # extract by lang_code trk-oat), CC BY-SA + GFDL → attribution,
+  # FileFetch.
+  sync_policy: manual
