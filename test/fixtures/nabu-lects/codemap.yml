@@ -192,6 +192,10 @@ map:
   # of vi) onto the vi stage it names
   mkh-mvi: vi:mid
 
+  # Wiktionary's Old Anatolian Turkish (a full language code there,
+  # ancestor of ota) onto the ota stage it names — the mkh-mvi shape
+  trk-oat: ota:old
+
   # The ORACC Akkadian dialect suite (2026-09-27): ORACC's published
   # akk-x-* period/dialect codes onto the standing akk grid — universal
   # statements (the codes are ORACC's documented conventions, meaningful

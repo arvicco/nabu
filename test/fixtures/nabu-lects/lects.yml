@@ -2512,7 +2512,8 @@ anchors:
             note: "pre-1946 printings"}
 
   # ── The Turkic ladder (ISO 639-5 family + the literary-continuum
-  # chain: Old Turkic → Old Uyghur / Karakhanid → Chagatai) ─────────────────
+  # chain: Old Turkic → Old Uyghur / Karakhanid → Khwarezmian → Chagatai;
+  # Ottoman on its own Oghuz edge; the Kipchak branch below) ─────────────
 
   trk:
     name: Turkic
@@ -2522,9 +2523,11 @@ anchors:
             note: "Common Turkic + Oghur/Bulgar reconstructions. Corpus:
                    starling-turcet (2,017 etymologies, EDAL's Turkic branch
                    base)"}
-    note: "ISO 639-5. Family node only — modern Turkic languages stay
+    note: "ISO 639-5. Family node — modern Turkic languages stay
            unminted until consumers arrive; the historical literary
-           ladder below is what the library holds"
+           ladder below is what the library holds, with the Kipchak
+           branch (trk-kip) minted 2026-11-27 for its Cuman and
+           Karaim manuscript consumers"
 
   otk:
     name: Old Turkic
@@ -2535,10 +2538,26 @@ anchors:
                 720s–730s) and the Yenisei epitaphs, to the Uyghur
                 khaganate's fall"
     note: "the earliest attested Turkic: the runiform ('Orkhon
-           script') inscriptional language. Consumers: kaikki extract
-           (505 senses) + a CC0 UD treebank seed; no open runiform
-           corpus exists yet (bitig.kz down at survey — censused
-           2026-09-28)"
+           script') inscriptional language of the Second Türk
+           khaganate and its Uyghur successor. Attestation: the
+           central Orkhon stelae — the Tonyukuk inscription (c.
+           716–726, the minister's own memorial), the Kül Tigin
+           inscription (732) and the Bilge Kagan inscription (735),
+           the latter two with Chinese faces that fix their dates —
+           beside the Uyghur-khaganate stelae (Šine Usu, 750s) and
+           the marginal corpus: the Yenisei epitaphs of the Kyrgyz
+           (several hundred short funerary texts, dating disputed,
+           conventionally 8th–10th c., so their tail runs past the
+           band) and the scattered Altai, Talas and Mongolian finds;
+           over 500 runiform inscriptions are known in all (Tekin, A
+           Grammar of Orkhon Turkic, 1968; Erdal, A Grammar of Old
+           Turkic, 2004). Digital editions: the Uppsala Database of
+           Turkic Runiform Inscriptions (Károly & Rentzsch, eds.;
+           preliminary, 23 inscriptions at survey) and the runiform
+           strand of the Frankfurt VATEC corpus. Consumers: kaikki
+           extract (505 senses) + a CC0 UD treebank seed (bitig.kz
+           down at survey — censused 2026-09-28; the digital editions
+           re-surveyed 2026-11-27)"
 
   oui:
     name: Old Uyghur
@@ -2551,9 +2570,17 @@ anchors:
            continuation — Uyghur script (Sogdian-derived), plus
            Manichaean, Brahmi and runiform strands. Descent edge otk
            per the literary-continuum reading (the enm←ang shape).
-           Consumers: kaikki extract (632 senses) + the Wilkens
-           dictionary; the corpus (VATEC) is ask-gated (censused
-           2026-09-28)"
+           Attestation: the Turfan and Dunhuang manuscript finds —
+           Manichaean texts (the Xuastvanift confession), the
+           Buddhist translation literature from Tocharian, Chinese
+           and Sanskrit (Maitrisimit, the Altun Yaruq
+           Suvarṇaprabhāsa), and the civil and legal documents of
+           the 10th–14th c.; the pre-Islamic corpus is digitized as
+           the Frankfurt VATEC (Vorislamische alttürkische Texte:
+           Elektronisches Corpus; Erdal, Gippert, Röhrborn, Zieme et
+           al.), the reference Old Uyghur text corpus. Consumers:
+           kaikki extract (632 senses) + the Wilkens dictionary;
+           VATEC is ask-gated (censused 2026-09-28)"
 
   xqa:
     name: Karakhanid
@@ -2568,15 +2595,49 @@ anchors:
            2026-09-28); minted now so the ladder reads whole and
            kaikki's DLT-derived otk entries have their context"
 
+  zkh:
+    name: Khwarezmian Turkic
+    parent: xqa
+    band: [1250, 1400]
+    band_note: "the Golden Horde and Khwarezm literary horizon,
+                approximate: the 13th-c. interlinear Qurʾān
+                translations through Rabghūzī (1310), Quṭb (1341–42),
+                Khwārazmī (1353) and the Nahj al-farādīs (1358), to
+                the Timurid rise of Chagatai"
+    note: "ISO 639-3 zkh (reference name Khorezmian; historical) —
+           the TURKIC literary language of Khwarezm and the Golden
+           Horde, never to be confused with xco Chorasmian, the
+           Iranian language of the same oasis. A Karakhanid-based
+           Islamic literary norm in Arabic script carrying growing
+           Oghuz and Kipchak elements, it is the transitional link
+           between Karakhanid and Chagatai (Eckmann, 'Das
+           Chwarezmtürkische', Philologiae Turcicae Fundamenta I,
+           1959; Boeschoten & Vandamme in Johanson & Csató, The
+           Turkic Languages, 1998) — hence the xqa edge, and chg's
+           edge now runs through it (Wiktionary files zkh in Karluk
+           with ancestor xqa, and chg with ancestor zkh). Main
+           witnesses: Rabghūzī's Qiṣaṣ al-anbiyāʾ (1310), Quṭb's
+           Khusraw u Shīrīn (1341–42), Khwārazmī's Muḥabbatnāma
+           (1353), Maḥmūd b. ʿAlī's Nahj al-farādīs (1358), the
+           Muʿīn al-murīd, and the interlinear Qurʾān glosses. No
+           glottocode: Glottolog's khwa1238 'Khwarezmian' is the
+           Iranian xco, so none is stated. Consumers: the Uppsala
+           database of Middle Turkic manuscripts (Károly & Németh,
+           eds.), whose Khwarezmian Turkic manuscripts (2 at survey,
+           2026-11-27) are not yet ingested"
+
   chg:
     name: Chagatai
-    parent: xqa
+    parent: zkh
     band: [1400, 1920]
     band_note: "Nawāʾī's classical age through the late 'Turki' of
                 Central Asian chanceries and the Jarring-collection
                 manuscripts, approximate"
     note: "the great Perso-Arabic-script literary language of Central
-           Asia, continuing the Karakhanid tradition. The consuming
+           Asia, continuing the Karakhanid tradition through its
+           Khwarezmian Turkic stage (edge refined from xqa to zkh
+           2026-11-27, the most-specific-ancestor rule; the walk
+           still reaches xqa and otk). The consuming
            ATMO manuscripts (18th–20th c. Eastern 'Turki') sit at its
            late edge — the honest-coarse chg claim, with any finer
            late-Turki node a future call. Consumers: ATMO TEI + kaikki
@@ -2586,12 +2647,13 @@ anchors:
     name: Ottoman Turkish
     parent: trk
     glottocode: otto1234
-    band: [1299, 1928]
-    band_note: "the conventional dynastic span to the alphabet reform:
-                from the beylik's rise (the Old Anatolian Turkish of
-                the 13th–15th c. is conventionally folded into the
-                code's early edge) to the 1928 Latin-script law that
-                closes the Perso-Arabic written tradition"
+    band: [1200, 1928]
+    band_note: "the Anatolian Oghuz written tradition to the alphabet
+                reform: from the earliest Old Anatolian Turkish texts
+                (13th c., now the ota:old stage; the band opened at the
+                beylik's rise, 1299, until that stage was minted
+                2026-11-27) to the 1928 Latin-script law that closes
+                the Perso-Arabic written tradition"
     note: "the Perso-Arabic-script literary and chancery language of
            the Ottoman state — OGHUZ Turkic, continuing Old Anatolian
            Turkish, NOT the otk Orkhon lineage (Kerslake in Johanson &
@@ -2601,7 +2663,154 @@ anchors:
            strata over a Turkic frame. Consumers: the UD Ottoman
            treebank (5 docs) + 8,556 Wiktionary etymology lines — the
            single largest unanchored historical code in the held etym
-           layer (censused 2026-11-13)"
+           layer (censused 2026-11-13). Periodization (Kerslake;
+           Doerfer's Altosmanisch): Old Anatolian Turkish, 13th–15th
+           c. (staged below — Wiktionary codes it trk-oat, ota's
+           ancestor); Middle Ottoman, 16th–18th c.; New Ottoman,
+           19th c. to 1928 — the later two unminted, no consuming
+           code or source tagging them, so post-1500 text stays bare
+           ota"
+    stages:
+      old: {name: Old Anatolian Turkish, band: [1200, 1500], ord: 10,
+            wikt: trk-oat,
+            band_note: "13th–15th c., approximate: from the first
+                        Anatolian Oghuz texts (Sultan Veled's Turkish
+                        verses, 1277–1301; the Seljuk-era poets) to
+                        the conventional c. 1500 close, when the
+                        classical Ottoman written norm is established",
+            note: "Eski Anadolu Türkçesi, the Oghuz literary language
+                   of Seljuk and beylik Anatolia in Arabic script,
+                   before the Ottoman norm absorbed it: Yunus Emre
+                   (d. c. 1320), Âşık Paşa's Garībnāme (1330),
+                   Gülşehrī, Ahmedī's İskendernāme (c. 1390), Şeyhī,
+                   the translation literature commissioned by the
+                   beyliks, and the early Ottoman chronicles. Mostly
+                   Turkic in lexicon beside the later Persianized
+                   norm; Wiktionary's trk-oat (a full language code
+                   there, ancestor of ota, descended from Early
+                   Oghuz trk-eog) lands here — a stage of the
+                   continuing Anatolian Oghuz lineage, the ohu → hu:old
+                   shape"}
+
+  # ── Kipchak (Northwest Turkic): the family node, its Ponto-Caspian
+  # subgroup, and the historical and Hebrew-script members ────────────────
+
+  trk-kip:
+    name: Kipchak
+    kind: family
+    parent: trk
+    glottocode: kipc1239
+    note: "established Wiktionary family code (no ISO 639-5 code):
+           Johanson's Northwest Turkic, the Kipchak languages of the
+           western steppe, the Volga–Urals and the Caucasus — Tatar
+           and Bashkir (Kipchak-Bulgar), Kazakh, Karakalpak and Nogai
+           (Kipchak-Nogai), Kyrgyz (Kyrgyz-Kipchak, by Wiktionary's
+           and Glottolog's reading) and the Ponto-Caspian group
+           (trk-kcu), beside the historical Cuman/Kipchak of the
+           medieval steppe and Mamluk Egypt (qwm). The parent edge
+           reads trk directly: the Common Turkic intermediate
+           (Wiktionary trk-cmn, Glottolog comm1245 — everything but
+           Oghur) is real but unminted, the otk/ota edges' standing
+           discipline (Johanson, 'The history of Turkic', in Johanson
+           & Csató, The Turkic Languages, 1998). Glottolog kipc1239
+           (Kipchak, under its Kipchak-Turkestan node) matches the
+           Wiktionary scope member for member. Only the members the
+           consuming sources need are minted (2026-11-27)"
+
+  trk-kcu:
+    name: Kipchak-Cuman
+    kind: family
+    parent: trk-kip
+    glottocode: west1472
+    note: "established Wiktionary family code (alias Ponto-Caspian;
+           no ISO 639-5 code): the western Kipchak languages named
+           after the Cuman of the Pontic steppe — Karaim (kdr),
+           Krymchak, Crimean Tatar (its northern steppe dialects),
+           Urum, Karachay-Balkar and Kumyk (Baskakov's Kipchak-
+           Polovtsian; Johanson's West Kipchak). Glottolog west1472
+           (West Kipchak) holds exactly these six; its intermediate
+           Northwest Kipchak node is not modeled. qwm itself is NOT
+           under this node — its code's scope reaches Mamluk and
+           Armeno-Kipchak beyond the Ponto-Caspian group, so it
+           parents trk-kip (Wiktionary's placement too)"
+
+  qwm:
+    name: Cuman (Kipchak)
+    parent: trk-kip
+    glottocode: cuma1241
+    band: [1245, 1700]
+    band_note: "the written record, approximate: the Mamluk Arabic–
+                Kipchak glossary of the Houtsma codex (dated 1245)
+                and the Codex Cumanicus (its Interpreter's part dated
+                1303) through the Armeno-Kipchak chancery and court
+                records of the 16th–17th c.; the language's last
+                Hungarian remnants (the Cuman Lord's Prayer) trail
+                into the 18th c. outside the band"
+    note: "ISO 639-3 qwm (reference name Kuman (Russia); extinct) —
+           the language of the Cumans/Qıpčaq (Polovtsy) of the
+           11th–13th-c. Pontic–Caspian steppe and its written
+           continuations; Wiktionary's canonical name for the code is
+           Kipchak and its scope takes in all three historical
+           strands: (1) the Codex Cumanicus (Venice, Biblioteca
+           Marciana, Cod. Lat. Z. 549) — a Latin-script Cuman
+           glossary and missionary text collection from the Crimean
+           Genoese and Franciscan milieu, the Italian
+           'Interpreter's Book' dated 1303 and the German
+           'Missionaries' Book' with its riddles, hymns and
+           catechetical texts of the 14th c. (editions: Kuun 1880;
+           Grønbech's facsimile 1936 and Komanisches Wörterbuch
+           1942; Drimba 2000); (2) Mamluk Kipchak, the
+           Arabic-script grammars and glossaries written for the
+           Kipchak military elite of Egypt and Syria (the Houtsma
+           glossary 1245; Abū Ḥayyān's Kitāb al-idrāk li-lisān
+           al-atrāk, 1312/13); (3) Armeno-Kipchak, the Armenian-script
+           records of the Armenian communities of Kamianets-Podilskyi
+           and Lviv (16th–17th c.). Kipchak in classification
+           (Johanson 1998): the eponym of the Kipchak-Cuman group,
+           whose members continue its dialects, but the edge stays
+           at trk-kip since the code spans more than that group
+           (trk-kcu's note). Glottolog files cuma1241 as a dialect
+           under Crimean Tatar within West Kipchak — a narrower
+           reading kept as the crosswalk only. Consumers: Kuun's
+           1880 Codex Cumanicus edition and the Cuman rows of two
+           Lexibank wordlists (2026-11-27)"
+
+  kdr:
+    name: Karaim
+    parent: trk-kcu
+    glottocode: kara1464
+    band: [1648, null]
+    band_note: "the written record, approximate: the oldest known
+                Karaim manuscript (JSul.III.02, an East Karaim
+                translation of the Former Prophets, Ruth, Esther and
+                Proverbs, created 1648–1687 — Németh 2016) and the
+                first West Karaim text of 1671; open — Northwest
+                (Trakai) Karaim is still spoken"
+    note: "the Kipchak Turkic language of the Karaite Jews of Crimea,
+           Lithuania and Galicia–Volhynia, written in Hebrew script
+           until the 20th c. (Latin and Cyrillic after). Three
+           varieties: Northwest (Trakai/Vilnius, the only living
+           one), Southwest (Halych/Lutsk, last fluent speaker d.
+           2003) and East (Crimean, largely assimilated to Crimean
+           Tatar) —
+           deliberately not minted as varieties until a consumer
+           tags them. Its literature is above all Bible translation
+           in a common tradition shared across the communities,
+           plus the piyyut interpretations, letters and community
+           records (Németh, Middle Western Karaim, 2020; Csató &
+           Nathan, Spoken Karaim, 2002). The field's Middle vs Modern
+           Karaim divide (the pre-19th-c. sources vs the 19th–20th-c.
+           language) is real but its close is drawn differently
+           across the literature (Németh's Middle Western Karaim
+           edition stops before 1800; the Uppsala Middle Turkic
+           database's frame runs to 1917), so no stage is minted —
+           the bare anchor is the honest claim, a future kdr:mid
+           the shape if a dated grid settles. Consumers: the
+           Uppsala database of Middle Turkic manuscripts (Károly &
+           Németh, eds.; the KaraimBIBLE project's contribution),
+           whose Middle Karaim manuscripts (12 at survey, e.g.
+           ADub.III.73, the 1720 Torah and Haftarah) are not yet
+           ingested (2026-11-27)"
 
   # ── Mongolic and Tungusic (ISO 639-5 families, one anchor each) ───────────
 
