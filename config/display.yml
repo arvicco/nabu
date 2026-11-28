@@ -63,6 +63,11 @@ languages:
   # Persian corpus is censused.
   ara: { strip: [quranic-marks], keep: [tashkeel], isolates: true }
   fas: { isolates: true }
+  # Ottoman Turkish (makhzan's manuscripts, ottoman-ocr's printed books) is
+  # Arabic-script at home: the fas claim — isolates only. Its texts are
+  # mostly unpointed; the vocalized dîvân and Bible pages are censused
+  # nowhere yet as a mark class to strip, so nothing is.
+  ota: { isolates: true }
   san: { strip: [vedic-accents] } # Devanagari-script text; the IAST shelves are untouched
   chu: { strip: [titla] }
   orv: {}

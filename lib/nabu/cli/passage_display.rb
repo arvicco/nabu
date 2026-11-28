@@ -38,7 +38,7 @@ module Nabu
       # passage's source (the show family) pass them so `--display reading`
       # can apply the per-source convention rules and the ketiv/qere choice;
       # everywhere else the language-level policies alone apply.
-      def display_text(text, language, source: nil, annotations: nil)
+      def display_text(text, language, source: nil, annotations: nil, script: nil)
         @display_gaiji_ladder = true if source && display_source_policies[source]&.gaiji == "ladder"
         rendered = Nabu::Display.render(text.to_s, language: language,
                                                    mode: display_mode, policies: display_policies,
@@ -46,7 +46,8 @@ module Nabu
                                                    source_policies: display_source_policies,
                                                    gaiji_map: gaiji_map_for(source),
                                                    gaiji_ids: gaiji_ids_for(source),
-                                                   gaiji_substitutes: gaiji_substitutes_for(source))
+                                                   gaiji_substitutes: gaiji_substitutes_for(source),
+                                                   script: script)
         display_applied.merge(rendered.applied)
         record_gaiji(rendered.gaiji)
         rendered.text

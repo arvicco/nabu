@@ -1,0 +1,36 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a documented trim of a larger file in the pinned commit of
+# github.com/koras0ff/OttomanOCR-search (bac65b67166c): the works cut to two
+# or three pages, the manifest to the works carried, the superseded JSON to
+# one page. Re-cut per the README recipe.
+source: ottoman-ocr
+adapter_test:
+retrieved: '2026-11-28'
+files:
+- path: data/Kanunnamei_Ali_Osman.js
+  whole: false
+  trim: the work cut to a few pages, upstream serialization kept (see README)
+  refetchable: false
+  reason: a trim of data/Kanunnamei_Ali_Osman.js at commit bac65b67166c — a fresh fetch returns the whole file
+- path: data/esariziyapasa.js
+  whole: false
+  trim: the work cut to a few pages incl. its calibration chart (see README)
+  refetchable: false
+  reason: a trim of data/esariziyapasa.js at commit bac65b67166c — a fresh fetch returns the whole file
+- path: data/manifest.js
+  whole: false
+  trim: the manifest cut to the three works this fixture carries (see README)
+  refetchable: false
+  reason: a trim of data/manifest.js at commit bac65b67166c — a fresh fetch returns the whole file
+- path: data/tarihipeevi01peuoft.js
+  whole: false
+  trim: the work cut to a few pages (see README)
+  refetchable: false
+  reason: a trim of data/tarihipeevi01peuoft.js at commit bac65b67166c — a fresh fetch returns the whole file
+- path: transcriptions_ziyapasa.json
+  whole: false
+  trim: one page of the superseded OCR pass (the rejected grain's specimen; see README)
+  refetchable: false
+  reason: a trim of transcriptions_ziyapasa.json at commit bac65b67166c — a fresh fetch returns the whole file

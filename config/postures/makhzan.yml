@@ -2,12 +2,10 @@ sources:
   makhzan:
     # kind: machine-postured — the makhzan fold in kind_map.yml over the TSV's
     # Genre column (metadata "genre").
-    lect: {posture: identity, note: "ota IS the claim: every manuscript is Ottoman Turkish by
-        upstream's own Language column and ALTO LANG (a few pages LANG=mul, the
+    lect: {posture: dates, note: "ota by upstream's own Language column and ALTO LANG (a few pages LANG=mul, the
         Arabic/Persian/Baleybelen admixture kept as metadata languages/language_codes); the
-        copies run 1438–1869, inside the registry's ota band (1299–1928) — the 1438/1440/1459
-        copies sit in the Old Anatolian edge the band note folds in; ota has no stages, so no
-        finer claim exists to make"}
+        copies run 1438–1869 and stage by their copy date: the 1438/1440/1459 copies fall in
+        ota:old (1200–1500), the rest stay on the bare ota anchor, which has no later stage"}
     dating: {posture: dated, note: "all 30: the TSV's Volume Date — the manuscript copy's date
         (artifact date, no class): 27 single years, two \"c. 1500\" (circa flag), one \"17th
         c.\" (1601–1700) — :structured lane"}

@@ -1524,7 +1524,7 @@ module Nabu
           results.each do |result|
             say "#{result.urn}#{" [#{result.language}]" if result.language}" \
                 "#{"  — #{result.document_title}" if result.document_title}"
-            say "  #{result.layer}: #{display_snippet(result.snippet, nil)}"
+            say "  #{result.layer}: #{display_layer(result.snippet, nil)}"
             say "  original: #{display_snippet(truncate_line(result.text), result.language)}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} in annotation-held translations " \
@@ -1580,7 +1580,7 @@ module Nabu
           results.each do |result|
             say "#{result.urn}#{" [#{result.language}]" if result.language}" \
                 "#{"  — #{result.document_title}" if result.document_title}"
-            say "  #{result.layer}: #{display_snippet(result.snippet, result.language)}"
+            say "  #{result.layer}: #{display_layer(result.snippet, result.language)}"
             say "  text: #{display_snippet(truncate_line(result.text), result.language)}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} in declared annotation layers " \

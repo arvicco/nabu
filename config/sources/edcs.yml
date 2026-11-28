@@ -1,0 +1,31 @@
+edcs:   # 02-sources row 458
+  adapter: Nabu::Adapters::Edcs
+  adopted: "2026-11-28"
+  axes: [epigraphy]
+  # The edh/edr epigraphy precedent: damaged Latin inscriptions are the
+  # trigram fragment desk's designed constituency, and silver lemmas land
+  # only where Lewis-Short attests them (invented proper-name nominatives
+  # are the epigraphic error class).
+  fuzzy_index: true
+  lemma_dictionary_filter: true
+  wired: true    # FIRST SYNC LANDED 2026-11-28 exactly as expected (513,781 / 513,781; 23,481 skipped by rule). EXPECTED FIRST SYNC (whole-file dry parse through the adapter, 2026-11-28):
+                 # bin/nabu sync edcs — ONE streamed Zenodo GET, 465,523,658 B
+                 # (sha256 + md5 pinned in the adapter), the same size canonical.
+                 # EXPECT 513,781 docs / 513,781 passages, 0 errored; skipped by
+                 # rule 23,481 (6,997 without an inscription, 12,549 without a
+                 # letter — EDCS's "?" — and 3,935 repeated copies), 0
+                 # unrecognized. Parse ~48 s single-process measured; the load and
+                 # index stages scale like edr's (~600K passages). Eyeball nabu
+                 # show urn:nabu:edcs:24900077 (Q. Caecilius Metellus at Argos,
+                 # 68 BCE) and 5 random, probe nabu search "Leivei salve"
+                 # (urn:nabu:edcs:24700151), then flip.
+  # EDCS — the Epigraphik-Datenbank Clauss-Slaby (db.edcs.eu; Manfred
+  # Clauss et al.), Latin inscriptions of the whole empire, in the SDAM
+  # project's cleaned scrape (Aarhus University; Zenodo record 7072337,
+  # "EDCS" v2.0, 2022-09-12, license field cc-by-4.0 → attribution,
+  # credited to EDCS and SDAM). One JSON array, 537,262 records — the count
+  # the record advertises. Document = inscription; the raw EDCS text is the
+  # passage, SDAM's two cleanings ride as annotations. Overlaps edh/edr by
+  # design (separate databases, never deduplicated). Frozen: the scrape is
+  # dated and the Zenodo file immutable — a new deposit is an owner re-pin.
+  sync_policy: frozen

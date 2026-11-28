@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one file is thirteen records cut byte-for-byte from the 465 MB dump and
+# re-wrapped as an array; a fresh fetch returns the whole dump, so the entry
+# is not refetchable for comparison. Re-cut per the README recipe.
+source: edcs
+adapter_test:
+retrieved: '2026-11-28'
+files:
+- path: EDCS_text_cleaned_2022-09-12.json
+  whole: false
+  trim: thirteen records of the 537,262 in the dump, each byte-identical (see README)
+  refetchable: false
+  reason: a cut of https://zenodo.org/records/7072337/files/EDCS_text_cleaned_2022-09-12.json (465,523,658 bytes) — a fresh fetch returns the whole dump

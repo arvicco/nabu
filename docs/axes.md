@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (43): `aio`, `armepic`, `ceipom`, `ceipp-rongorongo`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `dio-epidoc`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pgp-geniza`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
+**Members** (44): `aio`, `armepic`, `ceipom`, `ceipp-rongorongo`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `dio-epidoc`, `edcs`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pgp-geniza`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 
@@ -155,7 +155,7 @@ The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta ma
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
-**Members** (14): `althurayya`, `corpus-coranicum`, `corpus-coranicum-manuscripts`, `corpus-coranicum-variants`, `diccas`, `kitab`, `kitab-reuse`, `lane-lexicon`, `makhzan`, `ociana`, `openiti`, `pgp-geniza`, `quranic-corpus`, `wiktionary-ar`
+**Members** (15): `althurayya`, `corpus-coranicum`, `corpus-coranicum-manuscripts`, `corpus-coranicum-variants`, `diccas`, `kitab`, `kitab-reuse`, `lane-lexicon`, `makhzan`, `ociana`, `openiti`, `ottoman-ocr`, `pgp-geniza`, `quranic-corpus`, `wiktionary-ar`
 
 ### hittite
 
@@ -252,7 +252,7 @@ The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscr
 
 The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscripts (line-by-line TEI, Perso-Arabic with transliteration) and the kaikki Old Turkic / Old Uyghur / Chagatai extracts — the Wilkens Old Uyghur dictionary and the runiform inscriptions joining as their packets and asks land.
 
-**Members** (12): `atmo`, `makhzan`, `robbeetstriangulation`, `savelyevturkic`, `tr-wikisource`, `turkic-pd`, `ud`, `westoldturkic`, `wiktionary-ota`, `wiktionary-recon`, `wiktionary-trk-oat`, `wilkens-oui`
+**Members** (13): `atmo`, `makhzan`, `ottoman-ocr`, `robbeetstriangulation`, `savelyevturkic`, `tr-wikisource`, `turkic-pd`, `ud`, `westoldturkic`, `wiktionary-ota`, `wiktionary-recon`, `wiktionary-trk-oat`, `wilkens-oui`
 
 ### mongolic
 

@@ -3,6 +3,7 @@
 require "digest"
 require "fileutils"
 require "json"
+require "tmpdir"
 require "faraday"
 
 require_relative "../redirect_follow"
@@ -45,6 +46,14 @@ module Nabu
   # last_modified pin for drift (Health::RemoteProbe via HttpProbeTarget's
   # state_file).
   #
+  # == Stream mode (+stream: true+, the hundreds-of-MB single files)
+  #
+  # The body streams chunk by chunk into a staging file in a private temp
+  # dir (never under +dir+), sha256 + md5 minted incrementally — the
+  # ZipFetch stream mold. complete! moves the staged file into place;
+  # cleanup! removes the staging dir and must run in an ensure (a fetch
+  # aborted between the phases leaves the live tree byte-unchanged).
+  #
   # The GET follows redirects (RedirectFollow, the ZipFetch doctrine):
   # If-Modified-Since rides every hop, a 304 is honored pre-redirect or from
   # the mirror, and the state file keys off the ORIGINAL url — never the
@@ -79,8 +88,11 @@ module Nabu
       Result.new(sha: fetch.sha, atticked: fetch.atticked, not_modified: fetch.not_modified?)
     end
 
-    def initialize(url:, dir:, filename:, attic_dir:, http: self.class.default_http, progress: nil)
+    def initialize(url:, dir:, filename:, attic_dir:, http: self.class.default_http, progress: nil,
+                   stream: false)
       @url = url
+      @stream = stream
+      @staging = nil
       @dir = dir
       @filename = filename
       @attic_dir = attic_dir
@@ -108,16 +120,18 @@ module Nabu
 
     # Phase 1 — download; live tree untouched.
     def prepare!
-      response = get_file
+      response = @stream ? stream_file! : get_file
       if response.status == 304
         @not_modified = true
         @sha = state["sha256"]
         return
       end
 
-      @body = response.body.to_s.b
-      @sha = Digest::SHA256.hexdigest(@body)
-      @md5 = Digest::MD5.hexdigest(@body)
+      unless @stream
+        @body = response.body.to_s.b
+        @sha = Digest::SHA256.hexdigest(@body)
+        @md5 = Digest::MD5.hexdigest(@body)
+      end
       @new_last_modified = response.headers["last-modified"]
       @doomed_relpaths = live_relpaths - [@filename]
     end
@@ -134,19 +148,64 @@ module Nabu
 
       attic_doomed!
       FileUtils.mkdir_p(@dir)
-      File.binwrite(File.join(@dir, @filename), @body)
+      if @stream
+        FileUtils.mv(staged_path, File.join(@dir, @filename))
+      else
+        File.binwrite(File.join(@dir, @filename), @body)
+      end
       @doomed_relpaths.each { |rel| FileUtils.rm_f(File.join(@dir, rel)) }
       write_state!
     end
 
+    # Stream mode's staging dir goes (a no-op otherwise); callers run it in
+    # an ensure.
+    def cleanup!
+      FileUtils.remove_entry(@staging) if @staging && Dir.exist?(@staging)
+      @staging = nil
+    end
+
     private
+
+    def staged_path
+      @staging ||= Dir.mktmpdir("nabu-file-fetch")
+      File.join(@staging, @filename)
+    end
+
+    # Stream mode: chunks land in the staging file as they arrive. The
+    # per-hop sink factory truncates the file and resets the digests at
+    # the start of every hop, so a redirect hop's body never pollutes the
+    # terminal artifact; a transport that ignores on_data and buffers
+    # anyway falls back to the buffered body.
+    def stream_file!
+      sha_digest = Digest::SHA256.new
+      md5_digest = Digest::MD5.new
+      response = nil
+      File.open(staged_path, "wb") do |file|
+        sink = lambda do
+          file.truncate(0)
+          file.rewind
+          sha_digest.reset
+          md5_digest.reset
+          proc { |chunk, _received| [file, sha_digest, md5_digest].each { |sink_part| sink_part << chunk } }
+        end
+        response = get_file(stream: sink)
+        return response if response.status == 304
+
+        streamed_bytes = file.size
+        fallback = response.body.to_s.b
+        [file, sha_digest, md5_digest].each { |part| part << fallback } if streamed_bytes.zero? && !fallback.empty?
+      end
+      @sha = sha_digest.hexdigest
+      @md5 = md5_digest.hexdigest
+      response
+    end
 
     # Redirects followed (the DSpace/figshare mirror shape); a 304 — first
     # hop or post-redirect — is a terminal answer, not an error.
-    def get_file(headers = conditional_headers)
+    def get_file(headers = conditional_headers, stream: nil)
       @progress&.call("Downloading #{@url}…\n")
       response, = RedirectFollow.get(@url, http: @http, error: Error,
-                                           headers: headers, accept: [200, 304])
+                                           headers: headers, accept: [200, 304], stream: stream)
       response
     end
 

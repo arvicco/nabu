@@ -4,19 +4,8 @@ sources:
   robbeetstriangulation:
     kind: {posture: unclassified, note: "a dictionary shelf — basic-vocabulary cognate sets;
         kind folds documents only"}
-    lect: {posture: pending, note: "candidate qwm — the Codex Cumanicus row (228 reflexes)
-        carries upstream's ISO qwm (Cuman), not yet a nabu-lects anchor; it resolves bare
-        until the mint reaches canonical, then this flips to identity. Everything else is
-        identity today: tut — the registry's Altaic filing node, the dataset's own
-        Transeurasian hypothesis (a filing place, not a genealogical claim; tut:pro is not
-        claimed — no reconstructed variety); upstream's ISO codes ride verbatim — ojp, mnc
-        and jpn on their anchors, kor through the codemap to ko, the Old Turkic row on oui
-        (refinement to otk left to the registry), the modern Turkic/Mongolic/Tungusic/
-        Ryukyuan codes bare; the adapter maps the two Middle Mongolian rows (no ISO
-        upstream) to xng and the (Late) Middle Korean row (upstream ISO kor — the modern
-        language — Glottocode late1258) to okm, the Middle Korean anchor, declared coarse (an
-        okm → okm:lmk override row would stage it, but a machine override retires this
-        declaration — it waits for the qwm flip); the 22 ISO-less varieties display-only"}
+    # lect machine-postured — the okm → okm:lmk row in lect_overrides.yml (its
+    # comment carries the shelf's whole lect reading).
     dating: {posture: undatable, note: "a reference dataset (Robbeets et al. 2021) — no dates"}
     places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
         findspots — no place claim at dictionary grain"}

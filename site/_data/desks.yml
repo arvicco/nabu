@@ -11,7 +11,7 @@
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 43
+  members: 44
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
@@ -52,7 +52,7 @@
 - slug: arabic
   persona: The Arabist
   blurb: the Islamicate library whole, Quran and hadith to falsafa and adab
-  members: 14
+  members: 15
 - slug: hittite
   persona: The Hittitologist
   blurb: Anatolia in cuneiform, KBo and KUB by tablet and line
@@ -102,7 +102,7 @@
 - slug: turkic
   persona: The Turkologist
   blurb: the runiform steppe to the Chagatai chancery, one literary continuum
-  members: 12
+  members: 13
 - slug: mongolic
   persona: The Mongolist
   blurb: the Secret History's empire in its own words, hanzi transcription beside

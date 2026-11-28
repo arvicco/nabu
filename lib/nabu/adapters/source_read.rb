@@ -105,6 +105,26 @@ module Nabu
       end
       private_class_method :check_lines
 
+      # Open +path+ for binary ranged reads and yield the handle — for files
+      # too big to read whole, whose records are read by offset through
+      # #utf8_at.
+      def binary_file(path, &)
+        File.open(path, "rb", &)
+      end
+
+      # Exactly +length+ bytes of the open +io+ from +offset+ as UTF-8 text
+      # through #utf8, or Nabu::ParseError "<label> <offset>+<length> reaches
+      # past the end of the file" — never a short read decoded as if whole.
+      def utf8_at(io, offset:, length:, label:)
+        io.seek(offset)
+        bytes = io.read(length).to_s
+        if bytes.bytesize != length
+          raise Nabu::ParseError, "#{label} #{offset}+#{length} reaches past the end of the file"
+        end
+
+        utf8(bytes, label: label)
+      end
+
       # Open the ZIP archive at +path+ (a Nabu::ZipReader over its bytes) —
       # the belt's one binary read. Structural defects stay
       # Nabu::ZipReader::Error: each caller maps it onto its own contract

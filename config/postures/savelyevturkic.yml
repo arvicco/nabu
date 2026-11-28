@@ -6,15 +6,14 @@ sources:
   savelyevturkic:
     kind: {posture: unclassified, note: "a dictionary shelf — basic-vocabulary cognate sets;
         kind folds documents only"}
-    lect: {posture: pending, note: "candidate qwm — a Cuman anchor (ISO 639-3 qwm, the Codex
-        Cumanicus language) is not yet in the nabu-lects registry; the adapter maps the
-        upstream Cuman row (229 reflexes, no ISO upstream) to qwm, which resolves bare until
-        the mint reaches canonical, then this flips to identity. Everything else is identity
-        today: trk — the registry's Turkic family anchor (no reconstructed variety, so trk:pro
-        is not claimed); the Old Turkic row on upstream's ISO oui (the registry's Old Uyghur
-        under otk — upstream names it Old Turkic, sourced from Clauson's pre-13th-century
-        dictionary; the otk/oui refinement is left to the registry); the modern Turkic ISO
-        codes bare (no registry nodes); the five ISO-less varieties display-only"}
+    lect: {posture: identity, note: "qwm — the adapter maps the upstream Cuman row (229
+        reflexes, no ISO upstream) to qwm, the registry's Cuman anchor (minted 2026-11-28 under
+        trk-kip). trk — the registry's Turkic family anchor (no reconstructed variety, so
+        trk:pro is not claimed); the Old Turkic row on upstream's ISO oui (the registry's Old
+        Uyghur under otk — upstream names it Old Turkic, sourced from Clauson's
+        pre-13th-century dictionary; the otk/oui refinement is left to the registry); the
+        modern Turkic ISO codes bare (no registry nodes); the five ISO-less varieties
+        display-only"}
     dating: {posture: undatable, note: "a reference dataset (Savelyev & Robbeets 2020) — no
         dates"}
     places: {posture: unplaced, note: "variety coordinates are doculect reference points, not

@@ -599,6 +599,21 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # EDCS: the dump's inscr_type genus labels, one genre facet row each.
+  def test_shipped_edcs_folds_the_genus_labels
+    shipped = shipped_kinds
+    assert_equal "genre", shipped.facet_for("edcs")
+    assert_equal ["funerary/epitaph"], shipped.normalize("edcs", "tituli sepulcrales")
+    assert_equal ["mark/maker"], shipped.normalize("edcs", "tituli fabricationis")
+    assert_equal ["boundary/milestone"], shipped.normalize("edcs", "miliaria")
+    assert_empty shipped.normalize("edcs", "inscriptiones christianae"), "a cult context, declared deliberate"
+    assert_empty shipped.normalize("edcs", "reges"), "a person category, declared deliberate"
+    ["tituli sacri", "tituli possessionis", "tituli operum", "tituli honorarii", "carmina", "signacula",
+     "diplomata militaria", "leges", "termini", "defixiones", "senatus consulta"].each do |label|
+      refute_empty shipped.normalize("edcs", label), "#{label}: every censused label folds"
+    end
+  end
+
   # The OpenITI MAKHZAN Ottoman manuscripts: the TSV's Genre column, case-folded.
   def test_shipped_makhzan_folds_the_tsv_genres
     shipped = shipped_kinds
@@ -611,6 +626,22 @@ class KindsTest < Minitest::Test
      "commentary", "Legal works", "medicine", "Astrology", "Encyclopedias", "agriculture", "Grammar",
      "Grammar, Dictionaries, Linguistics"].each do |genre|
       refute_empty shipped.normalize("makhzan", genre), "#{genre}: every censused genre folds"
+    end
+  end
+
+  # OttomanOCR-search: the per-work fold over metadata "work" (upstream's
+  # genre field says only "book/printed material" / "periodicals").
+  def test_shipped_ottoman_ocr_folds_every_work_by_its_id
+    shipped = shipped_kinds
+    assert_equal %w[work], shipped.metadata_for("ottoman-ocr")
+    assert_equal ["literary/diary/travelogue"], shipped.normalize("ottoman-ocr", "evliyaelebisey05evliuoft")
+    assert_equal ["legal/law"], shipped.normalize("ottoman-ocr", "Kanunnamei_Ali_Osman")
+    assert_equal ["legal"], shipped.normalize("ottoman-ocr", "Behcetu_l-Fetava"), "a fetvâ collection"
+    assert_equal ["literary/poetry"], shipped.normalize("ottoman-ocr", "esariziyapasa")
+    assert_equal ["lexical/word-list"], shipped.normalize("ottoman-ocr", "kamus__turki")
+    assert_equal ["periodical/journal"], shipped.normalize("ottoman-ocr", "public-amed-43703963A-43703963A")
+    Nabu::Adapters::OttomanOcr::COMPOSITION.each_key do |work|
+      refute_empty shipped.normalize("ottoman-ocr", work), "#{work}: every composition-dated work folds"
     end
   end
 

@@ -13,9 +13,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 43 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 44 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 November 2026)</span> |
 |---|---|---|---|---|
 | `aio` | inscriptions | attribution | wired · manual | 4,002 docs / 67,429 passages |
 | `armepic` | inscriptions | nc | wired · manual | 50 docs / 374 passages |
@@ -29,6 +29,7 @@ A source wears every desk it serves — these 43 answer this desk. Holdings are 
 | `dharma-pyu` | texts | attribution | wired · auto | 145 docs / 629 passages |
 | `dharma-tamil` | texts | attribution | wired · auto | 1,275 docs / 18,133 passages |
 | `dio-epidoc` | inscriptions | attribution | wired · manual | 978 docs / 2,699 passages |
+| `edcs` | inscriptions | attribution | wired · frozen | 513,781 docs / 513,781 passages |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
@@ -61,7 +62,7 @@ A source wears every desk it serves — these 43 answer this desk. Holdings are 
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 November 2026)</span>: `lat` 195,608 · `grc` 77,312 · `xna` 36,758 · `eng` 26,155 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,706 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,104 … and 103 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 November 2026)</span>: `lat` 690,912 · `grc` 95,789 · `xna` 36,758 · `eng` 26,155 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,706 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,104 … and 103 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 

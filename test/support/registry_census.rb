@@ -19,12 +19,15 @@ module Nabu
     # package (PR #50): 349 → 351 anchors — jrb, smp; the 2026-11-22
     # eleventh cut added only the roro scripts-table row, census unmoved;
     # the 2026-11-27 twelfth cut carried the Middle English periods and the
-    # treebank stages: 178 → 184 stages).
+    # treebank stages: 178 → 184 stages; the 2026-11-28 thirteenth cut
+    # carried the Turkic package — trk-kip, trk-kcu, qwm, kdr, zkh and the
+    # ota:old stage with its trk-oat codemap row: 351 → 356 anchors,
+    # 184 → 185 stages, 264 → 265 codemap).
     module RegistryCensus
-      ANCHORS = 351
-      STAGES = 184
+      ANCHORS = 356
+      STAGES = 185
       VARIETIES = 33
-      CODEMAP_ROWS = 264
+      CODEMAP_ROWS = 265
 
       # The one-line census rendering shared by status/list surfaces.
       LINE = [

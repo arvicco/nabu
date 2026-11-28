@@ -322,6 +322,25 @@ class SourceReadTest < Minitest::Test
     assert_equal "abc", Nabu::Normalize.nfc("abc".b), "ASCII-only BINARY is unambiguous"
   end
 
+  def test_utf8_at_reads_exactly_the_range_and_refuses_a_short_or_invalid_one
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "records.json")
+      File.binwrite(path, "[{\"a\":\"Δέκιος\"},{\"b\":1}]")
+      Nabu::Adapters::SourceRead.binary_file(path) do |io|
+        text = Nabu::Adapters::SourceRead.utf8_at(io, offset: 1, length: 20, label: path)
+        assert_equal "{\"a\":\"Δέκιος\"}", text
+        assert_equal Encoding::UTF_8, text.encoding
+        short = assert_raises(Nabu::ParseError) do
+          Nabu::Adapters::SourceRead.utf8_at(io, offset: 20, length: 500, label: path)
+        end
+        assert_match(/20\+500 reaches past the end of the file/, short.message)
+        assert_raises(Nabu::ParseError) do
+          Nabu::Adapters::SourceRead.utf8_at(io, offset: 7, length: 3, label: path)
+        end
+      end
+    end
+  end
+
   private
 
   # A minimal spec-conformant STORED zip (method 0) — the container only;

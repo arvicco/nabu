@@ -538,7 +538,17 @@ class PosturesTest < Minitest::Test
                  "tr-wikisource ADDED — identity otk (the Orkhon inscriptions' runiform lines, the " \
                  "Old Turkic anchor; the Turkish translation an annotation layer): 223→224; " \
                  "makhzan ADDED — identity ota (the OpenITI MAKHZAN Ottoman manuscripts, copied " \
-                 "1438–1869 inside the stageless ota band): 224→225"
+                 "1438–1869 inside the stageless ota band): 224→225; " \
+                 "the Turkic registry package (canonical-synced 2026-11-28: trk-kip/trk-kcu/qwm/kdr/zkh, " \
+                 "ota:old + its trk-oat codemap row) flips savelyevturkic to identity (qwm live) and " \
+                 "wiktionary-trk-oat to codemap (trk-oat → ota:old), and RETIRES robbeetstriangulation's " \
+                 "declaration (the okm → okm:lmk override machine-postures it; the shadowing rule): 225→224; " \
+                 "pcmep RETIRES — the pcmep-period facet rule stages its M1/M2/M3 bands onto the " \
+                 "registry's enm:m1–m3 (the shadowing rule): 224→223; " \
+                 "edcs ADDED — dates (the SDAM EDCS dump's lat/grc inscriptions stage by their own " \
+                 "dating envelope, the edh/edr shape): 223→224; " \
+                 "ottoman-ocr ADDED — dates ota (the OttomanOCR-search printed books, composed " \
+                 "1477–1910; the Kanunname falls in ota:old, the rest stay on the bare anchor): 224→225"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -675,6 +685,14 @@ class PosturesTest < Minitest::Test
     # (Cuman) anchor mint: pending 2→4.
     # tr-wikisource joins identity (bare otk, the Orkhon runiform lines): 162→163.
     # makhzan joins identity (ota; the registry's ota carries no stages): 163→164.
-    assert_equal({ "dates" => 35, "codemap" => 22, "identity" => 164, "pending" => 4 }, by_posture)
+    # The Turkic package (canonical-synced 2026-11-28) closes the Turkic pendings:
+    # savelyevturkic flips to identity (qwm live): 164→165; wiktionary-trk-oat
+    # flips to codemap (trk-oat → ota:old): 22→23; robbeetstriangulation retires
+    # to its okm → okm:lmk override (the shadowing rule). pcmep retires to the
+    # pcmep-period facet rule (enm:m1–m3 live): pending 4→0.
+    # edcs joins dates (lat/grc staged by each record's dating envelope): 36→37
+    # (makhzan had already moved identity → dates: 35→36, 165→164).
+    # ottoman-ocr joins dates (ota staged by composition date): 37→38.
+    assert_equal({ "dates" => 38, "codemap" => 23, "identity" => 164 }, by_posture)
   end
 end
