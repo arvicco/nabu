@@ -266,4 +266,67 @@ class FileFetchTest < Minitest::Test
     assert_same Nabu::ZipFetch.default_http, Nabu::FileFetch.default_http,
                 "FileFetch rides ZipFetch's cert-hardened Faraday connection"
   end
+
+  # -- stream mode (the hundreds-of-MB single-file deposits) --------------------
+
+  def streamed_fetch
+    Nabu::FileFetch.new(url: URL, dir: @dir, filename: FILENAME, attic_dir: @attic, stream: true)
+  end
+
+  def drive!(fetch, guard: nil)
+    fetch.prepare!
+    guard&.call(fetch.doomed_paths)
+    fetch.complete!
+  ensure
+    fetch.cleanup!
+  end
+
+  def test_streamed_fetch_writes_the_file_and_pins_sha256_and_md5
+    body = "<TEI>#{'alpha ' * 1000}</TEI>"
+    stub_file(body)
+    fetch = streamed_fetch
+    drive!(fetch)
+    assert_equal body, File.read(File.join(@dir, FILENAME))
+    assert_equal Digest::SHA256.hexdigest(body), fetch.sha
+    assert_equal Digest::MD5.hexdigest(body), fetch.md5
+    state = JSON.parse(File.read(File.join(@dir, Nabu::FileFetch::STATE_FILE)))
+    assert_equal fetch.sha, state["sha256"]
+    assert_equal LAST_MODIFIED, state["last_modified"]
+  end
+
+  def test_streamed_prepare_leaves_the_live_tree_untouched_until_complete
+    stub_file("<TEI>alpha</TEI>")
+    drive!(streamed_fetch)
+    stub_file("<TEI>beta</TEI>", last_modified: "Sat, 20 Jul 2019 12:07:26 GMT")
+    fetch = streamed_fetch
+    fetch.prepare!
+    assert_equal "<TEI>alpha</TEI>", File.read(File.join(@dir, FILENAME)), "staged outside the tree"
+    assert_equal Digest::SHA256.hexdigest("<TEI>beta</TEI>"), fetch.sha
+    fetch.cleanup!
+    assert_equal "<TEI>alpha</TEI>", File.read(File.join(@dir, FILENAME)), "an aborted fetch never lands"
+  end
+
+  def test_streamed_fetch_pins_only_the_terminal_hop_of_a_redirect
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_request(:get, MIRROR).to_return(status: 200, body: "<TEI>mirror</TEI>")
+    fetch = streamed_fetch
+    drive!(fetch)
+    assert_equal "<TEI>mirror</TEI>", File.read(File.join(@dir, FILENAME))
+    assert_equal Digest::SHA256.hexdigest("<TEI>mirror</TEI>"), fetch.sha
+  end
+
+  def test_streamed_304_replays_the_stored_pin_and_touches_nothing
+    stub_file("<TEI>alpha</TEI>")
+    first = streamed_fetch
+    drive!(first)
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 304)
+    second = streamed_fetch
+    drive!(second)
+    assert second.not_modified?
+    assert_equal first.sha, second.sha
+    assert_nil second.md5
+    assert_equal "<TEI>alpha</TEI>", File.read(File.join(@dir, FILENAME))
+  end
 end

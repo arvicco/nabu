@@ -219,7 +219,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 223, lect.size,
+    assert_equal 224, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -544,7 +544,9 @@ class PosturesTest < Minitest::Test
                  "wiktionary-trk-oat to codemap (trk-oat → ota:old), and RETIRES robbeetstriangulation's " \
                  "declaration (the okm → okm:lmk override machine-postures it; the shadowing rule): 225→224; " \
                  "pcmep RETIRES — the pcmep-period facet rule stages its M1/M2/M3 bands onto the " \
-                 "registry's enm:m1–m3 (the shadowing rule): 224→223"
+                 "registry's enm:m1–m3 (the shadowing rule): 224→223; " \
+                 "edcs ADDED — dates (the SDAM EDCS dump's lat/grc inscriptions stage by their own " \
+                 "dating envelope, the edh/edr shape): 223→224"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -686,6 +688,8 @@ class PosturesTest < Minitest::Test
     # flips to codemap (trk-oat → ota:old): 22→23; robbeetstriangulation retires
     # to its okm → okm:lmk override (the shadowing rule). pcmep retires to the
     # pcmep-period facet rule (enm:m1–m3 live): pending 4→0.
-    assert_equal({ "dates" => 36, "codemap" => 23, "identity" => 164 }, by_posture)
+    # edcs joins dates (lat/grc staged by each record's dating envelope): 36→37
+    # (makhzan had already moved identity → dates: 35→36, 165→164).
+    assert_equal({ "dates" => 37, "codemap" => 23, "identity" => 164 }, by_posture)
   end
 end

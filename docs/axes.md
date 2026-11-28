@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (43): `aio`, `armepic`, `ceipom`, `ceipp-rongorongo`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `dio-epidoc`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pgp-geniza`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
+**Members** (44): `aio`, `armepic`, `ceipom`, `ceipp-rongorongo`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `dio-epidoc`, `edcs`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pgp-geniza`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 

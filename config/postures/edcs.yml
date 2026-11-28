@@ -1,0 +1,16 @@
+sources:
+  edcs:
+    # kind: machine-postured — the edcs fold in kind_map.yml over the genre
+    # facet (EDCS's inscr_type labels).
+    lect: {posture: dates, note: "lat (495,304 docs) and grc (18,477, by script) stage by the date-band
+        inference off each record's own dating envelope — the edh/edr epigraphy shape; undated
+        records stay bare"}
+    dating: {posture: partial, note: "196,743 of 513,781 docs: SDAM's date_not_before/date_not_after
+        envelope over EDCS's dating parts (signed years, no year 0), raw_dating verbatim —
+        :structured, reordered; the rest carry no dating upstream"}
+    places: {posture: named, note: "504,391 of 513,781 docs: the EDCS findspot name (504,102;
+        modern and ancient names joined ' / ' verbatim, '?' = unknown names nothing) and the
+        WGS84 latitude/longitude pair (500,229, place_lat/lon); no gazetteer refs — the province
+        rides the province facet"}
+    script: {posture: implied, note: "Latin script, Greek for the 18,477 Greek-majority records
+        (the document language follows the dominant script)"}
