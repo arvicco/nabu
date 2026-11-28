@@ -686,6 +686,6 @@ class PosturesTest < Minitest::Test
     # flips to codemap (trk-oat → ota:old): 22→23; robbeetstriangulation retires
     # to its okm → okm:lmk override (the shadowing rule). pcmep retires to the
     # pcmep-period facet rule (enm:m1–m3 live): pending 4→0.
-    assert_equal({ "dates" => 35, "codemap" => 23, "identity" => 165 }, by_posture)
+    assert_equal({ "dates" => 36, "codemap" => 23, "identity" => 164 }, by_posture)
   end
 end
