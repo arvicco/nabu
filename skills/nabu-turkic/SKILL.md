@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: turkic
   origin: generated
-  sources: "atmo makhzan robbeetstriangulation savelyevturkic tr-wikisource turkic-pd ud westoldturkic wiktionary-ota wiktionary-recon wiktionary-trk-oat wilkens-oui"
+  sources: "atmo makhzan ottoman-ocr robbeetstriangulation savelyevturkic tr-wikisource turkic-pd ud westoldturkic wiktionary-ota wiktionary-recon wiktionary-trk-oat wilkens-oui"
 ---
 
 # The Turkologist — the `turkic` desk
@@ -25,6 +25,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | --- | --- | --- |
 | `atmo` | ATMO — Annotated Turki Manuscripts from the Jarring Collection Online | attribution |
 | `makhzan` | OpenITI MAKHZAN — Ottoman Turkish manuscript transcriptions | nc |
+| `ottoman-ocr` | OttomanOCR-search — machine OCR of printed Ottoman Turkish books (1729–1923 printings) | nc |
 | `robbeetstriangulation` | Robbeets et al. 2021 Transeurasian basic-vocabulary cognate sets (lexibank/robbeetstriangulation CLDF v0.3) | attribution |
 | `savelyevturkic` | Savelyev & Robbeets 2020 Turkic basic-vocabulary cognate sets (lexibank/savelyevturkic CLDF v2.1) | attribution |
 | `tr-wikisource` | Turkish Wikisource — the Orkhon inscriptions (Kül Tigin, Bilge Kağan, Tonyukuk) | attribution |

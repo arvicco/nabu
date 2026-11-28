@@ -280,10 +280,9 @@ module Nabu
         return unless File.file?(path)
 
         seen = Set.new
-        File.open(path, "rb") do |io|
+        SourceRead.binary_file(path) do |io|
           JsonArraySplitter.new(path).each do |offset, length|
-            io.seek(offset)
-            record = JSON.parse(io.read(length).force_encoding(Encoding::UTF_8))
+            record = JSON.parse(SourceRead.utf8_at(io, offset: offset, length: length, label: path))
             yield verdict(record, seen), record, offset, length
           end
         end
@@ -302,9 +301,10 @@ module Nabu
       end
 
       def read_record(document_ref)
-        File.open(document_ref.path, "rb") do |io|
-          io.seek(document_ref.metadata.fetch("offset"))
-          JSON.parse(io.read(document_ref.metadata.fetch("length")).to_s.force_encoding(Encoding::UTF_8))
+        SourceRead.binary_file(document_ref.path) do |io|
+          JSON.parse(SourceRead.utf8_at(io, offset: document_ref.metadata.fetch("offset"),
+                                            length: document_ref.metadata.fetch("length"),
+                                            label: document_ref.path))
         end
       end
 

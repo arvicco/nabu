@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: epigraphy
   origin: hand-tuned
-  sources: "aio armepic ceipom ceipp-rongorongo damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil dio-epidoc edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp paramara pgp-geniza pleiades riig rundata runesdb siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
+  sources: "aio armepic ceipom ceipp-rongorongo damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil dio-epidoc edcs edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp paramara pgp-geniza pleiades riig rundata runesdb siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
 ---
 
 # The Papyrologist-Epigraphist — the `epigraphy` desk
@@ -35,6 +35,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `dharma-pyu` | DHARMA Corpus of Pyu Inscriptions | attribution |
 | `dharma-tamil` | DHARMA Tamil-country epigraphy (Task Force A) | attribution |
 | `dio-epidoc` | DIO EpiDoc — Die Deutschen Inschriften, Epigraf volume dumps (DI 7, 77, 102) | attribution |
+| `edcs` | EDCS — Epigraphik-Datenbank Clauss-Slaby (SDAM cleaned dump, Zenodo 7072337) | attribution |
 | `edh` | EDH — Epigraphic Database Heidelberg | attribution |
 | `edr` | EDR — Epigraphic Database Roma (EpiDoc data release) | attribution |
 | `elephantine` | Elephantine — the Berlin ERC papyri and ostraca database | attribution |
