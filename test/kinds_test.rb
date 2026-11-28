@@ -599,6 +599,21 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # EDCS: the dump's inscr_type genus labels, one genre facet row each.
+  def test_shipped_edcs_folds_the_genus_labels
+    shipped = shipped_kinds
+    assert_equal "genre", shipped.facet_for("edcs")
+    assert_equal ["funerary/epitaph"], shipped.normalize("edcs", "tituli sepulcrales")
+    assert_equal ["mark/maker"], shipped.normalize("edcs", "tituli fabricationis")
+    assert_equal ["boundary/milestone"], shipped.normalize("edcs", "miliaria")
+    assert_empty shipped.normalize("edcs", "inscriptiones christianae"), "a cult context, declared deliberate"
+    assert_empty shipped.normalize("edcs", "reges"), "a person category, declared deliberate"
+    ["tituli sacri", "tituli possessionis", "tituli operum", "tituli honorarii", "carmina", "signacula",
+     "diplomata militaria", "leges", "termini", "defixiones", "senatus consulta"].each do |label|
+      refute_empty shipped.normalize("edcs", label), "#{label}: every censused label folds"
+    end
+  end
+
   # The OpenITI MAKHZAN Ottoman manuscripts: the TSV's Genre column, case-folded.
   def test_shipped_makhzan_folds_the_tsv_genres
     shipped = shipped_kinds

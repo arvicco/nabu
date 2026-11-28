@@ -719,6 +719,30 @@ sources:
       "honorarius aut sepulcralis": unknown      # 41 — upstream's own either-or: an
       #   explicit non-determination between two classes, never a both-claim
       "cetera magica": magic                     # 26 — "other magical": magica IS the claim
+  edcs:               # 513,781 docs (census 2026-11-28), 391,232 with a label; EDCS's Latin
+    #                   genus vocabulary, one facet row per label (a record may carry several)
+    facet: genre
+    map:
+      "tituli sepulcrales": funerary/epitaph     # 176,712 — the edr "sepulcralis" fold
+      "tituli fabricationis": mark/maker         # 143,787 — makers' marks on instrumentum
+      #   (brick, tile, amphora and lamp stamps; 141,918 records are sigilla impressa)
+      "tituli sacri": dedicatory/votive          # 32,937 — the edr "sacer" fold
+      "tituli possessionis": mark/ownership      # 18,480 — owners' marks
+      "tituli operum": building                  # 14,195 — works and buildings, the edr
+      #   "oper. publ. priv.que" fold
+      "tituli honorarii": honorific              # 8,642
+      "miliaria": boundary/milestone             # 6,624
+      "carmina": literary/poetry                 # 3,881 — verse inscriptions (the edr carmen half)
+      "signacula": mark/stamp                    # 2,320 — the bronze stamp-dies themselves
+      "diplomata militaria": legal               # 1,294 — the edh "military diploma" fold
+      "leges": legal/law                         # 988
+      "termini": boundary/terminus               # 819
+      "defixiones": magic/curse                  # 711 — the edh "defixio" fold
+      "senatus consulta": legal/law              # 41 — decrees of the Senate are law
+    deliberate:
+      "inscriptiones christianae": "a cult context, not a genre — the record's genre label rides
+        beside it when EDCS gives one (55,895)"
+      "reges": "kings named — a person category inside EDCS's genus list, not a genre (199)"
   elephantine:        # 9,034 docs; pipes split upstream composites
     facet: genre
     map:
