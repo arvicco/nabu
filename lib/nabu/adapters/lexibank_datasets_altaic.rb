@@ -32,9 +32,9 @@ module Nabu
     #   Cumanicus row → qwm (Cuman — the ISO the robbeetstriangulation row
     #   for the same witness carries), the two Middle Mongolian rows → xng,
     #   "(Late) Middle Korean" (Glottolog late1258, upstream ISO kor — the
-    #   modern language) → okm, the registry's Middle Korean anchor (its
-    #   lmk stage is the finer call, an override row for later — see the
-    #   posture).
+    #   modern language) → okm, the registry's Middle Korean anchor (the
+    #   okm → okm:lmk row in config/lect_overrides.yml stages it on the
+    #   variety's own "Late Middle Korean" name).
     #   Every other ISO rides verbatim, including both Old Turkic rows'
     #   oui (ISO's Old Uighur, which the registry carries as Old Uyghur
     #   under otk) although both bundles name the variety "Old Turkic" and

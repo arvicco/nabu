@@ -116,6 +116,21 @@ class LectRulesTest < Minitest::Test
     assert_equal ["no:old"], rule.map.except("non-edda-regius-dep").values.uniq
   end
 
+  # PCMEP's file-name period bands are the Helsinki sub-periods the enm
+  # stages are defined by: every band the adapter mints (Pcmep::BANDS,
+  # the site's own table) maps onto its parent period's stage — the a/b
+  # halves stay metadata, never stages, and no band falls through.
+  def test_the_pcmep_period_rule_stages_every_band_onto_its_helsinki_period
+    rule = akk_rules.find("pcmep-period") || flunk("the shipped rules file must carry pcmep-period")
+    assert_equal %w[pcmep], rule.sources
+    assert_equal "enm", rule.code
+    assert_equal "period", rule.facet
+    assert_equal "certain", rule.tier
+    assert_equal Nabu::Adapters::Pcmep::BANDS.keys.sort, rule.map.keys.sort
+    assert_equal({ "M1" => "enm:m1", "M1a" => "enm:m1", "M1b" => "enm:m1", "M2" => "enm:m2",
+                   "M2a" => "enm:m2", "M2b" => "enm:m2", "M3" => "enm:m3" }, rule.map)
+  end
+
   def test_validate_names_the_rule_and_the_undefined_target
     rules = Nabu::LectRules.new(rules: [bad_rule])
     error = assert_raises(Nabu::Error) { rules.validate!(registry) }

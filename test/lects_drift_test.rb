@@ -118,6 +118,21 @@ class LectsDriftTest < Minitest::Test
     assert_equal "onw", lects.resolve("onw", source: "menota")
   end
 
+  # The 2026-11-28 Turkic package: Robbeets et al.'s "(Late) Middle
+  # Korean" row (Glottolog late1258) is the registry's okm:lmk stage by
+  # its own name; Wiktionary's trk-oat reaches the new ota:old stage
+  # through the universal codemap, and the Cuman rows' qwm is a real
+  # anchor now (identity, no override).
+  def test_the_turkic_package_resolves_the_altaic_shelves_and_trk_oat
+    assert_equal "okm:lmk", lects.resolve("okm", source: "robbeetstriangulation")
+    refute_nil lects.lect("okm:lmk")
+    assert_equal "okm", lects.resolve("okm", source: "ko-wikisource-mk"), "the override is source-scoped"
+    assert_equal "ota:old", lects.resolve("trk-oat", source: "wiktionary-trk-oat")
+    refute_nil lects.lect("ota:old")
+    assert_equal "qwm", lects.resolve("qwm", source: "savelyevturkic")
+    refute_nil lects.lect("qwm")
+  end
+
   private
 
   def seed_documents

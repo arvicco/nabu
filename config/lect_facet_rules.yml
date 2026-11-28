@@ -391,6 +391,37 @@ rules:
     map:
       "18": "chu:ncs"
 
+  # ── PCMEP (the Parsed Corpus of Middle English Poetry): every file name
+  # carries its period band (M1a.TheGrave.psd), minted verbatim as the
+  # period facet. The bands are the Helsinki Corpus sub-periods the
+  # registry's enm stages are defined by — enm's own note names PCMEP as
+  # carrying them for verse, "halving M1 and M2 into a/b bands (those
+  # halves stay consumer metadata, not stages)". So M1a/M1b fold onto
+  # enm:m1 [1150, 1250], M2a/M2b onto enm:m2 [1250, 1350], M3 onto enm:m3
+  # [1350, 1420]; the parent labels M1/M2 (in the adapter's band table,
+  # unused by the release) map the same way. Tier certain: the corpus's
+  # own periodization IS the stage grid, transcribed (parse-time work,
+  # the 2026-10-18 generalization). The band is the COMPOSITION date's,
+  # which is what the stages claim (enm's note: composition, not
+  # manuscript). Date-band inference over the same bands' :structured
+  # dates reaches the same stages; the rule states the claim from the
+  # label itself (basis rule:pcmep-period, inspectable in the journal)
+  # rather than from bounds the adapter derives from it. No M4 text
+  # exists (the corpus ends 1420).
+  - id: pcmep-period
+    tier: certain
+    sources: [pcmep]
+    code: enm
+    facet: period
+    map:
+      "M1": "enm:m1"
+      "M1a": "enm:m1"
+      "M1b": "enm:m1"
+      "M2": "enm:m2"
+      "M2a": "enm:m2"
+      "M2b": "enm:m2"
+      "M3": "enm:m3"
+
   # ── D59-b (2026-08-06): the eBL Standard Babylonian register — the
   # registry's own note ("the literary register of first-millennium
   # scholarship") made a rule. kind: compose refines EXISTING stage rows
