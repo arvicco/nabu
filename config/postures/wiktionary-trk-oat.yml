@@ -1,13 +1,11 @@
 sources:
   wiktionary-trk-oat:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "bare trk-oat — Wiktionary's own etymology-language code for
-        Old Anatolian Turkish (13th–15th c., the Oghuz literary stage before Ottoman), stored
-        verbatim; the lect registry carries no trk-oat row, so the code resolves to itself.
-        Candidate: a nabu-lects codemap row mapping trk-oat onto the ota anchor's early edge
-        (the registry's ota note already folds Old Anatolian Turkish into the code's early
-        edge) or onto a minted early-Ottoman stage under ota — after which the codemap
-        resolves every entry and this declaration retires (the shadowing rule)"}
+    lect: {posture: codemap, note: "trk-oat → ota:old through the universal codemap row
+        (nabu-lects, 2026-11-28): Wiktionary's own etymology-language code for Old Anatolian
+        Turkish, stored verbatim, resolves to the registry's Old Anatolian Turkish stage of ota
+        (1200–1500, the Oghuz literary language before Ottoman). Every entry carries the one
+        code, so the whole shelf lands on the stage; no finer claim exists"}
     dating: {posture: undatable, note: "a dictionary shelf — Wiktionary entries carry no
         attestation dates as fields; quotation years, where present, ride entry bodies"}
     places: {posture: unplaced, note: "a dictionary shelf — no document place; place-name

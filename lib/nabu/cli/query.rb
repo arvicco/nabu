@@ -34,14 +34,26 @@ module Nabu
       # precedent). Only PAIRED brackets convert (a stored lone Leiden
       # bracket stays literal); a stored [...] lacuna pair colors like a
       # match — the same ambiguity the bracket convention always had.
-      def display_snippet(text, language)
+      #
+      # +script+ (an annotation layer's own, Display.text_script) decides the
+      # direction when the run is not in its tag's script — see Display.render.
+      def display_snippet(text, language, script: nil)
         unless Nabu::Display.isolates?(language: language.to_s, mode: display_mode,
-                                       policies: display_policies) && color_output?
-          return display_text(text, language)
+                                       policies: display_policies, script: script) && color_output?
+          return display_text(text, language, script: script)
         end
 
         marked = text.to_s.gsub(/\[([^\[\]]*)\]/) { "#{RTL_HIGHLIGHT_ON}#{Regexp.last_match(1)}#{RTL_HIGHLIGHT_OFF}" }
-        display_text(marked, language)
+        display_text(marked, language, script: script)
+      end
+
+      # An annotation layer's line (search --annotations / --translations):
+      # rendered under the passage's +language+ (its mark policies), its
+      # direction taken from the layer's OWN script — a Latin transcription
+      # under a runiform passage is left to right, an Arabic-script layer
+      # under a Latin passage right to left.
+      def display_layer(text, language)
+        display_snippet(text, language, script: Nabu::Display.text_script(text))
       end
 
       # Per-token language coloring (P27-2): the single-passage show view —

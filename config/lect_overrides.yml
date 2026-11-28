@@ -649,3 +649,22 @@ sources:
     # never certain. Tier APPROXIMATION: a default assumption, not the
     # corpus's own definition (the armepic self-row shape, other tier).
     rap: { lect: "rap", tier: approximation }
+  robbeetstriangulation:
+    # Robbeets et al. 2021's "(Late) Middle Korean" row (Glottolog
+    # late1258; upstream's ISO is kor, the modern language) is coded okm,
+    # the Middle Korean anchor, by the adapter. Upstream's own variety
+    # name IS the registry's okm:lmk stage (Lee & Ramsey's 15th–16th c.
+    # hangul Korean, band [1392, 1599]) — the dataset's forms are the
+    # Yale-romanized hangul record of that stage. The row transcribes the
+    # variety name onto the existing node (parse-time work, the
+    # 2026-10-18 generalization); tier certain. No other row of the shelf
+    # carries okm, so the source-wide scope reaches nothing else.
+    # Everything else on the shelf stays identity: tut (the
+    # registry's Altaic filing node for the dataset's Transeurasian
+    # hypothesis — no tut:pro claimed), qwm for the Codex Cumanicus row
+    # (the Cuman anchor), xng for both Middle Mongolian rows, ojp/mnc/jpn
+    # on their anchors, kor through the codemap to ko, the Old Turkic row
+    # on upstream's oui (the otk/oui refinement left to the registry),
+    # the modern Turkic/Mongolic/Tungusic/Ryukyuan codes bare and the 22
+    # ISO-less varieties display-only.
+    okm: { lect: "okm:lmk", tier: certain }

@@ -72,7 +72,48 @@ class SearchAnnotationsCommandTest < Minitest::Test
     end
   end
 
+  # The layer line's direction is the LAYER's script, never the passage's:
+  # Kül Tigin G1's Latin transcription (tr-wikisource, real fixture bytes)
+  # under its runiform otk passage renders without an RTL isolate, while
+  # the passage text line keeps one; an Arabic-script layer under a Latin
+  # passage gets the isolate it needs. The translations lane alike.
+  RUNIFORM = "𐱅𐰭𐰼𐰃: 𐱅𐰏: 𐱅𐰭𐰼𐰃𐰓𐰀: 𐰉𐰆𐰞𐰢𐱁:"
+  ARABIC = "أيا أخوينا عبد شمس ونوفلا"
+  RLI = Nabu::Display::RLI
+
+  def test_a_layer_line_takes_its_direction_from_its_own_script
+    latin = annotation_result(language: "otk", layer: "transcription", snippet: "[TeŊRİ]: TeG: TeŊRİDE:",
+                              text: RUNIFORM)
+    arabic = annotation_result(language: "lat", layer: "notes", snippet: ARABIC, text: "praesul")
+    out, = capture_io { Nabu::CLI.new.send(:print_annotation_results, [latin, arabic], scope: {}) }
+    lines = out.lines
+    assert_equal "  transcription: [TeŊRİ]: TeG: TeŊRİDE:\n", lines[1], "a Latin layer is never isolated"
+    assert lines[2].start_with?("  text: #{RLI}"), "the runiform passage text keeps its isolate"
+    assert_equal "  notes: #{RLI}#{ARABIC}#{Nabu::Display::PDI}\n", lines[4], "an Arabic layer is isolated"
+    assert_equal "  text: praesul\n", lines[5]
+  end
+
+  def test_a_translation_line_takes_its_direction_from_its_own_script
+    turkish = Nabu::Query::TranslationSearch::Result.new(
+      urn: "urn:nabu:tr-wikisource:x:G1", language: "otk", text: RUNIFORM, layer: "translation",
+      snippet: "Tanrı gibi gökte olmuş", document_title: nil, license_class: "attribution", credit: nil
+    )
+    arabic = turkish.with(urn: "urn:nabu:x:2", language: "lat", text: "praesul", snippet: ARABIC)
+    out, = capture_io { Nabu::CLI.new.send(:print_translation_results, [turkish, arabic], scope: {}) }
+    lines = out.lines
+    assert_equal "  translation: Tanrı gibi gökte olmuş\n", lines[1]
+    assert lines[2].start_with?("  original: #{RLI}")
+    assert_equal "  translation: #{RLI}#{ARABIC}#{Nabu::Display::PDI}\n", lines[4],
+                 "an RTL translation gets its isolate even though the lane renders it language-less"
+  end
+
   private
+
+  def annotation_result(language:, layer:, snippet:, text:)
+    Nabu::Query::AnnotationSearch::Result.new(urn: "urn:nabu:x:#{layer}", language: language, text: text,
+                                              layer: layer, snippet: snippet, document_title: nil,
+                                              license_class: "attribution", credit: nil)
+  end
 
   def with_annotation_corpus(lane: true)
     Dir.mktmpdir("nabu-annotations-desk") do |root|

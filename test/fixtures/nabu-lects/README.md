@@ -7,6 +7,17 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
+- **Retrieved 2026-11-28 (thirteenth cut)** — the Turkic package: the
+  trk-kip (Kipchak) branch with trk-kcu (Cuman–Kipchak) under it, the
+  qwm (Cuman, band 1245–1700) and kdr (Karaim) anchors, zkh
+  (Khwarezmian Turkic) under xqa with chg re-parented under zkh, and
+  the ota:old (Old Anatolian Turkish, 1200–1500) stage with its
+  trk-oat → ota:old codemap row. 351 → 356 anchors, 184 → 185 stages,
+  264 → 265 codemap rows. Copied verbatim from canonical/nabu-lects
+  (commit `5250770919c0`, `main`). `lects.yml` 310,676 B, sha256
+  `19b5a08cb454f996c82be8fc45211964564c7c272d6d83fd89f4cf7afca456ae`;
+  `codemap.yml` 16,173 B, sha256
+  `4e3b9e03f014bb5c5ff041fe8bf4c92f1c8179e30cbe12af78b92ab81354ed59`.
 - **Retrieved 2026-11-27 (twelfth cut)** — the Middle English stages
   (enm:m1–m4, the Helsinki periods), the Ashokan Prakrit stage
   (pra:aso), Early Modern Swedish (sv:early) and the Zhelekhivka

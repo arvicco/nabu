@@ -6,6 +6,7 @@ require_relative "normalize"
 require_relative "deva"
 require_relative "cyrl"
 require_relative "hebr"
+require_relative "script_check"
 
 module Nabu
   # Display-time text policy (P27-0). ONE place that decides how passage text
@@ -479,8 +480,9 @@ module Nabu
       # bracket-safe snippet path (P42-r4, the CLI's display_snippet) asks
       # BEFORE rendering, so it can cut the isolate at highlight boundaries
       # instead of letting the brackets ride inside the isolated run.
-      def isolates?(language:, mode:, policies:)
-        policy = policy_for(language, policies)
+      # +script+ as in #render.
+      def isolates?(language:, mode:, policies:, script: nil)
+        policy = policy_for(language, policies, script: script)
         !policy.nil? && mode.isolates?(policy)
       end
 
@@ -501,6 +503,14 @@ module Nabu
         script && RTL_SCRIPTS.include?(script)
       end
 
+      # The ISO 15924 script (titlecased) dominating +text+'s held bytes
+      # (Nabu::ScriptCheck), or nil when no script-bearing character is
+      # classifiable — the direction claim for a run whose tag is not its
+      # own: an annotation layer rendered under its passage's language.
+      def text_script(text)
+        ScriptCheck.dominant([text.to_s]).first&.capitalize
+      end
+
       # Render one run of +text+ for the terminal: look up the language's
       # policy (primary subtag, like the fold tables), let the mode transform,
       # then wrap in RTL isolates when both mode and policy say so. No policy,
@@ -511,9 +521,15 @@ module Nabu
       # the source has conventions configured, the mode receives them; every
       # P27-0 mode and caller is untouched by their absence. Grapheme spacing
       # (P27-2) applies after the mode render when policy and mode allow.
+      #
+      # +script+ (optional, ISO 15924) names the script of THIS run when it
+      # is not the language tag's own — an annotation layer (a Latin
+      # transcription under a runiform passage, an Arabic-script layer
+      # under a Latin one) — and decides the direction outright; nil keeps
+      # the tag's rule.
       def render(text, language:, mode:, policies:, source: nil, annotations: nil, source_policies: {},
-                 gaiji_map: {}, gaiji_ids: {}, gaiji_substitutes: {})
-        policy = policy_for(language, policies)
+                 gaiji_map: {}, gaiji_ids: {}, gaiji_substitutes: {}, script: nil)
+        policy = policy_for(language, policies, script: script)
         edition = edition_context(mode, source, annotations, source_policies,
                                   gaiji_map, gaiji_ids, gaiji_substitutes)
         return Rendered.new(text: text, applied: []) if text.empty? || (policy.nil? && edition.nil?)
@@ -666,12 +682,22 @@ module Nabu
       # The language's policy (primary subtag, like the fold tables), with
       # its isolates switched OFF when the tag declares a left-to-right
       # script — the one place direction is decided (RTL_SCRIPTS note), so
-      # every mode and the snippet path's isolates? agree.
-      def policy_for(language, policies)
+      # every mode and the snippet path's isolates? agree. A run +script+
+      # (an annotation layer's own) overrides the tag: right to left gets
+      # the isolates even under a policy-less or left-to-right language,
+      # anything else loses them.
+      def policy_for(language, policies, script: nil)
         policy = policies[Normalize.primary_subtag(language)]
+        return run_policy(policy, language, RTL_SCRIPTS.include?(script)) if script
         return policy unless policy&.isolates && right_to_left?(language) == false
 
         policy.with(isolates: false)
+      end
+
+      def run_policy(policy, language, rtl)
+        return (policy.isolates == rtl ? policy : policy.with(isolates: rtl)) if policy
+
+        Policy.new(language: language, isolates: true) if rtl
       end
 
       # One ref's descent down the ladder (P38-2): the first rung that holds it
