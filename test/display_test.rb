@@ -289,6 +289,55 @@ class DisplayTest < Minitest::Test
     refute_includes render(ZOGR, "chu-Arab").text, RLI, "no isolates: true in the policy, no wrap"
   end
 
+  # -- annotation direction: the layer's OWN script decides -----------------
+  #
+  # An annotation line (a transcription or translation layer) renders under
+  # its passage's language, but its direction is its own: Kül Tigin G1's
+  # transcription and Turkish translation, as TrWikisource stores them over
+  # the checked-in fixture, are Latin script under an otk (runiform, RTL)
+  # passage; an Arabic-script layer under a Latin passage is right to left.
+  KT_G1_TRANSCRIPTION = "TeŊRİ: TeG: TeŊRİDE:"
+  KT_G1_TRANSLATION = "Tanrı gibi gökte olmuş Türk Bilge Kağan"
+
+  def render_layer(text, language, mode: "default")
+    Nabu::Display.render(text, language: language, mode: Nabu::Display.mode(mode), policies: policies,
+                               script: Nabu::Display.text_script(text))
+  end
+
+  def test_text_script_names_the_dominant_script_of_the_held_bytes
+    assert_equal "Latn", Nabu::Display.text_script(KT_G1_TRANSCRIPTION)
+    assert_equal "Arab", Nabu::Display.text_script(DIWAN_LINE)
+    assert_equal "Hebr", Nabu::Display.text_script(GEN_1_1)
+    assert_nil Nabu::Display.text_script(": 1.2 —"), "no script-bearing character: no claim"
+  end
+
+  def test_a_latin_annotation_under_a_runiform_passage_is_left_to_right
+    [KT_G1_TRANSCRIPTION, KT_G1_TRANSLATION].each do |layer|
+      rendered = render_layer(layer, "otk")
+      assert_equal layer, rendered.text, "no RTL isolate around a Latin-script layer"
+      refute_includes rendered.applied, Nabu::Display::ISOLATES
+      refute Nabu::Display.isolates?(language: "otk", mode: Nabu::Display.mode("default"), policies: policies,
+                                     script: Nabu::Display.text_script(layer))
+    end
+    assert render(KT_G1, "otk").text.start_with?(RLI), "the runiform passage text itself keeps its isolates"
+  end
+
+  def test_an_arabic_annotation_under_a_latin_passage_keeps_its_isolates
+    [["lat", DIWAN_LINE], [nil, HAFIZ_LINE]].each do |language, layer|
+      rendered = render_layer(layer, language)
+      assert_equal RLI + layer + PDI, rendered.text, "#{language.inspect}: the layer's own script is RTL"
+      assert_includes rendered.applied, Nabu::Display::ISOLATES
+      assert Nabu::Display.isolates?(language: language.to_s, mode: Nabu::Display.mode("default"),
+                                     policies: policies, script: "Arab")
+    end
+    refute_includes render_layer(DIWAN_LINE, "lat", mode: "full").text, RLI, "full mode never isolates"
+  end
+
+  def test_an_annotation_of_no_detectable_script_falls_back_to_the_passage_policy
+    assert render_layer(KT_G1, "otk").text.start_with?(RLI),
+           "runiform carries no ScriptCheck property: the otk policy's verdict stands"
+  end
+
   # -- East-Asian display width (P35-7) — the one column-math seam ----------
   #
   # Real Han from the kanripo fixture (KR1h0004 Lunyu): 其為人也 etc. Fullwidth
