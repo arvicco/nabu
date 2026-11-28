@@ -172,6 +172,18 @@ class DisplayTest < Minitest::Test
     end
   end
 
+  # Ottoman Turkish rides the same isolates-only path: a real line of the
+  # ottoman-ocr fixture (Peçevî vol. 1, the heading on printed p. 502).
+  PECEVI_HEADING = "( سردار سنان پاشا تونسی فتح )"
+
+  def test_ota_runs_are_wrapped_in_rtl_isolates_and_nothing_else
+    rendered = render(PECEVI_HEADING, "ota")
+    assert rendered.text.start_with?(RLI), "ota policy sets isolates: true"
+    assert rendered.text.end_with?(PDI)
+    assert_equal PECEVI_HEADING, unwrap(rendered.text)
+    assert_equal PECEVI_HEADING, render(PECEVI_HEADING, "ota", mode: "full").text
+  end
+
   def test_ara_and_fas_full_mode_is_byte_identical
     assert_equal DIWAN_LINE, render(DIWAN_LINE, "ara", mode: "full").text
     assert_equal HAFIZ_LINE, render(HAFIZ_LINE, "fas", mode: "full").text

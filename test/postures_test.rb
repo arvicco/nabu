@@ -219,7 +219,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 224, lect.size,
+    assert_equal 225, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -546,7 +546,9 @@ class PosturesTest < Minitest::Test
                  "pcmep RETIRES — the pcmep-period facet rule stages its M1/M2/M3 bands onto the " \
                  "registry's enm:m1–m3 (the shadowing rule): 224→223; " \
                  "edcs ADDED — dates (the SDAM EDCS dump's lat/grc inscriptions stage by their own " \
-                 "dating envelope, the edh/edr shape): 223→224"
+                 "dating envelope, the edh/edr shape): 223→224; " \
+                 "ottoman-ocr ADDED — dates ota (the OttomanOCR-search printed books, composed " \
+                 "1477–1910; the Kanunname falls in ota:old, the rest stay on the bare anchor): 224→225"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -690,6 +692,7 @@ class PosturesTest < Minitest::Test
     # pcmep-period facet rule (enm:m1–m3 live): pending 4→0.
     # edcs joins dates (lat/grc staged by each record's dating envelope): 36→37
     # (makhzan had already moved identity → dates: 35→36, 165→164).
-    assert_equal({ "dates" => 37, "codemap" => 23, "identity" => 164 }, by_posture)
+    # ottoman-ocr joins dates (ota staged by composition date): 37→38.
+    assert_equal({ "dates" => 38, "codemap" => 23, "identity" => 164 }, by_posture)
   end
 end

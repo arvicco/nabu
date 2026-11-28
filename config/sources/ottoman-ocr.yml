@@ -1,0 +1,29 @@
+ottoman-ocr:   # 02-sources row 459
+  adapter: Nabu::Adapters::OttomanOcr
+  adopted: "2026-11-28"
+  axes: [turkic, arabic]
+  wired: false   # EXPECTED FIRST SYNC (dry parse of the pinned clone, 2026-11-28):
+                 # bin/nabu sync ottoman-ocr — a sparse clone of data/*.js, the
+                 # root transcriptions_ziyapasa.json and the licence files at
+                 # bac65b6 (~219 MB; the YOLO model and the viewer stay out).
+                 # EXPECT 59 docs / 7,470 passages (the transcribed pages of
+                 # 24,375; 16,837 textless pages, 59 page-number-only pages
+                 # and 9 calibration charts mint nothing), 2,485,641 words,
+                 # 0 errored, 1 skipped by rule (the root
+                 # ziyapasa JSON), 0 unrecognized. Eyeball nabu show
+                 # urn:nabu:ottoman-ocr:tarihipeevi01peuoft:7 (Peçevî vol. 1,
+                 # printed p. 502, the conquest of Tunis) and 5 random, probe
+                 # nabu search with سردار سنان پاشا تونسی فتح, then flip.
+  # OttomanOCR-search (Enes Yılandiloğlu, University of Helsinki;
+  # github.com/koras0ff/OttomanOCR-search): uncorrected VLM OCR
+  # (Ottoman-Print-OCR-Qwen4B over YOLO26s layout) of 59 printed Ottoman
+  # Turkish works — Evliyâ Çelebi's Seyâhatnâme in 8 volumes, Peçevî,
+  # Selânikî, Solakzâde, Hoca Sadeddin, Lütfi Paşa, Kâtib Çelebi, the
+  # Kanunname-i Âl-i Osman, Fuzûlî, Nedîm, two fetvâ collections, Şemseddin
+  # Sâmî's dictionaries, Tanzimat plays and novels, four serials.
+  # Document = work volume, passage = page. README licence verbatim
+  # "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC
+  # 4.0) … The license applies to the layout and OCR data." (read
+  # 2026-11-28) → nc. PINNED to bac65b6: the repository is under active
+  # revision, so drift is an owner review, never a cadence → manual.
+  sync_policy: manual

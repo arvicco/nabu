@@ -350,6 +350,9 @@ module Nabu
           "otdo" => :date_text_prose, # the header's free-prose Date ("ca. 797, end of the reign of
           #                             Khri srong lde brtsan", "780-800?", "post 763") read into
           #                             an envelope, the prose riding verbatim as the raw
+          "ottoman-ocr" => :structured, # each work's attributed composition era (class composition,
+          #                               the adapter's COMPOSITION table) else its print year (class
+          #                               edition; a Hijri-only label as its CE envelope); no place
           "papyri-ddbdp" => :structured, # the DCLP literary documents' header origDate
           #                                envelope + findspot (PapyriHeader); the DDbDP
           #                                texts carry no date/place keys — their rows are

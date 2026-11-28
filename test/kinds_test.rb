@@ -629,6 +629,22 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # OttomanOCR-search: the per-work fold over metadata "work" (upstream's
+  # genre field says only "book/printed material" / "periodicals").
+  def test_shipped_ottoman_ocr_folds_every_work_by_its_id
+    shipped = shipped_kinds
+    assert_equal %w[work], shipped.metadata_for("ottoman-ocr")
+    assert_equal ["literary/diary/travelogue"], shipped.normalize("ottoman-ocr", "evliyaelebisey05evliuoft")
+    assert_equal ["legal/law"], shipped.normalize("ottoman-ocr", "Kanunnamei_Ali_Osman")
+    assert_equal ["legal"], shipped.normalize("ottoman-ocr", "Behcetu_l-Fetava"), "a fetvâ collection"
+    assert_equal ["literary/poetry"], shipped.normalize("ottoman-ocr", "esariziyapasa")
+    assert_equal ["lexical/word-list"], shipped.normalize("ottoman-ocr", "kamus__turki")
+    assert_equal ["periodical/journal"], shipped.normalize("ottoman-ocr", "public-amed-43703963A-43703963A")
+    Nabu::Adapters::OttomanOcr::COMPOSITION.each_key do |work|
+      refute_empty shipped.normalize("ottoman-ocr", work), "#{work}: every composition-dated work folds"
+    end
+  end
+
   # P104-1: the ETCSL composition-number taxonomy (c.0–c.6) folds through
   # a frozen prefix map — the Sumerian literary canon's first genre view.
   def test_shipped_etcsl_folds_the_composition_number_blocks
