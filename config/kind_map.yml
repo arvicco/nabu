@@ -3796,3 +3796,94 @@ sources:
       #                                            Baleybelen: grammar and lexicon of his constructed language
     deliberate:
       "Miscellany": "a mecmūʿa — the codex's form (a compilation of pieces), not a genre (1)"
+  ottoman-ocr:        # the work id (upstream's data-file stem) — upstream's genre field is only
+    #                   "book/printed material" or "periodicals" and its subjects are free LC-style
+    #                   headings missing on 11 works, so the fold is the loop's call per work on
+    #                   what the book IS (the hab-edoc edition mold). One document each, the pin's
+    #                   59 works (census 2026-11-28).
+    metadata: work
+    map:
+      # -- law: statutes, fetvâs, jurisprudence, treaties
+      "Kanunnamei_Ali_Osman": legal/law          # the kanunname of Mehmed II: the dynasty's law code
+      "dustur": legal/law                        # the Düstur (1863): the official compendium of the
+      #                                            Tanzimat statutes — a serial by issue (upstream
+      #                                            "periodicals"), law by content
+      "s_erhi_kanun__ceza": legal/law            # Şerh-i kânûn-ı ceza: commentary on the 1858 Penal Code
+      "serhli_usuli": legal/law                  # the code of criminal procedure, with commentary
+      "Behcetu_l-Fetava": legal                  # Yenişehirli Abdullah's fetvâs (the makhzan Behcet
+      #                                            fold: a fatwa collection is legal, no sub fits)
+      "Feta_va_-y_Ali_Efendi": legal             # Çatalcalı Ali Efendi's fetvâs, the same fold
+      "medhalif_kh": legal                       # Medhal-i fıkıh: an introduction to Islamic
+      #                                            jurisprudence (upstream "Islamic law")
+      "muahedat_mecmuas": legal/treaty           # Muâhedât mecmuası: the Foreign Ministry's collection
+      #                                            of the empire's treaties
+      # -- scripture and religion
+      "Turkish-1819-New-Testament-Kitab-al-Ahd-al-Jadid-al-mansub-ila-Rabbina-Isa-al-Masih": scripture
+      #                                            the 1819 Turkish New Testament (a Bible translation)
+      "New_Testament_1857_vol2": scripture       # the 1857 Turkish New Testament, vol. 2
+      "ahdimsiar00kr": theology                  # Ebûbekir Şükrî's ʿAhd-i mîsâk-ı ṣaġîr: Islamic
+      #                                            doctrine (the library plate's LC class BP165)
+      "nzhetlerv00usayuoft": theology            # Ḥusaynī Harawī's Nuzhat al-arvāḥ in Ottoman: Sufi
+      #                                            instruction (the makhzan Sufism fold — no mysticism head)
+      # -- writing the past
+      "tarihipeevi01peuoft": historiography      # Tarih-i Peçevî vol. 1: the chronicle 1520–1640
+      "tarihipeevi02peuoft": historiography      # Tarih-i Peçevî vol. 2
+      "tarih_selaniki": historiography           # Tarih-i Selânikî: the year-by-year chronicle 1563–1600
+      "solakzade_tarihi": historiography         # Solakzâde's dynastic history to 1657
+      "taceltevarih01sadeuoft": historiography   # Hoca Sadeddin's Tâcü't-tevârîh: the dynasty to 1520
+      "tevarihiliosma00lutfuoft": historiography # Lütfi Paşa's Tevârîh-i Âl-i Osman
+      "katip_celebi_tuhfe": historiography       # Kâtib Çelebi's Tuhfetü'l-kibâr: the history of the
+      #                                            Ottoman naval wars
+      "tarihi_ata": historiography               # Tarih-i ʿAṭâ: the history of the Enderun, the palace school
+      "trabzon_tarihi_vol1": historiography      # Şakir Şevket's history of Trabzon, vol. 1
+      "muhtasar_tarihi_umumi": historiography    # Mizancı Murad's concise world history
+      "amerika_tarih_kesfi": historiography      # Robertson's History of America in Ottoman translation
+      "dmetadaanlibirle00ibne": historiography   # Dimetoka'da kanlı bir levha (1910; upstream "History")
+      # -- travel
+      "evliyaelebisey01evliuoft": literary/diary/travelogue  # Evliyâ's Seyâhatnâme, vol. 1 — the
+      #                                            book of travels, first person
+      "evliyaelebisey02evliuoft": literary/diary/travelogue  # vol. 2
+      "evliyaelebisey03evliuoft": literary/diary/travelogue  # vol. 3
+      "evliyaelebisey04evliuoft": literary/diary/travelogue  # vol. 4
+      "evliyaelebisey05evliuoft": literary/diary/travelogue  # vol. 5
+      "evliyaelebisey06evliuoft": literary/diary/travelogue  # vol. 6
+      "evliyaelebisey07evliuoft": literary/diary/travelogue  # vol. 7
+      "evliyaelebisey08evliuoft": literary/diary/travelogue  # vol. 8
+      "Tarix_Siyahatulkubra_Suleyman_Shukri": literary/diary/travelogue  # Süleyman Şükrü's
+      #                                            Seyâhatü'l-kübrâ: his journey through the Islamic world
+      # -- verse
+      "klliytidvniful00fuzuuoft": literary/poetry  # Fuzûlî's collected dîvân
+      "divan__nedim": literary/poetry            # the dîvân of Nedîm
+      "esariziyapasa": literary/poetry           # Eşʿâr-ı Ziyâ: Ziyâ Paşa's poems
+      "sururi_mecmuas": literary/poetry          # Sürûrî's mecmûʿa of chronogram verses
+      "mntehabticedde00redmuoft": literary/poetry  # Müntehabât-ı cedîde: an anthology of verse
+      "midhatpasa00ozanuoft": literary/poetry    # Faik Âli's verse on Midhat Paşa
+      # -- drama and fiction
+      "as_lm_s__bir_adam": literary/drama        # Asılmış bir âdam: a drama after Anicet-Bourgeois
+      "bariadram4fasl00bolauoft": literary/drama  # Ali Ekrem's Baria, a drama in four acts
+      "gave": literary/drama                     # Şemseddin Sâmî's Gâve, a tragedy in five acts
+      "serseri_yahudi": literary/narrative/novel  # Serseri Yahudi: Eugène Sue's Le Juif errant translated
+      "hristnmuf00mfuoft": literary/narrative    # Ahmed Hikmet's Hâristân ve Gülistân: short stories
+      "muhtehabat__asar": literary/essay         # Sadık Rifat Paşa's selected writings on statecraft
+      #                                            and ethics
+      # -- dictionaries and the learned disciplines
+      "kamus__turki": lexical/word-list          # Şemseddin Sâmî's Kâmûs-ı Türkî: the Turkish dictionary
+      "lugati_naci_1899": lexical/word-list      # Muallim Nâcî's Lugat: the Ottoman dictionary
+      "hayati008800_0": lexical/glossary         # Hayâtî's commentary on the Tuhfe, Vehbî's versified
+      #                                            Persian–Turkish word list
+      "kamusul_alam": scholarly                  # Kâmûsü'l-aʿlâm: the encyclopedic dictionary of proper
+      #                                            names, history and geography (the makhzan
+      #                                            Encyclopedias fold)
+      "kozmografya": scholarly/astronomy         # Kozmoğrafya: the military-school astronomy textbook
+      "mecelleyi_hendese": scholarly/mathematics  # Mecelle-i hendese: geometry
+      "endaht_bahs__2018672550": scholarly       # Endâht bahsı: the gunnery manual (no military sub —
+      #                                            the bare learned head)
+      "topculuk_fenni_hulasasi": scholarly       # the artillery-science summary, the same fold
+      "kavaidi_esasiye_harbiyye": scholarly      # Kavâʿid-i esâsiye-i harbiye: principles of war, the same
+      # -- serials
+      "haver": periodical/journal                # Haver: a literary review (1884)
+      "hazineyi_evrak": periodical/journal       # Hazîne-i evrâk: the document and literature journal
+      "mirat__alem": periodical/journal          # Mirʾât-ı ʿâlem: the illustrated geography journal
+      "mecmuai_fununi_askeriye": periodical/journal  # Mecmûʿa-i fünûn-i askeriye, March–August 1884
+      "public-amed-43703963A-43703963A": periodical/journal  # the same military journal,
+      #                                            September 1882–February 1883

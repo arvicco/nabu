@@ -1,0 +1,21 @@
+sources:
+  ottoman-ocr:
+    # kind: machine-postured — the ottoman-ocr per-work fold in kind_map.yml
+    # (metadata "work").
+    lect: {posture: identity, note: "ota IS the claim: all 59 works are Ottoman Turkish in Arabic
+        script — chronicles, fetvâ collections, dîvâns, dictionaries, Bible translations, Tanzimat
+        plays, novels, textbooks and serials (Arabic quotation inside the fetvâs and Persian inside
+        the dîvâns ride along unclaimed); composed 1477–1910 and printed 1729–1923, inside the
+        registry's ota band (1299–1928); ota has no stages, so no finer claim exists to make"}
+    dating: {posture: dated, note: "58 of 59: 21 by the work's ATTRIBUTED composition era (the
+        adapter's COMPOSITION table, one reason each — Evliyâ, Peçevî, Selânikî, Solakzâde, Hoca
+        Sadeddin, Lütfi Paşa, Kâtib Çelebi, the Kanunname of Mehmed II, Fuzûlî, Nedîm, Sürûrî, the
+        two şeyhülislam fetvâ collections; class composition), 37 by upstream's typed print year
+        (two from a Hijri-only label, converted to the CE envelope; class edition); the
+        Kavâʿid-i esâsiye-i harbiye carries no year at all — :structured lane"}
+    places: {posture: unplaced, note: "upstream types no place; the press ('publisher': Matbaa-i
+        Âmire, İkdâm Matbaası, Mihran Matbaası …, mostly İstanbul) is the printing's imprint, not a
+        text place, and rides metadata only"}
+    script: {posture: implied, note: "Arabic script as printed (naskh type; partially vocalized
+        in the Bible translations and the dîvâns), read by uncorrected VLM OCR — stray Latin letters
+        inside Ottoman words are model noise (ocr_latin_line_share per document)"}
